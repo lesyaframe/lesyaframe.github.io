@@ -610,7 +610,7 @@ body.v3{
   ].map(([sphere, text], i) => ({ id:"t" + (i + 1), sphere, text }));
   const DEFAULT_GOALS = [
     { id:"g1", name:"прочитать 5 книг", target:5, links:[], manual:0 },
-    { id:"g2", name:"20 тренировок", target:20, links:["t1"], manual:0 }
+    { id:"g2", name:"20 тренировок", target:20, links:["тренировка"], manual:0 }
   ];
 
   // идеи-сюрпризы для бумажки дня: из четырёх сфер и близких к ним тем
@@ -698,17 +698,23 @@ body.v3{
     w.marks = w.marks || {}; w.slips = w.slips || {}; if (typeof w.note !== "string") w.note = "";
     return w;
   }
-  // прошедшие недели «замораживают» свой список: правки дальше их не трогают
-  function freezePast(){
-    if (beforeStart()) return;
-    let changed = false;
-    for (let n = 1; n < nowWeek(); n++) {
-      const w = ensureWeek(n);
-      if (!Array.isArray(w.list)) { w.list = clone(state.list); changed = true; }
-    }
-    if (changed) save();
-  }
+  // у каждой недели свой список дел. пока неделю не меняли, она показывает стартовый список (state.list)
   const listFor = n => { const w = state.weeks[wid(n)]; return w && Array.isArray(w.list) ? w.list : state.list; };
+  function ownList(n){ const w = ensureWeek(n); if (!Array.isArray(w.list)) w.list = clone(state.list); return w.list; }
+  const norm = t => String(t).trim().toLowerCase().replace(/\s+/g, " ");
+  // цели связаны с делами по названию, поэтому считают одно и то же дело на всех неделях
+  function migrateGoalLinks(){
+    const byId = {};
+    [state.list, ...Object.values(state.weeks).map(w => w.list || [])].forEach(l => l.forEach(t => { byId[t.id] = t.text; }));
+    state.goals.forEach(g => { g.links = [...new Set((g.links || []).map(x => norm(byId[x] != null ? byId[x] : x)))]; });
+  }
+  function allTaskNames(){
+    const map = new Map();
+    const add = t => { const k = norm(t.text); if (!map.has(k)) map.set(k, { key:k, text:t.text, sphere:t.sphere }); };
+    listFor(viewing).forEach(add); state.list.forEach(add);
+    for (let n = 1; n <= WEEKS; n++) listFor(n).forEach(add);
+    return [...map.values()];
+  }
   const count = (n, id) => ((week(n).marks || {})[id] || []).length;
   const sphereCount = (n, sid) => listFor(n).filter(t => t.sphere === sid).reduce((a, t) => a + count(n, t.id), 0);
   const weekTotal = n => SPHERES.reduce((a, s) => a + sphereCount(n, s.id), 0);
@@ -739,8 +745,9 @@ body.v3{
   }
   function goalValue(g){
     if (!g.links || !g.links.length) return g.manual || 0;
+    const keys = new Set(g.links.map(norm));
     let v = 0;
-    Object.values(state.weeks).forEach(w => g.links.forEach(id => { v += ((w.marks || {})[id] || []).length; }));
+    for (let n = 1; n <= WEEKS; n++) listFor(n).forEach(t => { if (keys.has(norm(t.text))) v += count(n, t.id); });
     return v;
   }
 
@@ -759,22 +766,23 @@ body.v3{
   }
   function addTask(sphere, text){
     text = text.trim().slice(0, 120); if (!text) return;
-    state.list.push({ id: uid("t"), sphere, text });
+    ownList(viewing).push({ id: uid("t"), sphere, text });
     save(); renderAll();
   }
   function editTask(id, patch){
-    const t = state.list.find(x => x.id === id); if (!t) return;
+    const t = ownList(viewing).find(x => x.id === id); if (!t) return;
     if (patch.text != null) { const v = patch.text.trim().slice(0, 120); if (v) t.text = v; }
     if (patch.sphere && SPH[patch.sphere]) t.sphere = patch.sphere;
     save(); renderAll();
   }
   function deleteTask(id){
-    const t = state.list.find(x => x.id === id); if (!t) return;
-    const marked = count(nowWeek(), id);
-    const msg = "удалить «" + t.text + "»?" + (marked ? "\nотметки по нему на этой неделе тоже удалятся." : "") + "\nпрошлые недели останутся как были.";
+    const list = ownList(viewing), t = list.find(x => x.id === id); if (!t) return;
+    const marked = count(viewing, id);
+    const msg = "удалить «" + t.text + "» с недели " + pad2(viewing) + "?" + (marked ? "\nотметки по нему на этой неделе тоже удалятся." : "") + "\nна других неделях ничего не изменится.";
     if (!confirm(msg)) return;
-    state.list = state.list.filter(x => x.id !== id);
-    for (let n = nowWeek(); n <= WEEKS; n++) { const w = state.weeks[wid(n)]; if (w && !Array.isArray(w.list) && w.marks) delete w.marks[id]; }
+    const w = ensureWeek(viewing);
+    w.list = list.filter(x => x.id !== id);
+    delete w.marks[id];
     save(); renderAll();
   }
   function hash(str){ let h = 2166136261; for (let i = 0; i < str.length; i++){ h ^= str.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; }
@@ -898,10 +906,10 @@ body.v3{
   function renderGoals(){
     const items = state.goals.map(g => {
       const v = goalValue(g), pct = Math.min(100, g.target ? v / g.target * 100 : 0), auto = g.links && g.links.length;
-      const names = auto ? g.links.map(id => { const t = state.list.find(x => x.id === id); return t ? t.text : null; }).filter(Boolean) : [];
+      const names = auto ? g.links : [];
       return '<li class="goal' + (v >= g.target ? " done" : "") + '"><div class="goal-top"><span class="goal-name">' + esc(g.name) + '</span><span class="goal-num">' + v + ' / ' + g.target + '</span></div>' +
         '<div class="goal-bar"><b style="width:' + pct + '%"></b></div>' +
-        '<div class="goal-meta"><span>' + (auto ? "считается из: " + esc(names.join(", ") || "удалённых занятий") : "отмечаю вручную") + '</span><span class="goal-btns">' +
+        '<div class="goal-meta"><span>' + (auto ? "считается из: " + esc(names.join(", ")) : "отмечаю вручную") + '</span><span class="goal-btns">' +
         (auto ? "" : '<button data-gminus="' + g.id + '" aria-label="минус один">−</button><button data-gplus="' + g.id + '" aria-label="плюс один">+</button>') +
         '<button class="icon-btn" data-gedit="' + g.id + '" aria-label="изменить цель">✎</button></span></div></li>';
     }).join("");
@@ -914,7 +922,7 @@ body.v3{
   }
 
   function renderSpheres(){
-    const n = viewing, list = listFor(n), past = isPast(n), future = isFuture(n);
+    const n = viewing, list = listFor(n), past = false, future = isFuture(n);
     const deco = {
       body: '<span class="sticker" style="top:-18px;right:-12px;width:44px;transform:rotate(14deg)">' + STAR("#eeb4c3") + '</span>',
       care: CLIP.replace('class="clip"', 'class="clip" style="top:-24px;left:30px;transform:rotate(-8deg)"'),
@@ -940,14 +948,13 @@ body.v3{
       }).join("");
       const tools = '<span class="sp-tools"><span class="chip">' + sphereCount(n, s.id) + ' за неделю</span>' +
         (past ? "" : '<button class="icon-btn" data-edit="' + s.id + '" aria-label="' + (ed ? "готово" : "редактировать список") + '" title="' + (ed ? "готово" : "редактировать список") + '">' + (ed ? "✓" : "✎") + '</button>') + '</span>';
-      const add = past ? '<div class="sp-note">список сохранён таким, каким был на этой неделе</div>' :
+      const add = past ? "" :
         '<form class="add" data-add="' + s.id + '"><input id="add-' + s.id + '" maxlength="120" placeholder="+ своё дело" aria-label="новое дело: ' + esc(s.name) + '"><button aria-label="добавить">+</button></form>';
       return '<article class="card sphere sp-' + s.id + '">' + (variant === "2" ? "" : variant === "3" ? deco3[s.id] : deco[s.id]) + '<div class="sheet"><div class="card-h"><h3>' + esc(s.name) + '</h3>' + tools + '</div>' +
         '<div class="card-b"><ul class="tasks">' + (rows || '<li class="muted" style="padding:6px 0">пока пусто</li>') + '</ul>' + add + '</div></div></article>';
     }).join("");
-    const note = past ? "это прошлая неделя: отметки можно поправить, список не меняется" :
-      future ? "неделя ещё не началась, отмечать пока нельзя" :
-      "жми на квадратик столько раз, сколько сделала. ✎ меняет список: правки идут на эту и следующие недели, прошлые не трогаются";
+    const note = (future ? "неделя ещё не началась: отмечать пока нельзя, но список можно подготовить. " : "жми на квадратик столько раз, сколько сделала. ") +
+      "у каждой недели свой список: ✎ и × меняют только неделю " + pad2(n) + "."
     document.getElementById("spheres").innerHTML = '<div class="spheres-head"><h2>мои сферы</h2><p>' + note + '</p></div><div class="sp-grid">' + cards + '</div>';
   }
 
@@ -1008,9 +1015,11 @@ body.v3{
     document.getElementById("goalDel").hidden = !editingGoal;
     form.name.value = g.name; form.target.value = g.target;
     form.mode.value = g.links && g.links.length ? "auto" : "manual";
-    linksBox.innerHTML = '<div class="muted" style="margin-bottom:6px">считать отметки этих занятий, за все недели:</div>' + SPHERES.map(s => {
-      const ts = state.list.filter(t => t.sphere === s.id); if (!ts.length) return "";
-      return '<h4>' + esc(s.name) + '</h4>' + ts.map(t => '<label><input type="checkbox" value="' + t.id + '"' + ((g.links || []).includes(t.id) ? " checked" : "") + '> ' + esc(t.text) + '</label>').join("");
+    const names = allTaskNames(), linked = new Set((g.links || []).map(norm));
+    (g.links || []).forEach(k => { if (!names.some(x => x.key === norm(k))) names.push({ key:norm(k), text:k, sphere:null }); });
+    linksBox.innerHTML = '<div class="muted" style="margin-bottom:6px">считать отметки этих дел на всех неделях (по названию):</div>' + [...SPHERES, { id:null, name:"других недель" }].map(s => {
+      const ts = names.filter(t => t.sphere === s.id); if (!ts.length) return "";
+      return '<h4>' + esc(s.name) + '</h4>' + ts.map(t => '<label><input type="checkbox" value="' + esc(t.key) + '"' + (linked.has(t.key) ? " checked" : "") + '> ' + esc(t.text) + '</label>').join("");
     }).join("");
     syncLinks();
     dlg.showModal();
@@ -1023,8 +1032,7 @@ body.v3{
     } else if (r === "save") {
       const name = form.name.value.trim().slice(0, 80), target = Math.max(1, Math.min(999, parseInt(form.target.value, 10) || 1));
       const checked = [...linksBox.querySelectorAll("input:checked")].map(i => i.value);
-      const hiddenOld = editingGoal ? (editingGoal.links || []).filter(id => !state.list.some(t => t.id === id)) : [];
-      const links = form.mode.value === "auto" ? [...new Set([...checked, ...hiddenOld])] : [];
+      const links = form.mode.value === "auto" ? [...new Set(checked)] : [];
       if (name) {
         if (editingGoal) Object.assign(editingGoal, { name, target, links });
         else state.goals.push({ id: uid("g"), name, target, links, manual:0 });
@@ -1069,7 +1077,7 @@ body.v3{
 
   /* ---------- boot ---------- */
   load();
-  freezePast();
+  migrateGoalLinks();
   renderAll();
 })();
 </script>
