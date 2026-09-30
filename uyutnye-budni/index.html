@@ -59,12 +59,13 @@ button{cursor:pointer}
 /* ---------- switcher ---------- */
 .switcher{position:sticky;top:0;z-index:60;display:flex;justify-content:center;align-items:center;gap:6px;flex-wrap:wrap;
   padding:9px 16px;background:rgba(251,244,234,.95);border-bottom:1px solid rgba(75,42,32,.15);font-family:var(--f-mono);font-size:12px;color:var(--choc)}
-.switcher span{margin-right:6px;opacity:.75}
+.switcher > span{margin-right:6px;opacity:.75}
 .switcher button{border:1.5px solid var(--choc);background:transparent;border-radius:999px;padding:4px 13px;font-family:var(--f-mono);font-size:12px}
 .switcher button.on{background:var(--choc);color:var(--milk)}
 
 /* ---------- page skeleton ---------- */
 .page{max-width:1200px;margin:0 auto;padding:30px 16px 60px;display:grid;gap:30px;align-items:start}
+.page > *, .book > *, .pg > *, .sp-grid > *{min-width:0}
 .side,.main{display:contents}
 .hero{grid-area:hero} .weeks{grid-area:weeks} .slipcard{grid-area:slip} .book{grid-area:book} .spheres{grid-area:spheres} .progress{grid-area:progress} .foot{grid-area:foot}
 .book{display:grid;grid-template-columns:1fr 1fr;gap:0}
@@ -444,19 +445,87 @@ body.v3{
   .v3 .hero .badge{grid-column:1;grid-row:auto;justify-self:start;margin-top:8px}
 }
 @media (max-width: 860px){
-  .page,.v1 .page,.v2 .page,.v3 .page{grid-template-columns:1fr;grid-template-areas:"hero" "slip" "weeks" "book" "spheres" "progress" "foot"}
-  .book,.v2 .book,.v3 .book{grid-template-columns:1fr}
-  .v2 .summary{grid-template-columns:1fr}
+  .page,.v1 .page,.v2 .page,.v3 .page{grid-template-columns:minmax(0,1fr);grid-template-areas:"hero" "slip" "weeks" "book" "spheres" "progress" "foot"}
+  .v3 .hero{grid-template-columns:1fr}
+  .v3 .hero .badge{grid-column:1;grid-row:auto;justify-self:start;margin-top:8px}
+  .book,.v2 .book,.v3 .book{grid-template-columns:minmax(0,1fr)}
+  .v2 .summary{grid-template-columns:minmax(0,1fr)}
   .v2 .summary .reflect{border-left:0;border-top:1.5px dashed rgba(75,42,32,.2)}
-  .months{grid-template-columns:1fr}
-  .sp-grid,.v2 .sp-grid{grid-template-columns:1fr}
-  .wk-row{grid-template-columns:repeat(7,1fr)}
+  .months{grid-template-columns:minmax(0,1fr)}
+  .sp-grid,.v2 .sp-grid{grid-template-columns:minmax(0,1fr)}
   .v1 .hero .badge{position:relative;right:auto;bottom:auto;align-self:flex-start;margin-top:8px}
+  /* недели: горизонтальная лента с прокруткой */
+  .wk-row{display:flex;overflow-x:auto;scroll-snap-type:x proximity;gap:6px;padding:4px 2px 8px;margin:0 -2px;scrollbar-width:thin}
+  .wk{flex:0 0 72px;scroll-snap-align:start}
+  .v3 .wk-row{grid-template-columns:none}
 }
-@media (max-width: 520px){
-  .slip-stage{grid-template-columns:1fr;justify-items:center}
-  .sum-row{grid-template-columns:100px 1fr 22px}
-  .v1 .book{padding:8px} .v1 .pg{padding:22px 16px}
+@media (max-width: 600px){
+  body{font-size:15px}
+  .page{padding:18px 12px 44px;gap:22px}
+  .switcher{padding:8px 10px;gap:5px;font-size:11px}
+  .switcher > span{display:none}
+  .switcher button{padding:5px 12px}
+  .switcher .lbl{font-size:11px}
+  .card h2{font-size:25px}
+  .hero h1,.v1 .hero h1,.v3 .hero h1{font-size:46px}
+  .v2 .hero h1{font-size:50px}
+  .v1 .hero,.v3 .hero{padding:24px 18px 20px;transform:none}
+  .v2 .hero{min-height:0;gap:18px}
+  .badge{padding:10px 16px 8px;min-width:0}
+  .badge .num,.v1 .hero .badge .num{font-size:36px}
+  .v1 .slipcard{padding:14px;transform:none}
+  .v1 .slipcard .inner{padding:16px 14px}
+  .v3 .slipcard{transform:none}
+  .slip-stage,.v2 .slip-stage,.v3 .slip-stage{grid-template-columns:1fr;justify-items:center;text-align:left}
+  .pull-cta{align-items:center;text-align:center}
+  .slip{width:100%}
+  .slip .txt{font-size:25px}
+  .v1 .book{padding:6px} .v1 .pg{padding:22px 16px}
+  .v1 .pg-l,.v1 .pg-r{box-shadow:none}
+  .v3 .card.summary,.v3 .card.goals{padding:24px 16px 18px;transform:none}
+  .big{font-size:46px}
+  .sum-row{grid-template-columns:minmax(0,1fr) auto 20px;gap:8px}
+  .sum-extra{gap:6px 14px}
+  .reflect textarea{font-size:20px}
+  .spheres-head{margin-bottom:12px}
+  .spheres-head p{max-width:none}
+  .sp-grid,.v2 .sp-grid,.v3 .sp-grid{gap:24px}
+  .v1 .sphere{padding:7px}
+  .v1 .sphere .sheet{padding:16px 14px 14px}
+  .v1 .sphere .sheet,.v3 .sphere{transform:none !important}
+  .v3 .sphere .sheet{padding:10px 14px 16px}
+  .v2 .sphere .card-h{min-height:96px}
+  .sphere .card-h{flex-wrap:wrap}
+  .sphere h3{font-size:24px}
+  .v3 .sphere h3{font-size:30px}
+  .task{grid-template-columns:32px minmax(0,1fr) auto;gap:10px;padding:7px 0}
+  .box{width:30px;height:30px}
+  .minus,.t-del{font-size:20px;padding:4px 6px;opacity:.6}
+  .task.edit{grid-template-columns:minmax(0,1fr) 30px}
+  .task.edit select{grid-column:1}
+  .task.edit .icon-btn{grid-row:1/3;grid-column:2;font-size:20px}
+  .task.edit input,.task.edit select{font-size:16px}
+  .add input{font-size:20px}
+  .add button{width:34px;height:34px}
+  .icon-btn{font-size:18px;padding:4px 6px}
+  .goal-btns button{width:30px;height:30px;font-size:16px}
+  .v1 .progress,.v3 .progress{padding:26px 14px 18px}
+  .v2 .progress .card-b{padding:14px}
+  .stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px 10px}
+  .stat .v,.v1 .stat .v{font-size:30px}
+  .stat .v small{font-size:15px}
+  .stat .l{font-size:9.5px}
+  .chart{min-width:520px}
+  .mrow span{padding:8px 0}
+  .fld input{font-size:16px}
+  .foot{flex-direction:column;gap:4px}
+  #heroStk .sticker:nth-child(2),#heroStk .sticker:nth-child(3),#heroStk .sticker:nth-child(4){display:none}
+  .chart{min-width:0;grid-template-columns:22px repeat(13,minmax(0,1fr));gap:3px}
+  .chart-scroll{overflow:visible}
+  .axis,.stack{height:140px}
+  .stack .tot{font-size:14px}
+  .col .wn{font-size:11px}
+  .axis span{font-size:9px}
 }
 @media (prefers-reduced-motion: reduce){ *{animation:none!important;transition:none!important} }
 </style>
@@ -465,9 +534,9 @@ body.v3{
 
 <div class="switcher" role="group" aria-label="вариант оформления">
   <span>вариант оформления:</span>
-  <button data-variant="1">1 · блокнот</button>
-  <button data-variant="2">2 · календарь</button>
-  <button data-variant="3">3 · скрапбук</button>
+  <button data-variant="1">1<span class="lbl"> · блокнот</span></button>
+  <button data-variant="2">2<span class="lbl"> · календарь</span></button>
+  <button data-variant="3">3<span class="lbl"> · скрапбук</span></button>
 </div>
 
 <div class="page">
@@ -775,6 +844,8 @@ body.v3{
       html += '<button class="' + cls + '" data-week="' + n + '" aria-pressed="' + (n === viewing) + '" aria-label="неделя ' + n + ', ' + weekRange(n) + '"><b>' + pad2(n) + '</b><span class="d">' + weekRange(n, true) + '</span><span class="c">' + (t || "") + '</span></button>';
     }
     el.innerHTML = html + '</div>' + weeksCap();
+    const cur = el.querySelector('.wk.viewing'), row = el.querySelector('.wk-row');
+    if (cur && row.scrollWidth > row.clientWidth) row.scrollLeft = cur.offsetLeft - row.offsetLeft - 8;
   }
 
   function renderSlip(){
