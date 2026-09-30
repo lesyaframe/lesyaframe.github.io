@@ -8,7 +8,7 @@
 <meta name="description" content="Трекер в стиле бумажного блокнота: сферы жизни, бумажка дня, цели и прогресс, пять цветовых тем. Открывается с телефона и компьютера.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Yeseva+One&display=swap">
 <link rel="preload" href="img/top-cocoa.webp" as="image">
 <style>
 @font-face{font-family:"Vasek";src:url("fonts/Vasek.ttf") format("truetype");font-display:swap;size-adjust:145%}
@@ -54,7 +54,7 @@ h2{font-size:clamp(34px,4.6vw,54px);color:var(--choco-2);margin:8px 0 14px}
 
 /* ---------- top bar ---------- */
 .bar{display:flex;justify-content:space-between;align-items:center;padding:14px 0;font-size:14px;color:var(--choco)}
-.bar b{font-weight:800;font-size:20px;letter-spacing:-.04em;color:var(--choco-2)}
+.bar b{font-family:"Yeseva One",Georgia,serif;font-weight:400;font-size:24px;letter-spacing:0;color:var(--choco-2)}
 .bar b span{font-family:var(--hand);font-weight:400;letter-spacing:0;color:var(--olive-2);margin-left:6px;font-size:22px}
 .bar a{text-decoration:none;border-bottom:1.5px solid currentColor;font-weight:500}
 
@@ -122,6 +122,21 @@ h2{font-size:clamp(34px,4.6vw,54px);color:var(--choco-2);margin:8px 0 14px}
 .shot.phone-shot img{border-radius:22px}
 .shot.phone-shot figcaption{color:var(--salad);text-align:center}
 
+/* ---------- price ---------- */
+.prices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:26px;margin-top:30px;max-width:860px}
+.price-card{position:relative;background:var(--paper);padding:34px 28px 28px;box-shadow:0 14px 30px rgba(59,27,20,.13);border-top:6px solid var(--sky-dk)}
+.price-card.pilot{border-top-color:var(--olive-2);transform:rotate(-.6deg)}
+.price-card .tape{top:-14px;right:30px;transform:rotate(6deg)}
+.p-lbl{font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft)}
+.p-num{font-family:"Yeseva One",Georgia,serif;font-size:56px;line-height:1;color:var(--choco-2);margin:10px 0 12px}
+.p-num s{font-family:var(--sans);font-size:20px;color:var(--ink-soft);margin-left:6px}
+.price-card p{margin:0 0 20px;color:var(--ink-soft)}
+.incl{list-style:none;padding:0;margin:26px 0 0;display:flex;flex-wrap:wrap;gap:10px}
+.incl li{background:var(--salad-lt);padding:8px 14px;border-radius:999px;font-size:14px;font-weight:600;color:var(--choco)}
+.incl li:nth-child(2n){background:var(--sky-lt)}
+.demo-line{margin:22px 0 0;color:var(--ink-soft)}
+.demo-line a{color:var(--choco-2);font-weight:700}
+
 /* ---------- steps ---------- */
 .steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;margin-top:34px;counter-reset:s}
 .step{position:relative;background:var(--latte);padding:30px 24px 26px;border-top:5px solid var(--choco-2)}
@@ -182,6 +197,8 @@ footer{padding:34px 0 50px;font-size:13px;color:var(--ink-soft);display:flex;jus
   .pains{grid-template-columns:minmax(0,1fr);gap:18px}
   .feats{grid-template-columns:minmax(0,1fr)}
   .steps{grid-template-columns:minmax(0,1fr)}
+  .prices{grid-template-columns:minmax(0,1fr)}
+  .p-num{font-size:46px}
   .about-card .in{font-size:22px;padding:22px 18px}
   .final{padding:52px 20px}
   .ribbon-track{font-size:17px}
@@ -203,10 +220,10 @@ footer{padding:34px 0 50px;font-size:13px;color:var(--ink-soft);display:flex;jus
       <h1 style="margin-top:12px">все дела<br>перед глазами<span class="hand">как бумажный блокнот, только в телефоне</span></h1>
       <p>разложи жизнь по сферам, отмечай, что успела, вытягивай бумажку дня и смотри, как складывается неделя.</p>
       <div class="hero-cta">
-        <a class="btn" href="#want">хочу трекер</a>
+        <a class="btn" href="#price">хочу трекер</a>
         <a class="btn ghost" href="#inside">что внутри</a>
       </div>
-      <div class="hero-note">открывается в браузере · телефон и компьютер · без приложений</div>
+      <div class="hero-note">доступ навсегда · телефон и компьютер · без приложений · <a href="demo/" style="color:inherit;font-weight:600">попробовать демо</a></div>
     </div>
     <div>
       <div class="devices" id="devices">
@@ -218,10 +235,10 @@ footer{padding:34px 0 50px;font-size:13px;color:var(--ink-soft);display:flex;jus
         <span class="themes-l">тема:</span>
         <div class="themes-set" role="group" aria-label="тема трекера">
           <button class="tbtn" data-t="cocoa" aria-pressed="true" style="--a:#5A2A20;--b:#D3DC8C"><i></i>какао</button>
-          <button class="tbtn" data-t="pistachio" aria-pressed="false" style="--a:#4F6B2A;--b:#CFE0A0"><i></i>фисташка</button>
-          <button class="tbtn" data-t="sky" aria-pressed="false" style="--a:#2F4F73;--b:#BCD3EA"><i></i>небо</button>
-          <button class="tbtn" data-t="lavender" aria-pressed="false" style="--a:#5B3F7A;--b:#D8CAEB"><i></i>лаванда</button>
-          <button class="tbtn" data-t="cherry" aria-pressed="false" style="--a:#7D1F2D;--b:#EEB4C3"><i></i>вишня</button>
+          <button class="tbtn" data-t="olive" aria-pressed="false" style="--a:#5E5A2B;--b:#EFE3A0"><i></i>олива</button>
+          <button class="tbtn" data-t="rose" aria-pressed="false" style="--a:#6E4148;--b:#EBCFCB"><i></i>пыльная роза</button>
+          <button class="tbtn" data-t="sage" aria-pressed="false" style="--a:#3F4F3B;--b:#CFDACB"><i></i>шалфей</button>
+          <button class="tbtn" data-t="sea" aria-pressed="false" style="--a:#3E5468;--b:#BFD0DC"><i></i>море</button>
         </div>
       </div>
     </div>
@@ -260,7 +277,7 @@ footer{padding:34px 0 50px;font-size:13px;color:var(--ink-soft);display:flex;jus
       <article class="feat" style="--pat:var(--pat-dots);--c:#3B1B14"><div class="feat-h"><span>03</span></div><div class="feat-b"><h3>бумажка дня</h3><p>утром вытягиваешь бумажку с маленькой идеей на сегодня. не нужно думать, с чего начать.</p></div></article>
       <article class="feat" style="--pat:var(--pat-ging);--c:#5E82A0"><div class="feat-h"><span>04</span></div><div class="feat-b"><h3>цели на сезон</h3><p>«прочитать 5 книг» или «15 прогулок». считаются сами из отмеченных дел или вручную.</p></div></article>
       <article class="feat" style="--pat:var(--pat-gingsalad);--c:#8E9A3C"><div class="feat-h"><span>05</span></div><div class="feat-b"><h3>итоги и прогресс</h3><p>сколько сделано по каждой сфере, график по неделям, серия дней и один вопрос: что было хорошего?</p></div></article>
-      <article class="feat" style="--pat:var(--pat-dotsalad);--c:#5A2A20"><div class="feat-h"><span>06</span></div><div class="feat-b"><h3>5 тем и свои даты</h3><p>какао, фисташка, небо, лаванда, вишня. название и даты сезона тоже выбираешь сама.</p></div></article>
+      <article class="feat" style="--pat:var(--pat-dotsalad);--c:#5A2A20"><div class="feat-h"><span>06</span></div><div class="feat-b"><h3>5 тем и свои даты</h3><p>какао, олива, пыльная роза, шалфей, море. название и даты сезона тоже выбираешь сама.</p></div></article>
     </div>
   </div>
 </section>
@@ -281,15 +298,41 @@ footer{padding:34px 0 50px;font-size:13px;color:var(--ink-soft);display:flex;jus
   </div>
 </section>
 
+<!-- price -->
+<section id="price">
+  <div class="wrap">
+    <div class="eyebrow">стоимость</div>
+    <h2>один раз и навсегда</h2>
+    <div class="prices">
+      <div class="price-card pilot"><div class="tape"></div>
+        <div class="p-lbl">пилот · первые 10 мест</div>
+        <div class="p-num">490 ₽ <s>990 ₽</s></div>
+        <p>за честный отзыв после пары недель. отзыв можно короткий, как пойдёт.</p>
+        <a class="btn" href="https://ig.me/m/lesya.frame" target="_blank" rel="noopener">хочу на пилот</a>
+      </div>
+      <div class="price-card">
+        <div class="p-lbl">обычная цена</div>
+        <div class="p-num">990 ₽</div>
+        <p>когда пилот закончится.</p>
+        <a class="btn ghost" href="https://ig.me/m/lesya.frame" target="_blank" rel="noopener">написать в директ</a>
+      </div>
+    </div>
+    <ul class="incl">
+      <li>доступ к трекеру навсегда</li><li>телефон и компьютер, записи общие</li><li>5 тем, свои сферы, даты и название</li><li>бумажка дня, цели, итоги и прогресс</li>
+    </ul>
+    <p class="demo-line">сначала посмотреть? <a href="demo/">открой демо</a>, там можно всё потыкать.</p>
+  </div>
+</section>
+
 <!-- steps -->
 <section>
   <div class="wrap">
     <div class="eyebrow">как получить</div>
     <h2>три шага</h2>
     <div class="steps">
-      <div class="step"><h3>пишешь мне</h3><p>в директ слово «трекер». расскажу детали и отвечу на вопросы.</p></div>
-      <div class="step"><h3>оплачиваешь</h3><p>после оплаты добавляю твою почту в список доступа.</p></div>
-      <div class="step"><h3>входишь по почте</h3><p>открываешь ссылку, входишь со своей почтой и пользуешься. твои записи видишь только ты.</p></div>
+      <div class="step"><h3>пишешь мне</h3><p>в директ слово «трекер» и свою почту. пришлю реквизиты для оплаты.</p></div>
+      <div class="step"><h3>оплачиваешь</h3><p>после оплаты открываю доступ для твоей почты и присылаю ссылку.</p></div>
+      <div class="step"><h3>входишь по почте</h3><p>входишь через Google или по ссылке из письма. твои записи видишь только ты, и они не теряются.</p></div>
     </div>
   </div>
 </section>
@@ -316,7 +359,8 @@ footer{padding:34px 0 50px;font-size:13px;color:var(--ink-soft);display:flex;jus
       <details><summary>нужно что-то скачивать?</summary><p>нет. трекер открывается по ссылке в браузере, как сайт. на телефоне его можно добавить на экран «домой», и он будет как приложение.</p></details>
       <details><summary>можно пользоваться и с телефона, и с компьютера?</summary><p>да. входишь по своей почте, и записи будут одни и те же на всех устройствах.</p></details>
       <details><summary>можно поменять дела и сферы под себя?</summary><p>да. дела добавляешь, переименовываешь и удаляешь сама. сферы тоже можно переименовать, добавить или убрать.</p></details>
-      <details><summary>можно поменять цвета?</summary><p>да, есть пять тем: какао, фисташка, небо, лаванда и вишня. переключаются одним нажатием, отметки при этом не теряются.</p></details>
+      <details><summary>можно поменять цвета?</summary><p>да, есть пять тем: какао, олива, пыльная роза, шалфей и море. переключаются одним нажатием, отметки при этом не теряются.</p></details>
+      <details><summary>доступ на какой срок?</summary><p>навсегда. один раз оплачиваешь и пользуешься сколько хочешь: можно заводить новые сезоны со своими датами.</p></details>
       <details><summary>а если я начну не с понедельника?</summary><p>даты начала и конца выбираешь сама в настройках. трекер перестроится под них.</p></details>
       <details><summary>что будет, если я пропущу неделю?</summary><p>ничего страшного. трекер не ругает. просто открываешь следующую неделю и продолжаешь.</p></details>
       <details><summary>кто видит мои записи?</summary><p>только ты. у каждого свой вход по почте, и чужие записи никому не видны.</p></details>
@@ -340,7 +384,7 @@ footer{padding:34px 0 50px;font-size:13px;color:var(--ink-soft);display:flex;jus
 
 <script>
 (function(){
-  const themes = ["cocoa","pistachio","sky","lavender","cherry"];
+  const themes = ["cocoa","olive","rose","sage","sea"];
   // заранее подгружаем картинки тем, чтобы переключение было мгновенным
   window.addEventListener("load", () => themes.forEach(t => { new Image().src = "img/top-" + t + ".webp"; new Image().src = "img/phone-" + t + ".webp"; }));
   const top = document.getElementById("imgTop"), phone = document.getElementById("imgPhone"), dev = document.getElementById("devices");
