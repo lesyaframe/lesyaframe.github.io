@@ -1,0 +1,1006 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Уютные будни</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Yeseva+One&family=Prata&family=Bad+Script&family=Lobster&family=Oswald:wght@500;700&family=Playfair+Display:ital,wght@0,500;1,400;1,500&family=Golos+Text:wght@400;500;600&family=Caveat:wght@500;700&family=PT+Mono&display=swap">
+<style>
+:root{
+  --pink:#eeb4c3; --pink-lt:#f8dde4; --pink-dk:#d0708a;
+  --bord:#7d1f2d; --choc:#4b2a20; --choc-2:#6b3f2c;
+  --milk:#fbf4ea; --milk-2:#f2e6d4;
+  --blue:#a9c3e4; --blue-dk:#4f76a8;
+  --ink:#3b211a; --ink-soft:#7a5a4e;
+  --f-disp:"Yeseva One", Georgia, serif;
+  --f-script:"Lobster", "Segoe Script", cursive;
+  --f-cond:"Oswald", "Arial Narrow", sans-serif;
+  --f-serif:"Playfair Display", Georgia, serif;
+  --f-body:"Golos Text", "Segoe UI", system-ui, sans-serif;
+  --f-hand:"Caveat", "Segoe Print", cursive;
+  --f-mono:"PT Mono", ui-monospace, Menlo, monospace;
+
+  --pat-tartan:
+    repeating-linear-gradient(90deg, transparent 0 18px, rgba(251,244,234,.55) 18px 20px, transparent 20px 26px, rgba(40,6,10,.35) 26px 36px),
+    repeating-linear-gradient(0deg, transparent 0 18px, rgba(251,244,234,.55) 18px 20px, transparent 20px 26px, rgba(40,6,10,.35) 26px 36px),
+    #9a2b37;
+  --pat-stripe:
+    repeating-linear-gradient(90deg, var(--pink) 0 22px, var(--choc) 22px 26px, var(--milk) 26px 29px, var(--choc) 29px 33px),
+    var(--pink);
+  --pat-dots:
+    radial-gradient(circle, var(--milk) 30%, transparent 32%) 0 0/28px 28px,
+    radial-gradient(circle, var(--milk) 30%, transparent 32%) 14px 14px/28px 28px,
+    var(--choc);
+  --pat-ging:
+    linear-gradient(90deg, rgba(79,118,168,.42) 50%, transparent 0) 0 0/16px 16px,
+    linear-gradient(rgba(79,118,168,.42) 50%, transparent 0) 0 0/16px 16px,
+    #f3f6fb;
+  --pat-ging-pink:
+    linear-gradient(90deg, rgba(208,112,138,.4) 50%, transparent 0) 0 0/18px 18px,
+    linear-gradient(rgba(208,112,138,.4) 50%, transparent 0) 0 0/18px 18px,
+    #fdf0f3;
+  color-scheme: light;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{font-family:var(--f-body);color:var(--ink);font-size:15px;line-height:1.45;background:var(--milk);overflow-x:hidden}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px dashed var(--pink-dk);outline-offset:3px}
+
+.sp-body{--pat:var(--pat-tartan);--c:#8a2433}
+.sp-care{--pat:var(--pat-stripe);--c:#c9607c}
+.sp-home{--pat:var(--pat-dots);--c:#6b3f2c}
+.sp-me{--pat:var(--pat-ging);--c:#4f76a8}
+
+/* ---------- switcher ---------- */
+.switcher{position:sticky;top:0;z-index:60;display:flex;justify-content:center;align-items:center;gap:6px;flex-wrap:wrap;
+  padding:9px 16px;background:rgba(251,244,234,.95);border-bottom:1px solid rgba(75,42,32,.15);font-family:var(--f-mono);font-size:12px;color:var(--choc)}
+.switcher span{margin-right:6px;opacity:.75}
+.switcher button{border:1.5px solid var(--choc);background:transparent;border-radius:999px;padding:4px 13px;font-family:var(--f-mono);font-size:12px}
+.switcher button.on{background:var(--choc);color:var(--milk)}
+
+/* ---------- page skeleton ---------- */
+.page{max-width:1200px;margin:0 auto;padding:30px 16px 60px;display:grid;gap:30px;align-items:start}
+.side,.main{display:contents}
+.hero{grid-area:hero} .weeks{grid-area:weeks} .slipcard{grid-area:slip} .book{grid-area:book} .spheres{grid-area:spheres} .progress{grid-area:progress} .foot{grid-area:foot}
+.book{display:grid;grid-template-columns:1fr 1fr;gap:0}
+.pg{display:flex;flex-direction:column;gap:22px;min-width:0}
+
+.card{position:relative;background:var(--milk);min-width:0}
+.card-h{position:relative}
+.eyebrow{font-family:var(--f-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft)}
+.card h2{margin:4px 0 0;font-family:var(--f-disp);font-weight:400;font-size:30px;line-height:1.05;text-wrap:balance}
+.hand{font-family:var(--f-hand);font-size:21px;color:var(--pink-dk);line-height:1.1}
+.muted{color:var(--ink-soft);font-size:13px}
+
+.btn{border:1.5px solid var(--choc);background:var(--milk);padding:6px 14px;font-size:13px;font-weight:500;border-radius:999px;transition:transform .15s}
+.btn:hover{transform:translateY(-1px)}
+.btn.primary{background:var(--choc);color:var(--milk)}
+.btn.done{background:var(--pink-lt);border-color:var(--pink-dk);color:var(--bord)}
+.btn.small{padding:3px 10px;font-size:12px}
+.icon-btn{border:0;background:none;padding:2px 6px;font-size:15px;line-height:1;color:var(--ink-soft);opacity:.7}
+.icon-btn:hover{opacity:1;color:var(--bord)}
+
+/* ---------- hero ---------- */
+.hero{position:relative;display:flex;flex-direction:column;gap:14px}
+.hero h1{margin:0;font-family:var(--f-disp);font-weight:400;line-height:.9;letter-spacing:-.01em}
+.hero .sub{font-family:var(--f-mono);font-size:13px;letter-spacing:.04em}
+.badge{position:relative;display:inline-flex;flex-direction:column;align-items:center;padding:12px 20px 10px;min-width:150px;text-align:center}
+.badge .lbl{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;opacity:.8}
+.badge .num{font-family:var(--f-disp);font-size:48px;line-height:1;font-variant-numeric:tabular-nums}
+.badge .num small{font-size:22px;opacity:.6}
+.badge .dates{font-family:var(--f-hand);font-size:20px}
+
+/* ---------- weeks tabs ---------- */
+.wk-row{display:grid;grid-template-columns:repeat(13,1fr);gap:6px}
+.wk{border:0;background:none;padding:8px 2px;display:flex;flex-direction:column;align-items:center;gap:3px;position:relative;transition:transform .15s}
+.wk:hover{transform:translateY(-2px)}
+.wk b{font-family:var(--f-disp);font-weight:400;font-size:20px;line-height:1;font-variant-numeric:tabular-nums}
+.wk .d{font-family:var(--f-mono);font-size:10px;white-space:nowrap}
+.wk .c{font-family:var(--f-hand);font-size:17px;line-height:1;font-weight:700;min-height:17px}
+.wk.future{opacity:.5}
+.weeks-cap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-family:var(--f-mono);font-size:12px;margin-top:10px}
+.weeks-cap button{border:0;background:none;padding:0;text-decoration:underline;text-underline-offset:3px;font-family:var(--f-mono);font-size:12px}
+
+/* month calendars (variant 2) */
+.months{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.month .card-h{height:92px;display:flex;align-items:flex-end;padding:0 14px 8px}
+.month h3{margin:0;font-family:var(--f-script);font-weight:400;font-size:38px;line-height:1;color:var(--bord);text-shadow:2px 2px 0 var(--milk),-1px -1px 0 var(--milk),1px -1px 0 var(--milk),-1px 1px 0 var(--milk)}
+.m-oct .card-h{background:var(--pat-ging)}
+.m-nov .card-h{background:var(--pat-dots)}
+.m-dec .card-h{background:var(--pat-tartan)}
+.m-dec h3,.m-nov h3{color:var(--milk);text-shadow:none}
+.m-nov .card-h{align-items:center}
+.m-nov h3{background:var(--blue);color:var(--milk);padding:2px 12px;width:100%;margin-top:30px}
+.mgrid{padding:10px 10px 12px}
+.mhead,.mrow{display:grid;grid-template-columns:30px repeat(7,1fr);font-family:var(--f-mono);font-size:10.5px;text-align:center}
+.mhead span{padding:3px 0;opacity:.7}
+.mrow{width:100%;border:0;background:none;padding:0;border-top:1px solid rgba(255,255,255,.28)}
+.mrow span{padding:6px 0;border-left:1px solid rgba(255,255,255,.28)}
+.mrow .wn{border-left:0;font-weight:700}
+.mrow[disabled]{cursor:default;opacity:.45}
+.mrow .today{font-weight:700;text-decoration:underline;text-underline-offset:3px}
+
+/* ---------- slip of the day ---------- */
+.slip-stage{display:grid;grid-template-columns:130px 1fr;gap:18px;align-items:center;margin-top:14px}
+.envelope{position:relative;width:130px;height:104px;border:0;padding:0;background:none}
+.envelope .back{position:absolute;inset:16px 0 0;background:#c99a86;box-shadow:0 6px 12px rgba(0,0,0,.18)}
+.envelope .slips{position:absolute;left:12px;right:12px;top:0;height:56px}
+.envelope .slips i{position:absolute;bottom:0;width:30px;border-radius:1px;box-shadow:0 1px 2px rgba(0,0,0,.15);transition:transform .25s}
+.envelope .front{position:absolute;inset:40px 0 0;background:#b27f6c;clip-path:polygon(0 0,50% 45%,100% 0,100% 100%,0 100%)}
+.envelope .front::after{content:"сюрпризы";position:absolute;bottom:8px;left:0;right:0;text-align:center;font-family:var(--f-hand);font-size:20px;color:var(--milk)}
+.envelope:hover .slips i:nth-child(3){transform:translateY(-10px) rotate(4deg)}
+.slip{position:relative;background:#fffdf8;padding:18px 16px 14px;transform:rotate(-1.5deg);box-shadow:0 8px 18px rgba(60,20,20,.18);
+  background-image:repeating-linear-gradient(transparent 0 25px, rgba(208,112,138,.28) 25px 26px);background-position:0 10px;animation:pull .45s cubic-bezier(.2,.9,.3,1.2)}
+.slip .tape{top:-10px;left:22px;transform:rotate(-8deg);width:70px}
+.slip .tag{display:inline-block;font-family:var(--f-mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;color:#fff}
+.slip .txt{font-family:var(--f-hand);font-size:28px;line-height:1.05;margin:10px 0 12px;font-weight:700}
+.slip-actions{display:flex;gap:8px;flex-wrap:wrap}
+.pull-cta{display:flex;flex-direction:column;gap:10px;align-items:flex-start}
+.pull-cta p{margin:0;color:var(--ink-soft);max-width:32ch;font-size:14px}
+@keyframes pull{from{transform:translateY(40px) rotate(6deg);opacity:0}to{transform:rotate(-1.5deg);opacity:1}}
+.tape{position:absolute;width:84px;height:22px;background:rgba(238,180,195,.7);box-shadow:0 1px 2px rgba(0,0,0,.1);z-index:3}
+.tape.blue{background:rgba(169,195,228,.75)}
+.tape.dots{background:radial-gradient(circle,rgba(75,42,32,.7) 28%,transparent 31%) 0 0/9px 9px, rgba(251,244,234,.9)}
+.clip{position:absolute;z-index:4;width:22px;pointer-events:none}
+.sticker{position:absolute;z-index:4;pointer-events:none;filter:drop-shadow(0 2px 2px rgba(0,0,0,.2))}
+.sticker svg{display:block;width:100%;height:auto}
+#heroStk{position:absolute;inset:0;pointer-events:none}
+.t-del{font-size:16px;padding:0 4px;opacity:.5}
+.task:hover .t-del{opacity:.8}
+
+/* ---------- summary ---------- */
+.sum-top{display:flex;align-items:flex-end;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:10px}
+.big{font-family:var(--f-disp);font-size:58px;line-height:.9;font-variant-numeric:tabular-nums}
+.big small{font-family:var(--f-hand);font-size:24px;color:var(--ink-soft);margin-left:6px}
+.stamp{font-family:var(--f-mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;border:1.5px solid var(--bord);color:var(--bord);padding:4px 8px;transform:rotate(-4deg);border-radius:3px}
+.stamp.off{border-style:dashed;border-color:rgba(75,42,32,.3);color:var(--ink-soft)}
+.sum-rows{display:flex;flex-direction:column;gap:7px;margin-top:14px}
+.sum-row{display:grid;grid-template-columns:130px 1fr 24px;gap:10px;align-items:center;font-size:13px}
+.dots{display:flex;gap:4px;flex-wrap:wrap}
+.dots i{width:12px;height:12px;border-radius:50%;display:block;background:var(--c)}
+.dots i.e{background:transparent;border:1.5px dashed rgba(75,42,32,.25)}
+.sum-row .k{font-family:var(--f-mono);font-size:12px;text-align:right}
+.sum-extra{display:flex;gap:18px;flex-wrap:wrap;margin-top:12px;font-family:var(--f-mono);font-size:12px;color:var(--ink-soft)}
+.reflect{margin-top:16px;padding-top:12px;border-top:1.5px dashed rgba(75,42,32,.2)}
+.reflect label{display:block;font-family:var(--f-serif);font-style:italic;font-size:20px;line-height:1.15}
+.reflect .muted{font-size:12px;margin-top:2px}
+.reflect textarea{width:100%;margin-top:8px;border:0;resize:vertical;min-height:112px;font-family:var(--f-hand);font-size:22px;line-height:28px;color:var(--ink);padding:0 2px;
+  background:repeating-linear-gradient(transparent 0 27px, rgba(79,118,168,.3) 27px 28px)}
+.reflect textarea:focus{outline:none;background-color:rgba(248,221,228,.35)}
+
+/* ---------- goals ---------- */
+.goals-list{list-style:none;margin:12px 0 0;padding:0;display:flex;flex-direction:column;gap:12px}
+.goal-top{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.goal-name{font-weight:500}
+.goal-num{font-family:var(--f-hand);font-size:22px;font-weight:700;white-space:nowrap}
+.goal-bar{height:10px;background:rgba(75,42,32,.1);border-radius:6px;overflow:hidden;margin-top:4px}
+.goal-bar b{display:block;height:100%;background:var(--pink-dk);border-radius:6px}
+.goal.done .goal-bar b{background:var(--bord)}
+.goal-meta{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:4px;font-size:12px;color:var(--ink-soft)}
+.goal-btns{display:flex;gap:2px;align-items:center}
+.goal-btns button{border:1.2px solid rgba(75,42,32,.35);background:transparent;border-radius:50%;width:24px;height:24px;padding:0;line-height:1;font-size:14px}
+.goal-btns .icon-btn{border:0;width:auto}
+.empty{font-size:14px;color:var(--ink-soft);margin:12px 0 4px}
+
+/* ---------- spheres ---------- */
+.spheres-head{display:flex;justify-content:space-between;align-items:flex-end;gap:14px;flex-wrap:wrap;margin-bottom:16px}
+.spheres-head h2{margin:0;font-family:var(--f-disp);font-weight:400;font-size:clamp(32px,4.5vw,48px);line-height:1}
+.spheres-head p{margin:0;font-family:var(--f-mono);font-size:12px;max-width:46ch}
+.sp-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:26px}
+.sphere .card-h{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.sphere h3{margin:0;font-family:var(--f-disp);font-weight:400;font-size:27px;line-height:1.05}
+.sp-tools{display:flex;align-items:center;gap:6px;flex:none}
+.chip{font-family:var(--f-mono);font-size:11px;padding:3px 8px;color:#fff;background:var(--c);white-space:nowrap}
+.tasks{list-style:none;margin:10px 0 0;padding:0}
+.task{display:grid;grid-template-columns:28px 1fr auto;gap:10px;align-items:center;padding:6px 0;border-bottom:1px dashed rgba(75,42,32,.16)}
+.task:last-child{border-bottom:0}
+.box{width:27px;height:27px;border:1.8px solid var(--ink);border-radius:5px;background:#fff;display:grid;place-items:center;padding:0;
+  font-family:var(--f-hand);font-weight:700;font-size:20px;line-height:1;color:#fff;transition:background .15s, transform .12s}
+.box:hover:not([disabled]){transform:scale(1.08)}
+.box.on{background:var(--c);border-color:var(--c)}
+.box svg{width:18px;height:18px}
+.box[disabled]{cursor:default;opacity:.45}
+.t-text{font-size:14.5px;line-height:1.3}
+.task.on .t-text{color:var(--ink)}
+.t-right{display:flex;align-items:center;gap:4px}
+.minus{border:0;background:none;padding:0 4px;font-size:17px;line-height:1;color:var(--ink-soft);opacity:.55}
+.minus:hover{opacity:1;color:var(--bord)}
+.task.edit{grid-template-columns:1fr 128px 24px;gap:6px}
+.task.edit input,.task.edit select{min-width:0;border:0;border-bottom:1.5px solid rgba(75,42,32,.3);background:transparent;padding:3px 2px;font-size:14px}
+.task.edit select{font-size:12px;font-family:var(--f-mono)}
+.add{display:flex;gap:6px;margin-top:10px}
+.add input{flex:1;min-width:0;border:0;border-bottom:1.5px solid rgba(75,42,32,.32);background:transparent;font-family:var(--f-hand);font-size:21px;padding:2px}
+.add input::placeholder{color:rgba(75,42,32,.4)}
+.add input:focus{outline:none;border-bottom-color:var(--pink-dk)}
+.add button{border:0;background:var(--choc);color:var(--milk);width:30px;height:30px;border-radius:50%;font-size:18px;line-height:1;flex:none}
+.sp-note{font-family:var(--f-mono);font-size:11px;color:var(--ink-soft);margin-top:10px}
+
+/* ---------- progress ---------- */
+.stats{display:flex;gap:26px;flex-wrap:wrap;margin-top:12px}
+.stat .v{font-family:var(--f-disp);font-size:40px;line-height:1;font-variant-numeric:tabular-nums}
+.stat .v small{font-size:20px;color:var(--ink-soft)}
+.stat .l{font-family:var(--f-mono);font-size:10.5px;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.08em;max-width:16ch}
+.chart-scroll{overflow-x:auto;margin-top:22px}
+.chart{display:grid;grid-template-columns:28px repeat(13,minmax(30px,1fr));gap:8px;min-width:560px;align-items:end}
+.axis{height:170px;position:relative;font-family:var(--f-mono);font-size:10px;color:var(--ink-soft)}
+.axis span{position:absolute;right:4px;transform:translateY(50%)}
+.col{display:flex;flex-direction:column;align-items:center;gap:6px;border:0;background:none;padding:0}
+.stack{position:relative;width:100%;height:170px;display:flex;flex-direction:column-reverse;
+  background:repeating-linear-gradient(to top, rgba(75,42,32,.1) 0 1px, transparent 1px var(--grid,34px))}
+.stack i{display:block;width:100%;border-top:1.5px solid var(--milk)}
+.stack .tot{position:absolute;left:0;right:0;text-align:center;font-family:var(--f-hand);font-size:19px;font-weight:700;transform:translateY(-100%)}
+.col .wn{font-family:var(--f-disp);font-size:15px}
+.col.now .wn{color:var(--pink-dk)}
+.col.future .stack{outline:1.5px dashed rgba(75,42,32,.15);outline-offset:-1px}
+.legend{display:flex;gap:14px;flex-wrap:wrap;margin-top:14px;font-size:12.5px}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:12px;height:12px;display:inline-block;background:var(--c)}
+.rule{font-family:var(--f-mono);font-size:11.5px;color:var(--ink-soft);margin-top:12px}
+
+.foot{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-family:var(--f-mono);font-size:12px}
+.save-state{display:inline-flex;align-items:center;gap:6px}
+.save-state i{width:7px;height:7px;border-radius:50%;background:#8bb86a;display:inline-block}
+
+/* ---------- dialog ---------- */
+dialog{border:0;padding:0;background:transparent;max-width:min(520px,calc(100vw - 32px));width:100%}
+dialog::backdrop{background:rgba(43,20,15,.45)}
+.dlg{background:var(--milk);padding:24px 22px 20px;box-shadow:0 20px 40px rgba(0,0,0,.3);position:relative;max-height:calc(100vh - 60px);overflow:auto}
+.dlg h3{margin:0 0 14px;font-family:var(--f-disp);font-weight:400;font-size:28px}
+.fld{display:block;margin-bottom:12px;font-size:13px;color:var(--ink-soft)}
+.fld input{display:block;width:100%;margin-top:3px;border:0;border-bottom:1.5px solid rgba(75,42,32,.35);background:transparent;padding:4px 2px;font-size:16px;color:var(--ink)}
+.fld input:focus{outline:none;border-bottom-color:var(--pink-dk)}
+.modes{border:0;padding:0;margin:4px 0 10px;display:flex;flex-direction:column;gap:6px;font-size:14px}
+.modes legend{font-size:13px;color:var(--ink-soft);margin-bottom:4px;padding:0}
+.links{border:1.5px dashed rgba(75,42,32,.25);padding:10px 12px;margin-bottom:12px;max-height:240px;overflow:auto;font-size:14px}
+.links h4{margin:8px 0 4px;font-family:var(--f-mono);font-weight:400;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft)}
+.links h4:first-child{margin-top:0}
+.links label{display:flex;gap:8px;align-items:center;padding:2px 0}
+.links[hidden]{display:none}
+.dlg-actions{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap}
+.dlg-actions .danger{margin-right:auto;border-color:var(--bord);color:var(--bord)}
+
+/* =====================================================================
+   ВАРИАНТ 1 · блокнот (спокойный)
+   ===================================================================== */
+body.v1{
+  --f-disp:"Prata", Georgia, serif; --f-serif:"Prata", Georgia, serif; --f-hand:"Bad Script", "Segoe Print", cursive;
+  background:
+    repeating-linear-gradient(90deg, transparent 0 52px, rgba(208,112,138,.16) 52px 55px, transparent 55px 59px, rgba(208,112,138,.16) 59px 62px, transparent 62px 120px),
+    #f6ece5;
+}
+.v1 .page{grid-template-columns:1.25fr 1fr;grid-template-areas:"hero slip" "weeks weeks" "book book" "spheres spheres" "progress progress" "foot foot"}
+.v1 .hand{font-size:18px}
+.v1 .hero{background:var(--milk);padding:30px 30px 26px;box-shadow:0 10px 26px rgba(90,40,40,.12);transform:rotate(-.4deg);align-self:stretch;justify-content:center}
+.v1 .hero h1{font-size:clamp(50px,7vw,88px);color:var(--bord);line-height:1}
+.v1 .hero .sub{color:var(--ink-soft)}
+.v1 .hero .badge{position:absolute;right:22px;bottom:-24px;background:var(--pink-lt);transform:rotate(3deg);box-shadow:0 6px 14px rgba(90,40,40,.14);color:var(--choc)}
+.v1 .hero .badge .tape{top:-11px;left:50%;transform:translateX(-50%) rotate(-5deg)}
+.v1 .hero .badge .num{font-size:42px}
+.v1 .hero .badge .dates{color:var(--bord);font-size:16px}
+.v1 .slipcard{background:radial-gradient(circle, rgba(208,112,138,.45) 24%, transparent 26%) 0 0/30px 30px, var(--milk);
+  padding:22px;box-shadow:0 10px 26px rgba(90,40,40,.12);transform:rotate(.6deg)}
+.v1 .slipcard .inner{background:#fbe9ee;padding:18px 18px 20px;position:relative}
+.v1 .slipcard h2{font-size:30px;color:var(--bord)}
+.v1 .slipcard .hand{color:var(--pink-dk)}
+.v1 .weeks{background:var(--milk);padding:14px 16px 12px;box-shadow:0 8px 20px rgba(90,40,40,.1);margin-top:10px}
+.v1 .wk{background:#f6e6e9;border-radius:8px 8px 3px 3px;color:var(--choc)}
+.v1 .wk b{font-size:18px}
+.v1 .wk.now{background:var(--pink-lt);box-shadow:inset 0 -3px 0 var(--pink-dk)}
+.v1 .wk.viewing{background:var(--bord);color:var(--milk)}
+.v1 .weeks-cap{color:var(--ink-soft)}
+.v1 .book{position:relative;padding:14px;background:#ead7d4;box-shadow:0 16px 32px rgba(90,40,40,.16);border-radius:4px}
+.v1 .pg{padding:30px 28px}
+.v1 .pg-l{background:#fffaf6;box-shadow:inset -16px 0 20px -14px rgba(90,40,40,.18)}
+.v1 .pg-r{background:#fbeef0;box-shadow:inset 16px 0 20px -14px rgba(90,40,40,.18)}
+.v1 .book .card{background:transparent}
+.v1 .card h2{font-size:28px}
+.v1 .big{font-size:50px}
+.v1 .reflect label{font-size:19px}
+.v1 .reflect textarea{font-size:19px}
+.v1 .spheres-head h2{color:var(--bord);font-size:clamp(30px,4vw,42px)}
+.v1 .spheres-head p{color:var(--ink-soft)}
+.v1 .sphere{background:var(--pat);padding:9px;box-shadow:0 10px 22px rgba(90,40,40,.14)}
+.v1 .sphere .sheet{background:var(--milk);padding:20px 18px 16px}
+.v1 .sphere h3{font-size:24px}
+.v1 .add input{font-size:18px}
+.v1 .progress{padding:30px 26px 24px;box-shadow:0 10px 26px rgba(90,40,40,.12)}
+.v1 .stat .v{font-size:34px}
+.v1 .foot{color:var(--ink-soft)}
+
+/* =====================================================================
+   ВАРИАНТ 2 · календарные листы
+   ===================================================================== */
+body.v2{background:#1f1310}
+.v2 .page{max-width:1280px;grid-template-columns:repeat(4,1fr);gap:22px;
+  grid-template-areas:"hero weeks weeks weeks" "slip book book book" "spheres spheres spheres spheres" "progress progress progress progress" "foot foot foot foot"}
+.v2 .card{background:var(--milk)}
+.v2 .card > .card-h, .v2 .sheet > .card-h{padding:16px 16px 12px}
+.v2 .card > .card-b, .v2 .sheet > .card-b{padding:12px 16px 16px}
+.v2 .hero{background:var(--pink);padding:18px 18px 16px;justify-content:space-between;align-self:stretch;min-height:250px}
+.v2 .hero h1{font-family:var(--f-cond);font-weight:700;font-size:64px;letter-spacing:-.03em;color:var(--choc);text-transform:lowercase;line-height:.88}
+.v2 .hero .sub{color:var(--choc);font-size:11.5px}
+.v2 .hero .badge{align-self:flex-end;align-items:flex-end;padding:0;min-width:0;color:var(--choc);text-align:right}
+.v2 .hero .badge .num{font-family:var(--f-cond);font-weight:700}
+.v2 .hero .badge .dates{font-family:var(--f-mono);font-size:11px}
+.v2 .hero .badge .tape{display:none}
+.v2 .weeks{align-self:stretch}
+.v2 .months{height:100%}
+.v2 .month{display:flex;flex-direction:column}
+.v2 .m-oct .mgrid{background:var(--blue-dk);color:#fff;flex:1}
+.v2 .m-nov .mgrid{background:#a9c3e4;color:var(--choc);flex:1}
+.v2 .m-nov .mrow,.v2 .m-nov .mrow span{border-color:rgba(75,42,32,.2)}
+.v2 .m-dec .mgrid{background:#8e2230;color:#fff;flex:1}
+.v2 .mrow .wn{background:rgba(255,255,255,.18)}
+.v2 .m-oct .mrow .wn{background:var(--pink-dk)}
+.v2 .m-nov .mrow .wn{background:var(--milk)}
+.v2 .m-dec .mrow .wn{background:#c24a58}
+.v2 .mrow.viewing{background:rgba(255,255,255,.22);outline:2px solid #fff;outline-offset:-2px}
+.v2 .m-nov .mrow.viewing{background:rgba(255,255,255,.5);outline-color:var(--choc)}
+.v2 .mrow:not([disabled]):hover{background:rgba(255,255,255,.12)}
+.v2 .weeks-cap{display:none}
+.v2 .weeks-cap button{color:var(--milk)}
+.v2 .book{grid-template-columns:1fr 2fr;gap:22px}
+.v2 .pg{display:contents}
+.v2 .goals{order:1} .v2 .summary{order:2}
+.v2 .slipcard .card-h{background:var(--pat-ging-pink);padding-top:44px}
+.v2 .slipcard .card-h .eyebrow{background:var(--milk);display:inline-block;padding:2px 6px}
+.v2 .slipcard h2{font-family:var(--f-script);color:var(--bord);font-size:36px;text-shadow:2px 2px 0 var(--milk)}
+.v2 .slipcard .hand{background:var(--milk);display:inline-block;padding:0 6px}
+.v2 .slip-stage{grid-template-columns:1fr;justify-items:center}
+.v2 .goals .card-h{background:var(--choc);color:var(--milk)}
+.v2 .goals .card-h .eyebrow{color:var(--pink)}
+.v2 .goals h2{font-family:var(--f-script);font-size:34px}
+.v2 .summary{display:grid;grid-template-columns:1fr 1fr}
+.v2 .summary .card-h{grid-column:1/-1;background:var(--pat-stripe);padding:20px 16px}
+.v2 .summary .card-h > *{background:var(--milk);display:inline-block;padding:2px 8px}
+.v2 .summary .card-h h2{font-family:var(--f-script);color:var(--bord);font-size:34px;display:table;margin-top:6px}
+.v2 .summary .reflect{border-top:0;border-left:1.5px solid rgba(75,42,32,.15);margin:0;padding:12px 16px 16px}
+.v2 .summary .card-b{padding-right:16px}
+.v2 .spheres-head{color:var(--milk)}
+.v2 .spheres-head h2{font-family:var(--f-cond);font-weight:700;text-transform:uppercase;color:#e7e36a;font-size:clamp(34px,5vw,58px)}
+.v2 .sp-grid{grid-template-columns:repeat(4,1fr);gap:22px}
+.v2 .sphere{background:var(--milk)}
+.v2 .sphere .card-h{background:var(--pat);min-height:118px;align-items:flex-end;padding:14px}
+.v2 .sphere h3{font-family:var(--f-script);font-size:30px;color:var(--c);background:var(--milk);padding:2px 10px 4px;box-shadow:0 2px 0 rgba(0,0,0,.1)}
+.v2 .sphere .icon-btn{background:var(--milk);opacity:1;border-radius:50%;width:26px;height:26px}
+.v2 .sphere .card-b{background:
+  linear-gradient(90deg, var(--c) 0 6px, transparent 6px)}
+.v2 .sphere .card-b{padding-left:22px}
+.v2 .task{border-bottom:1px solid rgba(75,42,32,.14)}
+.v2 .box{border-radius:0}
+.v2 .task.edit{grid-template-columns:1fr 24px;row-gap:2px}
+.v2 .task.edit select{grid-column:1}
+.v2 .task.edit .icon-btn{grid-row:1/3;grid-column:2}
+.v2 .progress .card-h{background:var(--pat-tartan);padding:22px 18px}
+.v2 .progress .card-h > *{background:var(--milk);display:inline-block;padding:2px 8px}
+.v2 .progress .card-h h2{font-family:var(--f-script);color:var(--bord);display:table;margin-top:6px}
+.v2 .progress .card-b{padding:16px 20px 20px}
+.v2 .foot{color:rgba(251,244,234,.7)}
+
+/* =====================================================================
+   ВАРИАНТ 3 · скрапбук на миллиметровке
+   ===================================================================== */
+body.v3{
+  background-color:#fbf6ee;
+  background-image:
+    linear-gradient(rgba(79,118,168,.14) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(79,118,168,.14) 1px, transparent 1px);
+  background-size:22px 22px;
+}
+.v3 .page{grid-template-columns:repeat(3,1fr);gap:30px;
+  grid-template-areas:"hero hero slip" "weeks weeks weeks" "book book book" "spheres spheres spheres" "progress progress progress" "foot foot foot"}
+.v3 .card h2{font-family:var(--f-serif);font-style:italic;font-weight:500}
+.v3 .hero{background:#fff;padding:30px 34px 28px;box-shadow:0 6px 16px rgba(90,40,60,.12);align-self:stretch;display:grid;grid-template-columns:1fr auto;column-gap:24px;align-content:center}
+.v3 .hero::before{content:"";position:absolute;left:0;right:0;top:0;height:14px;background:var(--pat-ging-pink)}
+.v3 .hero h1{font-family:var(--f-serif);font-style:italic;font-weight:500;font-size:clamp(54px,7vw,90px);color:var(--bord);line-height:.95}
+.v3 .hero .sub{color:var(--pink-dk)}
+.v3 .hero .badge{grid-column:2;grid-row:1/3;align-self:center;background:var(--pink-lt);box-shadow:0 6px 14px rgba(90,40,60,.15);transform:rotate(-3deg);color:var(--bord)}
+.v3 .hero .badge .tape{top:-10px;left:14px;transform:rotate(-8deg);width:60px}
+.v3 .hero .badge .dates{color:var(--bord)}
+.v3 .weeks{background:#fff;padding:12px 14px 10px;box-shadow:0 6px 16px rgba(90,40,60,.1)}
+.v3 .wk{border-radius:10px 10px 0 0;background:#fdf0f3;border-top:4px solid var(--pink)}
+.v3 .wk b{font-family:var(--f-serif);font-style:italic;font-size:19px;color:var(--bord)}
+.v3 .wk.now{border-top-color:var(--bord)}
+.v3 .wk.viewing{background:var(--bord);border-top-color:var(--bord);color:var(--milk)}
+.v3 .wk.viewing b{color:var(--milk)}
+.v3 .weeks-cap{color:var(--ink-soft)}
+.v3 .slipcard{background:#fff;padding:26px 20px 20px;box-shadow:0 6px 16px rgba(90,40,60,.12);transform:rotate(1deg)}
+.v3 .slipcard::before{content:"";position:absolute;left:0;right:0;top:0;height:12px;background:var(--pat-stripe)}
+.v3 .slipcard h2{font-size:30px;color:var(--bord)}
+.v3 .slip{background-image:repeating-linear-gradient(transparent 0 25px, rgba(208,112,138,.3) 25px 26px)}
+.v3 .book{grid-template-columns:1fr 1.3fr;gap:30px}
+.v3 .card.summary,.v3 .card.goals{padding:28px 24px 22px;box-shadow:0 6px 16px rgba(90,40,60,.12)}
+.v3 .card.summary{background:#fff;transform:rotate(.4deg)}
+.v3 .card.goals{background:#fdecf1;transform:rotate(-.6deg)}
+.v3 .card.goals::before{content:"";position:absolute;left:0;right:0;top:0;height:12px;background:var(--pat-tartan)}
+.v3 .goals h2,.v3 .summary h2{color:var(--bord)}
+.v3 .goal-bar{background:#fff}
+.v3 .spheres-head h2{font-family:var(--f-serif);font-style:italic;font-weight:500;color:var(--bord)}
+.v3 .spheres-head p{color:var(--ink-soft)}
+.v3 .sp-grid{gap:34px 30px}
+.v3 .sphere{background:#fff;box-shadow:0 6px 16px rgba(90,40,60,.12);padding-top:14px}
+.v3 .sphere::before{content:"";position:absolute;left:18px;top:-14px;width:96px;height:28px;background:var(--pat);border-radius:6px 6px 0 0}
+.v3 .sphere .sheet{padding:10px 20px 18px;border-top:3px solid var(--c)}
+.v3 .sphere h3{font-family:var(--f-hand);font-weight:700;font-size:34px;color:var(--c)}
+.v3 .sphere:nth-child(1){transform:rotate(-.5deg)} .v3 .sphere:nth-child(4){transform:rotate(.5deg)}
+.v3 .box{border-radius:50%;border-color:var(--pink-dk)}
+.v3 .task{border-bottom-color:rgba(208,112,138,.25);border-bottom-style:solid}
+.v3 .progress{background:#fff;padding:32px 24px 22px;box-shadow:0 6px 16px rgba(90,40,60,.12)}
+.v3 .progress::before{content:"";position:absolute;left:0;right:0;top:0;height:12px;background:var(--pat-ging-pink)}
+.v3 .progress h2{color:var(--bord)}
+.v3 .foot{color:var(--ink-soft)}
+
+/* ---------- responsive ---------- */
+@media (max-width: 1100px){
+  .v2 .page{grid-template-columns:1fr 1fr;grid-template-areas:"hero slip" "weeks weeks" "book book" "spheres spheres" "progress progress" "foot foot"}
+  .v2 .sp-grid{grid-template-columns:repeat(2,1fr)}
+  .v3 .page{grid-template-columns:1fr 1fr;grid-template-areas:"hero slip" "weeks weeks" "book book" "spheres spheres" "progress progress" "foot foot"}
+  .v3 .hero{grid-template-columns:1fr}
+  .v3 .hero .badge{grid-column:1;grid-row:auto;justify-self:start;margin-top:8px}
+}
+@media (max-width: 860px){
+  .page,.v1 .page,.v2 .page,.v3 .page{grid-template-columns:1fr;grid-template-areas:"hero" "slip" "weeks" "book" "spheres" "progress" "foot"}
+  .book,.v2 .book,.v3 .book{grid-template-columns:1fr}
+  .v2 .summary{grid-template-columns:1fr}
+  .v2 .summary .reflect{border-left:0;border-top:1.5px dashed rgba(75,42,32,.2)}
+  .months{grid-template-columns:1fr}
+  .sp-grid,.v2 .sp-grid{grid-template-columns:1fr}
+  .wk-row{grid-template-columns:repeat(7,1fr)}
+  .v1 .hero .badge{position:relative;right:auto;bottom:auto;align-self:flex-start;margin-top:8px}
+}
+@media (max-width: 520px){
+  .slip-stage{grid-template-columns:1fr;justify-items:center}
+  .sum-row{grid-template-columns:100px 1fr 22px}
+  .v1 .book{padding:8px} .v1 .pg{padding:22px 16px}
+}
+@media (prefers-reduced-motion: reduce){ *{animation:none!important;transition:none!important} }
+</style>
+</head>
+<body class="v1">
+
+<div class="switcher" role="group" aria-label="вариант оформления">
+  <span>вариант оформления:</span>
+  <button data-variant="1">1 · блокнот</button>
+  <button data-variant="2">2 · календарь</button>
+  <button data-variant="3">3 · скрапбук</button>
+</div>
+
+<div class="page">
+  <aside class="side">
+    <header class="hero">
+      <h1>уютные будни</h1>
+      <div class="sub">5 октября – 31 декабря 2026</div>
+      <div class="badge" id="badge"></div>
+      <div id="heroStk"></div>
+    </header>
+    <nav class="weeks" id="weeks" aria-label="недели"></nav>
+    <section class="card slipcard" id="slip"></section>
+  </aside>
+  <main class="main">
+    <section class="book">
+      <div class="pg pg-l"><section class="card goals" id="goals"></section></div>
+      <div class="pg pg-r"><section class="card summary" id="summary"></section></div>
+    </section>
+    <section class="spheres" id="spheres"></section>
+    <section class="card progress" id="progress"></section>
+  </main>
+  <footer class="foot">
+    <span>неделя начинается в понедельник</span>
+    <span class="save-state"><i></i><span id="saveState">сохраняется в этом браузере</span></span>
+  </footer>
+</div>
+
+<dialog id="goalDlg">
+  <form method="dialog" class="dlg" id="goalForm">
+    <h3 id="goalDlgTitle">новая цель</h3>
+    <label class="fld">название<input name="name" required maxlength="80" placeholder="например, прочитать 5 книг"></label>
+    <label class="fld">сколько нужно<input name="target" type="number" min="1" max="999" required></label>
+    <fieldset class="modes">
+      <legend>как считать прогресс</legend>
+      <label><input type="radio" name="mode" value="manual"> вручную, кнопками + и −</label>
+      <label><input type="radio" name="mode" value="auto"> автоматически из отмеченных занятий</label>
+    </fieldset>
+    <div class="links" id="goalLinks"></div>
+    <div class="dlg-actions">
+      <button class="btn danger" value="del" formnovalidate id="goalDel">удалить цель</button>
+      <button class="btn" value="cancel" formnovalidate>отмена</button>
+      <button class="btn primary" value="save">сохранить</button>
+    </div>
+  </form>
+</dialog>
+
+<script>
+(function(){
+  const START = new Date(2026, 9, 5);   // понедельник, 5 октября 2026
+  const END = new Date(2026, 11, 31);   // 31 декабря 2026
+  const WEEKS = 13;                     // 12 полных недель + 28–31 декабря
+  const KEY = "uyutnye-budni-2026";
+  const MONTHS = ["января","февраля","марта","апреля","мая","июня","июля","августа","сентября","октября","ноября","декабря"];
+  const MSHORT = ["янв","фев","мар","апр","мая","июн","июл","авг","сен","окт","ноя","дек"];
+  const WEEKDAYS = ["воскресенье","понедельник","вторник","среда","четверг","пятница","суббота"];
+
+  const SPHERES = [
+    { id:"body", name:"движение и тело", color:"#8a2433" },
+    { id:"care", name:"забота о себе",   color:"#c9607c" },
+    { id:"home", name:"дом и уют",       color:"#6b3f2c" },
+    { id:"me",   name:"время для себя",  color:"#4f76a8" }
+  ];
+  const SPH = Object.fromEntries(SPHERES.map(s => [s.id, s]));
+
+  // стартовый список-пример: заказчица меняет его сама
+  const DEFAULT_LIST = [
+    ["body","тренировка"],["body","растяжка 15 минут"],["body","прогулка 40 минут"],["body","йога перед сном"],
+    ["care","маска для лица"],["care","лечь спать до 23:00"],["care","ванна с солью"],["care","уход за волосами"],
+    ["home","разобрать один ящик"],["home","приготовить новое блюдо"],["home","купить цветы домой"],["home","зажечь свечи вечером"],
+    ["me","чтение"],["me","кофейня одной"],["me","вечер с фильмом"],["me","порисовать"]
+  ].map(([sphere, text], i) => ({ id:"t" + (i + 1), sphere, text }));
+  const DEFAULT_GOALS = [
+    { id:"g1", name:"прочитать 5 книг", target:5, links:[], manual:0 },
+    { id:"g2", name:"20 тренировок", target:20, links:["t1"], manual:0 }
+  ];
+
+  // идеи-сюрпризы для бумажки дня: из четырёх сфер и близких к ним тем
+  const NEAR = { nature:{ name:"природа", color:"#8c7a55" }, food:{ name:"вкусное", color:"#b4546a" }, people:{ name:"близкие", color:"#a0707e" }, craft:{ name:"творчество", color:"#6c8fbd" } };
+  const SURPRISES = [
+    ["body","потанцевать под три любимые песни"],["body","выйти на прогулку без телефона"],["body","10 приседаний, пока закипает чайник"],
+    ["body","размять шею и плечи 5 минут"],["body","пройти одну остановку пешком"],["body","подняться по лестнице вместо лифта"],
+    ["body","зарядка под любимый альбом"],["body","найти новое видео с йогой и попробовать"],["body","покататься на коньках"],
+    ["care","маска для лица и 15 минут полежать"],["care","лечь спать на час раньше"],["care","тёплый душ и крем для тела"],
+    ["care","массаж рук с кремом"],["care","чай из самой красивой чашки, без спешки"],["care","записать три вещи, за которые себя можно похвалить"],
+    ["care","час без телефона перед сном"],["care","самомассаж лица"],["care","надеть любимые тёплые носки и ничего не делать"],
+    ["home","переставить пару вещей на полке"],["home","зажечь свечу и разобрать стол"],["home","испечь что-нибудь с корицей"],
+    ["home","разобрать косметичку"],["home","достать гирлянду и повесить её"],["home","красиво заправить кровать и положить плед"],
+    ["home","поставить в вазу ветку или цветы"],["home","сварить какао с маршмеллоу"],["home","постирать плед"],
+    ["me","полчаса почитать в тишине"],["me","пересмотреть старый любимый фильм"],["me","20 минут порисовать что угодно"],
+    ["me","сходить одной в кофейню"],["me","собрать плейлист на этот сезон"],["me","написать письмо себе в 31 декабря"],
+    ["me","собрать доску настроения в Pinterest"],["me","послушать подкаст в ванной"],["me","сделать пару фото просто для себя"],
+    ["nature","найти самый красивый лист и засушить его"],["nature","посмотреть на закат"],["nature","покормить птиц"],
+    ["nature","прогуляться в незнакомом парке"],["nature","подышать у открытого окна 5 минут"],
+    ["food","попробовать новый вкус чая"],["food","приготовить завтрак как в кафе"],["food","купить мандарины и съесть их под плед"],
+    ["food","испечь печенье"],["food","сварить суп, как в детстве"],
+    ["people","позвонить маме или подруге просто так"],["people","написать открытку от руки"],["people","позвать подругу на чай"],
+    ["people","отправить кому-то смешную фотку"],
+    ["craft","слепить что-нибудь из пластилина или глины"],["craft","сделать коллаж из журналов"],["craft","попробовать вышивку крестиком"],
+    ["craft","украсить страницу в блокноте наклейками"],["craft","связать хоть пару рядов"]
+  ].map(([s, t]) => ({ s, t }));
+
+  /* ---------- dates ---------- */
+  const midnight = d => new Date(d.getFullYear(), d.getMonth(), d.getDate());
+  const dayDiff = (a, b) => Math.round((midnight(a) - midnight(b)) / 864e5);
+  const addDays = (d, n) => { const x = new Date(d); x.setDate(x.getDate() + n); return x; };
+  const iso = d => d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+  const pad2 = n => String(n).padStart(2, "0");
+  const wid = n => "w" + pad2(n);
+  const rawWeek = d => Math.floor(dayDiff(d, START) / 7) + 1;
+  const beforeStart = () => dayDiff(new Date(), START) < 0;
+  const nowWeek = () => Math.min(WEEKS, Math.max(1, rawWeek(new Date())));
+  const weekStart = n => addDays(START, (n - 1) * 7);
+  const weekEnd = n => { const e = addDays(weekStart(n), 6); return e > END ? END : e; };
+  function weekRange(n, short){
+    const a = weekStart(n), b = weekEnd(n), M = short ? MSHORT : MONTHS;
+    if (a.getMonth() === b.getMonth()) return a.getDate() + "–" + b.getDate() + " " + M[a.getMonth()];
+    return a.getDate() + " " + M[a.getMonth()] + " – " + b.getDate() + " " + M[b.getMonth()];
+  }
+  const isPast = n => n < nowWeek();
+  const isFuture = n => n > nowWeek();
+  const plural = (n, a, b, c) => { const m10 = n % 10, m100 = n % 100; return (m10 === 1 && m100 !== 11) ? a : (m10 >= 2 && m10 <= 4 && (m100 < 12 || m100 > 14)) ? b : c; };
+  const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]));
+  const uid = p => p + Date.now().toString(36) + Math.random().toString(36).slice(2, 5);
+  const clone = x => JSON.parse(JSON.stringify(x));
+
+  /* ---------- state ---------- */
+  let state = { list: clone(DEFAULT_LIST), goals: clone(DEFAULT_GOALS), weeks: {} };
+  let variant = "1";
+  let viewing = nowWeek();
+  const editing = new Set();
+
+  function load(){
+    try {
+      const raw = localStorage.getItem(KEY);
+      if (raw) {
+        const d = JSON.parse(raw);
+        if (Array.isArray(d.list)) state.list = d.list;
+        if (Array.isArray(d.goals)) state.goals = d.goals;
+        if (d.weeks && typeof d.weeks === "object") state.weeks = d.weeks;
+      }
+    } catch (e) {}
+    try { const v = localStorage.getItem(KEY + "-variant"); if (["1","2","3"].includes(v)) variant = v; } catch (e) {}
+  }
+  let saveTimer;
+  function save(){
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(() => {
+      const el = document.getElementById("saveState");
+      try { localStorage.setItem(KEY, JSON.stringify(state)); el.textContent = "сохранено в этом браузере"; }
+      catch (e) { el.textContent = "не получилось сохранить"; }
+    }, 250);
+  }
+
+  function week(n){ return state.weeks[wid(n)] || { marks:{}, slips:{}, note:"" }; }
+  function ensureWeek(n){
+    const k = wid(n);
+    if (!state.weeks[k]) state.weeks[k] = { marks:{}, slips:{}, note:"" };
+    const w = state.weeks[k];
+    w.marks = w.marks || {}; w.slips = w.slips || {}; if (typeof w.note !== "string") w.note = "";
+    return w;
+  }
+  // прошедшие недели «замораживают» свой список: правки дальше их не трогают
+  function freezePast(){
+    if (beforeStart()) return;
+    let changed = false;
+    for (let n = 1; n < nowWeek(); n++) {
+      const w = ensureWeek(n);
+      if (!Array.isArray(w.list)) { w.list = clone(state.list); changed = true; }
+    }
+    if (changed) save();
+  }
+  const listFor = n => { const w = state.weeks[wid(n)]; return w && Array.isArray(w.list) ? w.list : state.list; };
+  const count = (n, id) => ((week(n).marks || {})[id] || []).length;
+  const sphereCount = (n, sid) => listFor(n).filter(t => t.sphere === sid).reduce((a, t) => a + count(n, t.id), 0);
+  const weekTotal = n => SPHERES.reduce((a, s) => a + sphereCount(n, s.id), 0);
+  const slipsDone = n => Object.values(week(n).slips || {}).filter(s => s.done).length;
+  const fullWeek = n => SPHERES.every(s => sphereCount(n, s.id) > 0);
+
+  function activeDates(){
+    const set = new Set();
+    Object.values(state.weeks).forEach(w => {
+      Object.values(w.marks || {}).forEach(arr => arr.forEach(d => { if (d) set.add(d); }));
+      Object.entries(w.slips || {}).forEach(([d, s]) => { if (s.done) set.add(d); });
+    });
+    return set;
+  }
+  function streaks(){
+    const set = activeDates();
+    let d = new Date(); if (!set.has(iso(d))) d = addDays(d, -1);
+    let cur = 0; while (set.has(iso(d))) { cur++; d = addDays(d, -1); }
+    const sorted = [...set].sort(); let best = 0, run = 0, prev = null;
+    sorted.forEach(s => { const x = new Date(s + "T00:00"); run = prev && dayDiff(x, prev) === 1 ? run + 1 : 1; best = Math.max(best, run); prev = x; });
+    return { cur, best };
+  }
+  function weekActiveDays(n){
+    const set = new Set(), w = week(n);
+    Object.values(w.marks || {}).forEach(arr => arr.forEach(d => { if (d) set.add(d); }));
+    Object.entries(w.slips || {}).forEach(([d, s]) => { if (s.done) set.add(d); });
+    return set.size;
+  }
+  function goalValue(g){
+    if (!g.links || !g.links.length) return g.manual || 0;
+    let v = 0;
+    Object.values(state.weeks).forEach(w => g.links.forEach(id => { v += ((w.marks || {})[id] || []).length; }));
+    return v;
+  }
+
+  /* ---------- actions ---------- */
+  function plus(id){
+    if (isFuture(viewing)) return;
+    const w = ensureWeek(viewing);
+    (w.marks[id] = w.marks[id] || []).push(viewing === nowWeek() ? iso(new Date()) : null);
+    save(); renderAll();
+  }
+  function minus(id){
+    const w = ensureWeek(viewing);
+    if (!w.marks[id] || !w.marks[id].length) return;
+    w.marks[id].pop(); if (!w.marks[id].length) delete w.marks[id];
+    save(); renderAll();
+  }
+  function addTask(sphere, text){
+    text = text.trim().slice(0, 120); if (!text) return;
+    state.list.push({ id: uid("t"), sphere, text });
+    save(); renderAll();
+  }
+  function editTask(id, patch){
+    const t = state.list.find(x => x.id === id); if (!t) return;
+    if (patch.text != null) { const v = patch.text.trim().slice(0, 120); if (v) t.text = v; }
+    if (patch.sphere && SPH[patch.sphere]) t.sphere = patch.sphere;
+    save(); renderAll();
+  }
+  function deleteTask(id){
+    const t = state.list.find(x => x.id === id); if (!t) return;
+    const marked = count(nowWeek(), id);
+    const msg = "удалить «" + t.text + "»?" + (marked ? "\nотметки по нему на этой неделе тоже удалятся." : "") + "\nпрошлые недели останутся как были.";
+    if (!confirm(msg)) return;
+    state.list = state.list.filter(x => x.id !== id);
+    for (let n = nowWeek(); n <= WEEKS; n++) { const w = state.weeks[wid(n)]; if (w && !Array.isArray(w.list) && w.marks) delete w.marks[id]; }
+    save(); renderAll();
+  }
+  function hash(str){ let h = 2166136261; for (let i = 0; i < str.length; i++){ h ^= str.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; }
+  function draw(fresh){
+    const today = iso(new Date()), w = ensureWeek(nowWeek()), prev = w.slips[today];
+    const pool = SURPRISES.filter(x => !prev || x.t !== prev.t);
+    const pick = pool[(fresh ? Math.floor(Math.random() * 1e9) : hash(today)) % pool.length];
+    w.slips[today] = { t: pick.t, s: pick.s, done: false };
+    save(); renderAll();
+  }
+  function markSlip(){
+    const w = ensureWeek(nowWeek()), s = w.slips[iso(new Date())]; if (!s) return;
+    s.done = !s.done; save(); renderAll();
+  }
+
+  /* ---------- render ---------- */
+  const CHECK = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 13 C7 15 8 17 10 20 C13 12 17 7 22 3" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  const STAR = c => '<svg viewBox="0 0 40 40" aria-hidden="true"><path d="M20 2 L24.5 14.5 L38 15 L27 23.5 L31 37 L20 29 L9 37 L13 23.5 L2 15 L15.5 14.5Z" fill="' + c + '" stroke="#fff" stroke-width="2" stroke-linejoin="round"/></svg>';
+  const HEART = c => '<svg viewBox="0 0 40 36" aria-hidden="true"><path d="M20 34 C6 24 1 17 3 10 C5 3 14 1 20 9 C26 1 35 3 37 10 C39 17 34 24 20 34Z" fill="' + c + '" stroke="#fff" stroke-width="2"/></svg>';
+  const FLOWER = c => '<svg viewBox="0 0 40 40" aria-hidden="true"><g fill="' + c + '" stroke="#fff" stroke-width="1.5"><circle cx="20" cy="10" r="8"/><circle cx="29.5" cy="17" r="8"/><circle cx="26" cy="28.5" r="8"/><circle cx="14" cy="28.5" r="8"/><circle cx="10.5" cy="17" r="8"/></g><circle cx="20" cy="20" r="6" fill="#fbf4ea"/></svg>';
+  const BOW = c => '<svg viewBox="0 0 60 44" aria-hidden="true"><path d="M30 20 L22 40 M30 20 L38 40" stroke="' + c + '" stroke-width="6" stroke-linecap="round"/><path d="M30 20 C20 5 5 3 4 12 C3 23 17 26 30 20Z M30 20 C40 5 55 3 56 12 C57 23 43 26 30 20Z" fill="' + c + '" stroke="#fff" stroke-width="2"/><circle cx="30" cy="20" r="5.5" fill="' + c + '" stroke="#fff" stroke-width="2"/></svg>';
+  const DOT = (c, d) => '<svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="18" fill="' + c + '" stroke="#fff" stroke-width="2.5"/><circle cx="20" cy="20" r="10" fill="none" stroke="' + d + '" stroke-width="2" stroke-dasharray="3 3"/></svg>';
+  const stk = (svg, css) => '<span class="sticker" style="' + css + '">' + svg + '</span>';
+  const P1 = "#e889a3", P2 = "#f4b8c8", BD = "#8a2433", BD2 = "#b8435a";
+  const CLIP = '<svg class="clip" viewBox="0 0 24 64" aria-hidden="true"><path d="M8 20 V46 a4 4 0 0 0 8 0 V12 a6 6 0 0 0 -12 0 V48 a8 8 0 0 0 16 0 V22" fill="none" stroke="#a9a3ad" stroke-width="2.6" stroke-linecap="round"/></svg>';
+
+  function renderBadge(){
+    const el = document.getElementById("badge");
+    if (beforeStart()) {
+      const days = dayDiff(START, new Date());
+      el.innerHTML = '<div class="tape"></div><div class="lbl">до старта</div><div class="num">' + days + '</div><div class="dates">' + plural(days, "день", "дня", "дней") + ', начинаем 5 октября</div>';
+    } else {
+      const n = nowWeek();
+      el.innerHTML = '<div class="tape"></div><div class="lbl">сейчас неделя</div><div class="num">' + pad2(n) + '<small>/' + WEEKS + '</small></div><div class="dates">' + weekRange(n) + '</div>';
+    }
+  }
+
+  function weeksCap(){
+    const now = nowWeek();
+    const label = viewing === now ? "текущая неделя" : viewing < now ? "прошлая неделя" : "эта неделя ещё впереди";
+    return '<div class="weeks-cap"><span>неделя ' + pad2(viewing) + ' · ' + weekRange(viewing) + ' · ' + label + '</span>' +
+      (viewing !== now ? '<button data-week="' + now + '">вернуться к текущей</button>' : '<span>' + (viewing === WEEKS ? "финальная неделя" : "впереди недель: " + (WEEKS - now)) + '</span>') + '</div>';
+  }
+  function renderWeeks(){
+    const el = document.getElementById("weeks"), now = nowWeek();
+    if (variant === "2") {
+      const today = iso(new Date());
+      const card = (m, cls, title) => {
+        const first = new Date(2026, m, 1), last = new Date(2026, m + 1, 0);
+        let mon = addDays(first, -((first.getDay() + 6) % 7)), rows = "";
+        while (mon <= last) {
+          const n = rawWeek(mon), ok = n >= 1 && n <= WEEKS;
+          let cells = "";
+          for (let i = 0; i < 7; i++) { const d = addDays(mon, i); cells += '<span' + (iso(d) === today ? ' class="today"' : "") + '>' + (d.getMonth() === m ? d.getDate() : "") + '</span>'; }
+          rows += '<button class="mrow' + (ok && n === viewing ? " viewing" : "") + '" ' + (ok ? 'data-week="' + n + '" aria-label="неделя ' + n + ', ' + weekRange(n) + ', отметок: ' + weekTotal(n) + '"' : "disabled") + '><span class="wn">' + (ok ? pad2(n) : "") + '</span>' + cells + '</button>';
+          mon = addDays(mon, 7);
+        }
+        return '<div class="card month ' + cls + '"><div class="card-h"><h3>' + title + '</h3></div><div class="mgrid"><div class="mhead"><span>нед</span><span>пн</span><span>вт</span><span>ср</span><span>чт</span><span>пт</span><span>сб</span><span>вс</span></div>' + rows + '</div></div>';
+      };
+      el.innerHTML = '<div class="months">' + card(9, "m-oct", "октябрь") + card(10, "m-nov", "ноябрь") + card(11, "m-dec", "декабрь") + '</div>' + weeksCap();
+      return;
+    }
+    let html = '<div class="wk-row">';
+    for (let n = 1; n <= WEEKS; n++) {
+      const t = weekTotal(n);
+      const cls = ["wk", n < now && !beforeStart() ? "past" : n > now ? "future" : "now", n === viewing ? "viewing" : ""].join(" ");
+      html += '<button class="' + cls + '" data-week="' + n + '" aria-pressed="' + (n === viewing) + '" aria-label="неделя ' + n + ', ' + weekRange(n) + '"><b>' + pad2(n) + '</b><span class="d">' + weekRange(n, true) + '</span><span class="c">' + (t || "") + '</span></button>';
+    }
+    el.innerHTML = html + '</div>' + weeksCap();
+  }
+
+  function renderSlip(){
+    const d = new Date(), today = iso(d), s = week(nowWeek()).slips ? week(nowWeek()).slips[today] : null;
+    const colors = ["#c9607c","#a9c3e4","#8a2433","#f8dde4","#6b3f2c"];
+    const slips = colors.map((c, i) => '<i style="left:' + (i * 18) + 'px;background:' + c + ';transform:rotate(' + [-8,4,-2,7,-5][i] + 'deg);height:' + [46,54,50,42,48][i] + 'px"></i>').join("");
+    let right;
+    if (s) {
+      const tag = SPH[s.s] || NEAR[s.s] || { name:"сюрприз", color:"#6b3f2c" };
+      right = '<div class="slip"><div class="tape blue"></div><span class="tag" style="background:' + tag.color + '">' + esc(tag.name) + '</span>' +
+        '<div class="txt">' + esc(s.t) + '</div><div class="slip-actions">' +
+        '<button class="btn ' + (s.done ? "done" : "primary") + '" data-act="mark">' + (s.done ? "сделано ✓" : "сделала!") + '</button>' +
+        '<button class="btn" data-act="redraw">другую</button></div></div>';
+    } else {
+      right = '<div class="pull-cta"><p>в конверте идеи-сюрпризы: из твоих сфер и чуть в сторону от них. одна бумажка на день.</p><button class="btn primary" data-act="draw">вытянуть бумажку</button></div>';
+    }
+    const stage = '<div class="slip-stage"><button class="envelope" data-act="' + (s ? "redraw" : "draw") + '" aria-label="вытянуть бумажку"><span class="back"></span><span class="slips">' + slips + '</span><span class="front"></span></button>' + right + '</div>';
+    const head = '<div class="card-h"><div class="eyebrow">бумажка дня</div><h2>что сегодня?</h2><div class="hand">' + WEEKDAYS[d.getDay()] + ', ' + d.getDate() + ' ' + MONTHS[d.getMonth()] + '</div></div>';
+    const el = document.getElementById("slip");
+    if (variant === "1") el.innerHTML = '<div class="inner">' + CLIP.replace('class="clip"', 'class="clip" style="top:-22px;right:26px;transform:rotate(12deg)"') + head + '<div class="card-b">' + stage + '</div>' +
+      '<span class="sticker" style="bottom:-18px;left:-16px;width:40px;transform:rotate(-14deg)">' + STAR("#a9c3e4") + '</span></div>';
+    else el.innerHTML = head + '<div class="card-b">' + stage + '</div>' +
+      (variant === "3" ? stk(FLOWER(BD2), "top:-14px;right:-12px;width:44px;transform:rotate(-10deg)") + stk(HEART(P1), "bottom:-12px;left:-10px;width:32px;transform:rotate(-16deg)") : "");
+  }
+
+  function renderSummary(){
+    const n = viewing, w = week(n), total = weekTotal(n), full = fullWeek(n);
+    const rows = SPHERES.map(s => {
+      const c = sphereCount(n, s.id);
+      const dots = Array.from({ length: Math.min(Math.max(c, 3), 14) }, (_, i) => i < c ? '<i></i>' : '<i class="e"></i>').join("");
+      return '<div class="sum-row sp-' + s.id + '"><span>' + esc(s.name) + '</span><span class="dots">' + dots + '</span><span class="k">' + c + '</span></div>';
+    }).join("");
+    const el = document.getElementById("summary");
+    const ta = document.getElementById("weekNote");
+    const keep = ta && document.activeElement === ta && ta.dataset.week === String(n) ? ta : null;
+    const hint = n === nowWeek() ? "лучше заполнять в конце недели, в воскресенье вечером" : n < nowWeek() ? "запись этой недели" : "эта неделя ещё не началась";
+    el.innerHTML =
+      '<div class="card-h"><div class="eyebrow">итоги недели ' + pad2(n) + ' · ' + weekRange(n) + '</div><h2>моя неделя</h2></div>' +
+      '<div class="card-b"><div class="sum-top"><div class="big">' + total + '<small>' + plural(total, "отметка", "отметки", "отметок") + '</small></div>' +
+      '<span class="stamp' + (full ? "" : " off") + '">' + (full ? "все 4 сферы ✓" : "сфер: " + SPHERES.filter(s => sphereCount(n, s.id) > 0).length + " из 4") + '</span></div>' +
+      '<div class="sum-rows">' + rows + '</div>' +
+      '<div class="sum-extra"><span>дней с отметками: ' + weekActiveDays(n) + ' из ' + (dayDiff(weekEnd(n), weekStart(n)) + 1) + '</span><span>сюрпризов сделано: ' + slipsDone(n) + '</span></div></div>' +
+      '<div class="reflect"><label for="weekNote">что было хорошего на этой неделе?</label><div class="muted">' + hint + '</div>' +
+      '<textarea id="weekNote" data-week="' + n + '" rows="4" placeholder="пара строчек о хорошем…"></textarea></div>';
+    if (variant === "3") el.insertAdjacentHTML("beforeend", stk(STAR(BD), "top:-18px;right:-14px;width:42px;transform:rotate(14deg)") + stk(FLOWER(P2), "bottom:-14px;right:40px;width:36px;transform:rotate(-8deg)"));
+    const nta = document.getElementById("weekNote");
+    if (keep) nta.replaceWith(keep); else nta.value = w.note || "";
+  }
+
+  function renderGoals(){
+    const items = state.goals.map(g => {
+      const v = goalValue(g), pct = Math.min(100, g.target ? v / g.target * 100 : 0), auto = g.links && g.links.length;
+      const names = auto ? g.links.map(id => { const t = state.list.find(x => x.id === id); return t ? t.text : null; }).filter(Boolean) : [];
+      return '<li class="goal' + (v >= g.target ? " done" : "") + '"><div class="goal-top"><span class="goal-name">' + esc(g.name) + '</span><span class="goal-num">' + v + ' / ' + g.target + '</span></div>' +
+        '<div class="goal-bar"><b style="width:' + pct + '%"></b></div>' +
+        '<div class="goal-meta"><span>' + (auto ? "считается из: " + esc(names.join(", ") || "удалённых занятий") : "отмечаю вручную") + '</span><span class="goal-btns">' +
+        (auto ? "" : '<button data-gminus="' + g.id + '" aria-label="минус один">−</button><button data-gplus="' + g.id + '" aria-label="плюс один">+</button>') +
+        '<button class="icon-btn" data-gedit="' + g.id + '" aria-label="изменить цель">✎</button></span></div></li>';
+    }).join("");
+    document.getElementById("goals").innerHTML =
+      '<div class="card-h"><div class="eyebrow">цели на период</div><h2>к 31 декабря</h2></div>' +
+      '<div class="card-b">' + (items ? '<ul class="goals-list">' + items + '</ul>' : '<p class="empty">здесь появятся цели: название и нужное количество.</p>') +
+      '<div style="margin-top:14px"><button class="btn small" data-gnew>+ новая цель</button></div></div>' +
+      (variant === "1" ? '<span class="sticker" style="top:-8px;right:4px;width:38px;transform:rotate(12deg)">' + HEART("#c9607c") + '</span>' : "") +
+      (variant === "3" ? stk(BOW(P1), "top:-20px;right:18px;width:62px;transform:rotate(8deg)") + stk(DOT(BD2, P2), "bottom:-12px;left:22px;width:28px") : "");
+  }
+
+  function renderSpheres(){
+    const n = viewing, list = listFor(n), past = isPast(n), future = isFuture(n);
+    const deco = {
+      body: '<span class="sticker" style="top:-18px;right:-12px;width:44px;transform:rotate(14deg)">' + STAR("#eeb4c3") + '</span>',
+      care: CLIP.replace('class="clip"', 'class="clip" style="top:-24px;left:30px;transform:rotate(-8deg)"'),
+      home: '<span class="tape dots" style="top:-8px;left:50%;transform:translateX(-50%) rotate(3deg)"></span>',
+      me: '<span class="sticker" style="bottom:-14px;right:20px;width:36px;transform:rotate(-12deg)">' + HEART("#4f76a8") + '</span>'
+    };
+    const deco3 = {
+      body: stk(BOW(BD), "top:-22px;right:18px;width:56px;transform:rotate(6deg)"),
+      care: stk(FLOWER(P1), "top:-18px;right:-14px;width:46px;transform:rotate(-8deg)") + stk(DOT(P2, BD), "bottom:-10px;left:-10px;width:26px"),
+      home: stk(HEART(BD2), "top:-16px;right:-10px;width:40px;transform:rotate(12deg)"),
+      me: stk(STAR(P1), "bottom:-16px;right:-12px;width:42px;transform:rotate(-12deg)") + stk(FLOWER(BD2), "top:-16px;right:30px;width:32px")
+    };
+    const cards = SPHERES.map(s => {
+      const tasks = list.filter(t => t.sphere === s.id), ed = editing.has(s.id) && !past;
+      const rows = tasks.map(t => {
+        if (ed) return '<li class="task edit"><input data-etext="' + t.id + '" value="' + esc(t.text) + '" maxlength="120" aria-label="название дела">' +
+          '<select data-emove="' + t.id + '" aria-label="сфера">' + SPHERES.map(x => '<option value="' + x.id + '"' + (x.id === t.sphere ? " selected" : "") + '>' + esc(x.name) + '</option>').join("") + '</select>' +
+          '<button class="icon-btn" data-del="' + t.id + '" aria-label="удалить">×</button></li>';
+        const c = count(n, t.id);
+        return '<li class="task' + (c ? " on" : "") + '"><button class="box' + (c ? " on" : "") + '" data-plus="' + t.id + '"' + (future ? " disabled" : "") + ' aria-label="отметить «' + esc(t.text) + '», сейчас ' + c + '">' + (c === 1 ? CHECK : c > 1 ? c : "") + '</button>' +
+          '<span class="t-text">' + esc(t.text) + '</span><span class="t-right">' + (c ? '<button class="minus" data-minus="' + t.id + '" aria-label="убрать одну отметку" title="убрать одну отметку">−</button>' : "") +
+          (past ? "" : '<button class="icon-btn t-del" data-del="' + t.id + '" aria-label="удалить «' + esc(t.text) + '»" title="удалить дело">×</button>') + '</span></li>';
+      }).join("");
+      const tools = '<span class="sp-tools"><span class="chip">' + sphereCount(n, s.id) + ' за неделю</span>' +
+        (past ? "" : '<button class="icon-btn" data-edit="' + s.id + '" aria-label="' + (ed ? "готово" : "редактировать список") + '" title="' + (ed ? "готово" : "редактировать список") + '">' + (ed ? "✓" : "✎") + '</button>') + '</span>';
+      const add = past ? '<div class="sp-note">список сохранён таким, каким был на этой неделе</div>' :
+        '<form class="add" data-add="' + s.id + '"><input id="add-' + s.id + '" maxlength="120" placeholder="+ своё дело" aria-label="новое дело: ' + esc(s.name) + '"><button aria-label="добавить">+</button></form>';
+      return '<article class="card sphere sp-' + s.id + '">' + (variant === "2" ? "" : variant === "3" ? deco3[s.id] : deco[s.id]) + '<div class="sheet"><div class="card-h"><h3>' + esc(s.name) + '</h3>' + tools + '</div>' +
+        '<div class="card-b"><ul class="tasks">' + (rows || '<li class="muted" style="padding:6px 0">пока пусто</li>') + '</ul>' + add + '</div></div></article>';
+    }).join("");
+    const note = past ? "это прошлая неделя: отметки можно поправить, список не меняется" :
+      future ? "неделя ещё не началась, отмечать пока нельзя" :
+      "жми на квадратик столько раз, сколько сделала. ✎ меняет список: правки идут на эту и следующие недели, прошлые не трогаются";
+    document.getElementById("spheres").innerHTML = '<div class="spheres-head"><h2>мои сферы</h2><p>' + note + '</p></div><div class="sp-grid">' + cards + '</div>';
+  }
+
+  function renderProgress(){
+    const now = nowWeek(), per = [];
+    for (let n = 1; n <= WEEKS; n++) per.push(SPHERES.map(s => sphereCount(n, s.id)));
+    const totals = per.map(a => a.reduce((x, y) => x + y, 0));
+    const step = 5, max = Math.max(15, Math.ceil(Math.max(...totals) / step) * step), gridPx = 170 * step / max;
+    const all = totals.reduce((a, b) => a + b, 0), st = streaks();
+    let fulls = 0; for (let n = 1; n <= WEEKS; n++) if (fullWeek(n)) fulls++;
+    const slipAll = Object.values(state.weeks).reduce((a, w) => a + Object.values(w.slips || {}).filter(s => s.done).length, 0);
+    const ticks = []; for (let v = 0; v <= max; v += step) ticks.push('<span style="bottom:' + (v / max * 100) + '%">' + v + '</span>');
+    const cols = per.map((arr, i) => {
+      const n = i + 1, t = totals[i];
+      const segs = arr.map((c, si) => c ? '<i class="sp-' + SPHERES[si].id + '" style="height:' + (c / max * 100) + '%;background:var(--c)" title="' + SPHERES[si].name + ': ' + c + '"></i>' : "").join("");
+      return '<button class="col ' + (n < now ? "past" : n > now ? "future" : "now") + '" data-week="' + n + '" aria-label="неделя ' + n + ': ' + t + '"><div class="stack" style="--grid:' + gridPx + 'px">' + segs +
+        (t ? '<span class="tot" style="bottom:' + (t / max * 100) + '%">' + t + '</span>' : "") + '</div><span class="wn">' + pad2(n) + '</span></button>';
+    }).join("");
+    const sd = n => plural(n, "день", "дня", "дней");
+    document.getElementById("progress").innerHTML =
+      (variant === "1" ? '<div class="tape" style="top:-10px;left:30px;transform:rotate(-6deg)"></div><div class="tape blue" style="top:-10px;right:30px;transform:rotate(5deg)"></div>' : "") +
+      (variant === "3" ? stk(HEART(P1), "top:-16px;right:60px;width:40px;transform:rotate(10deg)") + stk(BOW(BD2), "top:-20px;right:120px;width:54px;transform:rotate(-8deg)") + stk(FLOWER(P2), "bottom:-14px;left:-12px;width:40px") : "") +
+      '<div class="card-h"><div class="eyebrow">прогресс по неделям</div><h2>уютные будни целиком</h2></div><div class="card-b">' +
+      '<div class="stats"><div class="stat"><div class="v">' + all + '</div><div class="l">отметок за всё время</div></div>' +
+      '<div class="stat"><div class="v">' + st.cur + '<small> ' + sd(st.cur) + '</small></div><div class="l">серия сейчас</div></div>' +
+      '<div class="stat"><div class="v">' + st.best + '<small> ' + sd(st.best) + '</small></div><div class="l">лучшая серия</div></div>' +
+      '<div class="stat"><div class="v">' + fulls + '<small>/' + WEEKS + '</small></div><div class="l">недель со всеми 4 сферами</div></div>' +
+      '<div class="stat"><div class="v">' + slipAll + '</div><div class="l">сюрпризов сделано</div></div></div>' +
+      '<div class="chart-scroll"><div class="chart"><div class="axis">' + ticks.join("") + '</div>' + cols + '</div></div>' +
+      '<div class="legend">' + SPHERES.map(s => '<span class="sp-' + s.id + '"><i></i>' + esc(s.name) + '</span>').join("") + '</div>' +
+      '<div class="rule">серия: день засчитывается, если отмечено хотя бы одно занятие или бумажка дня. «все 4 сферы» значит, что за неделю было что-то из каждой сферы.</div></div>';
+  }
+
+  function renderAll(){
+    const active = document.activeElement, activeId = active && active.id;
+    const addVals = {}; document.querySelectorAll(".add input").forEach(i => { addVals[i.id] = i.value; });
+    document.body.className = "v" + variant;
+    document.querySelectorAll("[data-variant]").forEach(b => { b.classList.toggle("on", b.dataset.variant === variant); b.setAttribute("aria-pressed", b.dataset.variant === variant); });
+    document.getElementById("heroStk").innerHTML = variant === "3" ?
+      stk(BOW(BD), "top:-18px;left:40%;width:70px;transform:rotate(-6deg)") +
+      stk(FLOWER(P1), "top:22px;right:34px;width:48px;transform:rotate(12deg)") +
+      stk(HEART(BD2), "bottom:18px;left:46%;width:34px;transform:rotate(-14deg)") +
+      stk(DOT(P2, BD), "top:56px;right:96px;width:26px") +
+      stk(STAR(P1), "bottom:-16px;right:26px;width:40px;transform:rotate(18deg)") : "";
+    renderBadge(); renderWeeks(); renderSlip(); renderSummary(); renderGoals(); renderSpheres(); renderProgress();
+    Object.entries(addVals).forEach(([id, v]) => { const el = document.getElementById(id); if (el) el.value = v; });
+    if (activeId && activeId !== "weekNote") { const el = document.getElementById(activeId); if (el) el.focus({ preventScroll:true }); }
+  }
+
+  /* ---------- goal dialog ---------- */
+  const dlg = document.getElementById("goalDlg"), form = document.getElementById("goalForm"), linksBox = document.getElementById("goalLinks");
+  let editingGoal = null;
+  function syncLinks(){ linksBox.hidden = form.mode.value !== "auto"; }
+  function openGoal(id){
+    editingGoal = id ? state.goals.find(g => g.id === id) : null;
+    const g = editingGoal || { name:"", target:10, links:[], manual:0 };
+    document.getElementById("goalDlgTitle").textContent = editingGoal ? "цель" : "новая цель";
+    document.getElementById("goalDel").hidden = !editingGoal;
+    form.name.value = g.name; form.target.value = g.target;
+    form.mode.value = g.links && g.links.length ? "auto" : "manual";
+    linksBox.innerHTML = '<div class="muted" style="margin-bottom:6px">считать отметки этих занятий, за все недели:</div>' + SPHERES.map(s => {
+      const ts = state.list.filter(t => t.sphere === s.id); if (!ts.length) return "";
+      return '<h4>' + esc(s.name) + '</h4>' + ts.map(t => '<label><input type="checkbox" value="' + t.id + '"' + ((g.links || []).includes(t.id) ? " checked" : "") + '> ' + esc(t.text) + '</label>').join("");
+    }).join("");
+    syncLinks();
+    dlg.showModal();
+  }
+  form.addEventListener("change", e => { if (e.target.name === "mode") syncLinks(); });
+  dlg.addEventListener("close", () => {
+    const r = dlg.returnValue;
+    if (r === "del" && editingGoal) {
+      if (confirm("удалить цель «" + editingGoal.name + "»?")) state.goals = state.goals.filter(g => g !== editingGoal);
+    } else if (r === "save") {
+      const name = form.name.value.trim().slice(0, 80), target = Math.max(1, Math.min(999, parseInt(form.target.value, 10) || 1));
+      const checked = [...linksBox.querySelectorAll("input:checked")].map(i => i.value);
+      const hiddenOld = editingGoal ? (editingGoal.links || []).filter(id => !state.list.some(t => t.id === id)) : [];
+      const links = form.mode.value === "auto" ? [...new Set([...checked, ...hiddenOld])] : [];
+      if (name) {
+        if (editingGoal) Object.assign(editingGoal, { name, target, links });
+        else state.goals.push({ id: uid("g"), name, target, links, manual:0 });
+      }
+    }
+    dlg.returnValue = ""; save(); renderAll();
+  });
+
+  /* ---------- events ---------- */
+  document.addEventListener("click", e => {
+    const t = e.target;
+    const v = t.closest("[data-variant]"); if (v) { variant = v.dataset.variant; try { localStorage.setItem(KEY + "-variant", variant); } catch (err) {} renderAll(); return; }
+    const wk = t.closest("[data-week]"); if (wk && !wk.matches("textarea")) { viewing = +wk.dataset.week; renderAll(); return; }
+    const p = t.closest("[data-plus]"); if (p) { plus(p.dataset.plus); return; }
+    const m = t.closest("[data-minus]"); if (m) { minus(m.dataset.minus); return; }
+    const ed = t.closest("[data-edit]"); if (ed) { const id = ed.dataset.edit; editing.has(id) ? editing.delete(id) : editing.add(id); renderAll(); return; }
+    const del = t.closest("[data-del]"); if (del) { deleteTask(del.dataset.del); return; }
+    const gp = t.closest("[data-gplus]"); if (gp) { const g = state.goals.find(x => x.id === gp.dataset.gplus); g.manual = (g.manual || 0) + 1; save(); renderAll(); return; }
+    const gm = t.closest("[data-gminus]"); if (gm) { const g = state.goals.find(x => x.id === gm.dataset.gminus); g.manual = Math.max(0, (g.manual || 0) - 1); save(); renderAll(); return; }
+    const ge = t.closest("[data-gedit]"); if (ge) { openGoal(ge.dataset.gedit); return; }
+    if (t.closest("[data-gnew]")) { openGoal(null); return; }
+    const act = t.closest("[data-act]");
+    if (act) { const a = act.dataset.act; if (a === "draw") draw(false); else if (a === "redraw") draw(true); else if (a === "mark") markSlip(); }
+  });
+  document.addEventListener("change", e => {
+    const t = e.target;
+    if (t.dataset.etext) editTask(t.dataset.etext, { text: t.value });
+    else if (t.dataset.emove) editTask(t.dataset.emove, { sphere: t.value });
+  });
+  document.addEventListener("keydown", e => {
+    if (e.key === "Enter" && e.target.dataset && e.target.dataset.etext) { e.preventDefault(); e.target.blur(); }
+  });
+  document.addEventListener("submit", e => {
+    const f = e.target.closest("[data-add]"); if (!f) return;
+    e.preventDefault();
+    const input = f.querySelector("input"), val = input.value; input.value = "";
+    addTask(f.dataset.add, val);
+  });
+  document.addEventListener("input", e => {
+    if (e.target.id === "weekNote") { ensureWeek(+e.target.dataset.week).note = e.target.value.slice(0, 3000); save(); }
+  });
+
+  /* ---------- boot ---------- */
+  load();
+  freezePast();
+  renderAll();
+})();
+</script>
+</body>
+</html>
