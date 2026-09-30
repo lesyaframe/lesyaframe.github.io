@@ -19,11 +19,11 @@ body{margin:0;font:14px/1.4 system-ui,-apple-system,sans-serif;background:#F7F0D
 img{max-width:100%}
 [hidden]{display:none!important}
 </style>
-<script src="firebase-config.js?v=20260930115247"></script>
+<script src="firebase-config.js?v=20260930165635"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
-<script src="portal.js?v=20260930115247" data-app="budget"></script>
+<script src="portal.js?v=20260930165635" data-app="budget"></script>
 </head>
 <body>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -164,6 +164,46 @@ td.note{color:var(--muted);width:100%}
 .cat-h{display:grid;grid-template-columns:1fr 130px 34px;gap:8px;font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
 .sub{font-size:13px;color:var(--muted)}
 @media (max-width:520px){.row2{grid-template-columns:1fr}.catrow,.cat-h{grid-template-columns:1fr 96px 30px}}
+/* view switch */
+.vtabs{display:flex;gap:4px;background:rgba(247,240,218,.12);border-radius:999px;padding:4px}
+.vtabs button{border:0;background:transparent;color:var(--paper);border-radius:999px;padding:8px 14px;font-weight:700;font-size:13px;cursor:pointer}
+.vtabs button[aria-pressed="true"]{background:var(--butter);color:var(--ink)}
+/* income history */
+.hist-h{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap}
+.hist-h h2{font-size:clamp(30px,3.6vw,44px)}
+.hist-h h2 .v{color:var(--olive);font-size:1.1em;margin-left:.05em}
+.up{color:var(--green);font-weight:700}.down{color:var(--red);font-weight:700}
+.chart-info{min-height:22px;font-size:13px;color:var(--muted)}
+.chart-info b{color:var(--ink)}
+.chart-scroll{overflow-x:auto;padding-bottom:4px}
+.hchart{display:flex;align-items:flex-end;gap:3px;height:220px;min-width:640px;position:relative;border-bottom:1.5px solid var(--line);padding-top:8px}
+.hchart .gl{position:absolute;left:0;right:0;border-top:1px dashed rgba(37,10,10,.1);pointer-events:none}
+.hchart .gl span{position:absolute;right:0;top:-15px;font-size:10px;color:var(--muted)}
+.hbar{all:unset;flex:1;min-width:8px;height:100%;display:flex;align-items:flex-end;cursor:pointer;position:relative}
+.hbar i{display:block;width:100%;border-radius:4px 4px 0 0;background:var(--olive-2);min-height:2px;transition:background .15s}
+.hbar.ops i{background:repeating-linear-gradient(45deg,var(--olive-2) 0 4px,#A9A56A 4px 8px)}
+.hbar.best i{background:var(--choco)}
+.hbar:hover i,.hbar:focus-visible i{background:var(--butter);outline:1.5px solid var(--ink)}
+.hbar.empty i{background:transparent;border-bottom:2px dotted rgba(37,10,10,.2);min-height:0}
+.hbar.ny::before{content:"";position:absolute;left:-2px;top:0;bottom:-6px;border-left:1.5px solid rgba(37,10,10,.25)}
+.hx{display:flex;gap:3px;min-width:640px;font-size:11px;font-weight:700;color:var(--muted);height:18px}
+.hx span{flex:1;min-width:8px;white-space:nowrap;overflow:visible}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--muted)}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:6px;vertical-align:-2px}
+.ytable-wrap{overflow-x:auto}
+.ytable{border-collapse:separate;border-spacing:3px;min-width:860px;width:100%}
+.ytable th{font-size:11px;font-weight:700;color:var(--muted);text-transform:lowercase;padding:4px 2px;text-align:center}
+.ytable th.yr{font-size:18px;font-weight:900;color:var(--ink);letter-spacing:-.04em;text-align:left;padding-right:8px}
+.ytable td{padding:0}
+.ytable td button{all:unset;box-sizing:border-box;cursor:pointer;display:block;width:100%;text-align:center;border-radius:6px;padding:9px 4px;font-size:12.5px;font-weight:600;font-variant-numeric:tabular-nums;background:rgba(115,112,56,var(--a,.06));color:var(--ink)}
+.ytable td button.dark{color:var(--paper)}
+.ytable td button.none{color:rgba(107,85,80,.5);background:transparent;border:1.5px dashed var(--line)}
+.ytable td button:hover,.ytable td button:focus-visible{outline:2px solid var(--ink)}
+.ytable td button sup{font-size:10px;margin-left:1px}
+.ytable td.tot{font-size:13px;font-weight:800;text-align:right;padding:0 6px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.ytable td.avg{font-size:12px;color:var(--muted);text-align:right;padding:0 6px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.ytable td.yoy{font-size:12px;text-align:right;padding:0 4px;white-space:nowrap}
+#pasteText{min-height:220px;font-family:ui-monospace,Menlo,monospace;font-size:13px}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 
@@ -175,13 +215,28 @@ td.note{color:var(--muted);width:100%}
     </div>
     <div class="top-r">
       <div class="sync" id="sync"><i></i><span>подключаюсь…</span></div>
-      <div class="month"><button type="button" id="prevM" aria-label="Предыдущий месяц">‹</button><b id="mName" class="num"></b><button type="button" id="nextM" aria-label="Следующий месяц">›</button></div>
+      <nav class="vtabs" aria-label="Вид"><button type="button" data-view="month" aria-pressed="true">Месяц</button><button type="button" data-view="history" aria-pressed="false">История доходов</button></nav>
+      <div class="month" id="monthNav"><button type="button" id="prevM" aria-label="Предыдущий месяц">‹</button><b id="mName" class="num"></b><button type="button" id="nextM" aria-label="Следующий месяц">›</button></div>
     </div>
   </div>
 </header>
 
 <main>
   <div class="notice" id="notice" hidden></div>
+  <section id="v-history" hidden style="display:flex;flex-direction:column;gap:22px">
+    <div class="hist-h"><h2>Мои <span class="v">доходы</span></h2><div style="display:flex;gap:8px;flex-wrap:wrap"><button type="button" class="btn btn-line" id="pasteBtn">Вставить из заметок</button><button type="button" class="btn btn-ink" id="addHist">+ месяц</button></div></div>
+    <section class="tiles" id="hTiles"></section>
+    <section class="panel">
+      <div class="panel-h"><h2>По <span class="v">месяцам</span></h2><div class="legend"><span><i style="background:var(--olive-2)"></i>внесено вручную</span><span><i style="background:repeating-linear-gradient(45deg,var(--olive-2) 0 4px,#A9A56A 4px 8px)"></i>посчитано по записям</span><span><i style="background:var(--choco)"></i>рекорд</span></div></div>
+      <div class="chart-info" id="hInfo">Наведи на столбик, чтобы увидеть сумму.</div>
+      <div class="chart-scroll" id="hChart"></div>
+    </section>
+    <section class="panel">
+      <div class="panel-h"><h2>По <span class="v">годам</span></h2><span class="sub">Нажми на месяц, чтобы исправить сумму. «≈» — сумма примерная.</span></div>
+      <div class="ytable-wrap" id="hTable"></div>
+    </section>
+  </section>
+  <div id="v-month" style="display:flex;flex-direction:column;gap:22px">
   <section class="tiles" id="tiles"></section>
 
   <form class="add" id="addForm" autocomplete="off">
@@ -204,6 +259,7 @@ td.note{color:var(--muted);width:100%}
       <div class="panel-h"><h2>Все <span class="v">записи</span></h2><div class="filters" id="filters"></div></div>
       <div class="tbl-wrap" id="ops"></div>
     </section>
+  </div>
   </div>
 </main>
 
@@ -238,6 +294,8 @@ const DEFAULT_CATS = {
 
 /* ---------- state ---------- */
 let ops = {};                 // id -> {type, amount, category, date, note, createdAt}
+let hist = {};                // "ГГГГ-ММ" -> {amount, note}: доход за месяц, внесённый вручную
+let view = location.hash === "#history" ? "history" : "month";
 let cats = structuredClone(DEFAULT_CATS);
 let addType = "expense";
 let catFilter = null;         // category id to show in the table
@@ -247,6 +305,7 @@ const now = new Date();
 let ym = {y: now.getFullYear(), m: now.getMonth()};
 
 const $ = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const rub = n => (Math.round(n * 100) / 100).toLocaleString("ru-RU", {maximumFractionDigits: 2}) + " ₽";
 const todayISO = () => { const d = new Date(); d.setMinutes(d.getMinutes() - d.getTimezoneOffset()); return d.toISOString().slice(0,10); };
@@ -257,12 +316,14 @@ const catName = (type, id) => (cats[type].find(c => c.id === id) || {name: "Бе
 
 /* ---------- storage: synced db, or this browser as a fallback ---------- */
 const LS = "budget-v1";
-function saveLocal(){ try{ localStorage.setItem(LS, JSON.stringify({ops, cats})); }catch(e){} }
-function loadLocal(){ try{ const d = JSON.parse(localStorage.getItem(LS) || "null"); if (d){ ops = d.ops || {}; if (d.cats) cats = d.cats; } }catch(e){} }
+function saveLocal(){ try{ localStorage.setItem(LS, JSON.stringify({ops, cats, hist})); }catch(e){} }
+function loadLocal(){ try{ const d = JSON.parse(localStorage.getItem(LS) || "null"); if (d){ ops = d.ops || {}; if (d.cats) cats = d.cats; hist = d.hist || {}; } }catch(e){} }
 const newId = () => mode === "db" ? db.collection("ops").doc().id : rid();
 const store = {
   async put(id, data){ if (mode === "db"){ try{ await db.collection("ops").doc(id).set(data); }catch(e){ fail(e); } } else { ops[id] = data; saveLocal(); render(); } },
   async del(id){ if (mode === "db"){ try{ await db.collection("ops").doc(id).delete(); }catch(e){ fail(e); } } else { delete ops[id]; saveLocal(); render(); } },
+  async putHist(k, data){ if (mode === "db"){ try{ await db.collection("history").doc(k).set(data); }catch(e){ fail(e); } } else { hist[k] = data; saveLocal(); render(); } },
+  async delHist(k){ if (mode === "db"){ try{ await db.collection("history").doc(k).delete(); }catch(e){ fail(e); } } else { delete hist[k]; saveLocal(); render(); } },
   async setCats(c){ if (mode === "db"){ try{ await db.doc("settings/categories").set(c); }catch(e){ fail(e); } } else { cats = c; saveLocal(); render(); } }
 };
 function fail(e){
@@ -280,6 +341,7 @@ async function boot(){
   db = d; mode = "db"; setSync("ok", "синхронизируется");
   const onErr = () => setSync("", "нет связи, обнови страницу");
   db.collection("ops").onSnapshot(snap => { const m = {}; snap.docs.forEach(x => m[x.id] = x.data()); ops = m; render(); }, onErr);
+  db.collection("history").onSnapshot(snap => { const m = {}; snap.docs.forEach(x => m[x.id] = x.data()); hist = m; render(); }, onErr);
   db.doc("settings/categories").onSnapshot(s => { const c = s.exists && s.data(); cats = (c && c.expense) ? c : structuredClone(DEFAULT_CATS); render(); }, onErr);
 }
 
@@ -292,6 +354,11 @@ function totals(list){
 }
 
 function render(){
+  $$(".vtabs button").forEach(b => b.setAttribute("aria-pressed", b.dataset.view === view));
+  $("#v-history").hidden = view !== "history";
+  $("#v-month").hidden = view !== "month";
+  $("#monthNav").hidden = view !== "month";
+  if (view === "history"){ renderHistory(); return; }
   $("#mName").textContent = monthName(ym.y, ym.m);
   renderCatSelect();
   const list = monthOps(ym.y, ym.m);
@@ -468,6 +535,141 @@ document.addEventListener("keydown", e => {
     const op = e.target.closest?.("[data-op]"); if (op){ e.preventDefault(); editOp(op.dataset.op); }
   }
 });
+
+/* ---------- income history ---------- */
+const MON_S = ["янв","фев","мар","апр","май","июн","июл","авг","сен","окт","ноя","дек"];
+const MON_P = ["январь","февраль","март","апрель","май","июнь","июль","август","сентябрь","октябрь","ноябрь","декабрь"];
+const short = n => n >= 1e6 ? (n / 1e6).toFixed(1).replace(".", ",") + " млн" : n >= 1e3 ? Math.round(n / 1e3) + " тыс" : String(Math.round(n));
+// доход за месяц: внесённый вручную важнее, иначе сумма доходов из записей
+function incomeByMonth(){
+  const m = {};
+  Object.values(ops).forEach(o => { if (o.type === "income" && o.date){ const k = o.date.slice(0,7); m[k] = m[k] || {amount: 0, src: "ops"}; m[k].amount += +o.amount || 0; } });
+  Object.entries(hist).forEach(([k, h]) => { if (h && h.amount != null) m[k] = {amount: +h.amount, src: "hist", note: h.note || ""}; });
+  return m;
+}
+const approx = v => v && v.note && /вроде|≈|примерно/i.test(v.note);
+function renderHistory(){
+  const inc = incomeByMonth(), keys = Object.keys(inc).sort();
+  const curKey = ymKey(now.getFullYear(), now.getMonth());
+  if (!keys.length){
+    $("#hTiles").innerHTML = ""; $("#hChart").innerHTML = `<div class="empty"><span class="v">пока пусто</span>Добавь доходы за прошлые месяцы кнопкой «+ месяц» или «Вставить из заметок»</div>`; $("#hTable").innerHTML = ""; return;
+  }
+  // все месяцы от первого до текущего
+  const months = []; let [y, m] = keys[0].split("-").map(Number); m--;
+  const [ey, em] = (keys[keys.length - 1] > curKey ? keys[keys.length - 1] : curKey).split("-").map(Number);
+  while (y < ey || (y === ey && m <= em - 1)){ months.push(ymKey(y, m)); m++; if (m === 12){ m = 0; y++; } }
+  const val = k => inc[k] ? inc[k].amount : null;
+  const yearSum = yr => months.filter(k => k.startsWith(yr + "-") && val(k) != null).reduce((s, k) => s + val(k), 0);
+  const yearCnt = yr => months.filter(k => k.startsWith(yr + "-") && val(k) != null).length;
+  const years = [...new Set(months.map(k => +k.slice(0,4)))];
+  const cy = now.getFullYear(), full = years.filter(yr => yr < cy), ly = full.length ? full[full.length - 1] : null;
+  const best = months.reduce((b, k) => val(k) != null && (b == null || val(k) > val(b)) ? k : b, null);
+  const pct = (a, b) => b ? Math.round((a / b - 1) * 100) : null;
+  const pctTxt = p => p == null ? "" : `<span class="${p >= 0 ? "up" : "down"}">${p >= 0 ? "+" : "−"}${Math.abs(p)}%</span>`;
+  const bestLbl = k => MON_P[+k.slice(5) - 1] + " " + k.slice(0,4);
+  // сравнение текущего года с тем же периодом прошлого
+  const cyN = yearCnt(cy), cyMonths = months.filter(k => k.startsWith(cy + "-") && val(k) != null).map(k => k.slice(5));
+  const lySame = months.filter(k => k.startsWith((cy - 1) + "-") && cyMonths.includes(k.slice(5)) && val(k) != null).reduce((s, k) => s + val(k), 0);
+  $("#hTiles").innerHTML = `
+    ${ly ? `<div class="tile hl"><span>За ${ly} год</span><b class="num">${short(yearSum(ly))}</b><small class="num">${rub(yearSum(ly))} ${full.length > 1 ? "· " + pctTxt(pct(yearSum(ly), yearSum(ly - 1))) + " к " + (ly - 1) : ""}</small></div>
+    <div class="tile"><span>В среднем в месяц, ${ly}</span><b class="num">${short(yearSum(ly) / Math.max(1, yearCnt(ly)))}</b><small class="num">${rub(Math.round(yearSum(ly) / Math.max(1, yearCnt(ly))))}</small></div>` : ""}
+    <div class="tile"><span>${cy} пока</span><b class="num">${short(yearSum(cy))}</b><small class="num">${cyN} ${cyN === 1 ? "месяц" : cyN < 5 ? "месяца" : "месяцев"}${lySame ? " · " + pctTxt(pct(yearSum(cy), lySame)) + " к тем же месяцам " + (cy - 1) : ""}</small></div>
+    <div class="tile sky"><span>Рекордный месяц</span><b class="num">${short(val(best))}</b><small>${bestLbl(best)}</small></div>`;
+  // график
+  const max = Math.max(...months.map(k => val(k) || 0), 1);
+  const step = max > 250000 ? 100000 : max > 100000 ? 50000 : max > 40000 ? 20000 : 10000;
+  let grid = ""; for (let v = step; v <= max; v += step) grid += `<div class="gl" style="bottom:${v / max * 100}%"><span>${short(v)}</span></div>`;
+  $("#hChart").innerHTML = `<div class="hchart">${grid}${months.map(k => { const v = val(k), mm = +k.slice(5);
+      const cls = ["hbar", v == null ? "empty" : "", inc[k]?.src === "ops" ? "ops" : "", k === best ? "best" : "", mm === 1 ? "ny" : ""].join(" ");
+      const label = `${MON_P[mm - 1]} ${k.slice(0,4)}: ${v == null ? "нет данных" : rub(v) + (approx(inc[k]) ? " (примерно)" : "") + (inc[k].src === "ops" ? " — по записям" : "")}`;
+      return `<button type="button" class="${cls}" data-hk="${k}" data-info="${esc(label)}" aria-label="${esc(label)}"><i style="height:${v == null ? 0 : Math.max(1, v / max * 100)}%"></i></button>`; }).join("")}</div>
+    <div class="hx">${months.map(k => `<span>${+k.slice(5) === 1 || k === months[0] ? k.slice(0,4) : ""}</span>`).join("")}</div>`;
+  // таблица по годам
+  let t = `<table class="ytable"><thead><tr><th></th>${MON_S.map(x => `<th>${x}</th>`).join("")}<th style="text-align:right">итого</th><th style="text-align:right">в месяц</th><th></th></tr></thead><tbody>`;
+  [...years].reverse().forEach(yr => {
+    const sum = yearSum(yr), n = yearCnt(yr), prevSum = yearSum(yr - 1);
+    t += `<tr><th class="yr">${yr}</th>`;
+    for (let mm = 0; mm < 12; mm++){
+      const k = ymKey(yr, mm), v = val(k), future = k > curKey;
+      if (v == null) t += `<td>${future || k < months[0] ? "" :`<button type="button" class="none" data-hk="${k}" aria-label="Добавить доход за ${MON_P[mm]} ${yr}">+</button>`}</td>`;
+      else { const a = .1 + .75 * v / max;
+        t += `<td><button type="button" class="${a > .55 ? "dark" : ""}" style="--a:${a.toFixed(2)}" data-hk="${k}" title="${esc(rub(v) + (inc[k].note ? " · " + inc[k].note : "") + (inc[k].src === "ops" ? " · по записям" : ""))}">${short(v)}${approx(inc[k]) ? "<sup>≈</sup>" : ""}${inc[k].src === "ops" ? "<sup>*</sup>" : ""}</button></td>`; }
+    }
+    const full = yr < cy && n === 12;
+    t += `<td class="tot">${n ? short(sum) : ""}</td><td class="avg">${n ? short(sum / n) : ""}</td><td class="yoy">${full && yearCnt(yr - 1) === 12 ? pctTxt(pct(sum, prevSum)) : ""}</td></tr>`;
+  });
+  $("#hTable").innerHTML = t + `</tbody></table><p class="sub" style="margin-top:8px">* посчитано по доходам из записей за этот месяц. Процент справа — рост к предыдущему году.</p>`;
+}
+function editHist(k){
+  const cur = hist[k], fromOps = !cur && incomeByMonth()[k];
+  const [yy, mm] = k.split("-").map(Number);
+  openModal(`<h2>${MON_P[mm - 1][0].toUpperCase() + MON_P[mm - 1].slice(1)} <span class="v">${yy}</span></h2>
+    ${fromOps ? `<p class="sub">Сейчас сумма посчитана по записям: ${rub(fromOps.amount)}. Если впишешь свою, будет учитываться она.</p>` : ""}
+    <div class="row2"><div class="fld"><label for="h-sum">Доход за месяц, ₽</label><input id="h-sum" type="number" min="0" step="any" value="${cur ? esc(cur.amount) : ""}"></div>
+    <div class="fld"><label for="h-note">Заметка</label><input id="h-note" maxlength="120" value="${cur ? esc(cur.note || "") : ""}" placeholder="например: примерно"></div></div>
+    <div class="dlg-foot">${cur ? `<button type="button" class="btn btn-line" id="h-del">Удалить</button>` : "<span></span>"}<div class="r"><button type="button" class="btn btn-line" data-close>Отмена</button><button type="button" class="btn btn-ink" id="h-save">Сохранить</button></div></div>`, dlg => {
+      dlg.querySelector("#h-del")?.addEventListener("click", e => { const b = e.currentTarget; if (b.dataset.sure){ store.delHist(k); closeModal(); } else { b.dataset.sure = 1; b.textContent = "Точно удалить?"; b.className = "btn btn-danger"; } });
+      dlg.querySelector("#h-save").addEventListener("click", () => {
+        const v = dlg.querySelector("#h-sum").value; if (v === "" || !(+v >= 0)) return dlg.querySelector("#h-sum").focus();
+        store.putHist(k, {amount: Math.round(+v * 100) / 100, note: dlg.querySelector("#h-note").value.trim(), updatedAt: Date.now()}); closeModal();
+      });
+  });
+}
+function addHistDialog(){
+  const d = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+  openModal(`<h2>Доход <span class="v">за месяц</span></h2>
+    <div class="row2"><div class="fld"><label for="h-m">Месяц</label><input id="h-m" type="month" value="${ymKey(d.getFullYear(), d.getMonth())}"></div>
+    <div class="fld"><label for="h-sum2">Сумма, ₽</label><input id="h-sum2" type="number" min="0" step="any"></div></div>
+    <div class="fld"><label for="h-note2">Заметка</label><input id="h-note2" maxlength="120" placeholder="необязательно"></div>
+    <div class="dlg-foot"><span></span><div class="r"><button type="button" class="btn btn-line" data-close>Отмена</button><button type="button" class="btn btn-ink" id="h-save2">Сохранить</button></div></div>`, dlg => {
+      dlg.querySelector("#h-save2").addEventListener("click", () => {
+        const k = dlg.querySelector("#h-m").value, v = dlg.querySelector("#h-sum2").value;
+        if (!/^\d{4}-\d{2}$/.test(k)) return dlg.querySelector("#h-m").focus();
+        if (v === "" || !(+v >= 0)) return dlg.querySelector("#h-sum2").focus();
+        store.putHist(k, {amount: +v, note: dlg.querySelector("#h-note2").value.trim(), updatedAt: Date.now()}); closeModal();
+      });
+  });
+}
+// разбирает заметки вида «2024» / «январь - 55 805»
+function parseNotes(text){
+  const idx = {"январ":1,"феврал":2,"март":3,"апрел":4,"май":5,"мая":5,"июн":6,"июл":7,"август":8,"сентябр":9,"октябр":10,"ноябр":11,"декабр":12};
+  let year = null; const out = [], skipped = [];
+  text.split(/\n/).forEach(raw => {
+    const line = raw.trim(); if (!line) return;
+    const y = line.match(/^(20\d\d)\b/); if (y && !/[а-я]/i.test(line.replace(/^20\d\d/, ""))){ year = +y[1]; }
+    const mm = line.match(/^([а-яё]+)\s*[-–—:]\s*(.+)$/i);
+    if (!mm){ if (!y) skipped.push(line); return; }
+    const key = Object.keys(idx).find(k => mm[1].toLowerCase().startsWith(k));
+    const num = mm[2].match(/[\d\s]+[.,]?\d*/);
+    if (!key || !year || !num){ skipped.push(line); return; }
+    const amount = +num[0].replace(/\s/g, "").replace(",", ".");
+    const note = mm[2].replace(num[0], "").trim();
+    out.push({k: ymKey(year, idx[key] - 1), amount, note});
+  });
+  return {out, skipped};
+}
+function pasteDialog(){
+  openModal(`<h2>Вставить <span class="v">из заметок</span></h2>
+    <p class="sub">Формат как в заметках: строка с годом, под ней «январь - 55 805». Слово после суммы (например, «вроде») сохранится как заметка.</p>
+    <div class="fld"><textarea id="pasteText" placeholder="2025\nянварь - 84 200\nфевраль - 165 370"></textarea></div>
+    <p class="sub" id="pastePrev"></p>
+    <div class="dlg-foot"><span></span><div class="r"><button type="button" class="btn btn-line" data-close>Отмена</button><button type="button" class="btn btn-ink" id="pasteSave" disabled>Добавить</button></div></div>`, dlg => {
+      const ta = dlg.querySelector("#pasteText"), btn = dlg.querySelector("#pasteSave"), pv = dlg.querySelector("#pastePrev");
+      let parsed = {out: [], skipped: []};
+      ta.addEventListener("input", () => { parsed = parseNotes(ta.value); btn.disabled = !parsed.out.length;
+        pv.textContent = parsed.out.length ? `Найдено месяцев: ${parsed.out.length}${parsed.skipped.length ? ". Не поняла строки: " + parsed.skipped.slice(0,4).join("; ") : ""}` : ""; });
+      btn.addEventListener("click", async () => { btn.disabled = true; for (const r of parsed.out) await store.putHist(r.k, {amount: r.amount, note: r.note, updatedAt: Date.now()}); closeModal(); });
+  }, "wide");
+}
+document.addEventListener("click", e => {
+  const vb = e.target.closest(".vtabs [data-view]"); if (vb){ view = vb.dataset.view; try{ history.replaceState(null, "", view === "history" ? "#history" : "#"); }catch(_){} render(); return; }
+  const hk = e.target.closest("[data-hk]"); if (hk){ editHist(hk.dataset.hk); return; }
+  if (e.target.closest("#addHist")) return addHistDialog();
+  if (e.target.closest("#pasteBtn")) return pasteDialog();
+});
+const showInfo = e => { const b = e.target.closest?.(".hbar"); if (b) $("#hInfo").innerHTML = "<b>" + esc(b.dataset.info).replace(": ", ":</b> "); };
+document.addEventListener("mouseover", showInfo);
+document.addEventListener("focusin", showInfo);
 
 boot();
 </script>
