@@ -1,0 +1,724 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Моя осень</title>
+<meta name="theme-color" content="#3B1B14">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Хаб">
+<style>
+html{background:#3B1B14}
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{margin:0;font:14px/1.4 system-ui,-apple-system,sans-serif;background:#F7F0DA}
+img{max-width:100%}
+[hidden]{display:none!important}
+</style>
+<script src="firebase-config.js?v=20260930102457"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+<script src="portal.js?v=20260930102457" data-app="osen"></script>
+</head>
+<body>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,400;1,500;1,700&family=Golos+Text:wght@400;500;600&family=Caveat:wght@500;700&family=PT+Mono&display=swap">
+<style>
+:root{
+  --fabric:#56612f;
+  --fabric-dk:#3f4822;
+  --paper:#f4ecdc;
+  --paper-2:#fbf6ea;
+  --ink:#2b1d14;
+  --ink-soft:#6b5646;
+  --orange:#d9612a;
+  --mustard:#c99a2e;
+  --red:#c24a42;
+  --sky:#8fc3d2;
+  --olive-lt:#8e9a4c;
+  --wood:#5a3622;
+  --kraft:#c9a574;
+  --cork:#c4955f;
+  --pink:#e59aa6;
+  --display:"Playfair Display", "Times New Roman", Georgia, serif;
+  --body:"Golos Text", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --hand:"Caveat", "Segoe Print", "Comic Sans MS", cursive;
+  --mono:"PT Mono", ui-monospace, Menlo, Consolas, monospace;
+  color-scheme: light;
+}
+*{box-sizing:border-box}
+html{background:var(--fabric)}
+body{
+  margin:0;
+  color:var(--ink);
+  font-family:var(--body);
+  font-size:15px;
+  line-height:1.45;
+  background-color:var(--fabric);
+  background-image:
+    repeating-linear-gradient(0deg, rgba(0,0,0,.10) 0 1px, transparent 1px 3px),
+    repeating-linear-gradient(90deg, rgba(255,255,255,.05) 0 1px, transparent 1px 3px),
+    radial-gradient(ellipse at 20% 0%, rgba(255,210,120,.12), transparent 60%);
+  padding-inline:16px;
+  padding-block:20px 60px;
+  overflow-x:hidden;
+}
+.wrap{max-width:1120px;margin:0 auto;display:flex;flex-direction:column;gap:36px}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:2px dashed var(--orange);outline-offset:3px}
+
+/* ---------- top strip ---------- */
+.strip{display:flex;justify-content:space-between;gap:12px;font-family:var(--mono);font-size:12px;color:rgba(244,236,220,.8);letter-spacing:.04em}
+.save-state{display:inline-flex;align-items:center;gap:6px}
+.save-state i{width:7px;height:7px;border-radius:50%;background:var(--mustard);display:inline-block}
+.save-state.cloud i{background:#a7d36b}
+
+/* ---------- hero ---------- */
+.hero{position:relative;display:grid;grid-template-columns:1fr auto;align-items:end;gap:20px}
+.hero h1{
+  margin:0;font-family:var(--display);font-style:italic;font-weight:500;
+  color:var(--paper);font-size:clamp(56px, 11vw, 132px);line-height:.86;letter-spacing:-.02em;
+  text-wrap:balance;
+}
+.hero h1 span{display:block;font-size:.38em;font-style:normal;font-weight:500;letter-spacing:0;margin-top:12px;color:rgba(244,236,220,.85)}
+.weekbadge{
+  position:relative;background:var(--paper);padding:14px 20px 12px;transform:rotate(3deg);
+  box-shadow:0 10px 24px rgba(0,0,0,.28);text-align:center;min-width:150px;
+}
+.weekbadge .lbl{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.12em;color:var(--ink-soft)}
+.weekbadge .num{font-family:var(--display);font-style:italic;font-size:54px;line-height:1;font-variant-numeric:tabular-nums}
+.weekbadge .num small{font-size:24px;color:var(--ink-soft)}
+.weekbadge .dates{font-family:var(--hand);font-size:20px;color:var(--orange)}
+.tape{position:absolute;width:86px;height:22px;background:rgba(236,219,178,.78);box-shadow:0 1px 2px rgba(0,0,0,.12);z-index:2}
+.weekbadge .tape{top:-11px;left:50%;transform:translateX(-50%) rotate(-5deg)}
+.leaf{position:absolute;pointer-events:none}
+
+/* ---------- week tracker ---------- */
+.tracker{display:grid;grid-template-columns:repeat(12, 1fr);gap:8px}
+.wk{
+  position:relative;border:0;padding:8px 4px 8px;background:rgba(244,236,220,.16);
+  color:var(--paper);display:flex;flex-direction:column;align-items:center;gap:6px;
+  border-radius:2px;transition:transform .15s, background .15s;
+}
+.wk:hover{transform:translateY(-2px);background:rgba(244,236,220,.26)}
+.wk .n{font-family:var(--display);font-style:italic;font-size:22px;line-height:1;font-variant-numeric:tabular-nums}
+.wk .bar{width:70%;height:28px;background:rgba(0,0,0,.18);position:relative;overflow:hidden}
+.wk .bar b{position:absolute;left:0;right:0;bottom:0;background:var(--mustard)}
+.wk .c{font-family:var(--mono);font-size:10px;opacity:.85}
+.wk.past{background:rgba(244,236,220,.22)}
+.wk.future{opacity:.55}
+.wk.now .bar b{background:var(--orange)}
+.wk.viewing{background:var(--paper);color:var(--ink);box-shadow:0 8px 18px rgba(0,0,0,.25)}
+.wk.viewing .bar{background:rgba(43,29,20,.1)}
+.wk.now::after{
+  content:"";position:absolute;top:-6px;left:50%;width:12px;height:12px;margin-left:-6px;border-radius:50%;
+  background:radial-gradient(circle at 35% 35%, #ff9a6b, var(--orange) 55%, #8a3413);box-shadow:0 2px 3px rgba(0,0,0,.35)
+}
+.tracker-cap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;color:rgba(244,236,220,.85);font-family:var(--mono);font-size:12px;margin-top:10px}
+.tracker-cap button{background:none;border:0;padding:0;color:var(--paper);text-decoration:underline;text-underline-offset:3px;font-family:var(--mono);font-size:12px}
+
+/* ---------- board: jar + summary ---------- */
+.board{display:grid;grid-template-columns:1.1fr 1fr;gap:28px;align-items:start}
+
+.jar{
+  position:relative;padding:28px 26px 26px;
+  background-color:#e8d6b4;
+  background-image:
+    linear-gradient(90deg, rgba(194,74,66,.35) 50%, transparent 50%),
+    linear-gradient(rgba(194,74,66,.35) 50%, transparent 50%);
+  background-size:26px 26px;
+  box-shadow:0 14px 30px rgba(0,0,0,.28);
+}
+.jar-inner{background:var(--paper-2);padding:22px 22px 24px;position:relative;box-shadow:0 2px 6px rgba(0,0,0,.12)}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft)}
+.h2{font-family:var(--display);font-style:italic;font-weight:500;font-size:clamp(30px,4.2vw,42px);line-height:1;margin:6px 0 4px;text-wrap:balance}
+.jar .today{font-family:var(--hand);font-size:22px;color:var(--orange)}
+.jar-stage{display:grid;grid-template-columns:150px 1fr;gap:22px;align-items:center;margin-top:18px}
+.envelope{position:relative;width:150px;height:118px;border:0;padding:0;background:none}
+.envelope .back{position:absolute;inset:18px 0 0;background:var(--kraft);box-shadow:0 6px 14px rgba(0,0,0,.2)}
+.envelope .slips{position:absolute;left:14px;right:14px;top:0;height:60px}
+.envelope .slips i{position:absolute;bottom:0;width:34px;height:52px;border-radius:1px;box-shadow:0 1px 2px rgba(0,0,0,.15);transition:transform .25s}
+.envelope .front{position:absolute;inset:44px 0 0;background:#b88f5a;clip-path:polygon(0 0, 50% 45%, 100% 0, 100% 100%, 0 100%);box-shadow:inset 0 -2px 0 rgba(0,0,0,.1)}
+.envelope .front::after{content:"идеи";position:absolute;bottom:10px;left:0;right:0;text-align:center;font-family:var(--hand);font-size:22px;color:#fff6e6}
+.envelope:hover .slips i:nth-child(3){transform:translateY(-10px) rotate(4deg)}
+.slip{
+  position:relative;background:#fffdf6;padding:18px 18px 16px;transform:rotate(-1.5deg);
+  box-shadow:0 8px 18px rgba(0,0,0,.18);
+  background-image:repeating-linear-gradient(transparent 0 25px, rgba(100,140,170,.22) 25px 26px);
+  background-position:0 10px;
+  animation:pull .45s cubic-bezier(.2,.9,.3,1.2);
+}
+.slip .tape{top:-10px;left:22px;transform:rotate(-8deg);width:70px}
+.slip .tag{display:inline-block;font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;color:#fff}
+.slip .txt{font-family:var(--hand);font-size:30px;line-height:1.05;margin:10px 0 14px;font-weight:700}
+.slip-actions{display:flex;gap:8px;flex-wrap:wrap}
+.btn{border:1.5px solid var(--ink);background:var(--paper-2);padding:7px 14px;font-size:13px;font-weight:500;border-radius:999px;transition:background .15s, transform .15s}
+.btn:hover{transform:translateY(-1px)}
+.btn.primary{background:var(--ink);color:var(--paper-2)}
+.btn.done{background:#dfe6c4;border-color:#6d7a33;color:#3e4a15}
+.pull-cta{display:flex;flex-direction:column;gap:10px;align-items:flex-start}
+.pull-cta p{margin:0;color:var(--ink-soft);max-width:30ch}
+@keyframes pull{from{transform:translateY(40px) rotate(6deg);opacity:0}to{transform:rotate(-1.5deg);opacity:1}}
+
+/* summary notebook */
+.notebook{
+  position:relative;background:var(--paper-2);padding:26px 24px 24px 46px;
+  box-shadow:0 14px 30px rgba(0,0,0,.28);transform:rotate(.6deg);
+}
+.notebook::before{
+  content:"";position:absolute;left:12px;top:14px;bottom:14px;width:16px;
+  background:radial-gradient(circle at 8px 8px, var(--fabric-dk) 4px, transparent 5px) 0 0/16px 26px repeat-y;
+}
+.notebook::after{
+  content:"";position:absolute;left:4px;top:14px;bottom:14px;width:14px;
+  background:repeating-linear-gradient(transparent 0 4px, #b9b3a6 4px 7px, transparent 7px 26px);
+}
+.sum-top{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap}
+.big{font-family:var(--display);font-weight:700;font-size:64px;line-height:.9;font-variant-numeric:tabular-nums}
+.big small{font-family:var(--hand);font-weight:500;font-size:26px;color:var(--ink-soft);margin-left:6px}
+.sum-rows{display:flex;flex-direction:column;gap:8px;margin-top:16px}
+.sum-row{display:grid;grid-template-columns:130px 1fr 26px;gap:10px;align-items:center;font-size:13px}
+.dots{display:flex;gap:4px;flex-wrap:wrap}
+.dots i{width:12px;height:12px;border-radius:50%;display:block}
+.dots i.empty{background:transparent;border:1.5px dashed rgba(43,29,20,.25)}
+.sum-row .k{font-family:var(--mono);font-size:12px;text-align:right;font-variant-numeric:tabular-nums}
+.habit{margin-top:18px;padding-top:14px;border-top:1.5px dashed rgba(43,29,20,.2)}
+.habit-title{display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap}
+.habit-title b{font-family:var(--display);font-style:italic;font-weight:500;font-size:20px}
+.habit-title span{font-family:var(--mono);font-size:11px;color:var(--ink-soft)}
+.days{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-top:10px}
+.day{border:1.5px solid rgba(43,29,20,.35);background:transparent;aspect-ratio:1;max-width:100%;border-radius:50%;display:grid;place-items:center;font-family:var(--mono);font-size:11px;padding:0;position:relative}
+.day.on{background:var(--orange);border-color:var(--orange);color:#fff}
+.day.today{box-shadow:0 0 0 3px rgba(217,97,42,.25)}
+.note-wrap{margin-top:16px}
+.note-wrap label{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft)}
+#weekNote{
+  width:100%;margin-top:6px;border:0;resize:vertical;min-height:84px;font-family:var(--hand);font-size:22px;line-height:26px;color:var(--ink);
+  background:repeating-linear-gradient(transparent 0 25px, rgba(100,140,170,.28) 25px 26px);padding:0 2px;
+}
+#weekNote:focus{outline:none;background-color:rgba(255,240,200,.35)}
+
+/* ---------- spheres ---------- */
+.sec-head{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;color:var(--paper)}
+.sec-head h2{margin:0;font-family:var(--display);font-style:italic;font-weight:500;font-size:clamp(34px,5vw,54px);line-height:1}
+.sec-head p{margin:0;font-family:var(--mono);font-size:12px;opacity:.85;max-width:40ch}
+.spheres{display:grid;grid-template-columns:repeat(6,1fr);gap:26px;margin-top:18px}
+.sphere{position:relative;grid-column:span 2;padding:18px;box-shadow:0 14px 28px rgba(0,0,0,.28)}
+.sphere:nth-child(4),.sphere:nth-child(5){grid-column:span 3}
+.sheet{position:relative;background:var(--paper-2);padding:20px 18px 16px;box-shadow:0 3px 8px rgba(0,0,0,.18)}
+.sphere:nth-child(odd) .sheet{transform:rotate(-.8deg)}
+.sphere:nth-child(even) .sheet{transform:rotate(.7deg)}
+
+.skin-cork{background-color:var(--cork);
+  background-image:radial-gradient(rgba(90,50,20,.38) 1px, transparent 1.6px),radial-gradient(rgba(255,230,190,.35) 1px, transparent 1.6px);
+  background-size:7px 7px, 11px 11px;background-position:0 0, 3px 5px;border:9px solid #8e6038}
+.skin-gingham{background-color:#f6e3df;
+  background-image:linear-gradient(90deg, rgba(194,74,66,.42) 50%, transparent 50%),linear-gradient(rgba(194,74,66,.42) 50%, transparent 50%);
+  background-size:22px 22px}
+.skin-note{background:var(--mustard)}
+.skin-note .sheet{padding-left:40px;background-image:repeating-linear-gradient(transparent 0 27px, rgba(100,140,170,.22) 27px 28px);background-position:0 12px}
+.skin-note .sheet::before{content:"";position:absolute;left:10px;top:12px;bottom:12px;width:14px;background:radial-gradient(circle at 7px 7px, var(--mustard) 4px, transparent 5px) 0 0/14px 24px repeat-y}
+.skin-sky{background-color:var(--sky);
+  background-image:linear-gradient(rgba(255,255,255,.3) 1px, transparent 1px),linear-gradient(90deg, rgba(255,255,255,.3) 1px, transparent 1px);
+  background-size:18px 18px}
+.skin-wood{background-color:var(--wood);
+  background-image:repeating-linear-gradient(94deg, rgba(0,0,0,.14) 0 2px, transparent 2px 9px, rgba(255,255,255,.05) 9px 11px, transparent 11px 21px)}
+.skin-wood .sheet{background:#efe4cc}
+.skin-wood .sheet::before{content:"";position:absolute;top:-16px;left:0;width:42%;height:18px;background:#efe4cc;clip-path:polygon(0 100%, 8% 0, 92% 0, 100% 100%)}
+
+.sphere-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.sphere-head h3{margin:0;font-family:var(--display);font-style:italic;font-weight:500;font-size:30px;line-height:1;text-wrap:balance}
+.sphere-head h3 em{font-style:normal;font-family:var(--display);font-size:22px;margin-right:4px;color:var(--ink-soft)}
+.sphere-sub{font-size:12.5px;color:var(--ink-soft);margin:6px 0 12px}
+.chip{flex:none;font-family:var(--mono);font-size:11px;padding:4px 8px;color:#fff;white-space:nowrap;font-variant-numeric:tabular-nums}
+.tasks{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.task{display:grid;grid-template-columns:22px 1fr auto;gap:10px;align-items:start;padding:6px 0;border-bottom:1px dashed rgba(43,29,20,.14)}
+.task:last-child{border-bottom:0}
+.task label{display:contents;cursor:pointer}
+.task input{position:absolute;opacity:0;width:1px;height:1px}
+.box{width:20px;height:20px;border:1.8px solid var(--ink);background:#fff;margin-top:1px;display:grid;place-items:center;border-radius:3px;transition:background .15s}
+.box svg{width:20px;height:20px;opacity:0;transform:scale(.6);transition:opacity .15s, transform .2s}
+.task input:checked + .box svg{opacity:1;transform:scale(1.15)}
+.task input:focus-visible + .box{outline:2px dashed var(--orange);outline-offset:2px}
+.t-text{font-size:14.5px}
+.task input:checked ~ .t-text{text-decoration:line-through;text-decoration-color:var(--orange);text-decoration-thickness:2px;color:var(--ink-soft)}
+.t-meta{display:flex;align-items:center;gap:6px;font-family:var(--hand);font-size:18px;color:var(--ink-soft);line-height:1}
+.t-del{border:0;background:none;padding:0 2px;font-size:16px;color:var(--ink-soft);opacity:.5;line-height:1}
+.t-del:hover{opacity:1;color:var(--red)}
+.add{display:flex;gap:6px;margin-top:10px}
+.add input{flex:1;min-width:0;border:0;border-bottom:1.5px solid rgba(43,29,20,.35);background:transparent;font-family:var(--hand);font-size:21px;padding:2px 2px;color:var(--ink)}
+.add input::placeholder{color:rgba(43,29,20,.4)}
+.add input:focus{outline:none;border-bottom-color:var(--orange)}
+.add button{border:0;background:var(--ink);color:var(--paper-2);width:30px;height:30px;border-radius:50%;font-size:18px;line-height:1;flex:none}
+
+.sticker{position:absolute;z-index:3;pointer-events:none;filter:drop-shadow(0 2px 2px rgba(0,0,0,.25))}
+.pin{position:absolute;top:-6px;left:50%;width:16px;height:16px;margin-left:-8px;border-radius:50%;z-index:3;box-shadow:0 3px 4px rgba(0,0,0,.35)}
+
+/* ---------- history chart ---------- */
+.history{position:relative;background:var(--paper);padding:30px 26px 22px;box-shadow:0 14px 30px rgba(0,0,0,.28)}
+.history .tape.l{top:-10px;left:30px;transform:rotate(-6deg)}
+.history .tape.r{top:-10px;right:30px;transform:rotate(5deg)}
+.hist-top{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap}
+.stats{display:flex;gap:26px;flex-wrap:wrap}
+.stat .v{font-family:var(--display);font-weight:700;font-size:40px;line-height:1;font-variant-numeric:tabular-nums}
+.stat .l{font-family:var(--mono);font-size:11px;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.08em}
+.chart-scroll{overflow-x:auto;margin-top:22px}
+.chart{display:grid;grid-template-columns:30px repeat(12, minmax(34px,1fr));gap:8px;min-width:520px;align-items:end}
+.axis{height:170px;position:relative;font-family:var(--mono);font-size:10px;color:var(--ink-soft)}
+.axis span{position:absolute;right:4px;transform:translateY(50%)}
+.col{display:flex;flex-direction:column;align-items:center;gap:6px}
+.stack{position:relative;width:100%;height:170px;display:flex;flex-direction:column-reverse;
+  background:repeating-linear-gradient(to top, rgba(43,29,20,.10) 0 1px, transparent 1px var(--grid, 34px))}
+.stack i{display:block;width:100%;border-top:1.5px solid var(--paper)}
+.stack .tot{position:absolute;left:0;right:0;text-align:center;font-family:var(--hand);font-size:19px;font-weight:700;transform:translateY(-100%)}
+.col .wn{font-family:var(--display);font-style:italic;font-size:17px;font-variant-numeric:tabular-nums}
+.col.now .wn{color:var(--orange);font-weight:700}
+.col.future .stack{background:repeating-linear-gradient(to top, rgba(43,29,20,.06) 0 1px, transparent 1px var(--grid, 34px));outline:1.5px dashed rgba(43,29,20,.15);outline-offset:-1px}
+.legend{display:flex;gap:14px;flex-wrap:wrap;margin-top:16px;font-size:12.5px}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:12px;height:12px;display:inline-block}
+
+footer{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-family:var(--mono);font-size:12px;color:rgba(244,236,220,.75)}
+
+/* ---------- responsive ---------- */
+@media (max-width: 900px){
+  .board{grid-template-columns:1fr}
+  .spheres{grid-template-columns:repeat(2,1fr)}
+  .sphere,.sphere:nth-child(4){grid-column:span 1}
+  .sphere:nth-child(5){grid-column:span 2}
+}
+@media (max-width: 640px){
+  body{padding-block:14px 40px}
+  .hero{grid-template-columns:1fr}
+  .weekbadge{justify-self:start;transform:rotate(-2deg)}
+  .tracker{grid-template-columns:repeat(6,1fr)}
+  .spheres{grid-template-columns:1fr}
+  .sphere,.sphere:nth-child(4),.sphere:nth-child(5){grid-column:span 1}
+  .jar{padding:18px 14px}
+  .jar-stage{grid-template-columns:1fr}
+  .envelope{justify-self:center}
+  .notebook{padding-left:40px;transform:none}
+  .sum-row{grid-template-columns:100px 1fr 22px}
+}
+@media (prefers-reduced-motion: reduce){
+  *{animation:none!important;transition:none!important}
+}
+</style>
+
+<div class="wrap">
+  <div class="strip">
+    <span><a href="index.html" style="color:inherit;text-decoration:none;margin-right:14px">← в хаб</a>осень · 31 августа — 22 ноября 2026</span>
+    <span class="save-state" id="saveState"><i></i><span>загружаю…</span></span>
+  </div>
+
+  <header class="hero">
+    <svg class="leaf" style="right:210px;top:-8px;width:54px;transform:rotate(-24deg)" viewBox="0 0 60 80" aria-hidden="true"><path d="M30 2 C52 18 58 44 30 70 C2 44 8 18 30 2Z" fill="#d9612a"/><path d="M30 8 V78" stroke="#8a3413" stroke-width="2" fill="none"/></svg>
+    <svg class="leaf" style="right:260px;top:40px;width:34px;transform:rotate(38deg)" viewBox="0 0 60 80" aria-hidden="true"><path d="M30 2 C52 18 58 44 30 70 C2 44 8 18 30 2Z" fill="#c99a2e"/><path d="M30 8 V78" stroke="#7a5a12" stroke-width="2" fill="none"/></svg>
+    <h1>моя осень<span>12 недель маленьких дел для себя</span></h1>
+    <div class="weekbadge">
+      <div class="tape"></div>
+      <div class="lbl">сейчас неделя</div>
+      <div class="num" id="badgeNum">04<small>/12</small></div>
+      <div class="dates" id="badgeDates"></div>
+    </div>
+  </header>
+
+  <section>
+    <div class="tracker" id="tracker" aria-label="Недели осени"></div>
+    <div class="tracker-cap" id="trackerCap"></div>
+  </section>
+
+  <section class="board">
+    <div class="jar">
+      <div class="jar-inner" id="jar"></div>
+    </div>
+    <div class="notebook" id="summary"></div>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <h2 id="spheresTitle">пять сфер</h2>
+      <p>отмечай, что успела на выбранной неделе. цифра справа от дела — сколько недель ты его уже делала.</p>
+    </div>
+    <div class="spheres" id="spheres"></div>
+  </section>
+
+  <section class="history" id="history"></section>
+
+  <footer>
+    <span>маленькие дела складываются в большую осень</span>
+    <span>неделя начинается в понедельник</span>
+  </footer>
+</div>
+
+<script>
+(function(){
+  const START = new Date(2026, 7, 31); // понедельник, 31 августа 2026
+  const WEEKS = 12;
+  const MONTHS = ["января","февраля","марта","апреля","мая","июня","июля","августа","сентября","октября","ноября","декабря"];
+  const WEEKDAYS = ["воскресенье","понедельник","вторник","среда","четверг","пятница","суббота"];
+  const DAY_SHORT = ["пн","вт","ср","чт","пт","сб","вс"];
+
+  const SPHERES = [
+    { id:"sport", name:"спорт", sub:"двигаться понемножку, но почти каждый день", color:"#d9612a", skin:"cork",
+      tasks:["сделать растяжку","позаниматься йогой 20 минут","пошагать 5 минут после еды","погулять 30 минут в парке","планка 1 минуту","потанцевать под 3 любимые песни","пройти 8000 шагов за день","подняться по лестнице вместо лифта"] },
+    { id:"cook", name:"готовка", sub:"тёплая, сдобная, осенняя кухня", color:"#c24a42", skin:"gingham",
+      tasks:["приготовить что-то сдобное","попробовать новый рецепт шарлотки","сделать заготовки ужинов","сварить тыквенный суп-пюре","испечь печенье с корицей","сделать тыквенный латте дома","красиво накрыть завтрак, как в кафе","сварить ягодный морс"] },
+    { id:"hobby", name:"хобби и время для себя", sub:"руки заняты, голова отдыхает", color:"#b8862a", skin:"note",
+      tasks:["раскрасить 1 раскраску маркерами","30 минут алмазной мозаики","связать мини-сумочку","начать вязать свитер щенку","прочитать 20 страниц книги","ванна с пеной и маской для лица","сходить одной в кофейню с книгой","собрать букет из осенних листьев"] },
+    { id:"clean", name:"уборка", sub:"по одному уголку за раз", color:"#4f8fa3", skin:"sky",
+      tasks:["разобрать один ящик","протереть пыль везде","постирать пледы и подушки","убрать летние вещи, достать тёплые","помыть окна","15 минут уборки под подкаст","почистить галерею в телефоне","навести порядок на рабочем столе"] },
+    { id:"vary", name:"разнообразие будней", sub:"чтобы недели не сливались в одну", color:"#6f7d34", skin:"wood",
+      tasks:["пройти домой новым маршрутом","сходить в новое место","устроить фотопрогулку","киновечер с осенним фильмом","зажечь вечером свечи","пикник в пледе, пока тепло","позвонить подруге просто так","сходить на рынок за тыквой","собрать осенний плейлист"] }
+  ];
+  const SPH = Object.fromEntries(SPHERES.map(s => [s.id, s]));
+
+  const state = { weeks:{}, custom:[] };
+  let db = null, mode = "local";
+  let viewing = currentWeek();
+
+  /* ---------- dates ---------- */
+  function midnight(d){ return new Date(d.getFullYear(), d.getMonth(), d.getDate()); }
+  function dayDiff(a, b){ return Math.round((midnight(a) - midnight(b)) / 864e5); }
+  function rawWeek(d){ return Math.floor(dayDiff(d, START) / 7) + 1; }
+  function currentWeek(){ return Math.min(WEEKS, Math.max(1, rawWeek(new Date()))); }
+  function iso(d){ return d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0") + "-" + String(d.getDate()).padStart(2,"0"); }
+  function addDays(d, n){ const x = new Date(d); x.setDate(x.getDate() + n); return x; }
+  function weekStart(n){ return addDays(START, (n-1)*7); }
+  function weekRange(n){
+    const a = weekStart(n), b = addDays(a, 6);
+    if (a.getMonth() === b.getMonth()) return a.getDate() + "–" + b.getDate() + " " + MONTHS[a.getMonth()];
+    return a.getDate() + " " + MONTHS[a.getMonth()] + " – " + b.getDate() + " " + MONTHS[b.getMonth()];
+  }
+  function todayIndexInWeek(n){ const d = dayDiff(new Date(), weekStart(n)); return d >= 0 && d < 7 ? d : -1; }
+  const pad2 = n => String(n).padStart(2, "0");
+  const wid = n => "w" + pad2(n);
+
+  /* ---------- data helpers ---------- */
+  function blankWeek(){ return { done:{}, habit:[false,false,false,false,false,false,false], drawn:{}, note:"" }; }
+  function normWeek(d){
+    const w = blankWeek();
+    if (!d) return w;
+    if (d.done && typeof d.done === "object") w.done = { ...d.done };
+    if (Array.isArray(d.habit)) w.habit = w.habit.map((_, i) => !!d.habit[i]);
+    if (d.drawn && typeof d.drawn === "object") w.drawn = { ...d.drawn };
+    if (typeof d.note === "string") w.note = d.note;
+    return w;
+  }
+  function week(n){ return state.weeks[wid(n)] || blankWeek(); }
+  function ensureWeek(n){ const k = wid(n); if (!state.weeks[k]) state.weeks[k] = blankWeek(); return state.weeks[k]; }
+  function allTasks(){
+    const out = [];
+    SPHERES.forEach(s => s.tasks.forEach((t, i) => out.push({ id: s.id + "-" + i, sphere: s.id, text: t, custom:false })));
+    state.custom.forEach(c => { if (SPH[c.sphere]) out.push({ id: c.id, sphere: c.sphere, text: c.text, custom:true }); });
+    return out;
+  }
+  function taskMap(){ return Object.fromEntries(allTasks().map(t => [t.id, t])); }
+  function countWeek(n, sphere){
+    const map = taskMap();
+    return Object.keys(week(n).done).filter(id => map[id] && (!sphere || map[id].sphere === sphere)).length;
+  }
+  function timesDone(id){ let c = 0; for (let n = 1; n <= WEEKS; n++) if (week(n).done[id]) c++; return c; }
+  function esc(s){ return String(s).replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c])); }
+
+  /* ---------- saving ---------- */
+  const dirty = {}, seq = {}, timers = {}, chains = {};
+  function dataFor(path){
+    if (path.startsWith("weeks/")) return JSON.parse(JSON.stringify(state.weeks[path.slice(6)] || blankWeek()));
+    return { items: JSON.parse(JSON.stringify(state.custom)) };
+  }
+  function saveLocal(){
+    try { localStorage.setItem("moya-osen-2026", JSON.stringify(state)); } catch (e) {}
+  }
+  function save(path, delay){
+    dirty[path] = true;
+    seq[path] = (seq[path] || 0) + 1;
+    const my = seq[path];
+    clearTimeout(timers[path]);
+    timers[path] = setTimeout(() => {
+      if (!db) { saveLocal(); dirty[path] = false; return; }
+      const data = dataFor(path);
+      chains[path] = (chains[path] || Promise.resolve())
+        .then(() => db.doc(path).set(data))
+        .catch(err => { setStatus("error", err && err.code); })
+        .then(() => { if (seq[path] === my) dirty[path] = false; });
+    }, delay == null ? 300 : delay);
+  }
+  function setStatus(kind, code){
+    const el = document.getElementById("saveState");
+    el.className = "save-state" + (kind === "cloud" ? " cloud" : "");
+    const txt = {
+      cloud: "всё сохраняется",
+      local: "сохраняется в этом браузере",
+      error: code === "invalid_argument" ? "нет прав сохранять изменения" : "не получилось сохранить, попробуй ещё раз"
+    }[kind];
+    el.querySelector("span").textContent = txt;
+  }
+
+  /* ---------- actions ---------- */
+  function toggleTask(id){
+    const w = ensureWeek(viewing);
+    if (w.done[id]) delete w.done[id]; else w.done[id] = iso(new Date());
+    save("weeks/" + wid(viewing));
+    renderAll();
+  }
+  function toggleHabit(i){
+    const w = ensureWeek(viewing);
+    w.habit[i] = !w.habit[i];
+    save("weeks/" + wid(viewing));
+    renderAll();
+  }
+  function addCustom(sphere, text){
+    text = text.trim().slice(0, 120);
+    if (!text) return;
+    state.custom.push({ id: "c" + Date.now().toString(36) + Math.random().toString(36).slice(2,5), sphere, text });
+    save("lists/custom");
+    renderAll();
+  }
+  function removeCustom(id){
+    state.custom = state.custom.filter(c => c.id !== id);
+    save("lists/custom");
+    renderAll();
+  }
+  function hash(str){ let h = 2166136261; for (let i = 0; i < str.length; i++){ h ^= str.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; }
+  function draw(fresh){
+    const now = currentWeek(), w = ensureWeek(now), today = iso(new Date());
+    const prev = w.drawn[today];
+    let pool = allTasks().filter(t => !w.done[t.id] && t.id !== prev);
+    if (!pool.length) pool = allTasks().filter(t => t.id !== prev);
+    const seed = fresh ? Math.floor(Math.random() * 1e9) : hash(today);
+    w.drawn[today] = pool[seed % pool.length].id;
+    save("weeks/" + wid(now));
+    renderAll();
+  }
+  function markDrawn(){
+    const now = currentWeek(), w = ensureWeek(now), id = w.drawn[iso(new Date())];
+    if (!id) return;
+    if (w.done[id]) delete w.done[id]; else w.done[id] = iso(new Date());
+    save("weeks/" + wid(now));
+    renderAll();
+  }
+
+  /* ---------- render ---------- */
+  const CHECK = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 13 C7 15 8 17 10 20 C13 12 17 7 22 3" fill="none" stroke="#d9612a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  const STAR = c => '<svg viewBox="0 0 40 40" aria-hidden="true"><path d="M20 2 L24.5 14.5 L38 15 L27 23.5 L31 37 L20 29 L9 37 L13 23.5 L2 15 L15.5 14.5Z" fill="' + c + '" stroke="#fff" stroke-width="2" stroke-linejoin="round"/></svg>';
+
+  function renderBadge(){
+    const now = currentWeek();
+    document.getElementById("badgeNum").innerHTML = pad2(now) + "<small>/12</small>";
+    document.getElementById("badgeDates").textContent = weekRange(now);
+  }
+
+  function renderTracker(){
+    const now = currentWeek();
+    const totals = []; for (let n = 1; n <= WEEKS; n++) totals.push(countWeek(n));
+    const max = Math.max(8, ...totals);
+    document.getElementById("tracker").innerHTML = totals.map((t, i) => {
+      const n = i + 1;
+      const cls = ["wk", n < now ? "past" : n > now ? "future" : "now", n === viewing ? "viewing" : ""].join(" ");
+      return '<button class="' + cls + '" data-week="' + n + '" aria-pressed="' + (n === viewing) + '" aria-label="неделя ' + n + ', ' + weekRange(n) + ', дел: ' + t + '">' +
+        '<span class="n">' + pad2(n) + '</span><span class="bar"><b style="height:' + (t / max * 100) + '%"></b></span><span class="c">' + t + '</span></button>';
+    }).join("");
+    const cap = document.getElementById("trackerCap");
+    const label = viewing === now ? "смотришь текущую неделю" : viewing < now ? "смотришь прошлую неделю" : "планируешь наперёд";
+    cap.innerHTML = '<span>неделя ' + pad2(viewing) + ' · ' + weekRange(viewing) + ' · ' + label + '</span>' +
+      (viewing !== now ? '<button data-week="' + now + '">вернуться к неделе ' + pad2(now) + '</button>' : '<span>осталось недель: ' + (WEEKS - now) + '</span>');
+  }
+
+  function renderJar(){
+    const now = currentWeek(), w = week(now), d = new Date(), today = iso(d);
+    const id = w.drawn[today], t = id ? taskMap()[id] : null;
+    const slips = ["#d9612a","#8fc3d2","#c99a2e","#e59aa6","#6f7d34"].map((c, i) =>
+      '<i style="left:' + (i*20) + 'px;background:' + c + ';transform:rotate(' + [-8,4,-2,7,-5][i] + 'deg);height:' + [48,56,52,44,50][i] + 'px"></i>').join("");
+    let right;
+    if (t) {
+      const s = SPH[t.sphere], isDone = !!w.done[t.id];
+      right = '<div class="slip"><div class="tape"></div>' +
+        '<span class="tag" style="background:' + s.color + '">' + esc(s.name) + '</span>' +
+        '<div class="txt">' + esc(t.text) + '</div>' +
+        '<div class="slip-actions">' +
+        '<button class="btn ' + (isDone ? "done" : "primary") + '" data-act="mark">' + (isDone ? "сделано ✓" : "сделала!") + '</button>' +
+        '<button class="btn" data-act="redraw">вытянуть другую</button></div></div>';
+    } else {
+      right = '<div class="pull-cta"><p>в конверте все твои дела. одна бумажка в день, чтобы не думать, с чего начать.</p>' +
+        '<button class="btn primary" data-act="draw">вытянуть бумажку</button></div>';
+    }
+    document.getElementById("jar").innerHTML =
+      '<div class="eyebrow">бумажка дня</div>' +
+      '<div class="h2">что сделать сегодня?</div>' +
+      '<div class="today">' + WEEKDAYS[d.getDay()] + ', ' + d.getDate() + ' ' + MONTHS[d.getMonth()] + '</div>' +
+      '<div class="jar-stage"><button class="envelope" data-act="' + (t ? "redraw" : "draw") + '" aria-label="вытянуть бумажку из конверта">' +
+      '<span class="back"></span><span class="slips">' + slips + '</span><span class="front"></span></button>' + right + '</div>';
+  }
+
+  function renderSummary(){
+    const w = week(viewing), total = countWeek(viewing), ti = todayIndexInWeek(viewing);
+    const rows = SPHERES.map(s => {
+      const c = countWeek(viewing, s.id);
+      const dots = Array.from({ length: Math.max(c, 3) }, (_, i) => i < c ? '<i style="background:' + s.color + '"></i>' : '<i class="empty"></i>').join("");
+      return '<div class="sum-row"><span>' + esc(s.name) + '</span><span class="dots">' + dots + '</span><span class="k">' + c + '</span></div>';
+    }).join("");
+    const habitCount = w.habit.filter(Boolean).length;
+    const days = DAY_SHORT.map((d, i) =>
+      '<button class="day' + (w.habit[i] ? " on" : "") + (i === ti ? " today" : "") + '" data-habit="' + i + '" aria-pressed="' + w.habit[i] + '" aria-label="зарядка, ' + d + '">' + d + '</button>').join("");
+    const word = n => { const m10 = n % 10, m100 = n % 100; return (m10 === 1 && m100 !== 11) ? "дело" : (m10 >= 2 && m10 <= 4 && (m100 < 12 || m100 > 14)) ? "дела" : "дел"; };
+    const el = document.getElementById("summary");
+    const note = document.getElementById("weekNote");
+    const keepNote = note && document.activeElement === note ? note : null;
+    el.innerHTML =
+      '<div class="eyebrow">итоги недели ' + pad2(viewing) + ' · ' + weekRange(viewing) + '</div>' +
+      '<div class="sum-top"><div class="big">' + total + '<small>' + word(total) + ' сделано</small></div></div>' +
+      '<div class="sum-rows">' + rows + '</div>' +
+      '<div class="habit"><div class="habit-title"><b>зарядка перед сном</b><span>' + habitCount + ' из 7 вечеров</span></div><div class="days">' + days + '</div></div>' +
+      '<div class="note-wrap"><label for="weekNote">что было хорошего на этой неделе</label><textarea id="weekNote" rows="3" placeholder="напиши пару строчек…"></textarea></div>';
+    const ta = document.getElementById("weekNote");
+    if (keepNote) { ta.replaceWith(keepNote); }
+    else ta.value = w.note || "";
+  }
+
+  function renderSpheres(){
+    document.getElementById("spheresTitle").textContent = "пять сфер · неделя " + pad2(viewing);
+    const tasks = allTasks(), w = week(viewing);
+    const deco = {
+      cork: '<span class="sticker" style="top:-20px;right:-14px;width:46px;transform:rotate(14deg)">' + STAR("#e5669a") + '</span>',
+      gingham: '<span class="pin" style="background:radial-gradient(circle at 35% 35%, #ffb3a8, #c24a42 60%, #6e1f1a)"></span>',
+      note: '<span class="sticker" style="bottom:-16px;right:18px;width:38px;transform:rotate(-12deg)">' + STAR("#d9612a") + '</span>',
+      sky: '<span class="tape" style="top:6px;left:50%;transform:translateX(-50%) rotate(3deg)"></span>',
+      wood: '<span class="sticker" style="top:-18px;left:-12px;width:40px;transform:rotate(-18deg)">' + STAR("#c99a2e") + '</span>'
+    };
+    document.getElementById("spheres").innerHTML = SPHERES.map((s, si) => {
+      const list = tasks.filter(t => t.sphere === s.id);
+      const c = countWeek(viewing, s.id);
+      const items = list.map(t => {
+        const times = timesDone(t.id);
+        return '<li class="task"><label><input type="checkbox" id="t-' + t.id + '" data-task="' + t.id + '"' + (w.done[t.id] ? " checked" : "") + '>' +
+          '<span class="box">' + CHECK + '</span><span class="t-text">' + esc(t.text) + '</span></label>' +
+          '<span class="t-meta">' + (times ? "×" + times : "") +
+          (t.custom ? '<button class="t-del" data-del="' + t.id + '" aria-label="удалить «' + esc(t.text) + '»">×</button>' : "") + '</span></li>';
+      }).join("");
+      return '<article class="sphere skin-' + s.skin + '">' + deco[s.skin] +
+        '<div class="sheet"><div class="sphere-head"><h3><em>(' + (si+1) + ')</em>' + esc(s.name) + '</h3>' +
+        '<span class="chip" style="background:' + s.color + '">' + c + ' за неделю</span></div>' +
+        '<p class="sphere-sub">' + esc(s.sub) + '</p>' +
+        '<ul class="tasks">' + items + '</ul>' +
+        '<form class="add" data-add="' + s.id + '"><input id="add-' + s.id + '" type="text" maxlength="120" placeholder="+ своё дело" aria-label="новое дело: ' + esc(s.name) + '">' +
+        '<button type="submit" aria-label="добавить">+</button></form></div></article>';
+    }).join("");
+  }
+
+  function renderHistory(){
+    const now = currentWeek();
+    const perWeek = [];
+    for (let n = 1; n <= WEEKS; n++) perWeek.push(SPHERES.map(s => countWeek(n, s.id)));
+    const totals = perWeek.map(a => a.reduce((x, y) => x + y, 0));
+    const step = 5;
+    const max = Math.max(15, Math.ceil(Math.max(...totals) / step) * step);
+    const gridPx = 170 * step / max;
+    const all = totals.reduce((a, b) => a + b, 0);
+    const tried = allTasks().filter(t => timesDone(t.id) > 0).length;
+    const habitAll = Object.values(state.weeks).reduce((a, w) => a + (w.habit || []).filter(Boolean).length, 0);
+    const ticks = []; for (let v = 0; v <= max; v += step) ticks.push('<span style="bottom:' + (v / max * 100) + '%">' + v + '</span>');
+    const cols = perWeek.map((arr, i) => {
+      const n = i + 1, t = totals[i];
+      const segs = arr.map((c, si) => c ? '<i style="height:' + (c / max * 100) + '%;background:' + SPHERES[si].color + '" title="' + SPHERES[si].name + ': ' + c + '"></i>' : "").join("");
+      return '<div class="col ' + (n < now ? "past" : n > now ? "future" : "now") + '"><div class="stack" style="--grid:' + gridPx + 'px">' + segs +
+        (t ? '<span class="tot" style="bottom:' + (t / max * 100) + '%">' + t + '</span>' : "") + '</div><span class="wn">' + pad2(n) + '</span></div>';
+    }).join("");
+    document.getElementById("history").innerHTML =
+      '<div class="tape l"></div><div class="tape r"></div>' +
+      '<div class="hist-top"><div><div class="eyebrow">прогресс по неделям</div><div class="h2">осень целиком</div></div>' +
+      '<div class="stats"><div class="stat"><div class="v">' + all + '</div><div class="l">дел за осень</div></div>' +
+      '<div class="stat"><div class="v">' + tried + '<span style="font-size:22px;color:var(--ink-soft)">/' + allTasks().length + '</span></div><div class="l">идей попробовано</div></div>' +
+      '<div class="stat"><div class="v">' + habitAll + '</div><div class="l">вечеров с зарядкой</div></div></div></div>' +
+      '<div class="chart-scroll"><div class="chart"><div class="axis">' + ticks.join("") + '</div>' + cols + '</div></div>' +
+      '<div class="legend">' + SPHERES.map(s => '<span><i style="background:' + s.color + '"></i>' + esc(s.name) + '</span>').join("") + '</div>';
+  }
+
+  function renderAll(){
+    const active = document.activeElement, activeId = active && active.id;
+    const addVals = {};
+    document.querySelectorAll(".add input").forEach(i => { addVals[i.id] = i.value; });
+    renderBadge(); renderTracker(); renderJar(); renderSummary(); renderSpheres(); renderHistory();
+    Object.entries(addVals).forEach(([id, v]) => { const el = document.getElementById(id); if (el) el.value = v; });
+    if (activeId && activeId !== "weekNote") { const el = document.getElementById(activeId); if (el) el.focus({ preventScroll:true }); }
+  }
+
+  /* ---------- events ---------- */
+  document.addEventListener("click", e => {
+    const wk = e.target.closest("[data-week]");
+    if (wk) { viewing = +wk.dataset.week; renderAll(); return; }
+    const hb = e.target.closest("[data-habit]");
+    if (hb) { toggleHabit(+hb.dataset.habit); return; }
+    const del = e.target.closest("[data-del]");
+    if (del) { e.preventDefault(); removeCustom(del.dataset.del); return; }
+    const act = e.target.closest("[data-act]");
+    if (act) {
+      const a = act.dataset.act;
+      if (a === "draw") draw(false);
+      else if (a === "redraw") draw(true);
+      else if (a === "mark") markDrawn();
+    }
+  });
+  document.addEventListener("change", e => {
+    if (e.target.matches("[data-task]")) toggleTask(e.target.dataset.task);
+  });
+  document.addEventListener("submit", e => {
+    const f = e.target.closest("[data-add]");
+    if (!f) return;
+    e.preventDefault();
+    const input = f.querySelector("input");
+    const v = input.value;
+    input.value = "";
+    addCustom(f.dataset.add, v);
+  });
+  document.addEventListener("input", e => {
+    if (e.target.id === "weekNote") {
+      ensureWeek(viewing).note = e.target.value.slice(0, 2000);
+      save("weeks/" + wid(viewing), 900);
+    }
+  });
+
+  /* ---------- boot ---------- */
+  renderAll();
+  (async () => {
+    try { db = window.claude && window.claude.use ? await window.claude.use("db") : null; } catch (e) { db = null; }
+    if (!db) {
+      mode = "local";
+      try {
+        const raw = localStorage.getItem("moya-osen-2026");
+        if (raw) {
+          const d = JSON.parse(raw);
+          Object.entries(d.weeks || {}).forEach(([k, v]) => { state.weeks[k] = normWeek(v); });
+          if (Array.isArray(d.custom)) state.custom = d.custom;
+        }
+      } catch (e) {}
+      setStatus("local");
+      renderAll();
+      return;
+    }
+    mode = "cloud";
+    setStatus("cloud");
+    db.collection("weeks").onSnapshot(snap => {
+      const next = {};
+      Object.keys(state.weeks).forEach(k => { if (dirty["weeks/" + k]) next[k] = state.weeks[k]; });
+      snap.docs.forEach(d => { if (!dirty["weeks/" + d.id]) next[d.id] = normWeek(d.data()); });
+      state.weeks = next;
+      renderAll();
+    }, err => setStatus("error", err && err.code));
+    db.doc("lists/custom").onSnapshot(s => {
+      if (dirty["lists/custom"]) return;
+      const items = s.exists && Array.isArray(s.data().items) ? s.data().items : [];
+      state.custom = items.map(c => ({ id: String(c.id), sphere: String(c.sphere), text: String(c.text) }));
+      renderAll();
+    }, err => setStatus("error", err && err.code));
+  })();
+})();
+</script>
+</body>
+</html>

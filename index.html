@@ -19,11 +19,11 @@ body{margin:0;font:14px/1.4 system-ui,-apple-system,sans-serif;background:#F7F0D
 img{max-width:100%}
 [hidden]{display:none!important}
 </style>
-<script src="firebase-config.js?v=20260930100656"></script>
+<script src="firebase-config.js?v=20260930102457"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
-<script src="portal.js?v=20260930100656" data-app="hub"></script>
+<script src="portal.js?v=20260930102457" data-app="hub"></script>
 </head>
 <body>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -258,7 +258,8 @@ const S = [
   {id:"plan", cls:"f-plan", name:"Планирование", hand:"неделя", color:"var(--cream)",
    subs:[{t:"Цели на неделю и день", d:"Что хочу успеть на этой неделе и сегодня."}], label:"неделя и день"},
   {id:"pers", cls:"f-pers", name:"Личное", hand:"для себя", color:"var(--choco-2)", dark:true,
-   subs:[{t:"Бюджет", d:"Доходы, расходы по категориям и лимиты на месяц.", href:"budget.html"},{t:"Осенний трекер", d:"Что хочу успеть этой осенью.", href:"personal.html#autumn"},{t:"Список покупок", d:"Что купить, по магазинам.", href:"personal.html#shopping"},
+   subs:[{t:"Бюджет", d:"Доходы, расходы по категориям и лимиты на месяц.", href:"budget.html"},{t:"Моя осень · 12 недель", d:"Маленькие дела для себя по неделям, бумажка дня, зарядка перед сном.", href:"osen.html"},
+         {t:"Осенний трекер", d:"Что хочу успеть этой осенью.", href:"personal.html#autumn"},{t:"Список покупок", d:"Что купить, по магазинам.", href:"personal.html#shopping"},
          {t:"Дневник здоровья", d:"Самочувствие, сон, лекарства.", href:"personal.html#health"},{t:"Записи", d:"Бьюти-мастера, массажист, врач: к кому и когда.", href:"personal.html#visits"}]}
 ];
 const esc = s => s.replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));

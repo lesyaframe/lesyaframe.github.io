@@ -1,9 +1,9 @@
 /* Кэш для работы без сети. Страницы берутся из сети, если она есть
    (так обновления приходят сразу), иначе из кэша. */
-const VERSION = "hub-20260930100656";
+const VERSION = "hub-20260930102457";
 const SHELL = [
   "./", "index.html", "blog.html", "budget.html", "sport.html", "work.html", "personal.html",
-  "randomizer.html", "data.html", "portal.js", "firebase-config.js", "manifest.webmanifest",
+  "randomizer.html", "osen.html", "data.html", "portal.js", "firebase-config.js", "manifest.webmanifest",
   "fonts/Vasek.ttf", "img/rem-face.jpg", "img/rem-sun.jpg", "icons/icon-192.png", "icons/icon-512.png"
 ];
 self.addEventListener("install", e => {
