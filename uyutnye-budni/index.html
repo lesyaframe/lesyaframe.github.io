@@ -85,32 +85,34 @@ button{cursor:pointer}
 .sticker svg{display:block;width:100%;height:auto}
 
 /* ---------- hero ---------- */
-.hero{position:relative;display:flex;flex-direction:column;gap:14px;background:var(--milk);padding:30px 30px 26px;box-shadow:0 10px 26px rgba(90,40,40,.12);transform:rotate(-.4deg);align-self:stretch;justify-content:center}
+.hero{position:relative;display:flex;flex-direction:column;gap:14px;background:var(--milk);padding:44px 30px 26px;box-shadow:0 10px 26px rgba(90,40,40,.12);transform:rotate(-.4deg);align-self:stretch;justify-content:center}
+.hero::before{content:"";position:absolute;left:0;right:0;top:0;height:18px;background:var(--pat-tartan)}
 .hero h1{margin:0;font-family:var(--f-disp);font-weight:400;font-size:clamp(50px,7vw,88px);color:var(--bord);line-height:1;letter-spacing:-.01em}
 .hero .sub{font-family:var(--f-mono);font-size:13px;letter-spacing:.04em;color:var(--ink-soft)}
-.set-btn{position:absolute;top:14px;right:16px;border:1.5px solid rgba(75,42,32,.3);background:transparent;border-radius:999px;padding:4px 12px;font-family:var(--f-mono);font-size:11.5px;color:var(--ink-soft)}
+.set-btn{position:absolute;top:28px;right:16px;border:1.5px solid rgba(75,42,32,.3);background:transparent;border-radius:999px;padding:4px 12px;font-family:var(--f-mono);font-size:11.5px;color:var(--ink-soft)}
 .set-btn:hover{border-color:var(--bord);color:var(--bord)}
 .badge{position:absolute;right:22px;bottom:-24px;display:inline-flex;flex-direction:column;align-items:center;padding:12px 20px 10px;min-width:150px;text-align:center;
-  background:var(--pink-lt);transform:rotate(3deg);box-shadow:0 6px 14px rgba(90,40,40,.14);color:var(--choc)}
+  background:var(--bord);transform:rotate(3deg);box-shadow:0 8px 16px rgba(90,30,30,.25);color:var(--milk)}
 .badge .tape{top:-11px;left:50%;transform:translateX(-50%) rotate(-5deg)}
 .badge .lbl{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;opacity:.8}
 .badge .num{font-family:var(--f-disp);font-size:42px;line-height:1;font-variant-numeric:tabular-nums}
 .badge .num small{font-size:20px;opacity:.6}
-.badge .dates{font-family:var(--f-hand);font-size:16px;color:var(--bord)}
+.badge .dates{font-family:var(--f-hand);font-size:16px;color:#f4c3cf}
 
 /* ---------- weeks ---------- */
-.weeks{background:var(--milk);padding:14px 16px 12px;box-shadow:0 8px 20px rgba(90,40,40,.1);margin-top:10px}
+.weeks{background:#ead8cb;padding:14px 16px 12px;box-shadow:0 8px 20px rgba(90,40,40,.12);margin-top:10px;border-top:4px solid var(--choc)}
 .wk-row{display:flex;gap:6px;overflow-x:auto;scroll-snap-type:x proximity;padding-bottom:4px;scrollbar-width:thin}
 .wk{flex:1 0 66px;scroll-snap-align:start;border:0;padding:8px 2px;display:flex;flex-direction:column;align-items:center;gap:3px;position:relative;transition:transform .15s;
-  background:#f6e6e9;border-radius:8px 8px 3px 3px;color:var(--choc)}
+  background:#fbf4ea;border-radius:8px 8px 3px 3px;color:var(--choc)}
 .wk:hover{transform:translateY(-2px)}
 .wk b{font-family:var(--f-disp);font-weight:400;font-size:18px;line-height:1;font-variant-numeric:tabular-nums}
 .wk .d{font-family:var(--f-mono);font-size:10px;white-space:nowrap}
 .wk .c{font-family:var(--f-hand);font-size:16px;line-height:1;font-weight:700;min-height:16px}
-.wk.future{opacity:.55}
-.wk.now{background:var(--pink-lt);box-shadow:inset 0 -3px 0 var(--pink-dk)}
+.wk.past{background:#c99a86;color:#fff}
+.wk.future{opacity:.75}
+.wk.now{background:var(--pink);box-shadow:inset 0 -3px 0 var(--bord)}
 .wk.viewing{background:var(--bord);color:var(--milk);opacity:1}
-.weeks-cap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-family:var(--f-mono);font-size:12px;margin-top:10px;color:var(--ink-soft)}
+.weeks-cap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-family:var(--f-mono);font-size:12px;margin-top:10px;color:var(--choc)}
 .weeks-cap button{border:0;background:none;padding:0;text-decoration:underline;text-underline-offset:3px;font-family:var(--f-mono);font-size:12px;color:var(--bord)}
 
 /* ---------- calendars ---------- */
@@ -135,7 +137,7 @@ button{cursor:pointer}
 .th-3{--pat:var(--pat-stripe);--mc:var(--choc);--mbg:#d0708a;--mfg:#fff;--mline:rgba(255,255,255,.3);--mwn:#7d1f2d;--mwnfg:#fff}
 
 /* ---------- slip of the day ---------- */
-.slipcard{background:radial-gradient(circle, rgba(208,112,138,.45) 24%, transparent 26%) 0 0/30px 30px, var(--milk);
+.slipcard{background:radial-gradient(circle, var(--milk) 26%, transparent 28%) 0 0/26px 26px, radial-gradient(circle, var(--milk) 26%, transparent 28%) 13px 13px/26px 26px, var(--choc);
   padding:22px;box-shadow:0 10px 26px rgba(90,40,40,.12);transform:rotate(.6deg)}
 .slipcard .inner{background:#fbe9ee;padding:18px 18px 20px;position:relative}
 .slipcard h2{font-size:30px;color:var(--bord)}
@@ -301,9 +303,9 @@ dialog::backdrop{background:rgba(43,20,15,.45)}
 @media (max-width: 600px){
   .page{padding:18px 12px 44px;gap:22px}
   .card h2{font-size:25px}
-  .hero{padding:44px 18px 20px;transform:none}
+  .hero{padding:56px 18px 20px;transform:none}
   .hero h1{font-size:46px}
-  .set-btn{top:12px;right:12px}
+  .set-btn{top:26px;right:12px}
   .badge{padding:10px 16px 8px;min-width:0}
   .badge .num{font-size:36px}
   .slipcard{padding:14px;transform:none}
