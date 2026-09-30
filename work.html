@@ -1,0 +1,457 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Лесина работа</title>
+<meta name="theme-color" content="#3B1B14">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Хаб">
+<style>
+html{background:#3B1B14}
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{margin:0;font:14px/1.4 system-ui,-apple-system,sans-serif;background:#F7F0DA}
+img{max-width:100%}
+[hidden]{display:none!important}
+</style>
+<script src="firebase-config.js?v=20260930093126"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+<script src="portal.js?v=20260930093126" data-app="work"></script>
+</head>
+<body>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap">
+<style>
+@font-face{font-family:"Vasek";src:url("fonts/Vasek.ttf") format("truetype");font-display:swap}
+/* shared look of the hub mini-apps, inlined by build.py */
+:root{
+  color-scheme:light;
+  --choco:#3B1B14;--choco-2:#4E251B;--ink:#250A0A;--paper:#F7F0DA;--cream:#F5EDC9;
+  --butter:#F1EA91;--olive:#737038;--olive-2:#817E45;--sky:#A6BFD2;--sky-2:#BCCFDD;--muted:#6B5550;
+  --line:rgba(37,10,10,.14);--red:#A8432F;--green:#5E7A3A;--rose:#E4CFC7;
+  --sans:"Inter","Helvetica Neue",Arial,sans-serif;
+  --script:"Vasek","Segoe Script","Brush Script MT",cursive;
+  --gutter:clamp(16px,3vw,40px);
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:repeating-linear-gradient(transparent 0 35px,rgba(166,191,210,.35) 35px 36px),var(--paper);color:var(--ink);font-family:var(--sans);font-size:14px;line-height:1.38;letter-spacing:-.012em;-webkit-font-smoothing:antialiased;min-height:100vh}
+button,input,select,textarea{font:inherit;color:inherit;letter-spacing:inherit}
+a{color:inherit}
+h1,h2,h3,p{margin:0}
+h1,h2,h3{font-weight:800;letter-spacing:-.055em;line-height:.92;text-wrap:balance}
+.v{font-family:var(--script);font-weight:400;letter-spacing:0;line-height:.8}
+:focus-visible{outline:2px dashed currentColor;outline-offset:2px}
+.num{font-variant-numeric:tabular-nums}
+
+/* header */
+.top{background:repeating-linear-gradient(90deg,rgba(0,0,0,.2) 0 2px,transparent 2px 7px),var(--choco);color:var(--paper);padding:18px var(--gutter) 0}
+.top-in{max-width:1300px;margin-inline:auto}
+.top-row{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:14px;padding-bottom:18px}
+.top.tabbed .top-row{padding-bottom:0}
+.back{font-size:13px;font-weight:600;text-decoration:none;opacity:.7}
+.back:hover{opacity:1}
+.top h1{font-size:clamp(40px,5vw,68px);font-weight:900;letter-spacing:-.065em;margin-top:10px}
+.top h1 .v{color:var(--butter);font-size:.95em;margin-left:.15em;display:inline-block;rotate:-5deg}
+.top-r{display:flex;flex-direction:column;align-items:flex-end;gap:10px}
+.sync{font-size:12px;opacity:.7;display:flex;align-items:center;gap:7px}
+.sync i{width:8px;height:8px;border-radius:50%;background:#d6cfae}
+.sync.ok i{background:#9bc27a}
+.sync.local i{background:var(--butter)}
+.tabs{display:flex;flex-wrap:wrap;align-items:flex-end;gap:4px;margin-top:20px}
+.tab{border:0;cursor:pointer;padding:11px 16px 12px;border-radius:10px 10px 0 0;background:rgba(247,240,218,.14);color:var(--paper);font-weight:700;font-size:14px;display:flex;align-items:center;gap:8px;transition:background .2s;text-decoration:none}
+.tab:hover{background:rgba(247,240,218,.25)}
+.tab[aria-selected="true"]{background:var(--paper);color:var(--ink)}
+.tab .c{font-size:11px;font-weight:600;opacity:.6}
+
+main{max-width:1300px;margin-inline:auto;padding:24px var(--gutter) 60px;display:flex;flex-direction:column;gap:22px}
+.notice{background:var(--butter);padding:10px 14px;border-radius:8px;font-size:13px}
+
+/* building blocks */
+.panel{background:#fff;border-radius:12px;padding:18px 18px 16px;box-shadow:0 12px 20px -18px rgba(37,10,10,.55);display:flex;flex-direction:column;gap:12px;min-width:0}
+.panel-h{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}
+.panel-h h2{font-size:28px}
+.panel-h h2 .v{color:var(--olive);font-size:1.1em;margin-left:.05em}
+.tape{position:absolute;width:86px;height:22px;top:-10px;left:36px;rotate:-3deg;background:rgba(241,234,145,.9);z-index:2}
+.tape.dots{background:radial-gradient(circle,#3B1B14 1.5px,transparent 2px) 0 0/8px 8px,rgba(247,240,218,.92)}
+.tiles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.tile{background:#fff;border-radius:10px;padding:16px 18px 14px;display:flex;flex-direction:column;gap:6px;box-shadow:0 10px 18px -16px rgba(37,10,10,.5)}
+.tile span{font-size:12px;font-weight:600;color:var(--muted)}
+.tile b{font-size:clamp(26px,3vw,38px);font-weight:900;letter-spacing:-.06em;line-height:1}
+.tile small{font-size:12px;color:var(--muted)}
+.tile.hl{background:var(--butter)}
+.tile.sky{background:var(--sky-2)}
+@media (max-width:860px){.tiles{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.chip{display:inline-flex;align-items:center;font-size:11px;font-weight:700;padding:3px 8px;border-radius:999px;white-space:nowrap;background:var(--paper);color:var(--ink)}
+.chip.red{background:var(--red);color:#fff}
+.chip.olive{background:var(--olive);color:var(--paper)}
+.chip.butter{background:var(--butter)}
+.chip.sky{background:var(--sky-2)}
+.chip.rose{background:var(--rose)}
+.chip.ink{background:var(--ink);color:var(--paper)}
+.btn{border:0;cursor:pointer;border-radius:999px;padding:10px 18px;font-weight:700;font-size:13px;display:inline-flex;align-items:center;gap:6px;text-decoration:none}
+.btn-ink{background:var(--ink);color:var(--paper)}
+.btn-butter{background:var(--butter);color:var(--ink)}
+.btn-line{background:transparent;border:1.5px solid var(--ink);color:var(--ink)}
+.btn-danger{background:var(--red);color:#fff}
+.btn-green{background:var(--green);color:#fff}
+.btn:hover{filter:brightness(1.08)}
+.btn:disabled{opacity:.45;cursor:default;filter:none}
+.link{border:0;background:none;padding:0;font-size:13px;font-weight:600;text-decoration:underline;text-underline-offset:3px;cursor:pointer;color:var(--muted)}
+.link:hover{color:var(--ink)}
+.seg{display:flex;flex-wrap:wrap;gap:6px}
+.seg button{border:1.5px solid var(--ink);background:transparent;border-radius:999px;padding:6px 12px;font-size:13px;font-weight:600;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.fld{display:flex;flex-direction:column;gap:5px;min-width:0}
+.fld label,.lbl{font-size:12px;font-weight:700;color:var(--muted)}
+.fld input,.fld select,.fld textarea{border:1.5px solid var(--line);background:#fff;border-radius:8px;padding:9px 11px;width:100%}
+.fld textarea{min-height:76px;resize:vertical}
+.fld input:focus,.fld select:focus,.fld textarea:focus{border-color:var(--ink);outline:none}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.row3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.empty{font-size:13px;color:var(--muted);text-align:center;padding:24px 10px;border:1.5px dashed var(--line);border-radius:8px}
+.empty .v{display:block;font-size:32px;margin-bottom:6px;color:var(--olive)}
+.ck{all:unset;cursor:pointer;flex:none;width:18px;height:18px;border:1.5px solid var(--ink);border-radius:5px;box-sizing:border-box;background:#fff}
+.ck:focus-visible{outline:2px dashed var(--ink);outline-offset:2px}
+.ck.on{background:var(--ink) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3.5 8.5l3 3 6-7' stroke='%23F7F0DA' stroke-width='2' fill='none'/%3E%3C/svg%3E") center/100%}
+.x{all:unset;cursor:pointer;font-size:13px;color:var(--muted);opacity:.5;padding:2px 4px;border-radius:4px}
+.x:hover{opacity:1;color:var(--red)}
+.x:focus-visible{opacity:1;outline:2px dashed var(--ink)}
+
+/* dialog */
+.shade{position:fixed;inset:0;background:rgba(37,10,10,.45);z-index:90}
+.dlg{position:fixed;left:50%;top:50%;translate:-50% -50%;z-index:91;width:min(560px,calc(100% - 32px));max-height:calc(100% - 40px);overflow-y:auto;background:var(--paper);border-radius:14px;padding:26px 24px 22px;box-shadow:0 40px 70px -30px rgba(0,0,0,.7);display:flex;flex-direction:column;gap:14px}
+.dlg.wide{width:min(760px,calc(100% - 32px))}
+.dlg h2{font-size:32px}
+.dlg h2 .v{color:var(--olive);font-size:1.1em;margin-left:.06em}
+.dlg-foot{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-top:4px}
+.dlg-foot .r{display:flex;gap:8px;margin-left:auto}
+.sub{font-size:13px;color:var(--muted)}
+@media (max-width:560px){.row2,.row3{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+.top h1 .v{color:var(--butter)}
+.bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
+.quick{flex:1;min-width:260px;display:flex;gap:8px;position:relative;background:var(--cream);border-radius:12px;padding:12px;box-shadow:0 12px 20px -18px rgba(37,10,10,.6)}
+.quick input{flex:1;min-width:0;border:1.5px solid var(--line);background:#fff;border-radius:8px;padding:10px 12px}
+.quick input:focus{outline:none;border-color:var(--ink)}
+.quick select{border:1.5px solid var(--line);background:#fff;border-radius:8px;padding:0 10px;max-width:200px}
+@media (max-width:600px){.quick{flex-wrap:wrap}.quick input{flex:1 1 100%}.quick select{flex:1;max-width:none;min-height:40px}}
+.cols{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:22px;align-items:start}
+@media (max-width:980px){.cols{grid-template-columns:1fr}}
+.group{display:flex;flex-direction:column;gap:6px}
+.group h3{font-size:13px;font-weight:800;letter-spacing:.02em;text-transform:uppercase;color:var(--muted);display:flex;gap:8px;align-items:center;padding:6px 2px 2px}
+.group h3 .n{font-weight:600}
+.group.late h3{color:var(--red)}
+.task{display:grid;grid-template-columns:18px 1fr auto;gap:12px;align-items:start;background:#fff;border-radius:10px;padding:12px 14px;box-shadow:0 8px 14px -12px rgba(37,10,10,.5);border-left:4px solid var(--pc,transparent)}
+.task .ck{margin-top:1px}
+.task .body{min-width:0;cursor:pointer;display:flex;flex-direction:column;gap:5px}
+.task .t{font-weight:700;font-size:15px;letter-spacing:-.02em;line-height:1.25;word-break:break-word}
+.task.done .t{text-decoration:line-through;opacity:.5}
+.task .meta{display:flex;flex-wrap:wrap;gap:5px 8px;align-items:center;font-size:12px;color:var(--muted)}
+.task .note{font-size:12.5px;color:var(--muted);white-space:pre-wrap;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.task .right{display:flex;flex-direction:column;align-items:flex-end;gap:5px;font-size:12px;font-weight:700;white-space:nowrap}
+.task .due.late{color:var(--red)}
+.p-art{--pc:#9FB9A8}.p-cur{--pc:var(--sky)}.p-ira{--pc:var(--butter)}.p-other{--pc:var(--rose)}
+.pchip{background:color-mix(in srgb,var(--pc) 45%,#fff);color:var(--ink)}
+.st-doing{background:var(--butter)}.st-review{background:var(--sky-2)}.st-wait{background:var(--rose)}.st-todo{background:var(--paper)}
+.side{display:flex;flex-direction:column;gap:18px}
+.rem{display:flex;flex-direction:column;gap:6px}
+.rem button{all:unset;cursor:pointer;display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:center;padding:9px 10px;border-radius:8px;background:var(--paper)}
+.rem button:hover{background:var(--butter)}
+.rem .when{font-size:12px;font-weight:800;min-width:74px}
+.rem .when.soon{color:var(--red)}
+.rem .what{font-size:13px;font-weight:600;line-height:1.25}
+.tgnote{font-size:12px;color:var(--muted);background:var(--paper);border-radius:8px;padding:10px 12px}
+.projs{display:flex;flex-direction:column;gap:6px}
+.projs button{all:unset;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:8px;padding:8px 10px;border-radius:8px;border-left:4px solid var(--pc);background:var(--paper);font-weight:700;font-size:13px}
+.projs button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.projs button span:last-child{font-weight:600;opacity:.7}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));translate:-50% 0;z-index:80;background:var(--ink);color:var(--paper);border-radius:12px;padding:14px 18px;display:flex;gap:14px;align-items:center;box-shadow:0 20px 40px -20px rgba(0,0,0,.8);max-width:calc(100% - 32px)}
+.toast b{color:var(--butter)}
+.toast button{border:0;background:var(--butter);color:var(--ink);border-radius:999px;padding:7px 12px;font-weight:700;cursor:pointer}
+.donebox summary{cursor:pointer;font-size:13px;font-weight:700;color:var(--muted);padding:6px 2px}
+.projrow{display:grid;grid-template-columns:1fr 30px;gap:8px}
+.projrow input{border:1.5px solid var(--line);background:#fff;border-radius:8px;padding:8px 10px}
+</style>
+
+<header class="top">
+  <div class="top-in">
+    <div class="top-row">
+      <div>
+        <a class="back" href="index.html">← в хаб</a>
+        <h1>Работа<span class="v">задачи</span></h1>
+      </div>
+      <div class="top-r"><div class="sync" id="sync"><i></i><span>подключаюсь…</span></div></div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="notice" id="notice" hidden></div>
+  <section class="tiles" id="tiles"></section>
+  <form class="quick" id="quick" autocomplete="off">
+    <span class="tape"></span>
+    <input id="q-title" placeholder="Новая задача и Enter" maxlength="200" aria-label="Новая задача">
+    <select id="q-proj" aria-label="Проект"></select>
+    <button class="btn btn-ink" type="submit">Добавить</button>
+    <button class="btn btn-line" type="button" id="q-more">подробнее…</button>
+  </form>
+  <div class="cols">
+    <section class="panel"><div id="list"></div></section>
+    <aside class="side">
+      <section class="panel">
+        <div class="panel-h"><h2>Напоминания</h2></div>
+        <div class="rem" id="rem"></div>
+        <p class="tgnote">Пока напоминания видны здесь, а если страница открыта, в нужное время появится всплывающая подсказка. Присылать их в Telegram начнём, когда подключим бота.</p>
+      </section>
+      <section class="panel">
+        <div class="panel-h"><h2>Проекты</h2><button type="button" class="link" id="editProj">изменить</button></div>
+        <div class="projs" id="projs"></div>
+      </section>
+    </aside>
+  </div>
+</main>
+<div id="toastBox"></div>
+<div id="modal"></div>
+
+<script>
+/* shared helpers of the hub mini-apps, inlined by build.py */
+const HUB = "index.html";
+const MON_G = ["января","февраля","марта","апреля","мая","июня","июля","августа","сентября","октября","ноября","декабря"];
+const MON_N = ["Январь","Февраль","Март","Апрель","Май","Июнь","Июль","Август","Сентябрь","Октябрь","Ноябрь","Декабрь"];
+const WD_S = ["вс","пн","вт","ср","чт","пт","сб"];
+const $ = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const iso = d => { const x = new Date(d); x.setMinutes(x.getMinutes() - x.getTimezoneOffset()); return x.toISOString().slice(0,10); };
+const todayISO = () => iso(new Date());
+const addDays = (s, n) => { const d = new Date(s + "T12:00"); d.setDate(d.getDate() + n); return iso(d); };
+const daysBetween = (a, b) => Math.round((new Date(b + "T12:00") - new Date(a + "T12:00")) / 864e5);
+const weekOf = s => { const d = new Date(s + "T12:00"); return addDays(s, -((d.getDay() + 6) % 7)); };
+const dmy = s => { if (!s) return ""; const d = new Date(s + "T12:00"); return d.getDate() + " " + MON_G[d.getMonth()]; };
+const dshort = s => { if (!s) return ""; const d = new Date(s + "T12:00"); return d.getDate() + " " + MON_G[d.getMonth()].slice(0,3); };
+const wd = s => WD_S[new Date(s + "T12:00").getDay()];
+const rid = () => Math.random().toString(36).slice(2,10) + Date.now().toString(36).slice(-4);
+const rub = n => (Math.round(n * 100) / 100).toLocaleString("ru-RU", {maximumFractionDigits: 2}) + " ₽";
+const plural = (n, a, b, c) => { const m = Math.abs(n) % 100, k = m % 10; return m > 10 && m < 20 ? c : k === 1 ? a : k > 1 && k < 5 ? b : c; };
+const relDay = s => { const n = daysBetween(todayISO(), s); return n === 0 ? "сегодня" : n === 1 ? "завтра" : n === -1 ? "вчера" : n > 1 ? `через ${n} ${plural(n,"день","дня","дней")}` : `${-n} ${plural(-n,"день","дня","дней")} назад`; };
+
+/* storage: the artifact's synced db, or this browser as a fallback */
+function makeStore({key, cols = [], docs = {}, onChange}){
+  const st = {mode: "boot", db: null, data: {}, docs: {}};
+  cols.forEach(c => st.data[c] = {});
+  Object.entries(docs).forEach(([p, def]) => st.docs[p] = structuredClone(def));
+  const saveLocal = () => { try{ localStorage.setItem(key, JSON.stringify({data: st.data, docs: st.docs})); }catch(e){} };
+  const fail = e => { const n = $("#notice"); if (!n) return; n.hidden = false;
+    n.textContent = e && e.code === "quota_exceeded" ? "Место в базе закончилось: удали старые записи, чтобы добавлять новые." : "Не получилось сохранить. Проверь интернет и попробуй ещё раз."; };
+  const sync = (kind, text) => { const s = $("#sync"); if (!s) return; s.className = "sync " + kind; s.querySelector("span").textContent = text; };
+  st.newId = col => st.mode === "db" ? st.db.collection(col).doc().id : rid();
+  st.put = async (col, id, d) => { if (st.mode === "db"){ try{ await st.db.collection(col).doc(id).set(d); }catch(e){ fail(e); } } else { st.data[col][id] = d; saveLocal(); onChange(); } };
+  st.del = async (col, id) => { if (st.mode === "db"){ try{ await st.db.collection(col).doc(id).delete(); }catch(e){ fail(e); } } else { delete st.data[col][id]; saveLocal(); onChange(); } };
+  st.setDoc = async (p, d) => { if (st.mode === "db"){ try{ await st.db.doc(p).set(d); }catch(e){ fail(e); } } else { st.docs[p] = d; saveLocal(); onChange(); } };
+  st.list = col => Object.entries(st.data[col]);
+  st.boot = async () => {
+    onChange();
+    let d = null;
+    try{ d = window.claude?.use ? await window.claude.use("db") : null; }catch(e){ d = null; }
+    if (!d){
+      st.mode = "local";
+      try{ const l = JSON.parse(localStorage.getItem(key) || "null"); if (l){ Object.assign(st.data, l.data || {}); Object.assign(st.docs, l.docs || {}); } }catch(e){}
+      sync("local", "сохраняется только в этом браузере"); onChange(); return;
+    }
+    st.db = d; st.mode = "db"; sync("ok", "синхронизируется");
+    const onErr = () => sync("", "нет связи, обнови страницу");
+    cols.forEach(c => d.collection(c).onSnapshot(snap => { const m = {}; snap.docs.forEach(x => m[x.id] = x.data()); st.data[c] = m; onChange(); }, onErr));
+    Object.entries(docs).forEach(([p, def]) => d.doc(p).onSnapshot(s => { st.docs[p] = s.exists ? s.data() : structuredClone(def); onChange(); }, onErr));
+  };
+  return st;
+}
+
+/* dialogs */
+function closeModal(){ const m = $("#modal"); if (m) m.innerHTML = ""; }
+function openModal(html, onReady, cls = ""){
+  $("#modal").innerHTML = `<div class="shade" data-close></div><div class="dlg ${cls}" role="dialog" aria-modal="true">${html}</div>`;
+  const dlg = $("#modal .dlg");
+  onReady && onReady(dlg);
+  setTimeout(() => dlg.querySelector("input,textarea,select")?.focus(), 0);
+  return dlg;
+}
+/* a delete button that asks once more before acting */
+function armDelete(btn, action){
+  btn.addEventListener("click", () => {
+    if (btn.dataset.sure){ action(); closeModal(); }
+    else { btn.dataset.sure = 1; btn.textContent = "Точно удалить?"; btn.className = "btn btn-danger"; }
+  });
+}
+/* toggle buttons inside a .seg; returns a getter */
+function segPick(root, attr, initial, allowNone = false){
+  let val = initial;
+  const paint = () => root.querySelectorAll(`[${attr}]`).forEach(b => b.setAttribute("aria-pressed", b.getAttribute(attr) === val));
+  root.addEventListener("click", e => { const b = e.target.closest(`[${attr}]`); if (!b) return; const v = b.getAttribute(attr); val = allowNone && val === v ? "" : v; paint(); });
+  paint();
+  return () => val;
+}
+document.addEventListener("click", e => { if (e.target.closest("[data-close]")) closeModal(); });
+document.addEventListener("keydown", e => { if (e.key === "Escape" && $("#modal")?.innerHTML) closeModal(); });
+
+const DEFAULT_PROJECTS = {list: [
+  {id:"main", name:"Работа"},
+  {id:"other", name:"Другое"}
+]};
+const PCLS = ["p-art","p-cur","p-ira","p-other"];
+const STATUSES = [{id:"todo", name:"к работе"}, {id:"doing", name:"в работе"}, {id:"review", name:"на согласовании"}, {id:"wait", name:"жду ответа"}];
+const store = makeStore({key:"work-v1", cols:["tasks"], docs:{"settings/projects": DEFAULT_PROJECTS}, onChange: render});
+let projFilter = "all";
+const projects = () => store.docs["settings/projects"].list || [];
+const pOf = id => projects().find(p => p.id === id);
+const pCls = id => { const i = projects().findIndex(p => p.id === id); return i < 0 ? "p-other" : PCLS[Math.min(i, PCLS.length - 1)]; };
+const remTime = t => t.remindDate ? new Date(`${t.remindDate}T${t.remindTime || "09:00"}`) : null;
+
+function bucket(t){
+  if (!t.deadline) return "none";
+  const n = daysBetween(todayISO(), t.deadline);
+  if (n < 0) return "late"; if (n === 0) return "today"; if (n === 1) return "tomorrow";
+  if (t.deadline <= addDays(weekOf(todayISO()), 6)) return "week"; return "later";
+}
+const BUCKETS = [["late","Просрочено"],["today","Сегодня"],["tomorrow","Завтра"],["week","На этой неделе"],["later","Позже"],["none","Без срока"]];
+
+function render(){
+  const sel = $("#q-proj"), keep = sel.value;
+  sel.innerHTML = projects().map(p => `<option value="${esc(p.id)}">${esc(p.name)}</option>`).join("");
+  if (keep && pOf(keep)) sel.value = keep; else if (projFilter !== "all" && pOf(projFilter)) sel.value = projFilter;
+  const all = store.list("tasks");
+  const open = all.filter(([,t]) => !t.done);
+  const shown = open.filter(([,t]) => projFilter === "all" || t.project === projFilter);
+  const cnt = b => open.filter(([,t]) => bucket(t) === b).length;
+  const upcoming = open.filter(([,t]) => remTime(t) && remTime(t) > new Date());
+  $("#tiles").innerHTML = `
+    <div class="tile hl"><span>На сегодня</span><b class="num">${cnt("today")}</b><small>со сроком сегодня</small></div>
+    <div class="tile"><span>Просрочено</span><b class="num" style="${cnt("late") ? "color:var(--red)" : ""}">${cnt("late")}</b><small>${cnt("late") ? "стоит разобрать" : "всё вовремя"}</small></div>
+    <div class="tile"><span>Всего открыто</span><b class="num">${open.length}</b><small>${open.filter(([,t]) => t.status === "review").length} на согласовании</small></div>
+    <div class="tile sky"><span>Напоминаний впереди</span><b class="num">${upcoming.length}</b><small>${upcoming.length ? "ближайшее " + remLabel(upcoming.map(([,t]) => remTime(t)).sort((a,b) => a - b)[0]) : "нет"}</small></div>`;
+  let h = "";
+  BUCKETS.forEach(([b, name]) => {
+    const l = shown.filter(([,t]) => bucket(t) === b).sort((x,y) => (x[1].deadline || "").localeCompare(y[1].deadline || "") || (x[1].createdAt || 0) - (y[1].createdAt || 0));
+    if (l.length) h += `<div class="group ${b}"><h3>${name} <span class="n num">${l.length}</span></h3>${l.map(taskHTML).join("")}</div>`;
+  });
+  const done = all.filter(([,t]) => t.done && (projFilter === "all" || t.project === projFilter)).sort((x,y) => (y[1].doneAt || 0) - (x[1].doneAt || 0));
+  if (!h) h = `<div class="empty"><span class="v">${open.length ? "тут пусто" : "всё сделано"}</span>${open.length ? "В этом проекте нет открытых задач" : "Добавь задачу в строке выше"}</div>`;
+  if (done.length) h += `<details class="donebox"><summary>Готово · ${done.length}</summary><div class="group">${done.slice(0,30).map(taskHTML).join("")}</div></details>`;
+  const wasOpen = $(".donebox")?.open;
+  $("#list").innerHTML = h;
+  if (wasOpen && $(".donebox")) $(".donebox").open = true;
+  $("#rem").innerHTML = upcoming.sort((a,b) => remTime(a[1]) - remTime(b[1])).slice(0,8).map(([id,t]) => {
+    const soon = remTime(t) - new Date() < 36e5 * 3;
+    return `<button type="button" data-edit="${esc(id)}"><span class="when num${soon ? " soon" : ""}">${remLabel(remTime(t))}</span><span class="what">${esc(t.title)}</span></button>`; }).join("")
+    || `<div class="empty" style="padding:14px">Напоминаний нет. Их можно поставить в задаче.</div>`;
+  $("#projs").innerHTML = [`<button type="button" data-pf="all" aria-pressed="${projFilter === "all"}" style="--pc:var(--ink)"><span>Все проекты</span><span class="num">${open.length}</span></button>`,
+    ...projects().map(p => `<button type="button" class="${pCls(p.id)}" data-pf="${esc(p.id)}" aria-pressed="${projFilter === p.id}"><span>${esc(p.name)}</span><span class="num">${open.filter(([,t]) => t.project === p.id).length}</span></button>`)].join("");
+}
+function remLabel(d){
+  const ds = iso(d), hm = d.toTimeString().slice(0,5), n = daysBetween(todayISO(), ds);
+  return (n === 0 ? "сегодня" : n === 1 ? "завтра" : dshort(ds)) + " " + hm;
+}
+function taskHTML([id, t]){
+  const p = pOf(t.project), st = STATUSES.find(s => s.id === t.status);
+  const late = !t.done && t.deadline && t.deadline < todayISO();
+  return `<article class="task ${pCls(t.project)}${t.done ? " done" : ""}">
+    <button type="button" class="ck${t.done ? " on" : ""}" data-toggle="${esc(id)}" aria-label="${t.done ? "Вернуть в работу" : "Отметить сделанной"}"></button>
+    <div class="body" data-edit="${esc(id)}" role="button" tabindex="0">
+      <span class="t">${esc(t.title)}</span>
+      <span class="meta">${p ? `<span class="chip pchip">${esc(p.name)}</span>` : ""}${st && st.id !== "todo" && !t.done ? `<span class="chip st-${st.id}">${st.name}</span>` : ""}${t.remindDate && !t.done ? `<span class="chip butter">напомнить ${remLabel(remTime(t))}</span>` : ""}</span>
+      ${t.note ? `<span class="note">${esc(t.note)}</span>` : ""}
+    </div>
+    <div class="right">${t.deadline ? `<span class="due${late ? " late" : ""}">${late ? "было " : "до "}${dshort(t.deadline)}</span><span style="font-weight:500;color:var(--muted)">${wd(t.deadline)}</span>` : ""}</div>
+  </article>`;
+}
+
+function editTask(id, preset = {}){
+  const t = id ? store.data.tasks[id] : {title:"", project: $("#q-proj").value || projects()[0]?.id, status:"todo", deadline:"", remindDate:"", remindTime:"", note:"", ...preset};
+  openModal(`<h2>${id ? "Задача" : "Новая"} <span class="v">${id ? "работа" : "задача"}</span></h2>
+    <div class="fld"><label for="t-title">Что сделать</label><input id="t-title" value="${esc(t.title)}" maxlength="200"></div>
+    <div class="row2">
+      <div class="fld"><label for="t-proj">Проект</label><select id="t-proj">${projects().map(p => `<option value="${esc(p.id)}"${p.id === t.project ? " selected" : ""}>${esc(p.name)}</option>`).join("")}</select></div>
+      <div class="fld"><label for="t-dl">Срок</label><input id="t-dl" type="date" value="${esc(t.deadline)}"></div>
+    </div>
+    <div class="fld"><span class="lbl">Статус</span><div class="seg" id="t-st">${STATUSES.map(s => `<button type="button" data-s="${s.id}">${s.name}</button>`).join("")}</div></div>
+    <div class="row2">
+      <div class="fld"><label for="t-rd">Напомнить: день</label><input id="t-rd" type="date" value="${esc(t.remindDate)}"></div>
+      <div class="fld"><label for="t-rt">Время</label><input id="t-rt" type="time" value="${esc(t.remindTime || (t.remindDate ? "09:00" : ""))}"></div>
+    </div>
+    <div class="fld"><label for="t-note">Заметки</label><textarea id="t-note" maxlength="3000" placeholder="Ссылки, правки, контакты…">${esc(t.note)}</textarea></div>
+    <div class="dlg-foot">${id ? `<button type="button" class="btn btn-line" id="t-del">Удалить</button>` : ""}<div class="r"><button type="button" class="btn btn-line" data-close>Отмена</button><button type="button" class="btn btn-ink" id="t-save">Сохранить</button></div></div>`, dlg => {
+      const st = segPick(dlg.querySelector("#t-st"), "data-s", t.status || "todo");
+      dlg.querySelector("#t-rd").addEventListener("change", e => { if (e.target.value && !dlg.querySelector("#t-rt").value) dlg.querySelector("#t-rt").value = "09:00"; });
+      if (id) armDelete(dlg.querySelector("#t-del"), () => store.del("tasks", id));
+      dlg.querySelector("#t-save").addEventListener("click", () => {
+        const title = dlg.querySelector("#t-title").value.trim(); if (!title) return dlg.querySelector("#t-title").focus();
+        const rd = dlg.querySelector("#t-rd").value;
+        store.put("tasks", id || store.newId("tasks"), {...t, title, project: dlg.querySelector("#t-proj").value, status: st() || "todo",
+          deadline: dlg.querySelector("#t-dl").value || "", remindDate: rd || "", remindTime: rd ? (dlg.querySelector("#t-rt").value || "09:00") : "",
+          note: dlg.querySelector("#t-note").value.trim(), done: !!t.done, createdAt: t.createdAt || Date.now(), updatedAt: Date.now(),
+          remindShown: (rd === t.remindDate && dlg.querySelector("#t-rt").value === t.remindTime) ? !!t.remindShown : false});
+        closeModal();
+      });
+  });
+}
+
+function editProjects(){
+  const draft = structuredClone(projects());
+  const rows = () => draft.map((p,i) => `<div class="projrow"><input data-i="${i}" value="${esc(p.name)}" maxlength="50" aria-label="Проект"><button type="button" class="x" data-rm="${i}" aria-label="Удалить проект">✕</button></div>`).join("");
+  openModal(`<h2>Проекты</h2><p class="sub">Задачи удалённого проекта останутся, просто без проекта.</p>
+    <div id="p-rows" style="display:flex;flex-direction:column;gap:6px">${rows()}</div>
+    <button type="button" class="link" id="p-add" style="align-self:flex-start">+ проект</button>
+    <div class="dlg-foot"><div class="r"><button type="button" class="btn btn-line" data-close>Отмена</button><button type="button" class="btn btn-ink" id="p-save">Сохранить</button></div></div>`, dlg => {
+      const box = dlg.querySelector("#p-rows");
+      box.addEventListener("input", e => { if (e.target.dataset.i != null) draft[+e.target.dataset.i].name = e.target.value; });
+      box.addEventListener("click", e => { const r = e.target.closest("[data-rm]"); if (r){ draft.splice(+r.dataset.rm, 1); box.innerHTML = rows(); } });
+      dlg.querySelector("#p-add").addEventListener("click", () => { draft.push({id: "p" + rid(), name: ""}); box.innerHTML = rows(); box.querySelector(`[data-i="${draft.length - 1}"]`).focus(); });
+      dlg.querySelector("#p-save").addEventListener("click", () => {
+        const list = draft.filter(p => p.name.trim()).map(p => ({...p, name: p.name.trim()}));
+        if (!list.length) return;
+        store.setDoc("settings/projects", {list}); closeModal();
+      });
+  });
+}
+
+/* reminder pop-up while the page is open */
+function checkReminders(){
+  if (store.mode === "boot") return;
+  const now = new Date();
+  const due = store.list("tasks").find(([,t]) => !t.done && !t.remindShown && remTime(t) && remTime(t) <= now && now - remTime(t) < 864e5);
+  if (!due || $("#toastBox").innerHTML) return;
+  const [id, t] = due;
+  $("#toastBox").innerHTML = `<div class="toast" role="alert"><span><b>Напоминание:</b> ${esc(t.title)}</span><button type="button" id="toastOk">Ок</button></div>`;
+  $("#toastOk").addEventListener("click", () => { $("#toastBox").innerHTML = ""; store.put("tasks", id, {...store.data.tasks[id], remindShown: true}); });
+}
+setInterval(checkReminders, 30000);
+
+$("#quick").addEventListener("submit", e => {
+  e.preventDefault();
+  const title = $("#q-title").value.trim(); if (!title) return $("#q-title").focus();
+  store.put("tasks", store.newId("tasks"), {title, project: $("#q-proj").value, status:"todo", deadline:"", remindDate:"", remindTime:"", note:"", done:false, createdAt: Date.now()});
+  $("#q-title").value = ""; $("#q-title").focus();
+});
+$("#q-more").addEventListener("click", () => editTask(null, {title: $("#q-title").value.trim()}));
+$("#editProj").addEventListener("click", editProjects);
+document.addEventListener("click", e => {
+  const t = e.target;
+  const tg = t.closest("[data-toggle]");
+  if (tg){ const id = tg.dataset.toggle, x = store.data.tasks[id]; if (x) store.put("tasks", id, {...x, done: !x.done, doneAt: !x.done ? Date.now() : null}); return; }
+  const ed = t.closest("[data-edit]"); if (ed) return editTask(ed.dataset.edit);
+  const pf = t.closest("[data-pf]"); if (pf){ projFilter = pf.dataset.pf; render(); }
+});
+document.addEventListener("keydown", e => { if ((e.key === "Enter" || e.key === " ") && e.target.matches?.(".body[data-edit]")){ e.preventDefault(); editTask(e.target.dataset.edit); } });
+store.boot().then(() => setTimeout(checkReminders, 1500));
+</script>
+</body>
+</html>

@@ -1,0 +1,679 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Идеи lesya.frame</title>
+<meta name="theme-color" content="#3B1B14">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Хаб">
+<style>
+html{background:#3B1B14}
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{margin:0;font:14px/1.4 system-ui,-apple-system,sans-serif;background:#F7F0DA}
+img{max-width:100%}
+[hidden]{display:none!important}
+</style>
+<script src="firebase-config.js?v=20260930093126"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+<script src="portal.js?v=20260930093126" data-app="blog"></script>
+</head>
+<body>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap">
+<style>
+@font-face{font-family:"Vasek";src:url("fonts/Vasek.ttf") format("truetype");font-display:swap}
+:root{
+  color-scheme:light;
+  --choco:#3B1B14;--choco-2:#4E251B;--ink:#250A0A;--paper:#F7F0DA;--cream:#F5EDC9;
+  --butter:#F1EA91;--olive:#737038;--olive-2:#817E45;--sky:#A6BFD2;--sky-2:#BCCFDD;--muted:#6B5550;
+  --line:rgba(37,10,10,.14);--red:#A8432F;
+  --sans:"Inter","Helvetica Neue",Arial,sans-serif;
+  --script:"Vasek","Segoe Script","Brush Script MT",cursive;
+  --gutter:clamp(16px,3vw,40px);
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:repeating-linear-gradient(transparent 0 35px,rgba(166,191,210,.35) 35px 36px),var(--paper);color:var(--ink);font-family:var(--sans);font-size:14px;line-height:1.38;letter-spacing:-.012em;-webkit-font-smoothing:antialiased;min-height:100vh}
+button,input,select,textarea{font:inherit;color:inherit;letter-spacing:inherit}
+a{color:inherit}
+h1,h2,h3,p{margin:0}
+h1,h2,h3{font-weight:800;letter-spacing:-.055em;line-height:.92;text-wrap:balance}
+.v{font-family:var(--script);font-weight:400;letter-spacing:0;line-height:.8}
+:focus-visible{outline:2px dashed currentColor;outline-offset:2px}
+.num{font-variant-numeric:tabular-nums}
+
+/* header */
+.top{background:repeating-linear-gradient(90deg,rgba(0,0,0,.2) 0 2px,transparent 2px 7px),var(--choco);color:var(--paper);padding:18px var(--gutter) 0}
+.top-in{max-width:1400px;margin-inline:auto}
+.top-row{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:14px}
+.back{font-size:13px;font-weight:600;text-decoration:none;opacity:.7}
+.back:hover{opacity:1}
+.top h1{font-size:clamp(40px,5vw,68px);font-weight:900;letter-spacing:-.065em;margin-top:10px}
+.top h1 .v{color:var(--butter);font-size:.95em;margin-left:.15em;display:inline-block;rotate:-5deg}
+.sync{font-size:12px;opacity:.7;display:flex;align-items:center;gap:7px}
+.sync i{width:8px;height:8px;border-radius:50%;background:#d6cfae}
+.sync.ok i{background:#9bc27a}
+.sync.local i{background:var(--butter)}
+/* tabs look like folder tabs sitting on the page */
+.tabs{display:flex;flex-wrap:wrap;align-items:flex-end;gap:4px;margin-top:22px}
+.tab{border:0;cursor:pointer;padding:11px 16px 12px;border-radius:10px 10px 0 0;background:rgba(247,240,218,.14);color:var(--paper);font-weight:700;font-size:14px;display:flex;align-items:center;gap:8px;transition:background .2s}
+.tab:hover{background:rgba(247,240,218,.25)}
+.tab[aria-selected="true"]{background:var(--paper);color:var(--ink)}
+.tab .c{font-size:11px;font-weight:600;opacity:.6}
+.tab .x{font-size:12px;opacity:0;padding:0 2px;margin-right:-4px}
+.tab:hover .x{opacity:.6}
+.tab .x:hover{opacity:1}
+.tab.alt{background:var(--butter);color:var(--ink)}
+.tab.alt.sky{background:var(--sky)}
+.tab.alt[aria-selected="true"]{background:var(--paper)}
+.tabs .sp{flex:1}
+.addsec{display:flex;gap:4px;align-items:center;padding-bottom:6px}
+.addsec input{width:150px;border:0;border-radius:999px;padding:7px 12px;background:var(--paper);color:var(--ink);font-size:13px}
+.ghost{border:1.5px dashed rgba(247,240,218,.5);background:transparent;color:var(--paper);border-radius:999px;padding:6px 12px;font-size:13px;font-weight:600;cursor:pointer;margin-bottom:6px}
+.ghost:hover{border-style:solid}
+
+main{max-width:1400px;margin-inline:auto;padding:26px var(--gutter) 60px}
+.notice{background:var(--butter);padding:10px 14px;border-radius:8px;font-size:13px;margin-bottom:18px}
+.view{display:none}.view.on{display:block}
+
+/* board */
+.board{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;align-items:start}
+.col{background:rgba(255,255,255,.45);border:1.5px solid var(--line);border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:10px;min-height:260px;transition:background .2s,border-color .2s}
+.col.over{background:rgba(241,234,145,.5);border-color:var(--olive);border-style:dashed}
+.col-h{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:2px 4px 4px}
+.col-h h2{font-size:20px;display:flex;align-items:center;gap:8px}
+.col-h h2::before{content:"";width:10px;height:10px;border-radius:3px;background:var(--dot)}
+.col-h .n{font-size:12px;font-weight:600;color:var(--muted)}
+.quick{display:flex;gap:6px}
+.quick input{flex:1;min-width:0;border:1.5px solid var(--line);background:#fff;border-radius:8px;padding:9px 11px}
+.quick input:focus{border-color:var(--ink);outline:none}
+.quick button{border:0;background:var(--ink);color:var(--paper);border-radius:8px;padding:0 12px;font-weight:700;cursor:pointer}
+.card{position:relative;background:#fff;border-radius:6px;padding:12px 12px 11px;box-shadow:0 1px 0 var(--line),0 10px 18px -14px rgba(37,10,10,.5);cursor:grab;display:flex;flex-direction:column;gap:7px;transition:transform .2s,box-shadow .2s}
+.card:hover{transform:translateY(-2px) rotate(-.4deg);box-shadow:0 1px 0 var(--line),0 16px 22px -14px rgba(37,10,10,.55)}
+.card.dragging{opacity:.4}
+.card.menu-open{z-index:30;transform:none}
+.dots{position:absolute;top:6px;right:6px;border:0;background:transparent;border-radius:6px;width:28px;height:26px;font-size:18px;line-height:1;cursor:pointer;color:var(--muted);letter-spacing:1px}
+.dots:hover,.card.menu-open .dots{background:var(--paper);color:var(--ink)}
+.menu{position:absolute;top:34px;right:6px;z-index:31;background:#fff;border-radius:10px;box-shadow:0 20px 34px -14px rgba(37,10,10,.55),0 0 0 1px var(--line);padding:6px;display:flex;flex-direction:column;min-width:210px}
+.menu button{border:0;background:transparent;text-align:left;padding:9px 11px;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer}
+.menu button:hover{background:var(--paper)}
+.menu button.danger{color:var(--red)}
+.chip.co-link{background:var(--butter);color:var(--ink)}
+.co-items{display:flex;flex-direction:column;gap:4px;border-top:1px dashed var(--line);padding-top:8px}
+.co-items .lbl{margin-bottom:2px}
+.co-items button{all:unset;cursor:pointer;display:flex;justify-content:space-between;gap:10px;font-size:13px;font-weight:600}
+.co-items button:hover span:first-child{text-decoration:underline}
+.co-items button span:last-child{font-weight:500;color:var(--muted);white-space:nowrap}
+.pick{display:flex;flex-direction:column;gap:6px;max-height:220px;overflow-y:auto}
+.pick label{display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid var(--line);border-radius:8px;padding:10px 12px;cursor:pointer;font-weight:600}
+.pick label:has(input:checked){border-color:var(--ink)}
+.pick label small{font-weight:500;color:var(--muted);margin-left:auto;font-size:12px}
+.newco{background:#fff;border-radius:10px;padding:12px;display:flex;flex-direction:column;gap:10px}
+.card .t{padding-right:26px;font-weight:700;font-size:15px;letter-spacing:-.03em;line-height:1.2;word-break:break-word}
+.card .meta{display:flex;flex-wrap:wrap;gap:5px 8px;align-items:center;font-size:12px;color:var(--muted)}
+.card .acts{display:flex;justify-content:space-between;align-items:center;gap:6px;margin-top:2px}
+.mv{display:flex;gap:4px}
+.mv button,.edit{border:1px solid var(--line);background:transparent;border-radius:6px;font-size:12px;padding:3px 8px;cursor:pointer;color:var(--muted)}
+.mv button:hover,.edit:hover{border-color:var(--ink);color:var(--ink)}
+.chip{display:inline-flex;align-items:center;font-size:11px;font-weight:700;padding:3px 8px;border-radius:999px;white-space:nowrap}
+.g-hit{background:var(--butter);color:var(--ink)}
+.g-mid{background:var(--sky-2);color:var(--ink)}
+.g-low{background:#E7DCD6;color:var(--muted)}
+.need{background:var(--red);color:#fff}
+.empty{font-size:13px;color:var(--muted);text-align:center;padding:18px 8px;border:1.5px dashed var(--line);border-radius:8px}
+.empty .v{display:block;font-size:30px;margin-bottom:6px;color:var(--olive)}
+@media (max-width:1000px){.board{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:560px){.board{grid-template-columns:1fr}}
+
+/* stats */
+.st-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:14px;margin-bottom:18px}
+.st-head h2{font-size:clamp(34px,4vw,52px)}
+.st-head h2 .v{color:var(--olive);font-size:1.1em;margin-left:.06em}
+.filters{display:flex;flex-wrap:wrap;gap:6px}
+.filters button{border:1.5px solid var(--ink);background:transparent;border-radius:999px;padding:6px 12px;font-size:13px;font-weight:600;cursor:pointer}
+.filters button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.tiles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-bottom:20px}
+.tile{background:#fff;border-radius:10px;padding:16px 16px 14px;display:flex;flex-direction:column;gap:6px;box-shadow:0 10px 18px -16px rgba(37,10,10,.5)}
+.tile:nth-child(1){background:var(--butter)}
+.tile:nth-child(4){background:var(--sky-2)}
+.tile span{font-size:12px;font-weight:600;color:var(--muted)}
+.tile b{font-size:clamp(26px,3vw,38px);font-weight:900;letter-spacing:-.06em;line-height:1}
+.tile small{font-size:12px;color:var(--muted);word-break:break-word}
+.wait{background:#fff;border-left:4px solid var(--red);border-radius:6px;padding:12px 16px;margin-bottom:20px;display:flex;flex-direction:column;gap:8px}
+.wait b{font-size:14px}
+.wait ul{margin:0;padding:0;list-style:none;display:flex;flex-wrap:wrap;gap:6px}
+.wait li button{border:1.5px solid var(--line);background:var(--paper);border-radius:999px;padding:5px 11px;font-size:13px;cursor:pointer}
+.wait li button:hover{border-color:var(--ink)}
+.tbl-wrap{overflow-x:auto;background:#fff;border-radius:10px;box-shadow:0 10px 18px -16px rgba(37,10,10,.5)}
+table{width:100%;border-collapse:collapse;min-width:820px}
+th,td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--line);white-space:nowrap}
+th{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);cursor:pointer;user-select:none}
+th[data-k]:hover{color:var(--ink)}
+th.r,td.r{text-align:right}
+td.name{white-space:normal;min-width:200px;font-weight:600}
+td.name button{all:unset;cursor:pointer}
+td.name button:hover{text-decoration:underline}
+tr:last-child td{border-bottom:0}
+.bar{display:flex;align-items:center;gap:8px;justify-content:flex-end}
+.bar i{display:block;height:8px;border-radius:4px;background:var(--olive);min-width:2px}
+.hint{font-size:12px;color:var(--muted);margin-top:12px;max-width:80ch}
+@media (max-width:800px){.tiles{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* collabs */
+.co-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px;align-items:start}
+.co-col{display:flex;flex-direction:column;gap:12px}
+.co-col>h2{font-size:clamp(30px,3.4vw,44px);display:flex;align-items:baseline;gap:10px}
+.co-col>h2 .v{color:var(--olive);font-size:1.05em}
+.co-col>p{color:var(--muted);font-size:13px;margin-top:-4px}
+.co{position:relative;background:#fff;padding:18px 16px 14px;box-shadow:0 12px 20px -16px rgba(37,10,10,.55);display:flex;flex-direction:column;gap:8px}
+.co:nth-child(odd){rotate:-.5deg}.co:nth-child(even){rotate:.5deg}
+.co .tape{position:absolute;width:74px;height:20px;top:-9px;left:50%;translate:-50% 0;rotate:-3deg;background:rgba(241,234,145,.85)}
+.co-col.wish .co .tape{background:rgba(166,191,210,.8)}
+.co h3{font-size:22px}
+.co p{font-size:14px;color:var(--muted);white-space:pre-wrap;word-break:break-word}
+.co .meta{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.f-barter{background:var(--sky-2)}
+.f-paid{background:var(--olive);color:var(--paper)}
+.dl{background:var(--paper);color:var(--ink)}
+.dl.soon{background:var(--red);color:#fff}
+.co .acts{display:flex;gap:6px;justify-content:flex-end}
+.btn{border:0;cursor:pointer;border-radius:999px;padding:10px 16px;font-weight:700;font-size:13px}
+.btn-ink{background:var(--ink);color:var(--paper)}
+.btn-butter{background:var(--butter);color:var(--ink)}
+.btn-line{background:transparent;border:1.5px solid var(--ink)}
+.btn-danger{background:var(--red);color:#fff}
+.btn:hover{filter:brightness(1.08)}
+@media (max-width:800px){.co-grid{grid-template-columns:1fr}}
+
+/* dialog */
+.shade{position:fixed;inset:0;background:rgba(37,10,10,.45);z-index:90}
+.dlg{position:fixed;left:50%;top:50%;translate:-50% -50%;z-index:91;width:min(560px,calc(100% - 32px));max-height:calc(100% - 40px);overflow-y:auto;background:var(--paper);border-radius:14px;padding:26px 24px 22px;box-shadow:0 40px 70px -30px rgba(0,0,0,.7);display:flex;flex-direction:column;gap:14px}
+.dlg h2{font-size:32px}
+.dlg h2 .v{color:var(--olive);font-size:1.1em;margin-left:.06em}
+.fld{display:flex;flex-direction:column;gap:5px}
+.fld label,.lbl{font-size:12px;font-weight:700;color:var(--muted)}
+.fld input,.fld select,.fld textarea{border:1.5px solid var(--line);background:#fff;border-radius:8px;padding:9px 11px;width:100%}
+.fld textarea{min-height:76px;resize:vertical}
+.fld input:focus,.fld select:focus,.fld textarea:focus{border-color:var(--ink);outline:none}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.stats5{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
+.stats5 input{padding:8px 8px}
+.seg{display:flex;gap:6px;flex-wrap:wrap}
+.seg button{border:1.5px solid var(--ink);background:transparent;border-radius:999px;padding:7px 13px;font-size:13px;font-weight:600;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.dlg-foot{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-top:4px}
+.dlg-foot .r{display:flex;gap:8px}
+.statbox{background:#fff;border-radius:10px;padding:12px;display:flex;flex-direction:column;gap:8px}
+@media (max-width:520px){.stats5{grid-template-columns:repeat(2,1fr)}.row2{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+<header class="top">
+  <div class="top-in">
+    <div class="top-row">
+      <div>
+        <a class="back" href="index.html">← в хаб</a>
+        <h1>Идеи для блога<span class="v">lesya.frame</span></h1>
+      </div>
+      <div class="sync" id="sync"><i></i><span>подключаюсь…</span></div>
+    </div>
+    <nav class="tabs" role="tablist" id="tabs"></nav>
+  </div>
+</header>
+
+<main>
+  <div class="notice" id="notice" hidden></div>
+  <section class="view" id="vBoard"></section>
+  <section class="view" id="vStats"></section>
+  <section class="view" id="vCollabs"></section>
+</main>
+
+<div id="modal"></div>
+
+<script>
+/* ---------- constants ---------- */
+const STATUSES = [
+  {id:"idea",   name:"Идея",          dot:"var(--sky)"},
+  {id:"shot",   name:"Снято",         dot:"var(--butter)"},
+  {id:"edited", name:"Смонтировано",  dot:"var(--olive-2)"},
+  {id:"posted", name:"Выложено",      dot:"var(--choco)"}
+];
+const DEFAULT_SECTIONS = [
+  {id:"reels", name:"Reels"},
+  {id:"posts", name:"Посты"},
+  {id:"carousels", name:"Карусели"},
+  {id:"stories", name:"Сторис"}
+];
+const METRICS = [
+  {k:"views", name:"Просмотры", short:"просм."},
+  {k:"likes", name:"Лайки", short:"лайк."},
+  {k:"comments", name:"Комменты", short:"комм."},
+  {k:"saves", name:"Сохранения", short:"сохр."},
+  {k:"shares", name:"Репосты", short:"репост."}
+];
+const GRADE = {hit:["g-hit","зашло"], mid:["g-mid","норм"], low:["g-low","не зашло"]};
+
+/* ---------- state ---------- */
+let ideas = {};      // id -> data
+let collabs = {};    // id -> data
+let sections = DEFAULT_SECTIONS.slice();
+let current = "reels";
+let statFilter = "all";
+let statSort = {k:"publishedAt", dir:-1};
+let mode = "boot";   // "db" | "local"
+let db = null;
+
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const fmt = n => (n == null || n === "" || isNaN(n)) ? "—" : Number(n).toLocaleString("ru-RU");
+const todayISO = () => { const d = new Date(); d.setMinutes(d.getMinutes() - d.getTimezoneOffset()); return d.toISOString().slice(0,10); };
+const daysSince = iso => Math.floor((new Date(todayISO()) - new Date(iso)) / 864e5);
+const shortDate = iso => { try{ return new Date(iso + "T12:00").toLocaleDateString("ru-RU",{day:"numeric",month:"short"}); }catch(e){ return iso; } };
+const rid = () => Math.random().toString(36).slice(2,10) + Date.now().toString(36).slice(-4);
+const hasStats = x => x.stats && x.stats.views != null && x.stats.views !== "";
+const needsStats = x => x.status === "posted" && x.publishedAt && daysSince(x.publishedAt) >= 7 && !hasStats(x);
+
+/* ---------- storage: synced db, or this browser as a fallback ---------- */
+const LS = "blog-ideas-v1";
+function saveLocal(){ try{ localStorage.setItem(LS, JSON.stringify({ideas, collabs, sections})); }catch(e){} }
+function loadLocal(){ try{ const d = JSON.parse(localStorage.getItem(LS) || "null"); if (d){ ideas = d.ideas || {}; collabs = d.collabs || {}; sections = d.sections?.length ? d.sections : sections; } }catch(e){} }
+
+const store = {
+  async put(col, id, data){
+    if (mode === "db"){ try{ await db.collection(col).doc(id).set(data); }catch(e){ fail(e); } }
+    else { (col === "ideas" ? ideas : collabs)[id] = data; saveLocal(); render(); }
+  },
+  async del(col, id){
+    if (mode === "db"){ try{ await db.collection(col).doc(id).delete(); }catch(e){ fail(e); } }
+    else { delete (col === "ideas" ? ideas : collabs)[id]; saveLocal(); render(); }
+  },
+  async setSections(list){
+    if (mode === "db"){ try{ await db.doc("settings/sections").set({list}); }catch(e){ fail(e); } }
+    else { sections = list; saveLocal(); render(); }
+  }
+};
+function fail(e){
+  const n = $("#notice");
+  n.hidden = false;
+  n.textContent = e && e.code === "quota_exceeded"
+    ? "Место в базе закончилось: удали старые записи, чтобы добавлять новые."
+    : "Не получилось сохранить. Проверь интернет и попробуй ещё раз.";
+}
+function setSync(kind, text){ const s = $("#sync"); s.className = "sync " + kind; s.querySelector("span").textContent = text; }
+
+async function boot(){
+  render();
+  let d = null;
+  try{ d = window.claude?.use ? await window.claude.use("db") : null; }catch(e){ d = null; }
+  if (!d){
+    mode = "local"; loadLocal();
+    setSync("local", "сохраняется только в этом браузере");
+    render(); return;
+  }
+  db = d; mode = "db";
+  setSync("ok", "синхронизируется");
+  const onErr = () => setSync("", "нет связи, обнови страницу");
+  db.collection("ideas").onSnapshot(snap => { const m = {}; snap.docs.forEach(x => m[x.id] = x.data()); ideas = m; render(); }, onErr);
+  db.collection("collabs").onSnapshot(snap => { const m = {}; snap.docs.forEach(x => m[x.id] = x.data()); collabs = m; render(); }, onErr);
+  db.doc("settings/sections").onSnapshot(s => { const l = s.exists && s.data().list; sections = (l && l.length) ? l : DEFAULT_SECTIONS.slice(); if (!sections.find(x => x.id === current) && !["stats","collabs"].includes(current)) current = sections[0].id; render(); }, onErr);
+}
+
+/* ---------- grading: compare views with the median of the same section ---------- */
+function gradeMap(){
+  const bySec = {};
+  Object.entries(ideas).forEach(([id,x]) => { if (x.status === "posted" && hasStats(x)) (bySec[x.section] ||= []).push([id, +x.stats.views]); });
+  const g = {};
+  Object.values(bySec).forEach(list => {
+    if (list.length < 3) return;
+    const v = list.map(a => a[1]).sort((a,b) => a-b);
+    const med = v.length % 2 ? v[(v.length-1)/2] : (v[v.length/2-1] + v[v.length/2]) / 2;
+    list.forEach(([id,val]) => { g[id] = !med ? "mid" : val >= med*1.4 ? "hit" : val <= med*0.7 ? "low" : "mid"; });
+  });
+  return g;
+}
+
+/* ---------- render ---------- */
+function render(){
+  renderTabs();
+  const isStats = current === "stats", isCo = current === "collabs";
+  $("#vBoard").classList.toggle("on", !isStats && !isCo);
+  $("#vStats").classList.toggle("on", isStats);
+  $("#vCollabs").classList.toggle("on", isCo);
+  if (isStats) renderStats(); else if (isCo) renderCollabs(); else renderBoard();
+}
+
+let addingSection = false;
+let openMenu = null;
+function renderTabs(){
+  const cnt = id => Object.values(ideas).filter(x => x.section === id).length;
+  const waiting = Object.values(ideas).filter(needsStats).length;
+  const defIds = DEFAULT_SECTIONS.map(s => s.id);
+  $("#tabs").innerHTML =
+    sections.map(s => `<button type="button" role="tab" class="tab" data-tab="${esc(s.id)}" aria-selected="${current === s.id}">${esc(s.name)} <span class="c num">${cnt(s.id)}</span>${!defIds.includes(s.id) && !cnt(s.id) ? `<span class="x" data-delsec="${esc(s.id)}" title="Удалить пустой раздел">✕</span>` : ""}</button>`).join("") +
+    (addingSection
+      ? `<form class="addsec" id="addSecForm"><input id="newSec" placeholder="Название раздела" maxlength="30" autocomplete="off"><button class="ghost" type="submit" style="margin:0">добавить</button></form>`
+      : `<button type="button" class="ghost" id="addSecBtn">+ раздел</button>`) +
+    `<span class="sp"></span>
+     <button type="button" role="tab" class="tab alt" data-tab="collabs" aria-selected="${current === "collabs"}">Сотрудничества <span class="c num">${Object.keys(collabs).length}</span></button>
+     <button type="button" role="tab" class="tab alt sky" data-tab="stats" aria-selected="${current === "stats"}">Статистика${waiting ? ` <span class="chip need num">${waiting}</span>` : ""}</button>`;
+  if (addingSection) setTimeout(() => $("#newSec")?.focus(), 0);
+}
+
+function cardHTML(id, x, grades){
+  const i = STATUSES.findIndex(s => s.id === x.status);
+  let meta = "";
+  const co = x.collabId && collabs[x.collabId];
+  if (co) meta += `<span class="chip co-link">сотрудничество · ${esc(co.brand)}</span>`;
+  if (x.status === "posted"){
+    if (x.publishedAt) meta += `<span>выложено ${esc(shortDate(x.publishedAt))}</span>`;
+    if (hasStats(x)) meta += `<span class="num">${fmt(x.stats.views)} просм. · ${fmt(x.stats.likes)} лайк.</span>`;
+    if (grades[id]) meta += `<span class="chip ${GRADE[grades[id]][0]}">${GRADE[grades[id]][1]}</span>`;
+    if (needsStats(x)) meta += `<span class="chip need">внеси статистику</span>`;
+  }
+  return `<article class="card${openMenu === id ? " menu-open" : ""}" draggable="true" data-id="${esc(id)}">
+    <button type="button" class="dots" data-menu="${esc(id)}" aria-label="Ещё действия" aria-expanded="${openMenu === id}">⋯</button>
+    ${openMenu === id ? `<div class="menu" role="menu">
+      <button type="button" role="menuitem" data-edit="${esc(id)}">Изменить</button>
+      <button type="button" role="menuitem" data-tocollab="${esc(id)}">${co ? "Другое сотрудничество…" : "В сотрудничество…"}</button>
+      ${co ? `<button type="button" role="menuitem" data-gocollab>Открыть сотрудничества</button><button type="button" role="menuitem" data-uncollab="${esc(id)}">Убрать из сотрудничества</button>` : ""}
+      <button type="button" role="menuitem" class="danger" data-quickdel="${esc(id)}">Удалить</button>
+    </div>` : ""}
+    <div class="t">${esc(x.title)}</div>
+    ${meta ? `<div class="meta">${meta}</div>` : ""}
+    <div class="acts">
+      <div class="mv">${i > 0 ? `<button type="button" data-move="${esc(id)}" data-dir="-1" aria-label="Назад: ${STATUSES[i-1].name}">←</button>` : ""}${i < 3 ? `<button type="button" data-move="${esc(id)}" data-dir="1" aria-label="Дальше: ${STATUSES[i+1].name}">${STATUSES[i+1].name} →</button>` : ""}</div>
+      <button type="button" class="edit" data-edit="${esc(id)}">${x.status === "posted" ? "статистика" : "изменить"}</button>
+    </div>
+  </article>`;
+}
+
+function renderBoard(){
+  const sec = sections.find(s => s.id === current) || sections[0];
+  const grades = gradeMap();
+  const items = Object.entries(ideas).filter(([,x]) => x.section === sec.id);
+  $("#vBoard").innerHTML = `<div class="board">${STATUSES.map(st => {
+    const list = items.filter(([,x]) => x.status === st.id)
+      .sort((a,b) => st.id === "posted" ? String(b[1].publishedAt || "").localeCompare(String(a[1].publishedAt || "")) : (b[1].createdAt || 0) - (a[1].createdAt || 0));
+    return `<div class="col" data-col="${st.id}" style="--dot:${st.dot}">
+      <div class="col-h"><h2>${st.name}</h2><span class="n num">${list.length}</span></div>
+      ${st.id === "idea" ? `<form class="quick" data-quick><input id="quick-${esc(sec.id)}" placeholder="Новая идея: ${esc(sec.name)}" maxlength="200" autocomplete="off" aria-label="Новая идея"><button type="submit" aria-label="Добавить">+</button></form>` : ""}
+      ${list.map(([id,x]) => cardHTML(id, x, grades)).join("") || (st.id === "idea" && !items.length ? `<div class="empty"><span class="v">пусто</span>Впиши название и нажми Enter</div>` : "")}
+    </div>`; }).join("")}</div>`;
+}
+
+function renderStats(){
+  const grades = gradeMap();
+  const posted = Object.entries(ideas).filter(([,x]) => x.status === "posted" && (statFilter === "all" || x.section === statFilter));
+  const withStats = posted.filter(([,x]) => hasStats(x));
+  const waiting = posted.filter(([,x]) => needsStats(x));
+  const avg = withStats.length ? Math.round(withStats.reduce((s,[,x]) => s + +x.stats.views, 0) / withStats.length) : null;
+  const best = withStats.slice().sort((a,b) => b[1].stats.views - a[1].stats.views)[0];
+  const secName = id => (sections.find(s => s.id === id) || {name:id}).name;
+  const inter = x => ["likes","comments","saves","shares"].reduce((s,k) => s + (+x.stats[k] || 0), 0);
+  const er = x => x.stats.views > 0 ? inter(x) / x.stats.views * 100 : null;
+  const val = ([id,x], k) => k === "title" ? x.title.toLowerCase() : k === "publishedAt" ? (x.publishedAt || "") : k === "section" ? secName(x.section) : k === "er" ? (hasStats(x) ? er(x) ?? -1 : -1) : (hasStats(x) ? +x.stats[k] || 0 : -1);
+  const rows = posted.slice().sort((a,b) => { const va = val(a, statSort.k), vb = val(b, statSort.k); return (va > vb ? 1 : va < vb ? -1 : 0) * statSort.dir; });
+  const maxV = Math.max(1, ...withStats.map(([,x]) => +x.stats.views));
+  const arrow = k => statSort.k === k ? (statSort.dir < 0 ? " ↓" : " ↑") : "";
+  $("#vStats").innerHTML = `
+    <div class="st-head"><h2>Что <span class="v">зашло</span></h2>
+      <div class="filters">${[{id:"all",name:"Все"}, ...sections].map(s => `<button type="button" data-filter="${esc(s.id)}" aria-pressed="${statFilter === s.id}">${esc(s.name)}</button>`).join("")}</div></div>
+    <div class="tiles">
+      <div class="tile"><span>Выложено</span><b class="num">${posted.length}</b><small>со статистикой: ${withStats.length}</small></div>
+      <div class="tile"><span>Средние просмотры</span><b class="num">${fmt(avg)}</b><small>по публикациям с цифрами</small></div>
+      <div class="tile"><span>Ждут статистику</span><b class="num">${waiting.length}</b><small>прошла неделя после публикации</small></div>
+      <div class="tile"><span>Лучшее по просмотрам</span><b class="num">${best ? fmt(best[1].stats.views) : "—"}</b><small>${best ? esc(best[1].title) : "появится, когда внесёшь цифры"}</small></div>
+    </div>
+    ${waiting.length ? `<div class="wait"><b>Пора внести статистику</b><ul>${waiting.map(([id,x]) => `<li><button type="button" data-edit="${esc(id)}">${esc(x.title)} · ${esc(shortDate(x.publishedAt))}</button></li>`).join("")}</ul></div>` : ""}
+    ${posted.length ? `<div class="tbl-wrap"><table>
+      <thead><tr><th data-k="title">Название${arrow("title")}</th><th data-k="section">Раздел${arrow("section")}</th><th data-k="publishedAt">Дата${arrow("publishedAt")}</th>
+      ${METRICS.map(m => `<th class="r" data-k="${m.k}">${m.name}${arrow(m.k)}</th>`).join("")}<th class="r" data-k="er" title="(лайки + комменты + сохранения + репосты) / просмотры">ER${arrow("er")}</th><th>Оценка</th></tr></thead>
+      <tbody>${rows.map(([id,x]) => { const s = hasStats(x); return `<tr>
+        <td class="name"><button type="button" data-edit="${esc(id)}">${esc(x.title)}</button></td>
+        <td>${esc(secName(x.section))}</td>
+        <td class="num">${x.publishedAt ? esc(shortDate(x.publishedAt)) : "—"}</td>
+        <td class="r num">${s ? `<div class="bar"><i style="width:${Math.round(+x.stats.views / maxV * 90)}px"></i>${fmt(x.stats.views)}</div>` : "—"}</td>
+        ${METRICS.slice(1).map(m => `<td class="r num">${s ? fmt(x.stats[m.k]) : "—"}</td>`).join("")}
+        <td class="r num">${s && er(x) != null ? er(x).toFixed(1).replace(".", ",") + "%" : "—"}</td>
+        <td>${grades[id] ? `<span class="chip ${GRADE[grades[id]][0]}">${GRADE[grades[id]][1]}</span>` : needsStats(x) ? `<span class="chip need">нет цифр</span>` : ""}</td></tr>`; }).join("")}</tbody></table></div>`
+      : `<div class="empty"><span class="v">пока пусто</span>Здесь появятся публикации со статусом «Выложено»</div>`}
+    <p class="hint">Оценка сравнивает просмотры с серединой по тому же разделу: «зашло» на 40% выше, «не зашло» на 30% ниже. Появляется, когда в разделе есть хотя бы 3 публикации с цифрами. ER показывает, какая доля зрителей поставила лайк, написала коммент, сохранила или репостнула.</p>`;
+}
+
+const linked = cid => Object.entries(ideas).filter(([,x]) => x.collabId === cid);
+function renderCollabs(){
+  const list = kind => Object.entries(collabs).filter(([,c]) => c.kind === kind)
+    .sort((a,b) => String(a[1].deadline || "9999").localeCompare(String(b[1].deadline || "9999")));
+  const card = ([id,c]) => {
+    const d = c.deadline ? daysSince(c.deadline) * -1 : null;
+    return `<article class="co"><span class="tape"></span>
+      <h3>${esc(c.brand)}</h3>
+      ${c.about ? `<p>${esc(c.about)}</p>` : ""}
+      <div class="meta">
+        ${c.format ? `<span class="chip ${c.format === "paid" ? "f-paid" : "f-barter"}">${c.format === "paid" ? "оплата" : "бартер"}</span>` : ""}
+        ${c.deadline ? `<span class="chip dl ${c.kind === "agreed" && d != null && d <= 3 ? "soon" : ""}">дедлайн ${esc(shortDate(c.deadline))}${c.kind === "agreed" && d != null ? (d < 0 ? " · прошёл" : d === 0 ? " · сегодня" : ` · через ${d} дн.`) : ""}</span>` : ""}
+      </div>
+      ${linked(id).length ? `<div class="co-items"><span class="lbl">Контент</span>${linked(id).map(([iid,x]) => `<button type="button" data-edit="${esc(iid)}"><span>${esc(x.title)}</span><span>${esc((sections.find(q => q.id === x.section) || {name:""}).name)} · ${STATUSES.find(q => q.id === x.status).name.toLowerCase()}</span></button>`).join("")}</div>` : ""}
+      <div class="acts">${c.kind === "wish" ? `<button type="button" class="btn btn-butter" data-agree="${esc(id)}">договорились →</button>` : ""}<button type="button" class="btn btn-line" data-coedit="${esc(id)}">изменить</button></div>
+    </article>`; };
+  const agreed = list("agreed"), wish = list("wish");
+  $("#vCollabs").innerHTML = `<div class="co-grid">
+    <div class="co-col"><h2>Договорились <span class="v">уже</span></h2><p>С кем уже есть договорённость</p>
+      <button type="button" class="btn btn-ink" data-conew="agreed" style="align-self:flex-start">+ сотрудничество</button>
+      ${agreed.map(card).join("") || `<div class="empty"><span class="v">пока пусто</span>Добавь бренд, с которым договорилась</div>`}</div>
+    <div class="co-col wish"><h2>Хочу <span class="v">написать</span></h2><p>Кому хочу написать сама и попробовать</p>
+      <button type="button" class="btn btn-ink" data-conew="wish" style="align-self:flex-start">+ в список</button>
+      ${wish.map(card).join("") || `<div class="empty"><span class="v">пока пусто</span>Запиши бренды, которым хочешь предложить сотрудничество</div>`}</div>
+  </div>`;
+}
+
+/* ---------- dialogs ---------- */
+function closeModal(){ $("#modal").innerHTML = ""; document.removeEventListener("keydown", escClose); }
+function escClose(e){ if (e.key === "Escape") closeModal(); }
+function openModal(html, onReady){
+  $("#modal").innerHTML = `<div class="shade" data-close></div><div class="dlg" role="dialog" aria-modal="true">${html}</div>`;
+  document.addEventListener("keydown", escClose);
+  onReady && onReady($("#modal .dlg"));
+  setTimeout(() => $("#modal .dlg input")?.focus(), 0);
+}
+
+function editIdea(id){
+  const x = ideas[id]; if (!x) return;
+  const s = x.stats || {};
+  openModal(`
+    <h2>Идея <span class="v">${esc((sections.find(q => q.id === x.section) || {name:""}).name)}</span></h2>
+    <div class="fld"><label for="e-title">Название</label><input id="e-title" value="${esc(x.title)}" maxlength="200"></div>
+    <div class="row2">
+      <div class="fld"><label for="e-sec">Раздел</label><select id="e-sec">${sections.map(q => `<option value="${esc(q.id)}"${q.id === x.section ? " selected" : ""}>${esc(q.name)}</option>`).join("")}</select></div>
+      <div class="fld"><label for="e-status">Статус</label><select id="e-status">${STATUSES.map(q => `<option value="${q.id}"${q.id === x.status ? " selected" : ""}>${q.name}</option>`).join("")}</select></div>
+    </div>
+    <div class="fld"><label for="e-co">Сотрудничество</label><select id="e-co"><option value="">нет</option>${collabOptions(x.collabId)}</select></div>
+    <div class="statbox" id="e-statbox">
+      <div class="fld"><label for="e-date">Дата публикации</label><input id="e-date" type="date" value="${esc(x.publishedAt || "")}"></div>
+      <span class="lbl">Статистика через неделю после публикации</span>
+      <div class="stats5">${METRICS.map(m => `<div class="fld"><label for="e-${m.k}">${m.name}</label><input id="e-${m.k}" type="number" min="0" inputmode="numeric" value="${s[m.k] ?? ""}"></div>`).join("")}</div>
+    </div>
+    <div class="dlg-foot">
+      <button type="button" class="btn btn-line" id="e-del">Удалить</button>
+      <div class="r"><button type="button" class="btn btn-line" data-close>Отмена</button><button type="button" class="btn btn-ink" id="e-save">Сохранить</button></div>
+    </div>`, dlg => {
+      const box = dlg.querySelector("#e-statbox"), stSel = dlg.querySelector("#e-status");
+      const sync = () => { box.hidden = stSel.value !== "posted"; };
+      stSel.addEventListener("change", () => { sync(); if (stSel.value === "posted" && !dlg.querySelector("#e-date").value) dlg.querySelector("#e-date").value = todayISO(); });
+      sync();
+      dlg.querySelector("#e-del").addEventListener("click", e => {
+        const b = e.currentTarget;
+        if (b.dataset.sure){ store.del("ideas", id); closeModal(); }
+        else { b.dataset.sure = 1; b.textContent = "Точно удалить?"; b.className = "btn btn-danger"; }
+      });
+      dlg.querySelector("#e-save").addEventListener("click", () => {
+        const title = dlg.querySelector("#e-title").value.trim(); if (!title) return dlg.querySelector("#e-title").focus();
+        const status = stSel.value;
+        const st = {}; let any = false;
+        METRICS.forEach(m => { const v = dlg.querySelector("#e-" + m.k).value; if (v !== ""){ st[m.k] = Math.max(0, Math.round(+v)); any = true; } });
+        const next = {...x, title, section: dlg.querySelector("#e-sec").value, status,
+          publishedAt: status === "posted" ? (dlg.querySelector("#e-date").value || todayISO()) : (x.publishedAt || null),
+          stats: any ? st : null, collabId: dlg.querySelector("#e-co").value || null, updatedAt: Date.now()};
+        if (any && !hasStats(x)) next.statsAt = todayISO();
+        store.put("ideas", id, next); closeModal();
+      });
+  });
+}
+
+function collabOptions(sel){
+  const g = (kind, label) => { const l = Object.entries(collabs).filter(([,c]) => c.kind === kind); return l.length ? `<optgroup label="${label}">${l.map(([cid,c]) => `<option value="${esc(cid)}"${cid === sel ? " selected" : ""}>${esc(c.brand)}</option>`).join("")}</optgroup>` : ""; };
+  return g("agreed", "Договорились") + g("wish", "Хочу написать");
+}
+
+/* attach an idea to an existing collab, or create a new one right here */
+function toCollab(id){
+  const x = ideas[id]; if (!x) return;
+  const list = Object.entries(collabs).sort((a,b) => (a[1].kind === b[1].kind ? a[1].brand.localeCompare(b[1].brand) : a[1].kind === "agreed" ? -1 : 1));
+  openModal(`
+    <h2>В <span class="v">сотрудничество</span></h2>
+    <p style="color:var(--muted)">«${esc(x.title)}»</p>
+    ${list.length ? `<span class="lbl">Выбери сотрудничество</span>
+    <div class="pick" id="t-pick">${list.map(([cid,c]) => `<label><input type="radio" name="t-co" value="${esc(cid)}"${cid === x.collabId ? " checked" : ""}>${esc(c.brand)}<small>${c.kind === "agreed" ? "договорились" : "хочу написать"} · ${linked(cid).length} шт.</small></label>`).join("")}
+      <label><input type="radio" name="t-co" value="__new">+ новое сотрудничество</label></div>` : ""}
+    <div class="newco" id="t-new"${list.length ? " hidden" : ""}>
+      <div class="fld"><label for="t-brand">Бренд</label><input id="t-brand" maxlength="80"></div>
+      <div class="fld"><label for="t-about">О чём договорились</label><textarea id="t-about" maxlength="1000"></textarea></div>
+      <div class="row2">
+        <div class="fld"><label for="t-dl">Дедлайн</label><input id="t-dl" type="date"></div>
+        <div class="fld"><span class="lbl">Формат</span><div class="seg" id="t-fmt"><button type="button" data-f="barter" aria-pressed="false">бартер</button><button type="button" data-f="paid" aria-pressed="false">оплата</button></div></div>
+      </div>
+      <div class="fld"><span class="lbl">Куда</span><div class="seg" id="t-kind"><button type="button" data-k="agreed" aria-pressed="true">договорились</button><button type="button" data-k="wish" aria-pressed="false">хочу написать</button></div></div>
+    </div>
+    <div class="dlg-foot"><span></span><div class="r"><button type="button" class="btn btn-line" data-close>Отмена</button><button type="button" class="btn btn-ink" id="t-save">Добавить</button></div></div>`, dlg => {
+      let format = "", kind = "agreed";
+      const newBox = dlg.querySelector("#t-new");
+      const choice = () => list.length ? (dlg.querySelector('input[name="t-co"]:checked')?.value || "") : "__new";
+      dlg.querySelector("#t-pick")?.addEventListener("change", () => { newBox.hidden = choice() !== "__new"; if (!newBox.hidden) dlg.querySelector("#t-brand").focus(); });
+      dlg.querySelector("#t-fmt").addEventListener("click", e => { const b = e.target.closest("[data-f]"); if (!b) return; format = format === b.dataset.f ? "" : b.dataset.f; dlg.querySelectorAll("#t-fmt button").forEach(q => q.setAttribute("aria-pressed", q.dataset.f === format)); });
+      dlg.querySelector("#t-kind").addEventListener("click", e => { const b = e.target.closest("[data-k]"); if (!b) return; kind = b.dataset.k; dlg.querySelectorAll("#t-kind button").forEach(q => q.setAttribute("aria-pressed", q.dataset.k === kind)); });
+      dlg.querySelector("#t-save").addEventListener("click", async () => {
+        let cid = choice();
+        if (!cid) return;
+        if (cid === "__new"){
+          const brand = dlg.querySelector("#t-brand").value.trim(); if (!brand) return dlg.querySelector("#t-brand").focus();
+          cid = newId("collabs");
+          await store.put("collabs", cid, {kind, brand, about: dlg.querySelector("#t-about").value.trim(), deadline: dlg.querySelector("#t-dl").value || "", format, createdAt: Date.now(), updatedAt: Date.now()});
+        }
+        store.put("ideas", id, {...ideas[id], collabId: cid, updatedAt: Date.now()});
+        closeModal();
+      });
+  });
+}
+
+function editCollab(id, kind){
+  const c = id ? collabs[id] : {kind, brand:"", about:"", deadline:"", format:""};
+  if (!c) return;
+  const wish = c.kind === "wish";
+  openModal(`
+    <h2>${wish ? "Хочу" : "Сотрудничество"} <span class="v">${wish ? "написать" : "бренд"}</span></h2>
+    <div class="fld"><label for="c-brand">Бренд</label><input id="c-brand" value="${esc(c.brand)}" maxlength="80"></div>
+    <div class="fld"><label for="c-about">${wish ? "Что хочу предложить" : "О чём договорились"}</label><textarea id="c-about" maxlength="1000">${esc(c.about)}</textarea></div>
+    <div class="row2">
+      <div class="fld"><label for="c-dl">Дедлайн</label><input id="c-dl" type="date" value="${esc(c.deadline || "")}"></div>
+      <div class="fld"><span class="lbl">Формат</span><div class="seg" id="c-fmt">
+        <button type="button" data-f="barter" aria-pressed="${c.format === "barter"}">бартер</button>
+        <button type="button" data-f="paid" aria-pressed="${c.format === "paid"}">оплата</button></div></div>
+    </div>
+    <div class="dlg-foot">
+      ${id ? `<button type="button" class="btn btn-line" id="c-del">Удалить</button>` : "<span></span>"}
+      <div class="r"><button type="button" class="btn btn-line" data-close>Отмена</button><button type="button" class="btn btn-ink" id="c-save">Сохранить</button></div>
+    </div>`, dlg => {
+      let format = c.format || "";
+      dlg.querySelector("#c-fmt").addEventListener("click", e => { const b = e.target.closest("[data-f]"); if (!b) return;
+        format = format === b.dataset.f ? "" : b.dataset.f;
+        dlg.querySelectorAll("#c-fmt button").forEach(q => q.setAttribute("aria-pressed", q.dataset.f === format)); });
+      dlg.querySelector("#c-del")?.addEventListener("click", e => {
+        const b = e.currentTarget;
+        if (b.dataset.sure){ store.del("collabs", id); closeModal(); }
+        else { b.dataset.sure = 1; b.textContent = "Точно удалить?"; b.className = "btn btn-danger"; }
+      });
+      dlg.querySelector("#c-save").addEventListener("click", () => {
+        const brand = dlg.querySelector("#c-brand").value.trim(); if (!brand) return dlg.querySelector("#c-brand").focus();
+        const data = {...c, brand, about: dlg.querySelector("#c-about").value.trim(), deadline: dlg.querySelector("#c-dl").value || "", format, updatedAt: Date.now()};
+        if (!id) data.createdAt = Date.now();
+        store.put("collabs", id || newId("collabs"), data); closeModal();
+      });
+  });
+}
+const newId = col => mode === "db" ? db.collection(col).doc().id : rid();
+
+/* ---------- events ---------- */
+document.addEventListener("click", e => {
+  const t = e.target;
+  if (t.closest("[data-close]")) return closeModal();
+  const mb = t.closest("[data-menu]");
+  if (mb){ openMenu = openMenu === mb.dataset.menu ? null : mb.dataset.menu; renderBoard(); return; }
+  const qd = t.closest("[data-quickdel]");
+  if (qd){ const id = qd.dataset.quickdel;
+    if (qd.dataset.sure){ openMenu = null; store.del("ideas", id); renderBoard(); }
+    else { qd.dataset.sure = 1; qd.textContent = "Точно удалить?"; }
+    return; }
+  if (openMenu){ openMenu = null; renderBoard(); }
+  const tc = t.closest("[data-tocollab]"); if (tc) return toCollab(tc.dataset.tocollab);
+  const uc = t.closest("[data-uncollab]"); if (uc){ const id = uc.dataset.uncollab; store.put("ideas", id, {...ideas[id], collabId: null, updatedAt: Date.now()}); return; }
+  if (t.closest("[data-gocollab]")){ current = "collabs"; render(); return; }
+  const del = t.closest("[data-delsec]");
+  if (del){ e.stopPropagation(); const id = del.dataset.delsec; if (current === id) current = sections[0].id; store.setSections(sections.filter(s => s.id !== id)); return; }
+  const tab = t.closest("[data-tab]"); if (tab){ current = tab.dataset.tab; addingSection = false; render(); return; }
+  if (t.closest("#addSecBtn")){ addingSection = true; renderTabs(); return; }
+  const mv = t.closest("[data-move]");
+  if (mv){ const id = mv.dataset.move, x = ideas[id]; const i = STATUSES.findIndex(s => s.id === x.status) + +mv.dataset.dir;
+    if (STATUSES[i]) setStatus(id, STATUSES[i].id); return; }
+  const ed = t.closest("[data-edit]"); if (ed) return editIdea(ed.dataset.edit);
+  const f = t.closest("[data-filter]"); if (f){ statFilter = f.dataset.filter; renderStats(); return; }
+  const th = t.closest("th[data-k]"); if (th){ const k = th.dataset.k; statSort = {k, dir: statSort.k === k ? -statSort.dir : (k === "title" || k === "section" ? 1 : -1)}; renderStats(); return; }
+  const cn = t.closest("[data-conew]"); if (cn) return editCollab(null, cn.dataset.conew);
+  const ce = t.closest("[data-coedit]"); if (ce) return editCollab(ce.dataset.coedit);
+  const ag = t.closest("[data-agree]"); if (ag){ const id = ag.dataset.agree; store.put("collabs", id, {...collabs[id], kind:"agreed", updatedAt: Date.now()}); return; }
+});
+document.addEventListener("submit", e => {
+  e.preventDefault();
+  if (e.target.id === "addSecForm"){
+    const name = $("#newSec").value.trim(); addingSection = false;
+    if (!name){ renderTabs(); return; }
+    const id = "s" + rid(); current = id;
+    store.setSections([...sections, {id, name}]); render(); return;
+  }
+  if (e.target.matches("[data-quick]")){
+    const inp = e.target.querySelector("input"), title = inp.value.trim(); if (!title) return;
+    const id = newId("ideas");
+    store.put("ideas", id, {title, section: current, status:"idea", publishedAt:null, stats:null, createdAt: Date.now()});
+    inp.value = "";
+    setTimeout(() => document.getElementById("quick-" + current)?.focus(), 30);
+  }
+});
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape" && addingSection){ addingSection = false; renderTabs(); }
+  if (e.key === "Escape" && openMenu && !$("#modal").innerHTML){ openMenu = null; renderBoard(); }
+});
+function setStatus(id, status){
+  const x = ideas[id]; if (!x || x.status === status) return;
+  const next = {...x, status, updatedAt: Date.now()};
+  if (status === "posted" && !x.publishedAt) next.publishedAt = todayISO();
+  store.put("ideas", id, next);
+}
+/* drag & drop between columns */
+let dragId = null;
+document.addEventListener("dragstart", e => { const c = e.target.closest?.(".card"); if (!c) return; dragId = c.dataset.id; c.classList.add("dragging"); e.dataTransfer.effectAllowed = "move"; try{ e.dataTransfer.setData("text/plain", dragId); }catch(_){} });
+document.addEventListener("dragend", e => { e.target.closest?.(".card")?.classList.remove("dragging"); document.querySelectorAll(".col.over").forEach(c => c.classList.remove("over")); dragId = null; });
+document.addEventListener("dragover", e => { const col = e.target.closest?.(".col"); if (!col || !dragId) return; e.preventDefault(); document.querySelectorAll(".col.over").forEach(c => c !== col && c.classList.remove("over")); col.classList.add("over"); });
+document.addEventListener("drop", e => { const col = e.target.closest?.(".col"); if (!col || !dragId) return; e.preventDefault(); col.classList.remove("over"); setStatus(dragId, col.dataset.col); });
+
+boot();
+</script>
+</body>
+</html>

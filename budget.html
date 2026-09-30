@@ -1,0 +1,475 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Лесин бюджет</title>
+<meta name="theme-color" content="#3B1B14">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Хаб">
+<style>
+html{background:#3B1B14}
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{margin:0;font:14px/1.4 system-ui,-apple-system,sans-serif;background:#F7F0DA}
+img{max-width:100%}
+[hidden]{display:none!important}
+</style>
+<script src="firebase-config.js?v=20260930093126"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+<script src="portal.js?v=20260930093126" data-app="budget"></script>
+</head>
+<body>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap">
+<style>
+@font-face{font-family:"Vasek";src:url("fonts/Vasek.ttf") format("truetype");font-display:swap}
+:root{
+  color-scheme:light;
+  --choco:#3B1B14;--choco-2:#4E251B;--ink:#250A0A;--paper:#F7F0DA;--cream:#F5EDC9;
+  --butter:#F1EA91;--olive:#737038;--olive-2:#817E45;--sky:#A6BFD2;--sky-2:#BCCFDD;--muted:#6B5550;
+  --line:rgba(37,10,10,.14);--red:#A8432F;--green:#5E7A3A;
+  --sans:"Inter","Helvetica Neue",Arial,sans-serif;
+  --script:"Vasek","Segoe Script","Brush Script MT",cursive;
+  --gutter:clamp(16px,3vw,40px);
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:repeating-linear-gradient(transparent 0 35px,rgba(166,191,210,.35) 35px 36px),var(--paper);color:var(--ink);font-family:var(--sans);font-size:14px;line-height:1.38;letter-spacing:-.012em;-webkit-font-smoothing:antialiased;min-height:100vh}
+button,input,select,textarea{font:inherit;color:inherit;letter-spacing:inherit}
+a{color:inherit}
+h1,h2,h3,p{margin:0}
+h1,h2,h3{font-weight:800;letter-spacing:-.055em;line-height:.92;text-wrap:balance}
+.v{font-family:var(--script);font-weight:400;letter-spacing:0;line-height:.8}
+:focus-visible{outline:2px dashed currentColor;outline-offset:2px}
+.num{font-variant-numeric:tabular-nums}
+
+/* header */
+.top{background:repeating-linear-gradient(90deg,rgba(0,0,0,.2) 0 2px,transparent 2px 7px),var(--choco);color:var(--paper);padding:18px var(--gutter) 22px}
+.top-in{max-width:1300px;margin-inline:auto;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:16px}
+.back{font-size:13px;font-weight:600;text-decoration:none;opacity:.7}
+.back:hover{opacity:1}
+.top h1{font-size:clamp(40px,5vw,68px);font-weight:900;letter-spacing:-.065em;margin-top:10px}
+.top h1 .v{color:var(--butter);font-size:.95em;margin-left:.15em;display:inline-block;rotate:-5deg}
+.top-r{display:flex;flex-direction:column;align-items:flex-end;gap:12px}
+.sync{font-size:12px;opacity:.7;display:flex;align-items:center;gap:7px}
+.sync i{width:8px;height:8px;border-radius:50%;background:#d6cfae}
+.sync.ok i{background:#9bc27a}
+.sync.local i{background:var(--butter)}
+.month{display:flex;align-items:center;gap:6px;background:rgba(247,240,218,.12);border-radius:999px;padding:4px}
+.month button{border:0;background:transparent;color:var(--paper);width:36px;height:36px;border-radius:50%;font-size:18px;cursor:pointer}
+.month button:hover{background:rgba(247,240,218,.2)}
+.month b{min-width:150px;text-align:center;font-size:17px;font-weight:800;letter-spacing:-.03em}
+
+main{max-width:1300px;margin-inline:auto;padding:24px var(--gutter) 60px;display:flex;flex-direction:column;gap:22px}
+.notice{background:var(--butter);padding:10px 14px;border-radius:8px;font-size:13px}
+
+/* summary */
+.tiles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.tile{background:#fff;border-radius:10px;padding:16px 18px 14px;display:flex;flex-direction:column;gap:6px;box-shadow:0 10px 18px -16px rgba(37,10,10,.5)}
+.tile span{font-size:12px;font-weight:600;color:var(--muted)}
+.tile b{font-size:clamp(26px,3vw,38px);font-weight:900;letter-spacing:-.06em;line-height:1}
+.tile small{font-size:12px;color:var(--muted)}
+.tile.rest{background:var(--butter)}
+.tile.rest.neg{background:#EFD3CB}
+.tile .meter{height:8px;border-radius:4px;background:var(--paper);overflow:hidden;margin-top:2px}
+.tile .meter i{display:block;height:100%;border-radius:4px;background:var(--olive)}
+.tile .meter i.over{background:var(--red)}
+@media (max-width:860px){.tiles{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* quick add */
+.add{position:relative;background:var(--cream);border-radius:12px;padding:16px;display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end;box-shadow:0 12px 20px -18px rgba(37,10,10,.6)}
+.add .tape{position:absolute;width:86px;height:22px;top:-10px;left:36px;rotate:-3deg;background:rgba(241,234,145,.9)}
+.seg{display:flex;background:#fff;border-radius:999px;padding:3px;border:1.5px solid var(--line)}
+.seg button{border:0;background:transparent;border-radius:999px;padding:7px 14px;font-weight:700;font-size:13px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.seg button.inc[aria-pressed="true"]{background:var(--green)}
+.fld{display:flex;flex-direction:column;gap:5px}
+.fld label,.lbl{font-size:12px;font-weight:700;color:var(--muted)}
+.fld input,.fld select,.fld textarea{border:1.5px solid var(--line);background:#fff;border-radius:8px;padding:9px 11px;width:100%}
+.fld input:focus,.fld select:focus,.fld textarea:focus{border-color:var(--ink);outline:none}
+.add .f-sum{width:130px}.add .f-cat{width:190px}.add .f-date{width:150px}.add .f-note{flex:1;min-width:180px}
+.btn{border:0;cursor:pointer;border-radius:999px;padding:10px 18px;font-weight:700;font-size:13px}
+.btn-ink{background:var(--ink);color:var(--paper)}
+.btn-line{background:transparent;border:1.5px solid var(--ink)}
+.btn-danger{background:var(--red);color:#fff}
+.btn:hover{filter:brightness(1.1)}
+.add .btn{padding:11px 20px}
+
+/* two columns */
+.cols{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:22px;align-items:start}
+@media (max-width:960px){.cols{grid-template-columns:1fr}}
+.panel{background:#fff;border-radius:12px;padding:18px 18px 16px;box-shadow:0 12px 20px -18px rgba(37,10,10,.55);display:flex;flex-direction:column;gap:12px}
+.panel-h{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}
+.panel-h h2{font-size:28px}
+.panel-h h2 .v{color:var(--olive);font-size:1.1em;margin-left:.05em}
+.link{border:0;background:none;padding:0;font-size:13px;font-weight:600;text-decoration:underline;text-underline-offset:3px;cursor:pointer;color:var(--muted)}
+.link:hover{color:var(--ink)}
+
+/* category bars */
+.cats{display:flex;flex-direction:column;gap:12px}
+.cat{display:grid;grid-template-columns:1fr auto;gap:5px 12px;align-items:baseline;cursor:pointer;border-radius:8px;padding:4px 6px;margin:-4px -6px}
+.cat:hover{background:var(--paper)}
+.cat[aria-pressed="true"]{background:var(--butter)}
+.cat .nm{font-weight:700;font-size:14px}
+.cat .vl{font-size:13px;color:var(--muted);text-align:right}
+.cat .vl b{color:var(--ink);font-weight:700}
+.cat .track{grid-column:1/-1;position:relative;height:10px;border-radius:5px;background:var(--paper)}
+.cat .track i{position:absolute;left:0;top:0;bottom:0;border-radius:5px;background:var(--olive);min-width:3px}
+.cat .track i.over{background:var(--red)}
+.cat .track s{position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--ink);border-radius:1px}
+.cat .flag{font-size:11px;font-weight:700;color:var(--red)}
+.cats-foot{font-size:12px;color:var(--muted)}
+
+/* operations table */
+.filters{display:flex;flex-wrap:wrap;gap:6px}
+.filters button{border:1.5px solid var(--ink);background:transparent;border-radius:999px;padding:5px 11px;font-size:12px;font-weight:600;cursor:pointer}
+.filters button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.tbl-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:520px}
+td{padding:9px 8px;border-bottom:1px solid var(--line);vertical-align:middle}
+tr.day td{padding:14px 8px 6px;border-bottom:0;font-size:12px;font-weight:700;color:var(--muted);text-transform:lowercase}
+tr.day td.r{font-weight:600}
+tr.op{cursor:pointer}
+tr.op:hover td{background:var(--paper)}
+td.r{text-align:right;white-space:nowrap}
+td.sum{font-weight:700;font-size:15px}
+td.sum.inc{color:var(--green)}
+td .cchip{display:inline-block;font-size:11px;font-weight:700;padding:3px 8px;border-radius:999px;background:var(--sky-2);white-space:nowrap}
+td .cchip.inc{background:#DDE6CF}
+td.note{color:var(--muted);width:100%}
+.empty{font-size:13px;color:var(--muted);text-align:center;padding:26px 10px;border:1.5px dashed var(--line);border-radius:8px}
+.empty .v{display:block;font-size:32px;margin-bottom:6px;color:var(--olive)}
+
+/* dialog */
+.shade{position:fixed;inset:0;background:rgba(37,10,10,.45);z-index:90}
+.dlg{position:fixed;left:50%;top:50%;translate:-50% -50%;z-index:91;width:min(560px,calc(100% - 32px));max-height:calc(100% - 40px);overflow-y:auto;background:var(--paper);border-radius:14px;padding:26px 24px 22px;box-shadow:0 40px 70px -30px rgba(0,0,0,.7);display:flex;flex-direction:column;gap:14px}
+.dlg h2{font-size:32px}
+.dlg h2 .v{color:var(--olive);font-size:1.1em;margin-left:.06em}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.dlg-foot{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-top:4px}
+.dlg-foot .r{display:flex;gap:8px}
+.catlist{display:flex;flex-direction:column;gap:6px}
+.catrow{display:grid;grid-template-columns:1fr 130px 34px;gap:8px;align-items:center}
+.catrow input{border:1.5px solid var(--line);background:#fff;border-radius:8px;padding:8px 10px;width:100%}
+.catrow .x{border:0;background:transparent;font-size:15px;cursor:pointer;color:var(--muted);border-radius:6px;height:34px}
+.catrow .x:hover{background:#fff;color:var(--red)}
+.cat-h{display:grid;grid-template-columns:1fr 130px 34px;gap:8px;font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.sub{font-size:13px;color:var(--muted)}
+@media (max-width:520px){.row2{grid-template-columns:1fr}.catrow,.cat-h{grid-template-columns:1fr 96px 30px}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+<header class="top">
+  <div class="top-in">
+    <div>
+      <a class="back" href="index.html">← в хаб</a>
+      <h1>Бюджет<span class="v">для себя</span></h1>
+    </div>
+    <div class="top-r">
+      <div class="sync" id="sync"><i></i><span>подключаюсь…</span></div>
+      <div class="month"><button type="button" id="prevM" aria-label="Предыдущий месяц">‹</button><b id="mName" class="num"></b><button type="button" id="nextM" aria-label="Следующий месяц">›</button></div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="notice" id="notice" hidden></div>
+  <section class="tiles" id="tiles"></section>
+
+  <form class="add" id="addForm" autocomplete="off">
+    <span class="tape"></span>
+    <div class="fld"><span class="lbl">Что</span><div class="seg" id="typeSeg"><button type="button" data-t="expense" aria-pressed="true">Расход</button><button type="button" class="inc" data-t="income" aria-pressed="false">Доход</button></div></div>
+    <div class="fld f-sum"><label for="a-sum">Сумма, ₽</label><input id="a-sum" type="number" min="0" step="any" inputmode="decimal" placeholder="0" required></div>
+    <div class="fld f-cat"><label for="a-cat">Категория</label><select id="a-cat"></select></div>
+    <div class="fld f-date"><label for="a-date">Дата</label><input id="a-date" type="date"></div>
+    <div class="fld f-note"><label for="a-note">Комментарий</label><input id="a-note" maxlength="200" placeholder="необязательно"></div>
+    <button class="btn btn-ink" type="submit">Добавить</button>
+  </form>
+
+  <div class="cols">
+    <section class="panel">
+      <div class="panel-h"><h2>По <span class="v">категориям</span></h2><button type="button" class="link" id="editCats">категории и лимиты</button></div>
+      <div class="cats" id="cats"></div>
+      <p class="cats-foot">Чёрная отметка на полосе показывает лимит на месяц. Нажми на категорию, чтобы увидеть только её траты.</p>
+    </section>
+    <section class="panel">
+      <div class="panel-h"><h2>Все <span class="v">записи</span></h2><div class="filters" id="filters"></div></div>
+      <div class="tbl-wrap" id="ops"></div>
+    </section>
+  </div>
+</main>
+
+<div id="modal"></div>
+
+<script>
+/* ---------- defaults (editable in the page) ---------- */
+const DEFAULT_CATS = {
+  expense: [
+    {id:"food", name:"Продукты", limit:null},
+    {id:"transport", name:"Транспорт", limit:null},
+    {id:"beauty", name:"Бьюти", limit:null},
+    {id:"pharmacy", name:"Аптека", limit:null},
+    {id:"subs", name:"Подписки", limit:null},
+    {id:"splits", name:"Сплиты", limit:null},
+    {id:"eatout", name:"Еда вне дома", limit:null},
+    {id:"medicine", name:"Медицина", limit:null},
+    {id:"flat", name:"Квартира", limit:null},
+    {id:"home", name:"Для дома", limit:null},
+    {id:"market", name:"Маркетплейсы", limit:null},
+    {id:"taxi", name:"Такси", limit:null},
+    {id:"fun", name:"Развлечения", limit:null},
+    {id:"train", name:"Поезд", limit:null},
+    {id:"gifts", name:"Подарки", limit:null}
+  ],
+  income: [
+    {id:"work", name:"Работа"},
+    {id:"blog", name:"Блог"},
+    {id:"other-in", name:"Другое"}
+  ]
+};
+
+/* ---------- state ---------- */
+let ops = {};                 // id -> {type, amount, category, date, note, createdAt}
+let cats = structuredClone(DEFAULT_CATS);
+let addType = "expense";
+let catFilter = null;         // category id to show in the table
+let typeFilter = "all";
+let mode = "boot", db = null;
+const now = new Date();
+let ym = {y: now.getFullYear(), m: now.getMonth()};
+
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const rub = n => (Math.round(n * 100) / 100).toLocaleString("ru-RU", {maximumFractionDigits: 2}) + " ₽";
+const todayISO = () => { const d = new Date(); d.setMinutes(d.getMinutes() - d.getTimezoneOffset()); return d.toISOString().slice(0,10); };
+const ymKey = (y, m) => `${y}-${String(m + 1).padStart(2, "0")}`;
+const monthName = (y, m) => { const s = new Date(y, m, 1).toLocaleDateString("ru-RU", {month:"long", year:"numeric"}).replace(" г.", ""); return s[0].toUpperCase() + s.slice(1); };
+const rid = () => Math.random().toString(36).slice(2,10) + Date.now().toString(36).slice(-4);
+const catName = (type, id) => (cats[type].find(c => c.id === id) || {name: "Без категории"}).name;
+
+/* ---------- storage: synced db, or this browser as a fallback ---------- */
+const LS = "budget-v1";
+function saveLocal(){ try{ localStorage.setItem(LS, JSON.stringify({ops, cats})); }catch(e){} }
+function loadLocal(){ try{ const d = JSON.parse(localStorage.getItem(LS) || "null"); if (d){ ops = d.ops || {}; if (d.cats) cats = d.cats; } }catch(e){} }
+const newId = () => mode === "db" ? db.collection("ops").doc().id : rid();
+const store = {
+  async put(id, data){ if (mode === "db"){ try{ await db.collection("ops").doc(id).set(data); }catch(e){ fail(e); } } else { ops[id] = data; saveLocal(); render(); } },
+  async del(id){ if (mode === "db"){ try{ await db.collection("ops").doc(id).delete(); }catch(e){ fail(e); } } else { delete ops[id]; saveLocal(); render(); } },
+  async setCats(c){ if (mode === "db"){ try{ await db.doc("settings/categories").set(c); }catch(e){ fail(e); } } else { cats = c; saveLocal(); render(); } }
+};
+function fail(e){
+  const n = $("#notice"); n.hidden = false;
+  n.textContent = e && e.code === "quota_exceeded" ? "Место в базе закончилось: удали старые записи, чтобы добавлять новые." : "Не получилось сохранить. Проверь интернет и попробуй ещё раз.";
+}
+function setSync(kind, text){ const s = $("#sync"); s.className = "sync " + kind; s.querySelector("span").textContent = text; }
+
+async function boot(){
+  $("#a-date").value = todayISO();
+  render();
+  let d = null;
+  try{ d = window.claude?.use ? await window.claude.use("db") : null; }catch(e){ d = null; }
+  if (!d){ mode = "local"; loadLocal(); setSync("local", "сохраняется только в этом браузере"); render(); return; }
+  db = d; mode = "db"; setSync("ok", "синхронизируется");
+  const onErr = () => setSync("", "нет связи, обнови страницу");
+  db.collection("ops").onSnapshot(snap => { const m = {}; snap.docs.forEach(x => m[x.id] = x.data()); ops = m; render(); }, onErr);
+  db.doc("settings/categories").onSnapshot(s => { const c = s.exists && s.data(); cats = (c && c.expense) ? c : structuredClone(DEFAULT_CATS); render(); }, onErr);
+}
+
+/* ---------- render ---------- */
+function monthOps(y, m){ const k = ymKey(y, m); return Object.entries(ops).filter(([,o]) => (o.date || "").startsWith(k)); }
+function totals(list){
+  let inc = 0, exp = 0; const byCat = {};
+  list.forEach(([,o]) => { const a = +o.amount || 0; if (o.type === "income") inc += a; else { exp += a; byCat[o.category] = (byCat[o.category] || 0) + a; } });
+  return {inc, exp, byCat};
+}
+
+function render(){
+  $("#mName").textContent = monthName(ym.y, ym.m);
+  renderCatSelect();
+  const list = monthOps(ym.y, ym.m);
+  const t = totals(list);
+  const pm = ym.m === 0 ? {y: ym.y - 1, m: 11} : {y: ym.y, m: ym.m - 1};
+  const prev = totals(monthOps(pm.y, pm.m));
+  const limitSum = cats.expense.reduce((s,c) => s + (+c.limit || 0), 0);
+  const rest = t.inc - t.exp;
+  const pct = limitSum ? t.exp / limitSum * 100 : null;
+  const prevName = ["январе","феврале","марте","апреле","мае","июне","июле","августе","сентябре","октябре","ноябре","декабре"][pm.m];
+  $("#tiles").innerHTML = `
+    <div class="tile"><span>Доходы</span><b class="num">${rub(t.inc)}</b><small>в ${prevName}: ${rub(prev.inc)}</small></div>
+    <div class="tile"><span>Расходы</span><b class="num">${rub(t.exp)}</b><small>в ${prevName}: ${rub(prev.exp)}</small></div>
+    <div class="tile rest${rest < 0 ? " neg" : ""}"><span>Остаток</span><b class="num">${rub(rest)}</b><small>доходы минус расходы</small></div>
+    <div class="tile"><span>Лимиты на месяц</span>${limitSum
+      ? `<b class="num">${Math.round(pct)}%</b><div class="meter"><i class="${pct > 100 ? "over" : ""}" style="width:${Math.min(100, pct)}%"></i></div><small class="num">${rub(t.exp)} из ${rub(limitSum)}</small>`
+      : `<b>—</b><small>задай лимиты в «категории и лимиты»</small>`}</div>`;
+  renderCats(t);
+  renderOps(list);
+}
+
+function renderCatSelect(){
+  const sel = $("#a-cat"), keep = sel.value;
+  sel.innerHTML = cats[addType].map(c => `<option value="${esc(c.id)}">${esc(c.name)}</option>`).join("");
+  if ([...sel.options].some(o => o.value === keep)) sel.value = keep;
+}
+
+function renderCats(t){
+  const rows = cats.expense.map(c => ({...c, spent: t.byCat[c.id] || 0}));
+  const known = new Set(cats.expense.map(c => c.id));
+  const orphan = Object.entries(t.byCat).filter(([id]) => !known.has(id)).reduce((s,[,v]) => s + v, 0);
+  if (orphan) rows.push({id:"__none", name:"Без категории", limit:null, spent: orphan});
+  rows.sort((a,b) => b.spent - a.spent || (+b.limit || 0) - (+a.limit || 0));
+  const max = Math.max(1, ...rows.map(r => Math.max(r.spent, +r.limit || 0)));
+  const visible = rows.filter(r => r.spent || r.limit);
+  $("#cats").innerHTML = visible.length ? visible.map(r => {
+    const over = r.limit && r.spent > r.limit;
+    return `<div class="cat" role="button" tabindex="0" data-cat="${esc(r.id)}" aria-pressed="${catFilter === r.id}" title="${esc(r.name)}: ${rub(r.spent)}${r.limit ? " из " + rub(r.limit) : ""}">
+      <span class="nm">${esc(r.name)} ${over ? `<span class="flag">превышен на ${rub(r.spent - r.limit)}</span>` : ""}</span>
+      <span class="vl num"><b>${rub(r.spent)}</b>${r.limit ? ` / ${rub(r.limit)}` : ""}</span>
+      <span class="track"><i class="${over ? "over" : ""}" style="width:${r.spent / max * 100}%"></i>${r.limit ? `<s style="left:calc(${r.limit / max * 100}% - 1px)"></s>` : ""}</span>
+    </div>`; }).join("")
+    : `<div class="empty"><span class="v">пока пусто</span>Добавь первую трату в форме выше</div>`;
+}
+
+function renderOps(list){
+  $("#filters").innerHTML = [["all","все"],["expense","расходы"],["income","доходы"]].map(([k,n]) => `<button type="button" data-tf="${k}" aria-pressed="${typeFilter === k && !catFilter}">${n}</button>`).join("") +
+    (catFilter ? `<button type="button" data-clearcat aria-pressed="true">${esc(catFilter === "__none" ? "Без категории" : catName("expense", catFilter))} ✕</button>` : "");
+  let rows = list.filter(([,o]) => catFilter
+    ? o.type !== "income" && (catFilter === "__none" ? !cats.expense.some(c => c.id === o.category) : o.category === catFilter)
+    : typeFilter === "all" || o.type === typeFilter);
+  rows.sort((a,b) => (b[1].date || "").localeCompare(a[1].date || "") || (b[1].createdAt || 0) - (a[1].createdAt || 0));
+  if (!rows.length){ $("#ops").innerHTML = `<div class="empty"><span class="v">пусто</span>В этом месяце записей нет</div>`; return; }
+  let html = "<table><tbody>", day = null;
+  rows.forEach(([id,o]) => {
+    if (o.date !== day){
+      day = o.date;
+      const dayExp = rows.filter(([,q]) => q.date === day && q.type !== "income").reduce((s,[,q]) => s + (+q.amount || 0), 0);
+      const label = new Date(day + "T12:00").toLocaleDateString("ru-RU", {day:"numeric", month:"long", weekday:"short"});
+      html += `<tr class="day"><td colspan="2">${esc(label)}</td><td class="r num">${dayExp ? "−" + rub(dayExp) : ""}</td></tr>`;
+    }
+    const inc = o.type === "income";
+    html += `<tr class="op" data-op="${esc(id)}" tabindex="0">
+      <td><span class="cchip${inc ? " inc" : ""}">${esc(catName(inc ? "income" : "expense", o.category))}</span></td>
+      <td class="note">${esc(o.note || "")}</td>
+      <td class="r sum num${inc ? " inc" : ""}">${inc ? "+" : "−"}${rub(+o.amount || 0)}</td></tr>`;
+  });
+  $("#ops").innerHTML = html + "</tbody></table>";
+}
+
+/* ---------- dialogs ---------- */
+function closeModal(){ $("#modal").innerHTML = ""; }
+function openModal(html, onReady){
+  $("#modal").innerHTML = `<div class="shade" data-close></div><div class="dlg" role="dialog" aria-modal="true">${html}</div>`;
+  onReady && onReady($("#modal .dlg"));
+  setTimeout(() => $("#modal .dlg input")?.focus(), 0);
+}
+
+function editOp(id){
+  const o = ops[id]; if (!o) return;
+  let type = o.type === "income" ? "income" : "expense";
+  const opts = t => cats[t].map(c => `<option value="${esc(c.id)}"${c.id === o.category ? " selected" : ""}>${esc(c.name)}</option>`).join("");
+  openModal(`
+    <h2>Запись <span class="v">${type === "income" ? "доход" : "расход"}</span></h2>
+    <div class="fld"><span class="lbl">Что</span><div class="seg" id="e-type" style="align-self:flex-start"><button type="button" data-t="expense" aria-pressed="${type === "expense"}">Расход</button><button type="button" class="inc" data-t="income" aria-pressed="${type === "income"}">Доход</button></div></div>
+    <div class="row2">
+      <div class="fld"><label for="e-sum">Сумма, ₽</label><input id="e-sum" type="number" min="0" step="any" value="${esc(o.amount)}"></div>
+      <div class="fld"><label for="e-date">Дата</label><input id="e-date" type="date" value="${esc(o.date)}"></div>
+    </div>
+    <div class="fld"><label for="e-cat">Категория</label><select id="e-cat">${opts(type)}</select></div>
+    <div class="fld"><label for="e-note">Комментарий</label><input id="e-note" maxlength="200" value="${esc(o.note || "")}"></div>
+    <div class="dlg-foot">
+      <button type="button" class="btn btn-line" id="e-del">Удалить</button>
+      <div class="r"><button type="button" class="btn btn-line" data-close>Отмена</button><button type="button" class="btn btn-ink" id="e-save">Сохранить</button></div>
+    </div>`, dlg => {
+      dlg.querySelector("#e-type").addEventListener("click", e => { const b = e.target.closest("[data-t]"); if (!b) return; type = b.dataset.t;
+        dlg.querySelectorAll("#e-type button").forEach(q => q.setAttribute("aria-pressed", q.dataset.t === type));
+        dlg.querySelector("#e-cat").innerHTML = opts(type); });
+      dlg.querySelector("#e-del").addEventListener("click", e => { const b = e.currentTarget;
+        if (b.dataset.sure){ store.del(id); closeModal(); } else { b.dataset.sure = 1; b.textContent = "Точно удалить?"; b.className = "btn btn-danger"; } });
+      dlg.querySelector("#e-save").addEventListener("click", () => {
+        const amount = +dlg.querySelector("#e-sum").value; if (!(amount > 0)) return dlg.querySelector("#e-sum").focus();
+        store.put(id, {...o, type, amount, date: dlg.querySelector("#e-date").value || todayISO(), category: dlg.querySelector("#e-cat").value, note: dlg.querySelector("#e-note").value.trim(), updatedAt: Date.now()});
+        closeModal();
+      });
+  });
+}
+
+function editCats(){
+  const draft = structuredClone(cats);
+  const rowsHTML = () => `
+    <span class="lbl">Расходы</span>
+    <div class="cat-h"><span>Категория</span><span>Лимит, ₽/мес</span><span></span></div>
+    <div class="catlist">${draft.expense.map((c,i) => `<div class="catrow"><input data-ex="${i}" data-f="name" value="${esc(c.name)}" maxlength="40" aria-label="Название категории"><input data-ex="${i}" data-f="limit" type="number" min="0" value="${c.limit ?? ""}" placeholder="без лимита" aria-label="Лимит"><button type="button" class="x" data-rmex="${i}" aria-label="Удалить категорию">✕</button></div>`).join("")}</div>
+    <button type="button" class="link" data-addex style="align-self:flex-start">+ категория расходов</button>
+    <span class="lbl" style="margin-top:8px">Доходы</span>
+    <div class="catlist">${draft.income.map((c,i) => `<div class="catrow" style="grid-template-columns:1fr 34px"><input data-in="${i}" value="${esc(c.name)}" maxlength="40" aria-label="Название категории дохода"><button type="button" class="x" data-rmin="${i}" aria-label="Удалить категорию">✕</button></div>`).join("")}</div>
+    <button type="button" class="link" data-addin style="align-self:flex-start">+ категория доходов</button>`;
+  openModal(`<h2>Категории <span class="v">и лимиты</span></h2>
+    <p class="sub">Лимит — сколько хочешь тратить на категорию за месяц. Можно оставить пустым.</p>
+    <div id="c-body" style="display:flex;flex-direction:column;gap:8px">${rowsHTML()}</div>
+    <div class="dlg-foot"><span></span><div class="r"><button type="button" class="btn btn-line" data-close>Отмена</button><button type="button" class="btn btn-ink" id="c-save">Сохранить</button></div></div>`, dlg => {
+      const body = dlg.querySelector("#c-body");
+      const redraw = () => { body.innerHTML = rowsHTML(); };
+      body.addEventListener("input", e => {
+        const t = e.target;
+        if (t.dataset.ex != null){ const c = draft.expense[+t.dataset.ex]; if (t.dataset.f === "name") c.name = t.value; else c.limit = t.value === "" ? null : Math.max(0, +t.value); }
+        if (t.dataset.in != null) draft.income[+t.dataset.in].name = t.value;
+      });
+      body.addEventListener("click", e => {
+        const t = e.target;
+        if (t.closest("[data-addex]")){ draft.expense.push({id: "c" + rid(), name: "", limit: null}); redraw(); body.querySelector(`[data-ex="${draft.expense.length - 1}"]`).focus(); }
+        if (t.closest("[data-addin]")){ draft.income.push({id: "i" + rid(), name: ""}); redraw(); body.querySelector(`[data-in="${draft.income.length - 1}"]`).focus(); }
+        const rx = t.closest("[data-rmex]"); if (rx){ draft.expense.splice(+rx.dataset.rmex, 1); redraw(); }
+        const ri = t.closest("[data-rmin]"); if (ri){ draft.income.splice(+ri.dataset.rmin, 1); redraw(); }
+      });
+      dlg.querySelector("#c-save").addEventListener("click", () => {
+        draft.expense = draft.expense.filter(c => c.name.trim()).map(c => ({...c, name: c.name.trim()}));
+        draft.income = draft.income.filter(c => c.name.trim()).map(c => ({...c, name: c.name.trim()}));
+        if (!draft.expense.length || !draft.income.length) return;
+        store.setCats(draft); closeModal();
+      });
+  });
+}
+
+/* ---------- events ---------- */
+$("#prevM").addEventListener("click", () => { ym = ym.m === 0 ? {y: ym.y - 1, m: 11} : {y: ym.y, m: ym.m - 1}; catFilter = null; render(); });
+$("#nextM").addEventListener("click", () => { ym = ym.m === 11 ? {y: ym.y + 1, m: 0} : {y: ym.y, m: ym.m + 1}; catFilter = null; render(); });
+$("#typeSeg").addEventListener("click", e => { const b = e.target.closest("[data-t]"); if (!b) return; addType = b.dataset.t;
+  $("#typeSeg").querySelectorAll("button").forEach(q => q.setAttribute("aria-pressed", q.dataset.t === addType)); renderCatSelect(); });
+$("#addForm").addEventListener("submit", e => {
+  e.preventDefault();
+  const amount = +$("#a-sum").value; if (!(amount > 0)) return $("#a-sum").focus();
+  const date = $("#a-date").value || todayISO();
+  store.put(newId(), {type: addType, amount, category: $("#a-cat").value, date, note: $("#a-note").value.trim(), createdAt: Date.now()});
+  $("#a-sum").value = ""; $("#a-note").value = "";
+  const [y, m] = date.split("-").map(Number);
+  if (y !== ym.y || m - 1 !== ym.m){ ym = {y, m: m - 1}; render(); }
+  $("#a-sum").focus();
+});
+$("#editCats").addEventListener("click", editCats);
+document.addEventListener("click", e => {
+  const t = e.target;
+  if (t.closest("[data-close]")) return closeModal();
+  const c = t.closest("[data-cat]"); if (c){ catFilter = catFilter === c.dataset.cat ? null : c.dataset.cat; render(); return; }
+  const tf = t.closest("[data-tf]"); if (tf){ typeFilter = tf.dataset.tf; catFilter = null; render(); return; }
+  if (t.closest("[data-clearcat]")){ catFilter = null; render(); return; }
+  const op = t.closest("[data-op]"); if (op) return editOp(op.dataset.op);
+});
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape" && $("#modal").innerHTML) return closeModal();
+  if (e.key === "Enter" || e.key === " "){
+    const c = e.target.closest?.("[data-cat]"); if (c){ e.preventDefault(); c.click(); }
+    const op = e.target.closest?.("[data-op]"); if (op){ e.preventDefault(); editOp(op.dataset.op); }
+  }
+});
+
+boot();
+</script>
+</body>
+</html>

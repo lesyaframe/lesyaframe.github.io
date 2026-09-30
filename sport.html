@@ -1,0 +1,501 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Лесин спорт</title>
+<meta name="theme-color" content="#3B1B14">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Хаб">
+<style>
+html{background:#3B1B14}
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{margin:0;font:14px/1.4 system-ui,-apple-system,sans-serif;background:#F7F0DA}
+img{max-width:100%}
+[hidden]{display:none!important}
+</style>
+<script src="firebase-config.js?v=20260930093126"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+<script src="portal.js?v=20260930093126" data-app="sport"></script>
+</head>
+<body>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap">
+<style>
+@font-face{font-family:"Vasek";src:url("fonts/Vasek.ttf") format("truetype");font-display:swap}
+/* shared look of the hub mini-apps, inlined by build.py */
+:root{
+  color-scheme:light;
+  --choco:#3B1B14;--choco-2:#4E251B;--ink:#250A0A;--paper:#F7F0DA;--cream:#F5EDC9;
+  --butter:#F1EA91;--olive:#737038;--olive-2:#817E45;--sky:#A6BFD2;--sky-2:#BCCFDD;--muted:#6B5550;
+  --line:rgba(37,10,10,.14);--red:#A8432F;--green:#5E7A3A;--rose:#E4CFC7;
+  --sans:"Inter","Helvetica Neue",Arial,sans-serif;
+  --script:"Vasek","Segoe Script","Brush Script MT",cursive;
+  --gutter:clamp(16px,3vw,40px);
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:repeating-linear-gradient(transparent 0 35px,rgba(166,191,210,.35) 35px 36px),var(--paper);color:var(--ink);font-family:var(--sans);font-size:14px;line-height:1.38;letter-spacing:-.012em;-webkit-font-smoothing:antialiased;min-height:100vh}
+button,input,select,textarea{font:inherit;color:inherit;letter-spacing:inherit}
+a{color:inherit}
+h1,h2,h3,p{margin:0}
+h1,h2,h3{font-weight:800;letter-spacing:-.055em;line-height:.92;text-wrap:balance}
+.v{font-family:var(--script);font-weight:400;letter-spacing:0;line-height:.8}
+:focus-visible{outline:2px dashed currentColor;outline-offset:2px}
+.num{font-variant-numeric:tabular-nums}
+
+/* header */
+.top{background:repeating-linear-gradient(90deg,rgba(0,0,0,.2) 0 2px,transparent 2px 7px),var(--choco);color:var(--paper);padding:18px var(--gutter) 0}
+.top-in{max-width:1300px;margin-inline:auto}
+.top-row{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:14px;padding-bottom:18px}
+.top.tabbed .top-row{padding-bottom:0}
+.back{font-size:13px;font-weight:600;text-decoration:none;opacity:.7}
+.back:hover{opacity:1}
+.top h1{font-size:clamp(40px,5vw,68px);font-weight:900;letter-spacing:-.065em;margin-top:10px}
+.top h1 .v{color:var(--butter);font-size:.95em;margin-left:.15em;display:inline-block;rotate:-5deg}
+.top-r{display:flex;flex-direction:column;align-items:flex-end;gap:10px}
+.sync{font-size:12px;opacity:.7;display:flex;align-items:center;gap:7px}
+.sync i{width:8px;height:8px;border-radius:50%;background:#d6cfae}
+.sync.ok i{background:#9bc27a}
+.sync.local i{background:var(--butter)}
+.tabs{display:flex;flex-wrap:wrap;align-items:flex-end;gap:4px;margin-top:20px}
+.tab{border:0;cursor:pointer;padding:11px 16px 12px;border-radius:10px 10px 0 0;background:rgba(247,240,218,.14);color:var(--paper);font-weight:700;font-size:14px;display:flex;align-items:center;gap:8px;transition:background .2s;text-decoration:none}
+.tab:hover{background:rgba(247,240,218,.25)}
+.tab[aria-selected="true"]{background:var(--paper);color:var(--ink)}
+.tab .c{font-size:11px;font-weight:600;opacity:.6}
+
+main{max-width:1300px;margin-inline:auto;padding:24px var(--gutter) 60px;display:flex;flex-direction:column;gap:22px}
+.notice{background:var(--butter);padding:10px 14px;border-radius:8px;font-size:13px}
+
+/* building blocks */
+.panel{background:#fff;border-radius:12px;padding:18px 18px 16px;box-shadow:0 12px 20px -18px rgba(37,10,10,.55);display:flex;flex-direction:column;gap:12px;min-width:0}
+.panel-h{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}
+.panel-h h2{font-size:28px}
+.panel-h h2 .v{color:var(--olive);font-size:1.1em;margin-left:.05em}
+.tape{position:absolute;width:86px;height:22px;top:-10px;left:36px;rotate:-3deg;background:rgba(241,234,145,.9);z-index:2}
+.tape.dots{background:radial-gradient(circle,#3B1B14 1.5px,transparent 2px) 0 0/8px 8px,rgba(247,240,218,.92)}
+.tiles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.tile{background:#fff;border-radius:10px;padding:16px 18px 14px;display:flex;flex-direction:column;gap:6px;box-shadow:0 10px 18px -16px rgba(37,10,10,.5)}
+.tile span{font-size:12px;font-weight:600;color:var(--muted)}
+.tile b{font-size:clamp(26px,3vw,38px);font-weight:900;letter-spacing:-.06em;line-height:1}
+.tile small{font-size:12px;color:var(--muted)}
+.tile.hl{background:var(--butter)}
+.tile.sky{background:var(--sky-2)}
+@media (max-width:860px){.tiles{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.chip{display:inline-flex;align-items:center;font-size:11px;font-weight:700;padding:3px 8px;border-radius:999px;white-space:nowrap;background:var(--paper);color:var(--ink)}
+.chip.red{background:var(--red);color:#fff}
+.chip.olive{background:var(--olive);color:var(--paper)}
+.chip.butter{background:var(--butter)}
+.chip.sky{background:var(--sky-2)}
+.chip.rose{background:var(--rose)}
+.chip.ink{background:var(--ink);color:var(--paper)}
+.btn{border:0;cursor:pointer;border-radius:999px;padding:10px 18px;font-weight:700;font-size:13px;display:inline-flex;align-items:center;gap:6px;text-decoration:none}
+.btn-ink{background:var(--ink);color:var(--paper)}
+.btn-butter{background:var(--butter);color:var(--ink)}
+.btn-line{background:transparent;border:1.5px solid var(--ink);color:var(--ink)}
+.btn-danger{background:var(--red);color:#fff}
+.btn-green{background:var(--green);color:#fff}
+.btn:hover{filter:brightness(1.08)}
+.btn:disabled{opacity:.45;cursor:default;filter:none}
+.link{border:0;background:none;padding:0;font-size:13px;font-weight:600;text-decoration:underline;text-underline-offset:3px;cursor:pointer;color:var(--muted)}
+.link:hover{color:var(--ink)}
+.seg{display:flex;flex-wrap:wrap;gap:6px}
+.seg button{border:1.5px solid var(--ink);background:transparent;border-radius:999px;padding:6px 12px;font-size:13px;font-weight:600;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.fld{display:flex;flex-direction:column;gap:5px;min-width:0}
+.fld label,.lbl{font-size:12px;font-weight:700;color:var(--muted)}
+.fld input,.fld select,.fld textarea{border:1.5px solid var(--line);background:#fff;border-radius:8px;padding:9px 11px;width:100%}
+.fld textarea{min-height:76px;resize:vertical}
+.fld input:focus,.fld select:focus,.fld textarea:focus{border-color:var(--ink);outline:none}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.row3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.empty{font-size:13px;color:var(--muted);text-align:center;padding:24px 10px;border:1.5px dashed var(--line);border-radius:8px}
+.empty .v{display:block;font-size:32px;margin-bottom:6px;color:var(--olive)}
+.ck{all:unset;cursor:pointer;flex:none;width:18px;height:18px;border:1.5px solid var(--ink);border-radius:5px;box-sizing:border-box;background:#fff}
+.ck:focus-visible{outline:2px dashed var(--ink);outline-offset:2px}
+.ck.on{background:var(--ink) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3.5 8.5l3 3 6-7' stroke='%23F7F0DA' stroke-width='2' fill='none'/%3E%3C/svg%3E") center/100%}
+.x{all:unset;cursor:pointer;font-size:13px;color:var(--muted);opacity:.5;padding:2px 4px;border-radius:4px}
+.x:hover{opacity:1;color:var(--red)}
+.x:focus-visible{opacity:1;outline:2px dashed var(--ink)}
+
+/* dialog */
+.shade{position:fixed;inset:0;background:rgba(37,10,10,.45);z-index:90}
+.dlg{position:fixed;left:50%;top:50%;translate:-50% -50%;z-index:91;width:min(560px,calc(100% - 32px));max-height:calc(100% - 40px);overflow-y:auto;background:var(--paper);border-radius:14px;padding:26px 24px 22px;box-shadow:0 40px 70px -30px rgba(0,0,0,.7);display:flex;flex-direction:column;gap:14px}
+.dlg.wide{width:min(760px,calc(100% - 32px))}
+.dlg h2{font-size:32px}
+.dlg h2 .v{color:var(--olive);font-size:1.1em;margin-left:.06em}
+.dlg-foot{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-top:4px}
+.dlg-foot .r{display:flex;gap:8px;margin-left:auto}
+.sub{font-size:13px;color:var(--muted)}
+@media (max-width:560px){.row2,.row3{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+.week{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px}
+.wday{background:#fff;border-radius:10px;padding:10px 8px;display:flex;flex-direction:column;align-items:center;gap:6px;min-height:92px;box-shadow:0 8px 14px -12px rgba(37,10,10,.5)}
+.wday.today{outline:2px solid var(--ink)}
+.wday .d{font-size:11px;font-weight:700;color:var(--muted);text-transform:lowercase}
+.wday b{font-size:20px;font-weight:900;letter-spacing:-.05em}
+.wday .dots{display:flex;flex-wrap:wrap;justify-content:center;gap:3px}
+.wday .dots i{width:10px;height:10px;border-radius:50%;background:var(--t,var(--olive))}
+.wday.has{background:var(--butter)}
+.goalbar{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.goalbar .pips{display:flex;gap:6px}
+.goalbar .pips i{width:26px;height:10px;border-radius:5px;background:rgba(37,10,10,.1)}
+.goalbar .pips i.on{background:var(--olive)}
+.cols{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:22px;align-items:start}
+@media (max-width:960px){.cols{grid-template-columns:1fr}}
+.wk-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px}
+.wk{position:relative;border-radius:10px;padding:16px 16px 14px;display:flex;flex-direction:column;gap:8px;background:var(--bg,var(--cream));min-height:170px}
+.wk h3{font-size:22px;padding-right:24px}
+.wk .meta{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:12px;color:var(--muted)}
+.wk ul{margin:0;padding-left:16px;font-size:13px;color:var(--muted);display:flex;flex-direction:column;gap:2px}
+.wk .acts{margin-top:auto;display:flex;justify-content:space-between;align-items:center;gap:8px;padding-top:6px}
+.wk .edit{position:absolute;top:10px;right:10px}
+.t-strength{--bg:var(--butter);--t:#8B7F2E}
+.t-cardio{--bg:var(--sky-2);--t:#5A7E9C}
+.t-stretch{--bg:var(--rose);--t:#A26A5B}
+.t-yoga{--bg:#DDE6CF;--t:var(--green)}
+.t-walk{--bg:var(--cream);--t:var(--olive)}
+.t-other{--bg:#EDE4D8;--t:var(--muted)}
+.wk-new{border:1.5px dashed var(--line);background:transparent;align-items:center;justify-content:center;cursor:pointer;font-weight:700;color:var(--muted)}
+.wk-new:hover{border-color:var(--ink);color:var(--ink)}
+/* calendar */
+.cal-h{display:flex;align-items:center;gap:8px}
+.cal-h button{border:0;background:var(--paper);width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:15px}
+.cal-h b{font-size:15px;min-width:120px;text-align:center}
+.mcal{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.mcal .h{font-size:10px;font-weight:700;color:var(--muted);text-align:center;text-transform:uppercase}
+.mcal .c{aspect-ratio:1;border-radius:7px;background:var(--paper);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:12px;font-weight:600;position:relative}
+.mcal .c.out{visibility:hidden}
+.mcal .c.today{outline:2px solid var(--ink)}
+.mcal .c.has{background:var(--olive);color:var(--paper)}
+.mcal .c.has2{background:var(--choco);color:var(--paper)}
+.log{display:flex;flex-direction:column;gap:6px}
+.log button{all:unset;cursor:pointer;display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;padding:9px 10px;border-radius:8px;background:var(--paper)}
+.log button:hover{background:var(--butter)}
+.log .dt{font-size:12px;font-weight:700;color:var(--muted);min-width:64px}
+.log .nm{font-weight:700;font-size:14px;letter-spacing:-.02em}
+.log .nm small{display:block;font-weight:500;color:var(--muted);font-size:12px}
+.log .mn{font-size:13px;font-weight:700;white-space:nowrap}
+/* session */
+.sess{position:fixed;inset:0;z-index:95;background:var(--choco);color:var(--paper);display:flex;flex-direction:column;overflow:auto;padding:calc(24px + env(safe-area-inset-top,0px)) var(--gutter) calc(24px + env(safe-area-inset-bottom,0px))}
+.sess-in{max-width:760px;width:100%;margin-inline:auto;display:flex;flex-direction:column;gap:20px}
+.sess-top{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;flex-wrap:wrap}
+.sess h2{font-size:clamp(34px,5vw,56px);font-weight:900;letter-spacing:-.06em}
+.sess .lbl{color:rgba(247,240,218,.7)}
+.timer{font-size:clamp(56px,10vw,110px);font-weight:900;letter-spacing:-.06em;line-height:.9;color:var(--butter)}
+.sess-list{display:flex;flex-direction:column;gap:8px}
+.sess-list button{all:unset;cursor:pointer;display:grid;grid-template-columns:28px 1fr auto;gap:12px;align-items:center;background:rgba(247,240,218,.1);border-radius:10px;padding:14px 16px;font-size:17px;font-weight:700;letter-spacing:-.02em}
+.sess-list button:hover{background:rgba(247,240,218,.18)}
+.sess-list button .box{width:26px;height:26px;border-radius:7px;border:2px solid var(--paper)}
+.sess-list button.on{background:var(--butter);color:var(--ink)}
+.sess-list button.on .box{border-color:var(--ink);background:var(--ink) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3.5 8.5l3 3 6-7' stroke='%23F1EA91' stroke-width='2' fill='none'/%3E%3C/svg%3E") center/100%}
+.sess-list button span:last-child{font-size:14px;font-weight:600;opacity:.75}
+.sess-foot{display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;align-items:center}
+.sess .btn-line{border-color:var(--paper);color:var(--paper)}
+.exrow{display:grid;grid-template-columns:1fr 140px 30px;gap:8px;align-items:center}
+.exrow input{border:1.5px solid var(--line);background:#fff;border-radius:8px;padding:8px 10px;width:100%}
+.exlist{display:flex;flex-direction:column;gap:6px}
+</style>
+
+<header class="top">
+  <div class="top-in">
+    <div class="top-row">
+      <div>
+        <a class="back" href="index.html">← в хаб</a>
+        <h1>Спорт<span class="v">двигаться</span></h1>
+      </div>
+      <div class="top-r">
+        <div class="sync" id="sync"><i></i><span>подключаюсь…</span></div>
+        <button type="button" class="btn btn-butter" id="quickLog">+ отметить активность</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="notice" id="notice" hidden></div>
+  <section class="tiles" id="tiles"></section>
+  <section class="panel">
+    <div class="panel-h"><h2>Эта <span class="v">неделя</span></h2><div class="goalbar" id="goalbar"></div></div>
+    <div class="week" id="week"></div>
+  </section>
+  <div class="cols">
+    <section class="panel">
+      <div class="panel-h"><h2>Выбери <span class="v">тренировку</span></h2></div>
+      <div class="wk-grid" id="wks"></div>
+    </section>
+    <section class="panel">
+      <div class="panel-h"><h2>Мои <span class="v">тренировки</span></h2><div class="cal-h"><button type="button" id="mPrev" aria-label="Прошлый месяц">‹</button><b id="mName"></b><button type="button" id="mNext" aria-label="Следующий месяц">›</button></div></div>
+      <div class="mcal" id="mcal"></div>
+      <div class="log" id="log"></div>
+    </section>
+  </div>
+</main>
+
+<div class="sess" id="sess" hidden role="dialog" aria-modal="true" aria-label="Тренировка"></div>
+<div id="modal"></div>
+
+<script>
+/* shared helpers of the hub mini-apps, inlined by build.py */
+const HUB = "index.html";
+const MON_G = ["января","февраля","марта","апреля","мая","июня","июля","августа","сентября","октября","ноября","декабря"];
+const MON_N = ["Январь","Февраль","Март","Апрель","Май","Июнь","Июль","Август","Сентябрь","Октябрь","Ноябрь","Декабрь"];
+const WD_S = ["вс","пн","вт","ср","чт","пт","сб"];
+const $ = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const iso = d => { const x = new Date(d); x.setMinutes(x.getMinutes() - x.getTimezoneOffset()); return x.toISOString().slice(0,10); };
+const todayISO = () => iso(new Date());
+const addDays = (s, n) => { const d = new Date(s + "T12:00"); d.setDate(d.getDate() + n); return iso(d); };
+const daysBetween = (a, b) => Math.round((new Date(b + "T12:00") - new Date(a + "T12:00")) / 864e5);
+const weekOf = s => { const d = new Date(s + "T12:00"); return addDays(s, -((d.getDay() + 6) % 7)); };
+const dmy = s => { if (!s) return ""; const d = new Date(s + "T12:00"); return d.getDate() + " " + MON_G[d.getMonth()]; };
+const dshort = s => { if (!s) return ""; const d = new Date(s + "T12:00"); return d.getDate() + " " + MON_G[d.getMonth()].slice(0,3); };
+const wd = s => WD_S[new Date(s + "T12:00").getDay()];
+const rid = () => Math.random().toString(36).slice(2,10) + Date.now().toString(36).slice(-4);
+const rub = n => (Math.round(n * 100) / 100).toLocaleString("ru-RU", {maximumFractionDigits: 2}) + " ₽";
+const plural = (n, a, b, c) => { const m = Math.abs(n) % 100, k = m % 10; return m > 10 && m < 20 ? c : k === 1 ? a : k > 1 && k < 5 ? b : c; };
+const relDay = s => { const n = daysBetween(todayISO(), s); return n === 0 ? "сегодня" : n === 1 ? "завтра" : n === -1 ? "вчера" : n > 1 ? `через ${n} ${plural(n,"день","дня","дней")}` : `${-n} ${plural(-n,"день","дня","дней")} назад`; };
+
+/* storage: the artifact's synced db, or this browser as a fallback */
+function makeStore({key, cols = [], docs = {}, onChange}){
+  const st = {mode: "boot", db: null, data: {}, docs: {}};
+  cols.forEach(c => st.data[c] = {});
+  Object.entries(docs).forEach(([p, def]) => st.docs[p] = structuredClone(def));
+  const saveLocal = () => { try{ localStorage.setItem(key, JSON.stringify({data: st.data, docs: st.docs})); }catch(e){} };
+  const fail = e => { const n = $("#notice"); if (!n) return; n.hidden = false;
+    n.textContent = e && e.code === "quota_exceeded" ? "Место в базе закончилось: удали старые записи, чтобы добавлять новые." : "Не получилось сохранить. Проверь интернет и попробуй ещё раз."; };
+  const sync = (kind, text) => { const s = $("#sync"); if (!s) return; s.className = "sync " + kind; s.querySelector("span").textContent = text; };
+  st.newId = col => st.mode === "db" ? st.db.collection(col).doc().id : rid();
+  st.put = async (col, id, d) => { if (st.mode === "db"){ try{ await st.db.collection(col).doc(id).set(d); }catch(e){ fail(e); } } else { st.data[col][id] = d; saveLocal(); onChange(); } };
+  st.del = async (col, id) => { if (st.mode === "db"){ try{ await st.db.collection(col).doc(id).delete(); }catch(e){ fail(e); } } else { delete st.data[col][id]; saveLocal(); onChange(); } };
+  st.setDoc = async (p, d) => { if (st.mode === "db"){ try{ await st.db.doc(p).set(d); }catch(e){ fail(e); } } else { st.docs[p] = d; saveLocal(); onChange(); } };
+  st.list = col => Object.entries(st.data[col]);
+  st.boot = async () => {
+    onChange();
+    let d = null;
+    try{ d = window.claude?.use ? await window.claude.use("db") : null; }catch(e){ d = null; }
+    if (!d){
+      st.mode = "local";
+      try{ const l = JSON.parse(localStorage.getItem(key) || "null"); if (l){ Object.assign(st.data, l.data || {}); Object.assign(st.docs, l.docs || {}); } }catch(e){}
+      sync("local", "сохраняется только в этом браузере"); onChange(); return;
+    }
+    st.db = d; st.mode = "db"; sync("ok", "синхронизируется");
+    const onErr = () => sync("", "нет связи, обнови страницу");
+    cols.forEach(c => d.collection(c).onSnapshot(snap => { const m = {}; snap.docs.forEach(x => m[x.id] = x.data()); st.data[c] = m; onChange(); }, onErr));
+    Object.entries(docs).forEach(([p, def]) => d.doc(p).onSnapshot(s => { st.docs[p] = s.exists ? s.data() : structuredClone(def); onChange(); }, onErr));
+  };
+  return st;
+}
+
+/* dialogs */
+function closeModal(){ const m = $("#modal"); if (m) m.innerHTML = ""; }
+function openModal(html, onReady, cls = ""){
+  $("#modal").innerHTML = `<div class="shade" data-close></div><div class="dlg ${cls}" role="dialog" aria-modal="true">${html}</div>`;
+  const dlg = $("#modal .dlg");
+  onReady && onReady(dlg);
+  setTimeout(() => dlg.querySelector("input,textarea,select")?.focus(), 0);
+  return dlg;
+}
+/* a delete button that asks once more before acting */
+function armDelete(btn, action){
+  btn.addEventListener("click", () => {
+    if (btn.dataset.sure){ action(); closeModal(); }
+    else { btn.dataset.sure = 1; btn.textContent = "Точно удалить?"; btn.className = "btn btn-danger"; }
+  });
+}
+/* toggle buttons inside a .seg; returns a getter */
+function segPick(root, attr, initial, allowNone = false){
+  let val = initial;
+  const paint = () => root.querySelectorAll(`[${attr}]`).forEach(b => b.setAttribute("aria-pressed", b.getAttribute(attr) === val));
+  root.addEventListener("click", e => { const b = e.target.closest(`[${attr}]`); if (!b) return; const v = b.getAttribute(attr); val = allowNone && val === v ? "" : v; paint(); });
+  paint();
+  return () => val;
+}
+document.addEventListener("click", e => { if (e.target.closest("[data-close]")) closeModal(); });
+document.addEventListener("keydown", e => { if (e.key === "Escape" && $("#modal")?.innerHTML) closeModal(); });
+
+const TYPES = [
+  {id:"strength", name:"силовая"}, {id:"cardio", name:"кардио"}, {id:"stretch", name:"растяжка"},
+  {id:"yoga", name:"йога"}, {id:"walk", name:"прогулка"}, {id:"other", name:"другое"}
+];
+const FEEL = [{id:"easy", name:"легко"}, {id:"ok", name:"норм"}, {id:"hard", name:"тяжело"}];
+const tName = id => (TYPES.find(t => t.id === id) || TYPES[5]).name;
+const store = makeStore({key:"sport-v1", cols:["workouts","logs"], docs:{"settings/goal":{perWeek:3}}, onChange: render});
+let calYM = {y: new Date().getFullYear(), m: new Date().getMonth()};
+
+function render(){
+  const logs = store.list("logs"), t0 = todayISO(), w0 = weekOf(t0);
+  const perWeek = +store.docs["settings/goal"].perWeek || 3;
+  const inWeek = logs.filter(([,l]) => l.date >= w0 && l.date <= addDays(w0, 6));
+  const mk = t0.slice(0,7), inMonth = logs.filter(([,l]) => (l.date || "").startsWith(mk));
+  const mins = inMonth.reduce((s,[,l]) => s + (+l.minutes || 0), 0);
+  const days = new Set(inMonth.map(([,l]) => l.date)).size;
+  // weeks in a row with the goal reached (the current week counts once reached)
+  let streak = 0, w = inWeek.length >= perWeek ? w0 : addDays(w0, -7);
+  for (;;){ const n = logs.filter(([,l]) => l.date >= w && l.date <= addDays(w, 6)).length; if (n >= perWeek){ streak++; w = addDays(w, -7); } else break; if (streak > 200) break; }
+  $("#tiles").innerHTML = `
+    <div class="tile hl"><span>На этой неделе</span><b class="num">${inWeek.length} из ${perWeek}</b><small>${inWeek.length >= perWeek ? "цель недели выполнена" : `осталось ${perWeek - inWeek.length}`}</small></div>
+    <div class="tile"><span>Дней с тренировкой</span><b class="num">${days}</b><small>в ${MON_G[new Date().getMonth()].replace(/я$/,"е").replace(/а$/,"е")}</small></div>
+    <div class="tile"><span>Минут за месяц</span><b class="num">${mins}</b><small>${inMonth.length} ${plural(inMonth.length,"тренировка","тренировки","тренировок")}</small></div>
+    <div class="tile sky"><span>Недель подряд с целью</span><b class="num">${streak}</b><small>цель: ${perWeek} в неделю</small></div>`;
+  $("#goalbar").innerHTML = `<div class="pips">${Array.from({length: perWeek}, (_, i) => `<i class="${i < inWeek.length ? "on" : ""}"></i>`).join("")}</div><button type="button" class="link" id="setGoal">цель: ${perWeek} в неделю</button>`;
+  let wh = "";
+  for (let i = 0; i < 7; i++){
+    const d = addDays(w0, i), dl = logs.filter(([,l]) => l.date === d);
+    wh += `<div class="wday${d === t0 ? " today" : ""}${dl.length ? " has" : ""}"><span class="d">${wd(d)}</span><b class="num">${new Date(d + "T12:00").getDate()}</b><div class="dots">${dl.map(([,l]) => `<i class="t-${esc(l.type)}" title="${esc(l.name)}"></i>`).join("")}</div></div>`;
+  }
+  $("#week").innerHTML = wh;
+  renderWorkouts(); renderCal();
+}
+
+function renderWorkouts(){
+  const list = store.list("workouts").sort((a,b) => (a[1].createdAt || 0) - (b[1].createdAt || 0));
+  const last = id => store.list("logs").filter(([,l]) => l.workoutId === id).map(([,l]) => l.date).sort().pop();
+  $("#wks").innerHTML = list.map(([id,w]) => { const ex = w.exercises || [], l = last(id);
+    return `<article class="wk t-${esc(w.type)}">
+      <button type="button" class="link edit" data-wedit="${esc(id)}">изменить</button>
+      <h3>${esc(w.name)}</h3>
+      <div class="meta"><span class="chip">${tName(w.type)}</span>${w.minutes ? `<span>~${w.minutes} мин</span>` : ""}<span>${ex.length} ${plural(ex.length,"упражнение","упражнения","упражнений")}</span></div>
+      ${ex.length ? `<ul>${ex.slice(0,4).map(e => `<li>${esc(e.name)}${e.amount ? " — " + esc(e.amount) : ""}</li>`).join("")}${ex.length > 4 ? `<li>и ещё ${ex.length - 4}</li>` : ""}</ul>` : ""}
+      <div class="acts"><span class="sub">${l ? "была " + relDay(l) : "ещё не делала"}</span><button type="button" class="btn btn-ink" data-start="${esc(id)}">Начать ▸</button></div>
+    </article>`; }).join("") + `<button type="button" class="wk wk-new" id="newWk">+ своя тренировка</button>`;
+}
+
+function renderCal(){
+  const {y, m} = calYM, first = new Date(y, m, 1), shift = (first.getDay() + 6) % 7, dim = new Date(y, m + 1, 0).getDate();
+  $("#mName").textContent = `${MON_N[m]} ${y}`;
+  const logs = store.list("logs"), t0 = todayISO();
+  let h = ["пн","вт","ср","чт","пт","сб","вс"].map(d => `<span class="h">${d}</span>`).join("");
+  for (let i = 0; i < shift; i++) h += `<span class="c out"></span>`;
+  for (let d = 1; d <= dim; d++){
+    const ds = iso(new Date(y, m, d, 12)), n = logs.filter(([,l]) => l.date === ds).length;
+    h += `<span class="c${ds === t0 ? " today" : ""}${n > 1 ? " has2" : n ? " has" : ""}" title="${n ? n + " " + plural(n,"тренировка","тренировки","тренировок") : ""}">${d}</span>`;
+  }
+  $("#mcal").innerHTML = h;
+  const mk = `${y}-${String(m + 1).padStart(2,"0")}`;
+  const ml = logs.filter(([,l]) => (l.date || "").startsWith(mk)).sort((a,b) => (b[1].date || "").localeCompare(a[1].date || "") || (b[1].createdAt || 0) - (a[1].createdAt || 0));
+  $("#log").innerHTML = ml.length ? ml.map(([id,l]) => `<button type="button" data-ledit="${esc(id)}">
+      <span class="dt">${dshort(l.date)}, ${wd(l.date)}</span>
+      <span class="nm">${esc(l.name)}<small>${tName(l.type)}${l.feeling ? " · " + FEEL.find(f => f.id === l.feeling).name : ""}${l.total ? ` · ${l.doneCount}/${l.total} упр.` : ""}${l.note ? " · " + esc(l.note) : ""}</small></span>
+      <span class="mn num">${l.minutes ? l.minutes + " мин" : ""}</span></button>`).join("")
+    : `<div class="empty"><span class="v">пока пусто</span>Начни тренировку или отметь активность</div>`;
+}
+
+/* ---- workout editor ---- */
+function editWorkout(id){
+  const w = id ? store.data.workouts[id] : {name:"", type:"strength", minutes:"", exercises:[{name:"", amount:""}]};
+  const ex = structuredClone(w.exercises || []);
+  const rows = () => ex.map((e,i) => `<div class="exrow"><input data-i="${i}" data-f="name" value="${esc(e.name)}" placeholder="Упражнение" maxlength="80" aria-label="Упражнение"><input data-i="${i}" data-f="amount" value="${esc(e.amount)}" placeholder="3×15 или 1 мин" maxlength="30" aria-label="Сколько"><button type="button" class="x" data-rm="${i}" aria-label="Убрать">✕</button></div>`).join("");
+  openModal(`<h2>${id ? "Тренировка" : "Новая"} <span class="v">тренировка</span></h2>
+    <div class="fld"><label for="w-name">Название</label><input id="w-name" value="${esc(w.name)}" maxlength="60"></div>
+    <div class="row2">
+      <div class="fld"><label for="w-type">Тип</label><select id="w-type">${TYPES.map(t => `<option value="${t.id}"${t.id === w.type ? " selected" : ""}>${t.name}</option>`).join("")}</select></div>
+      <div class="fld"><label for="w-min">Примерно минут</label><input id="w-min" type="number" min="0" value="${esc(w.minutes)}"></div>
+    </div>
+    <span class="lbl">Упражнения</span>
+    <div class="exlist" id="w-ex">${rows()}</div>
+    <button type="button" class="link" id="w-add" style="align-self:flex-start">+ упражнение</button>
+    <div class="dlg-foot">${id ? `<button type="button" class="btn btn-line" id="w-del">Удалить</button>` : ""}<div class="r"><button type="button" class="btn btn-line" data-close>Отмена</button><button type="button" class="btn btn-ink" id="w-save">Сохранить</button></div></div>`, dlg => {
+      const box = dlg.querySelector("#w-ex");
+      box.addEventListener("input", e => { const t = e.target; if (t.dataset.i != null) ex[+t.dataset.i][t.dataset.f] = t.value; });
+      box.addEventListener("click", e => { const r = e.target.closest("[data-rm]"); if (r){ ex.splice(+r.dataset.rm, 1); box.innerHTML = rows(); } });
+      dlg.querySelector("#w-add").addEventListener("click", () => { ex.push({name:"", amount:""}); box.innerHTML = rows(); box.querySelector(`[data-i="${ex.length - 1}"]`).focus(); });
+      if (id) armDelete(dlg.querySelector("#w-del"), () => store.del("workouts", id));
+      dlg.querySelector("#w-save").addEventListener("click", () => {
+        const name = dlg.querySelector("#w-name").value.trim(); if (!name) return dlg.querySelector("#w-name").focus();
+        store.put("workouts", id || store.newId("workouts"), {...w, name, type: dlg.querySelector("#w-type").value,
+          minutes: +dlg.querySelector("#w-min").value || null,
+          exercises: ex.filter(e => e.name.trim()).map(e => ({name: e.name.trim(), amount: e.amount.trim()})),
+          createdAt: w.createdAt || Date.now(), updatedAt: Date.now()});
+        closeModal();
+      });
+  }, "wide");
+}
+
+/* ---- live session ---- */
+let S = null, tick = null;
+const mmss = s => `${String(Math.floor(s / 60)).padStart(2,"0")}:${String(s % 60).padStart(2,"0")}`;
+function startWorkout(id){
+  const w = store.data.workouts[id]; if (!w) return;
+  S = {id, w, start: Date.now(), paused: 0, pauseAt: null, done: new Set()};
+  $("#sess").hidden = false; document.body.style.overflow = "hidden";
+  renderSess(); tick = setInterval(paintTimer, 1000);
+}
+const elapsed = () => Math.floor(((S.pauseAt || Date.now()) - S.start - S.paused) / 1000);
+function paintTimer(){ const t = $("#timer"); if (t && S) t.textContent = mmss(elapsed()); }
+function renderSess(){
+  const ex = S.w.exercises || [];
+  $("#sess").innerHTML = `<div class="sess-in">
+    <div class="sess-top"><div><span class="lbl">${tName(S.w.type)}</span><h2>${esc(S.w.name)}</h2></div><div style="text-align:right"><div class="timer num" id="timer">${mmss(elapsed())}</div><button type="button" class="link" style="color:var(--paper)" id="pause">${S.pauseAt ? "продолжить" : "пауза"}</button></div></div>
+    ${ex.length ? `<div class="sess-list">${ex.map((e,i) => `<button type="button" class="${S.done.has(i) ? "on" : ""}" data-ex="${i}" aria-pressed="${S.done.has(i)}"><span class="box"></span><span>${esc(e.name)}</span><span>${esc(e.amount || "")}</span></button>`).join("")}</div>` : `<p class="lbl">В этой тренировке нет списка упражнений: просто засекай время.</p>`}
+    <div class="sess-foot"><button type="button" class="btn btn-line" id="cancelS">Отменить</button><span class="lbl num">${S.done.size} из ${ex.length} упражнений</span><button type="button" class="btn btn-butter" id="finishS">Завершить ✓</button></div>
+  </div>`;
+}
+$("#sess").addEventListener("click", e => {
+  const b = e.target.closest("[data-ex]");
+  if (b){ const i = +b.dataset.ex; S.done.has(i) ? S.done.delete(i) : S.done.add(i); renderSess(); return; }
+  if (e.target.closest("#pause")){ if (S.pauseAt){ S.paused += Date.now() - S.pauseAt; S.pauseAt = null; } else S.pauseAt = Date.now(); renderSess(); return; }
+  if (e.target.closest("#cancelS")){ endSess(); return; }
+  if (e.target.closest("#finishS")){ const mins = Math.max(1, Math.round(elapsed() / 60)); const snap = S; endSess(); logDialog(null, {workoutId: snap.id, name: snap.w.name, type: snap.w.type, minutes: mins, date: todayISO(), doneCount: snap.done.size, total: (snap.w.exercises || []).length}); }
+});
+function endSess(){ clearInterval(tick); S = null; $("#sess").hidden = true; document.body.style.overflow = ""; }
+
+/* ---- log an activity (after a session, or by hand) ---- */
+function logDialog(id, preset){
+  const l = id ? store.data.logs[id] : {name:"", type:"walk", minutes:"", date: todayISO(), feeling:"", note:"", ...preset};
+  openModal(`<h2>${preset ? "Готово!" : id ? "Запись" : "Отметить"} <span class="v">${preset ? "молодец" : "активность"}</span></h2>
+    <div class="fld"><label for="l-name">Что делала</label><input id="l-name" value="${esc(l.name)}" maxlength="60" placeholder="Например, прогулка с Рэмом"></div>
+    <div class="row3">
+      <div class="fld"><label for="l-type">Тип</label><select id="l-type">${TYPES.map(t => `<option value="${t.id}"${t.id === l.type ? " selected" : ""}>${t.name}</option>`).join("")}</select></div>
+      <div class="fld"><label for="l-min">Минут</label><input id="l-min" type="number" min="0" value="${esc(l.minutes)}"></div>
+      <div class="fld"><label for="l-date">Дата</label><input id="l-date" type="date" value="${esc(l.date)}"></div>
+    </div>
+    <div class="fld"><span class="lbl">Как прошло</span><div class="seg" id="l-feel">${FEEL.map(f => `<button type="button" data-f="${f.id}">${f.name}</button>`).join("")}</div></div>
+    <div class="fld"><label for="l-note">Заметка</label><input id="l-note" value="${esc(l.note)}" maxlength="200" placeholder="необязательно"></div>
+    <div class="dlg-foot">${id ? `<button type="button" class="btn btn-line" id="l-del">Удалить</button>` : ""}<div class="r"><button type="button" class="btn btn-line" data-close>${preset ? "Не сохранять" : "Отмена"}</button><button type="button" class="btn btn-ink" id="l-save">Сохранить</button></div></div>`, dlg => {
+      const feel = segPick(dlg.querySelector("#l-feel"), "data-f", l.feeling || "", true);
+      if (id) armDelete(dlg.querySelector("#l-del"), () => store.del("logs", id));
+      dlg.querySelector("#l-save").addEventListener("click", () => {
+        const name = dlg.querySelector("#l-name").value.trim() || tName(dlg.querySelector("#l-type").value);
+        store.put("logs", id || store.newId("logs"), {...l, name, type: dlg.querySelector("#l-type").value, minutes: +dlg.querySelector("#l-min").value || null,
+          date: dlg.querySelector("#l-date").value || todayISO(), feeling: feel() || null, note: dlg.querySelector("#l-note").value.trim(), createdAt: l.createdAt || Date.now()});
+        closeModal();
+      });
+  });
+}
+
+function goalDialog(){
+  const cur = +store.docs["settings/goal"].perWeek || 3;
+  openModal(`<h2>Цель <span class="v">на неделю</span></h2><p class="sub">Сколько тренировок или активностей в неделю хочешь?</p>
+    <div class="seg" id="g-seg">${[1,2,3,4,5,6,7].map(n => `<button type="button" data-n="${n}">${n}</button>`).join("")}</div>
+    <div class="dlg-foot"><div class="r"><button type="button" class="btn btn-line" data-close>Отмена</button><button type="button" class="btn btn-ink" id="g-save">Сохранить</button></div></div>`, dlg => {
+      const pickN = segPick(dlg.querySelector("#g-seg"), "data-n", String(cur));
+      dlg.querySelector("#g-save").addEventListener("click", () => { store.setDoc("settings/goal", {perWeek: +pickN() || cur}); closeModal(); });
+  });
+}
+
+document.addEventListener("click", e => {
+  const t = e.target;
+  const st = t.closest("[data-start]"); if (st) return startWorkout(st.dataset.start);
+  const we = t.closest("[data-wedit]"); if (we) return editWorkout(we.dataset.wedit);
+  const le = t.closest("[data-ledit]"); if (le) return logDialog(le.dataset.ledit);
+  if (t.closest("#newWk")) return editWorkout(null);
+  if (t.closest("#setGoal")) return goalDialog();
+  if (t.closest("#quickLog")) return logDialog(null);
+});
+$("#mPrev").addEventListener("click", () => { calYM = calYM.m ? {y: calYM.y, m: calYM.m - 1} : {y: calYM.y - 1, m: 11}; renderCal(); });
+$("#mNext").addEventListener("click", () => { calYM = calYM.m === 11 ? {y: calYM.y + 1, m: 0} : {y: calYM.y, m: calYM.m + 1}; renderCal(); });
+store.boot();
+</script>
+</body>
+</html>

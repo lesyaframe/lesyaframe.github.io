@@ -1,0 +1,537 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Лесин хаб</title>
+<meta name="theme-color" content="#3B1B14">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Хаб">
+<style>
+html{background:#3B1B14}
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{margin:0;font:14px/1.4 system-ui,-apple-system,sans-serif;background:#F7F0DA}
+img{max-width:100%}
+[hidden]{display:none!important}
+</style>
+<script src="firebase-config.js?v=20260930093126"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+<script src="portal.js?v=20260930093126" data-app="hub"></script>
+</head>
+<body>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800;900&display=swap">
+<style>
+@font-face{font-family:"Vasek";src:url("fonts/Vasek.ttf") format("truetype");font-display:swap}
+:root{
+  color-scheme:light;
+  --choco:#3B1B14;--choco-2:#4E251B;--ink:#250A0A;--paper:#F7F0DA;--cream:#F5EDC9;
+  --butter:#F1EA91;--olive:#737038;--olive-2:#817E45;--sky:#A6BFD2;--sky-2:#BCCFDD;--muted:#6B5550;
+  --sans:"Inter","Helvetica Neue",Arial,sans-serif;
+  --script:"Vasek","Segoe Script","Brush Script MT",cursive;
+  --gutter:clamp(16px,3vw,44px);
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{min-height:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.38;letter-spacing:-.012em;-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit}
+a{color:inherit}
+h1,h2,h3,p{margin:0}
+h1,h2,h3{font-weight:800;letter-spacing:-.055em;line-height:.92;text-wrap:balance}
+.v{font-family:var(--script);font-weight:400;letter-spacing:0;line-height:.8}
+:focus-visible{outline:2px dashed currentColor;outline-offset:3px}
+.ex{font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;opacity:.55}
+.tape{position:absolute;width:92px;height:24px;background:rgba(241,234,145,.85);top:-11px;left:50%;translate:-50% 0;rotate:-4deg;z-index:3}
+.tape.dots{background:radial-gradient(circle,#3B1B14 1.5px,transparent 2px) 0 0/8px 8px,rgba(247,240,218,.92)}
+
+/* shared: today note */
+.today{position:relative;background:var(--paper);color:var(--ink);padding:28px 22px 22px;box-shadow:0 18px 30px -20px rgba(37,10,10,.6);display:flex;flex-direction:column;gap:14px}
+.today h3{font-size:24px}
+.today h3 .v{font-size:1.5em;color:var(--olive);margin-left:.05em}
+.today ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.today li{display:grid;grid-template-columns:18px 1fr auto;gap:10px;align-items:start;font-size:14px}
+.today li i{width:16px;height:16px;border:1.5px solid var(--ink);border-radius:4px;margin-top:1px}
+.today li.done i{background:var(--ink) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3.5 8.5l3 3 6-7' stroke='%23F7F0DA' stroke-width='2' fill='none'/%3E%3C/svg%3E") center/100%}
+.today li.done span{text-decoration:line-through;opacity:.5}
+.today li small{font-size:11px;font-weight:600;padding:2px 7px;border-radius:5px;background:var(--sky-2);white-space:nowrap}
+.today li small.tg{background:var(--butter)}
+.today .sub{font-size:12px;font-weight:600;letter-spacing:.02em;color:var(--muted)}
+
+/* ================= V1: folders on a desk ================= */
+.v1{background:repeating-linear-gradient(90deg,rgba(0,0,0,.2) 0 2px,transparent 2px 7px),var(--choco);color:var(--paper);height:100vh;min-height:600px;padding-block:clamp(18px,3.2vh,40px)}
+.v1 .in{height:100%;max-width:1320px;margin-inline:auto;padding-inline:var(--gutter);display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:auto minmax(0,1fr);gap:clamp(18px,3vh,34px) clamp(22px,2.6vw,40px)}
+.v1-head{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.v1-head h1{font-size:clamp(44px,8.2vh,92px);font-weight:900;letter-spacing:-.065em;line-height:.9}
+.v1-head h1 .v{color:var(--butter);font-size:.95em;display:inline-block;rotate:-6deg;margin-left:.2em;translate:0 .08em}
+.remf{flex:none;width:clamp(56px,8vh,76px);height:clamp(56px,8vh,76px);border-radius:50%;border:3px solid #fff;background:url("img/rem-face.jpg") center/cover;rotate:-6deg;box-shadow:0 10px 20px -10px rgba(0,0,0,.7)}
+.desk{display:grid;grid-template-columns:repeat(3,minmax(0,1fr)) clamp(240px,21vw,300px);grid-template-rows:repeat(2,minmax(0,1fr));gap:clamp(34px,5vh,50px) clamp(16px,1.8vw,28px);padding-top:22px;min-height:0}
+.folder{all:unset;box-sizing:border-box;position:relative;cursor:pointer;display:block;height:100%;min-height:150px;color:var(--ink);transition:transform .3s cubic-bezier(.2,.8,.2,1)}
+.folder .back{position:absolute;inset:0;background:var(--fc);border-radius:4px 10px 10px 10px;filter:brightness(.9)}
+.folder .back::before{content:"";position:absolute;left:0;top:-20px;width:44%;height:24px;background:inherit;border-radius:9px 9px 0 0;clip-path:polygon(0 0,86% 0,100% 100%,0 100%)}
+.folder .sheet{position:absolute;left:8%;right:8%;top:8%;bottom:10%;background:#fff;box-shadow:0 2px 6px rgba(37,10,10,.15);transition:transform .35s cubic-bezier(.2,.8,.2,1);background-image:repeating-linear-gradient(transparent 0 15px,rgba(166,191,210,.55) 15px 16px)}
+.folder .sheet+.sheet{left:12%;right:4%;top:12%;rotate:3deg;background:var(--paper);background-image:none}
+.folder .front{position:absolute;left:0;right:0;bottom:0;height:74%;background:var(--fc);background-image:var(--fp,none);border-radius:10px;padding:16px 18px;display:flex;flex-direction:column;justify-content:flex-end;gap:4px;box-shadow:0 -1px 0 rgba(255,255,255,.25) inset,0 20px 30px -18px rgba(0,0,0,.7);transform-origin:bottom;transition:transform .35s cubic-bezier(.2,.8,.2,1)}
+.folder .front h2{font-size:clamp(22px,min(2.2vw,3.8vh),34px)}
+.folder .front p{font-size:12px;font-weight:500;opacity:.75}
+.folder .front .v{position:absolute;top:12px;right:16px;font-size:34px;opacity:.9;rotate:-6deg}
+.folder:hover,.folder:focus-visible{transform:translateY(-6px)}
+.folder:hover .sheet,.folder:focus-visible .sheet{transform:translateY(-26px)}
+.folder:hover .sheet+.sheet,.folder:focus-visible .sheet+.sheet{transform:translateY(-14px)}
+.folder:hover .front,.folder:focus-visible .front{transform:perspective(700px) rotateX(-12deg)}
+.f-sport{--fc:var(--sky)}
+.f-blog{--fc:var(--butter)}
+.f-work{--fc:var(--olive);color:var(--paper);--fp:repeating-linear-gradient(90deg,transparent 0 16px,rgba(255,255,255,.07) 16px 32px)}
+.f-plan{--fc:var(--cream)}
+.f-pers{--fc:var(--choco-2);color:var(--paper);--fp:radial-gradient(circle,rgba(247,240,218,.3) 2px,transparent 2.5px) 0 0/16px 16px}
+.f-health{--fc:var(--sky-2)}
+.cal{position:relative;align-self:stretch;display:flex;flex-direction:column;background:var(--paper);color:var(--ink);border-radius:6px 6px 4px 4px;box-shadow:0 22px 30px -18px rgba(0,0,0,.75),0 3px 0 -1px #e9dfbf,0 6px 0 -2px #ddd2ae;rotate:-1.2deg;min-height:0}
+.cal-top{background:var(--choco-2);background-image:radial-gradient(circle,rgba(247,240,218,.28) 2px,transparent 2.5px);background-size:16px 16px;border-radius:6px 6px 0 0;height:30px;position:relative;flex:none}
+.cal-top i{position:absolute;top:-9px;width:12px;height:24px;border-radius:6px;border:2.5px solid #9a9486;background:transparent}
+.cal-top i:first-child{left:26%}.cal-top i:last-child{right:26%}
+.cal-body{flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:clamp(4px,1vh,10px);padding:clamp(8px,1.6vh,16px) 18px clamp(10px,1.8vh,18px)}
+.cal-day{font-size:clamp(46px,9vh,86px);font-weight:900;letter-spacing:-.07em;line-height:.8;color:var(--choco)}
+.cal-mon{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.cal-cut{width:100%;border-top:2px dashed rgba(37,10,10,.18);margin-block:clamp(2px,.8vh,8px)}
+.cal-lbl{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--olive)}
+.cal-wish{font-family:var(--script);font-size:clamp(26px,4.4vh,42px);line-height:1;color:var(--ink);text-wrap:balance;max-width:17ch;transition:opacity .25s}
+.cal-wish.swap{opacity:0}
+.cal-more{border:0;background:none;font-size:12px;font-weight:600;color:var(--muted);cursor:pointer;text-decoration:underline;text-underline-offset:3px;padding:2px 4px}
+.cal-more:hover{color:var(--ink)}
+/* one long sheet: today + week goals, spans two cells of the bottom row */
+.sheetnote{grid-column:span 2;position:relative;background:var(--paper);color:var(--ink);rotate:.8deg;box-shadow:0 22px 30px -18px rgba(0,0,0,.75);display:grid;grid-template-columns:1.25fr 1fr;min-height:0;background-image:repeating-linear-gradient(transparent 0 27px,rgba(166,191,210,.45) 27px 28px);background-position:0 12px}
+.sheetnote .tape{left:22%}
+.sheetnote .tape.r{left:auto;right:10%;translate:0 0;rotate:5deg}
+.sheetnote .today{box-shadow:none;background:transparent;padding:clamp(22px,3.4vh,34px) clamp(18px,1.8vw,26px) clamp(14px,2vh,22px);gap:clamp(8px,1.4vh,14px);justify-content:center;min-height:0}
+.sheetnote .today+.today{border-left:2px dashed rgba(37,10,10,.16);background:rgba(241,234,145,.55)}
+.sheetnote .today h3{font-size:clamp(20px,2.8vh,26px)}
+.sheetnote .today li{font-size:13.5px}
+.v1 .today{rotate:1.5deg}
+.v1 .goals{background:var(--butter);rotate:-2deg}
+@media (max-width:1000px){.v1{height:auto;min-height:100vh}.v1 .in{grid-template-columns:minmax(0,1fr);grid-template-rows:auto}.desk{grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:none}.folder{height:auto;min-height:0;aspect-ratio:1.28}.cal{min-height:260px;grid-column:1/-1;order:-2}.sheetnote{grid-column:1/-1;order:-1;margin-bottom:10px}}
+@media (max-width:520px){.desk{gap:34px 12px}.folder .front{padding:12px 12px}.folder .front h2{font-size:clamp(17px,5vw,22px)}.folder .front .v{font-size:24px;top:8px;right:10px}.folder .back::before{top:-16px;height:20px}.v1-head h1{font-size:clamp(40px,12vw,56px)}.sheetnote{grid-template-columns:1fr}.sheetnote .today{min-height:180px}.sheetnote .today+.today{border-left:0;border-top:2px dashed rgba(37,10,10,.16)}}
+@media (max-height:700px) and (min-width:1001px){.folder .sheet+.sheet{display:none}.folder .front .v{font-size:28px}}
+
+.subs{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+.subcard{position:relative;display:flex;flex-direction:column;gap:10px;padding:26px 22px 20px;background:#fff;box-shadow:0 16px 26px -18px rgba(37,10,10,.5);min-height:170px;text-decoration:none}
+.subcard:nth-child(odd){rotate:-1deg}.subcard:nth-child(even){rotate:1deg}
+.subcard h3{font-size:28px}
+.subcard p{font-size:14px;color:var(--muted);max-width:40ch}
+.state{align-self:flex-start;margin-top:auto;font-size:12px;font-weight:700;padding:6px 11px;border-radius:999px;background:var(--sky-2)}
+.state.ready{background:var(--ink);color:var(--paper)}
+a.subcard:hover .state.ready{background:var(--olive)}
+
+/* ---------- opened folder drawer ---------- */
+.shade{position:fixed;inset:0;background:rgba(37,10,10,.45);z-index:90;opacity:0;pointer-events:none;transition:opacity .3s}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(640px,100%);z-index:91;background:var(--paper);box-shadow:-30px 0 60px -30px rgba(0,0,0,.6);transform:translateX(104%);transition:transform .45s cubic-bezier(.2,.8,.2,1);display:flex;flex-direction:column;overflow-y:auto;padding:calc(26px + env(safe-area-inset-top,0px)) clamp(20px,3vw,36px) calc(30px + env(safe-area-inset-bottom,0px))}
+.drawer.open{transform:none}
+.drawer.open~.shade,.shade.open{opacity:1;pointer-events:auto}
+.drawer .close{align-self:flex-end;border:1.5px solid var(--ink);background:transparent;border-radius:999px;padding:8px 14px;font-size:13px;font-weight:600;cursor:pointer}
+.drawer .close:hover{background:var(--ink);color:var(--paper)}
+.drawer h2{font-size:clamp(48px,6vw,76px);font-weight:900;letter-spacing:-.065em;margin:10px 0 6px}
+.drawer h2 .v{color:var(--olive);font-size:1.1em;margin-left:.06em}
+.drawer .lead{color:var(--muted);margin-bottom:26px}
+.drawer .subs{grid-template-columns:1fr}
+@media (min-width:560px){.drawer .subs{grid-template-columns:repeat(2,1fr)}}
+/* live home sheet */
+.sheetnote .today{overflow:hidden}
+.sheetnote .today h3{display:flex;align-items:baseline;justify-content:space-between;gap:8px}
+.sheetnote .today h3 button{border:0;background:none;font:600 12px/1 var(--sans);letter-spacing:-.01em;color:var(--muted);cursor:pointer;text-decoration:underline;text-underline-offset:3px;padding:0}
+.sheetnote .today h3 button:hover{color:var(--ink)}
+.sheetnote ul{flex:1;min-height:0;overflow-y:auto;scrollbar-width:thin}
+.plist li{align-items:center}
+.sheetnote .plist li{grid-template-columns:16px 1fr auto;gap:9px}
+.plist .tx{min-width:0;line-height:1.35}
+.plist .area{display:inline-block;vertical-align:1px;margin-left:4px}
+.plist li .ck{all:unset;cursor:pointer;width:16px;height:16px;border:1.5px solid var(--ink);border-radius:4px;box-sizing:border-box;flex:none}
+.plist li .ck:focus-visible{outline:2px dashed var(--ink);outline-offset:2px}
+.plist li.done .ck{background:var(--ink) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3.5 8.5l3 3 6-7' stroke='%23F7F0DA' stroke-width='2' fill='none'/%3E%3C/svg%3E") center/100%}
+.plist li.done .tt{text-decoration:line-through;opacity:.5}
+.plist .tt{word-break:break-word;cursor:text}
+.plist .late{font-size:10.5px;font-weight:700;color:#A8432F;margin-left:6px;white-space:nowrap}
+.plist .empty-li{display:block;font-size:13px;color:var(--muted);font-style:italic}
+.qadd{display:flex;gap:6px;flex:none}
+.qadd input{flex:1;min-width:0;border:0;border-bottom:1.5px dashed rgba(37,10,10,.3);background:transparent;padding:5px 2px;font:inherit;font-size:13px;color:var(--ink)}
+.qadd input:focus{outline:none;border-bottom-color:var(--ink)}
+.qadd input::placeholder{color:rgba(107,85,80,.8)}
+.area{all:unset;cursor:pointer;font-size:10.5px;font-weight:700;padding:2px 7px;border-radius:5px;white-space:nowrap;background:rgba(37,10,10,.07);color:var(--muted)}
+.area.a-blog{background:var(--butter);color:var(--ink)}
+.area.a-work{background:var(--olive);color:var(--paper)}
+.area.a-sport{background:var(--sky-2);color:var(--ink)}
+.area.a-pers{background:#E4CFC7;color:var(--ink)}
+.area.a-none{opacity:0;padding:2px 5px}
+li:hover .area.a-none,.area.a-none:focus-visible{opacity:.8}
+
+/* planner overlay */
+.planner{position:fixed;inset:0;z-index:95;background:repeating-linear-gradient(transparent 0 35px,rgba(166,191,210,.35) 35px 36px),var(--paper);color:var(--ink);display:flex;flex-direction:column;overflow:hidden}
+.pl-top{background:repeating-linear-gradient(90deg,rgba(0,0,0,.2) 0 2px,transparent 2px 7px),var(--choco);color:var(--paper);padding:calc(14px + env(safe-area-inset-top,0px)) var(--gutter) 14px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px 20px;flex:none}
+.pl-top h2{font-size:clamp(32px,4vw,52px);font-weight:900;letter-spacing:-.065em}
+.pl-top h2 .v{color:var(--butter);font-size:.95em;margin-left:.12em;display:inline-block;rotate:-5deg}
+.pl-week{display:flex;align-items:center;gap:6px;background:rgba(247,240,218,.12);border-radius:999px;padding:4px}
+.pl-week button{border:0;background:transparent;color:var(--paper);min-width:34px;height:34px;border-radius:999px;font-size:17px;cursor:pointer;padding:0 10px}
+.pl-week button:hover{background:rgba(247,240,218,.2)}
+.pl-week .pl-now{font-size:12px;font-weight:700}
+.pl-week b{min-width:170px;text-align:center;font-size:16px;font-weight:800;letter-spacing:-.03em}
+.pl-close{border:1.5px solid rgba(247,240,218,.6);background:transparent;color:var(--paper);border-radius:999px;padding:8px 14px;font-size:13px;font-weight:600;cursor:pointer}
+.pl-close:hover{background:var(--paper);color:var(--ink)}
+.pl-body{flex:1;min-height:0;display:grid;grid-template-columns:clamp(210px,18vw,280px) minmax(0,1fr);gap:20px;padding:20px var(--gutter) calc(20px + env(safe-area-inset-bottom,0px));overflow:auto}
+.pl-goals{position:relative;background:var(--butter);padding:28px 20px 18px;rotate:-.6deg;box-shadow:0 18px 26px -18px rgba(37,10,10,.6);display:flex;flex-direction:column;gap:12px;align-self:start}
+.pl-goals h3{font-size:26px}
+.pl-goals h3 .v{color:var(--olive);font-size:1.4em;margin-left:.05em}
+.pl-goals .prog{font-size:12px;font-weight:700;color:var(--muted)}
+.pl-goals .bar{height:6px;border-radius:3px;background:rgba(37,10,10,.1);overflow:hidden}
+.pl-goals .bar i{display:block;height:100%;background:var(--olive);border-radius:3px}
+.pl-days{display:grid;grid-template-columns:repeat(7,minmax(118px,1fr));gap:8px;align-items:stretch;min-width:0;overflow-x:auto;padding-bottom:6px}
+.pday{background:rgba(255,255,255,.6);border:1.5px solid rgba(37,10,10,.12);border-radius:10px;padding:9px 8px;display:flex;flex-direction:column;gap:8px;min-height:320px;transition:background .2s,border-color .2s}
+.pday.is-today{background:#fff;border-color:var(--ink);box-shadow:0 14px 22px -16px rgba(37,10,10,.6)}
+.pday.over{background:rgba(241,234,145,.6);border-style:dashed;border-color:var(--olive)}
+.pday-h{display:flex;align-items:baseline;justify-content:space-between;gap:6px;padding:2px 2px 6px;border-bottom:1.5px solid rgba(37,10,10,.1)}
+.pday-h b{font-size:22px;font-weight:900;letter-spacing:-.06em}
+.pday-h span{font-size:12px;font-weight:700;color:var(--muted);text-transform:lowercase}
+.pday.is-today .pday-h span{color:var(--ink)}
+.pday.is-today .pday-h b{background:var(--butter);padding:0 6px;border-radius:6px}
+.pday .plist{flex:1}
+.plist{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.pday .plist li,.pl-goals .plist li{display:grid;grid-template-columns:16px 1fr auto;gap:6px;align-items:start;font-size:13px;background:#fff;border-radius:6px;padding:7px 7px 7px 8px;box-shadow:0 1px 0 rgba(37,10,10,.1);cursor:grab}
+.pl-goals .plist li{cursor:default;background:rgba(255,255,255,.7)}
+.pday .plist li .ck,.pl-goals .plist li .ck{margin-top:1px}
+.pday .plist li.missed{box-shadow:inset 3px 0 0 #A8432F,0 1px 0 rgba(37,10,10,.1)}
+.pday .plist li.dragging{opacity:.4}
+.del{all:unset;cursor:pointer;opacity:0;font-size:12px;color:var(--muted);padding:0 2px}
+li:hover .del,.del:focus-visible{opacity:.7}
+.del:hover{opacity:1;color:#A8432F}
+.mv-today{grid-column:2/-1;justify-self:start;text-align:left;border:0;background:none;padding:0;font-size:11px;font-weight:700;color:#A8432F;cursor:pointer;text-decoration:underline;text-underline-offset:2px}
+.edit-in{font:inherit;font-size:13px;border:0;border-bottom:1.5px solid var(--ink);background:transparent;width:100%;padding:0;color:var(--ink)}
+.edit-in:focus{outline:none}
+.pl-hint{grid-column:1/-1;font-size:12px;color:var(--muted)}
+@media (max-width:800px){.pl-body{grid-template-columns:1fr}.pl-goals{rotate:0deg}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+<!-- ============ V1 ============ -->
+<main class="v1" id="v1">
+  <div class="in">
+    <header class="v1-head">
+      <h1>Привет,<span class="v">Леся</span></h1>
+      <div style="display:flex;align-items:center;gap:16px"><a href="data.html" style="color:#F7F0DA;opacity:.65;font-size:13px;font-weight:600">данные и вход</a><div class="remf" role="img" aria-label="Рэм"></div></div>
+    </header>
+    <div class="desk" id="desk"></div>
+  </div>
+</main>
+
+<aside class="drawer" id="drawer" aria-hidden="true">
+  <button type="button" class="close" id="closeDr">закрыть ✕</button>
+  <div id="drBody"></div>
+</aside>
+<div class="shade" id="shade"></div>
+<div class="planner" id="planner" hidden role="dialog" aria-modal="true" aria-label="Планирование">
+  <header class="pl-top">
+    <h2>Планирование<span class="v">неделя</span></h2>
+    <div class="pl-week"><button type="button" id="plPrev" aria-label="Прошлая неделя">‹</button><b id="plRange" class="num"></b><button type="button" id="plNext" aria-label="Следующая неделя">›</button><button type="button" class="pl-now" id="plNow">эта неделя</button></div>
+    <button type="button" class="pl-close" id="plClose">закрыть ✕</button>
+  </header>
+  <div class="pl-body">
+    <aside class="pl-goals" id="plGoals"></aside>
+    <div class="pl-days" id="plDays"></div>
+    <p class="pl-hint">Перетаскивай дела между днями. Нажми на текст, чтобы исправить. Маленькая метка справа — сфера: нажимай, чтобы сменить.</p>
+  </div>
+</div>
+
+<script>
+const RAND = "randomizer.html";
+const S = [
+  {id:"sport", cls:"f-sport", name:"Спорт", hand:"двигаться", color:"var(--sky)",
+   subs:[{t:"Трекер тренировок", d:"Выбрать тренировку, сделать с таймером, цель на неделю и календарь.", href:"sport.html"}]},
+  {id:"blog", cls:"f-blog", name:"Блог", hand:"lesya.frame", color:"var(--butter)",
+   subs:[{t:"Рандомайзер тем", d:"О чём снять разговорное видео.", href:RAND},
+         {t:"Идеи для блога", d:"Reels, посты, карусели, сторис, статистика и сотрудничества.", href:"blog.html"}]},
+  {id:"work", cls:"f-work", name:"Работа", hand:"задачи", color:"var(--olive)", dark:true,
+   subs:[{t:"Задачи по работе", d:"Задачи по проектам, сроки, статусы и напоминания.", href:"work.html"}]},
+  {id:"plan", cls:"f-plan", name:"Планирование", hand:"неделя", color:"var(--cream)",
+   subs:[{t:"Цели на неделю и день", d:"Что хочу успеть на этой неделе и сегодня."}], label:"неделя и день"},
+  {id:"pers", cls:"f-pers", name:"Личное", hand:"для себя", color:"var(--choco-2)", dark:true,
+   subs:[{t:"Бюджет", d:"Доходы, расходы по категориям и лимиты на месяц.", href:"budget.html"},{t:"Осенний трекер", d:"Что хочу успеть этой осенью.", href:"personal.html#autumn"},{t:"Список покупок", d:"Что купить, по магазинам.", href:"personal.html#shopping"},
+         {t:"Дневник здоровья", d:"Самочувствие, сон, лекарства.", href:"personal.html#health"},{t:"Записи", d:"Бьюти-мастера, массажист, врач: к кому и когда.", href:"personal.html#visits"}]}
+];
+const esc = s => s.replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const cnt = n => n === 1 ? "1 раздел" : n < 5 ? n + " раздела" : n + " разделов";
+
+/* date */
+try{
+  const now = new Date();
+  document.querySelectorAll(".js-day").forEach(e => e.textContent = now.toLocaleDateString("ru-RU",{day:"numeric",month:"long"}));
+  document.querySelectorAll(".js-wd").forEach(e => e.textContent = now.toLocaleDateString("ru-RU",{weekday:"long"}));
+}catch(e){}
+
+
+function subsHTML(s){
+  return `<div class="subs">${s.subs.map(x => x.href
+    ? `<a class="subcard" href="${x.href}"><span class="tape"></span><h3>${esc(x.t)}</h3><p>${esc(x.d)}</p><span class="state ready">открыть ↗</span></a>`
+    : `<div class="subcard"><span class="tape dots"></span><h3>${esc(x.t)}</h3>${x.d ? `<p>${esc(x.d)}</p>` : ""}<span class="state">скоро сделаем</span></div>`).join("")}</div>`;
+}
+
+/* V1 desk */
+const folderHTML = s => `
+<button type="button" class="folder ${s.cls}" data-open="${s.id}" aria-label="Открыть папку ${s.name}">
+  <span class="back"></span><span class="sheet"></span><span class="sheet"></span>
+  <span class="front"><span class="v">${s.hand}</span><h2>${s.name}</h2><p>${s.label || cnt(s.subs.length)}</p></span>
+</button>`;
+document.getElementById("desk").innerHTML = S.slice(0,3).map(folderHTML).join("") + `
+<div class="cal" aria-label="Напутствие на день">
+  <div class="cal-top"><i></i><i></i></div>
+  <div class="cal-body">
+    <div class="cal-day num" id="calDay"></div>
+    <div class="cal-mon" id="calMon"></div>
+    <div class="cal-cut"></div>
+    <div class="cal-lbl">напутствие на день</div>
+    <p class="cal-wish" id="calWish" aria-live="polite"></p>
+    <button type="button" class="cal-more" id="calMore">другое</button>
+  </div>
+</div>` + S.slice(3).map(folderHTML).join("") + `
+<div class="sheetnote"><span class="tape"></span><span class="tape dots r"></span>
+  <div class="today" id="homeToday"></div>
+  <div class="today" id="homeGoals"></div>
+</div>`;
+
+/* daily note: the same one all day, "другое" shows the next */
+const WISH = [
+  "Не идеально, а готово",
+  "Сначала прогулка с Рэмом, потом великие дела",
+  "Одно важное дело — и день удался",
+  "Сегодня можно медленно",
+  "Маленький шаг тоже считается",
+  "Выложи, а не доводи до идеала",
+  "Не получится — будет контент",
+  "Кофе, плед и одно дело до конца",
+  "Хвалить себя можно уже сейчас",
+  "Устала — отдохни. Это тоже план",
+  "Красиво, но реально. И в делах тоже",
+  "Меньше вкладок, больше дела",
+  "Сними черновик. Просто черновик",
+  "Рэм в тебя верит. Без вариантов",
+  "Выпей воды и выпрями спину",
+  "Сделай как есть, улучшишь потом",
+  "Пусть сегодня будет одна тёплая мелочь",
+  "Закрой одну задачу, которая давно висит",
+  "Ты справляешься лучше, чем думаешь",
+  "Сегодня отличный день, чтобы начать",
+  "Дыши. Всё успеется",
+  "Интересное рядом. Просто посмотри внимательнее",
+  "Пробуй, отмечай, что получилось",
+  "Минус одно «потом» — плюс одно «сделано»",
+  "Порадуй себя чем-нибудь маленьким",
+  "Замечай хорошее — оно считается",
+  "Не сравнивай. Твой темп — нормальный",
+  "Тёплый чай решает больше, чем кажется",
+  "Одна карусель лучше десяти идей в голове",
+  "Вечером скажешь себе спасибо"
+];
+(function(){
+  const d = new Date();
+  const dayNo = Math.floor((d - new Date(d.getFullYear(), 0, 0)) / 864e5);
+  let k = dayNo % WISH.length;
+  const w = document.getElementById("calWish");
+  document.getElementById("calDay").textContent = d.getDate();
+  try{ document.getElementById("calMon").textContent = ["января","февраля","марта","апреля","мая","июня","июля","августа","сентября","октября","ноября","декабря"][d.getMonth()] + " · " + d.toLocaleDateString("ru-RU", {weekday:"long"}); }catch(e){}
+  w.textContent = WISH[k];
+  document.getElementById("calMore").addEventListener("click", () => {
+    k = (k + 1) % WISH.length; w.classList.add("swap");
+    setTimeout(() => { w.textContent = WISH[k]; w.classList.remove("swap"); }, 200);
+  });
+})();
+
+/* drawer */
+const dr = document.getElementById("drawer"), shade = document.getElementById("shade"), drBody = document.getElementById("drBody");
+let lastFocus = null;
+function openDr(id){
+  const s = S.find(x => x.id === id); if (!s) return;
+  lastFocus = document.activeElement;
+  drBody.innerHTML = `<h2>${s.name} <span class="v">${s.hand}</span></h2><p class="lead">${cnt(s.subs.length)} внутри папки</p>${subsHTML(s)}`;
+  dr.classList.add("open"); shade.classList.add("open"); dr.setAttribute("aria-hidden","false");
+  document.getElementById("closeDr").focus();
+}
+function closeDr(){ dr.classList.remove("open"); shade.classList.remove("open"); dr.setAttribute("aria-hidden","true"); lastFocus && lastFocus.focus(); }
+document.addEventListener("click", e => { const o = e.target.closest("[data-open]"); if (!o) return; if (o.dataset.open === "plan") openPlanner(); else openDr(o.dataset.open); });
+document.getElementById("closeDr").addEventListener("click", closeDr);
+shade.addEventListener("click", closeDr);
+document.addEventListener("keydown", e => { if (e.key === "Escape" && dr.classList.contains("open")) closeDr(); });
+
+/* ================= planning: tasks by day, goals by week ================= */
+const AREAS = [{id:"blog", name:"блог"}, {id:"work", name:"работа"}, {id:"sport", name:"спорт"}, {id:"pers", name:"личное"}];
+const WD = ["пн","вт","ср","чт","пт","сб","вс"];
+const MON = ["января","февраля","марта","апреля","мая","июня","июля","августа","сентября","октября","ноября","декабря"];
+let tasks = {}, goals = {}, pmode = "boot", pdb = null;
+const iso = d => { const x = new Date(d); x.setMinutes(x.getMinutes() - x.getTimezoneOffset()); return x.toISOString().slice(0,10); };
+const todayISO = () => iso(new Date());
+const addDays = (s, n) => { const d = new Date(s + "T12:00"); d.setDate(d.getDate() + n); return iso(d); };
+const weekOf = s => { const d = new Date(s + "T12:00"); return addDays(s, -((d.getDay() + 6) % 7)); };
+const shortD = s => { const d = new Date(s + "T12:00"); return d.getDate() + " " + MON[d.getMonth()].slice(0,3); };
+const rid = () => Math.random().toString(36).slice(2,10) + Date.now().toString(36).slice(-4);
+let plWeek = weekOf(todayISO());
+
+const PLS = "hub-plan-v1";
+function savePL(){ try{ localStorage.setItem(PLS, JSON.stringify({tasks, goals})); }catch(e){} }
+function loadPL(){ try{ const d = JSON.parse(localStorage.getItem(PLS) || "null"); if (d){ tasks = d.tasks || {}; goals = d.goals || {}; } }catch(e){} }
+const pid = col => pmode === "db" ? pdb.collection(col).doc().id : rid();
+const pstore = {
+  async put(col, id, data){
+    if (pmode === "db"){ try{ await pdb.collection(col).doc(id).set(data); }catch(e){ console.warn(e); } }
+    else { (col === "tasks" ? tasks : goals)[id] = data; savePL(); renderPlan(); }
+  },
+  async del(col, id){
+    if (pmode === "db"){ try{ await pdb.collection(col).doc(id).delete(); }catch(e){ console.warn(e); } }
+    else { delete (col === "tasks" ? tasks : goals)[id]; savePL(); renderPlan(); }
+  }
+};
+async function bootPlan(){
+  renderPlan();
+  let d = null;
+  try{ d = window.claude?.use ? await window.claude.use("db") : null; }catch(e){ d = null; }
+  if (!d){ pmode = "local"; loadPL(); renderPlan(); return; }
+  pdb = d; pmode = "db";
+  pdb.collection("tasks").onSnapshot(snap => { const m = {}; snap.docs.forEach(x => m[x.id] = x.data()); tasks = m; renderPlan(); }, () => {});
+  pdb.collection("goals").onSnapshot(snap => { const m = {}; snap.docs.forEach(x => m[x.id] = x.data()); goals = m; renderPlan(); }, () => {});
+}
+
+const areaBtn = (col, id, a) => { const x = AREAS.find(q => q.id === a);
+  return `<button type="button" class="area a-${x ? x.id : "none"}" data-area="${col}:${esc(id)}" title="Сфера: ${x ? x.name : "не выбрана"}">${x ? x.name : "＋"}</button>`; };
+const byCreated = (a, b) => (a[1].createdAt || 0) - (b[1].createdAt || 0);
+
+function taskLI(id, t, opts = {}){
+  const t0 = todayISO();
+  const missed = !t.done && t.date < t0;
+  return `<li class="${t.done ? "done" : ""}${missed ? " missed" : ""}" data-task="${esc(id)}"${opts.drag ? ' draggable="true"' : ""}>
+    <button type="button" class="ck" data-toggle="tasks:${esc(id)}" aria-label="${t.done ? "Снять отметку" : "Отметить сделанным"}"></button>
+    <span class="tx"><span class="tt" data-edit="tasks:${esc(id)}">${esc(t.title)}</span>${opts.late && missed ? `<span class="late">с ${shortD(t.date)}</span>` : ""} ${areaBtn("tasks", id, t.area)}</span>
+    <button type="button" class="del" data-del="tasks:${esc(id)}" aria-label="Удалить">✕</button>
+    ${opts.move && missed ? `<button type="button" class="mv-today" data-totoday="${esc(id)}">→ на сегодня</button>` : ""}
+  </li>`;
+}
+function goalLI(id, g){
+  return `<li class="${g.done ? "done" : ""}">
+    <button type="button" class="ck" data-toggle="goals:${esc(id)}" aria-label="${g.done ? "Снять отметку" : "Отметить выполненной"}"></button>
+    <span class="tx"><span class="tt" data-edit="goals:${esc(id)}">${esc(g.title)}</span> ${areaBtn("goals", id, g.area)}</span>
+    <button type="button" class="del" data-del="goals:${esc(id)}" aria-label="Удалить">✕</button>
+  </li>`;
+}
+
+function renderHome(){
+  const t0 = todayISO(), w0 = weekOf(t0);
+  const list = Object.entries(tasks).filter(([,t]) => t.date === t0 || (!t.done && t.date < t0))
+    .sort((a,b) => ((b[1].date < t0) - (a[1].date < t0)) || byCreated(a,b));
+  const hT = document.getElementById("homeToday"), hG = document.getElementById("homeGoals");
+  const keep = document.activeElement && document.activeElement.id;
+  hT.innerHTML = `<h3><span>На <span class="v">сегодня</span></span><button type="button" data-openplan>неделя →</button></h3>
+    <ul class="plist">${list.map(([id,t]) => taskLI(id, t, {late:true})).join("") || `<li class="empty-li">Пока пусто. Что сделаем сегодня?</li>`}</ul>
+    <form class="qadd" data-add="today"><input id="addToday" placeholder="+ дело на сегодня" maxlength="160" autocomplete="off" aria-label="Новое дело на сегодня"></form>`;
+  const gl = Object.entries(goals).filter(([,g]) => g.week === w0).sort(byCreated);
+  hG.innerHTML = `<h3><span>Цели <span class="v">недели</span></span>${gl.length ? `<button type="button" data-openplan>${gl.filter(([,g]) => g.done).length} из ${gl.length}</button>` : ""}</h3>
+    <ul class="plist">${gl.map(([id,g]) => goalLI(id, g)).join("") || `<li class="empty-li">Цели на эту неделю ещё не записаны</li>`}</ul>
+    <form class="qadd" data-add="goal-home"><input id="addGoalHome" placeholder="+ цель на неделю" maxlength="160" autocomplete="off" aria-label="Новая цель на неделю"></form>`;
+  if (keep && (keep === "addToday" || keep === "addGoalHome")) document.getElementById(keep).focus();
+}
+
+function renderPlanner(){
+  const pl = document.getElementById("planner"); if (pl.hidden) return;
+  const t0 = todayISO(), end = addDays(plWeek, 6);
+  const a = new Date(plWeek + "T12:00"), b = new Date(end + "T12:00");
+  document.getElementById("plRange").textContent = a.getMonth() === b.getMonth()
+    ? `${a.getDate()}–${b.getDate()} ${MON[b.getMonth()]}` : `${a.getDate()} ${MON[a.getMonth()].slice(0,3)} – ${b.getDate()} ${MON[b.getMonth()].slice(0,3)}`;
+  const gl = Object.entries(goals).filter(([,g]) => g.week === plWeek).sort(byCreated);
+  const done = gl.filter(([,g]) => g.done).length;
+  const keep = document.activeElement && document.activeElement.id;
+  document.getElementById("plGoals").innerHTML = `<span class="tape"></span>
+    <h3>Цели <span class="v">недели</span></h3>
+    ${gl.length ? `<div class="prog num">${done} из ${gl.length}</div><div class="bar"><i style="width:${done / gl.length * 100}%"></i></div>` : ""}
+    <ul class="plist">${gl.map(([id,g]) => goalLI(id, g)).join("") || `<li class="empty-li" style="background:none;box-shadow:none">Что хочешь успеть за неделю?</li>`}</ul>
+    <form class="qadd" data-add="goal-week"><input id="addGoalWeek" placeholder="+ цель" maxlength="160" autocomplete="off" aria-label="Новая цель"></form>`;
+  let html = "";
+  for (let i = 0; i < 7; i++){
+    const day = addDays(plWeek, i), d = new Date(day + "T12:00");
+    const list = Object.entries(tasks).filter(([,t]) => t.date === day).sort(byCreated);
+    html += `<section class="pday${day === t0 ? " is-today" : ""}" data-day="${day}">
+      <div class="pday-h"><b class="num">${d.getDate()}</b><span>${day === t0 ? "сегодня" : WD[i]}</span></div>
+      <ul class="plist">${list.map(([id,t]) => taskLI(id, t, {drag:true, move:true})).join("")}</ul>
+      <form class="qadd" data-add="day:${day}"><input id="add-${day}" placeholder="+ дело" maxlength="160" autocomplete="off" aria-label="Новое дело на ${d.getDate()} ${MON[d.getMonth()]}"></form>
+    </section>`;
+  }
+  document.getElementById("plDays").innerHTML = html;
+  if (keep && document.getElementById(keep)) document.getElementById(keep).focus();
+}
+function renderPlan(){ if (editing) return; renderHome(); renderPlanner(); }
+
+function openPlanner(){ lastFocus = document.activeElement; const pl = document.getElementById("planner"); pl.hidden = false; document.body.style.overflow = "hidden"; renderPlanner(); document.getElementById("plClose").focus(); }
+function closePlanner(){ document.getElementById("planner").hidden = true; document.body.style.overflow = ""; lastFocus && lastFocus.focus(); }
+document.getElementById("plClose").addEventListener("click", closePlanner);
+document.getElementById("plPrev").addEventListener("click", () => { plWeek = addDays(plWeek, -7); renderPlanner(); });
+document.getElementById("plNext").addEventListener("click", () => { plWeek = addDays(plWeek, 7); renderPlanner(); });
+document.getElementById("plNow").addEventListener("click", () => { plWeek = weekOf(todayISO()); renderPlanner(); });
+
+const pick = (col, id) => (col === "tasks" ? tasks : goals)[id];
+document.addEventListener("submit", e => {
+  const f = e.target.closest("[data-add]"); if (!f) return;
+  e.preventDefault();
+  const inp = f.querySelector("input"), title = inp.value.trim(); if (!title) return;
+  const k = f.dataset.add, now = Date.now();
+  if (k === "today") pstore.put("tasks", pid("tasks"), {title, date: todayISO(), done:false, area:null, createdAt: now});
+  else if (k.startsWith("day:")) pstore.put("tasks", pid("tasks"), {title, date: k.slice(4), done:false, area:null, createdAt: now});
+  else pstore.put("goals", pid("goals"), {title, week: k === "goal-home" ? weekOf(todayISO()) : plWeek, done:false, area:null, createdAt: now});
+  inp.value = ""; inp.focus();
+});
+document.addEventListener("click", e => {
+  const t = e.target;
+  if (t.closest("[data-openplan]")) return openPlanner();
+  const tg = t.closest("[data-toggle]");
+  if (tg){ const [col, id] = tg.dataset.toggle.split(":"), x = pick(col, id); if (x) pstore.put(col, id, {...x, done: !x.done, doneAt: !x.done ? Date.now() : null}); return; }
+  const ar = t.closest("[data-area]");
+  if (ar){ const [col, id] = ar.dataset.area.split(":"), x = pick(col, id); if (!x) return;
+    const order = [null, ...AREAS.map(q => q.id)], i = order.indexOf(x.area ?? null);
+    pstore.put(col, id, {...x, area: order[(i + 1) % order.length]}); return; }
+  const dl = t.closest("[data-del]");
+  if (dl){ const [col, id] = dl.dataset.del.split(":"); pstore.del(col, id); return; }
+  const mt = t.closest("[data-totoday]");
+  if (mt){ const x = tasks[mt.dataset.totoday]; if (x) pstore.put("tasks", mt.dataset.totoday, {...x, date: todayISO()}); return; }
+  const ed = t.closest("[data-edit]"); if (ed) startEdit(ed);
+});
+
+/* inline edit of a title */
+let editing = false;
+function startEdit(span){
+  const [col, id] = span.dataset.edit.split(":"), x = pick(col, id); if (!x || editing) return;
+  editing = true;
+  const inp = document.createElement("input");
+  inp.className = "edit-in"; inp.value = x.title; inp.maxLength = 160; inp.setAttribute("aria-label", "Исправить текст");
+  span.replaceWith(inp); inp.focus(); inp.select();
+  let done = false;
+  const finish = save => { if (done) return; done = true; editing = false;
+    const v = inp.value.trim();
+    if (save && v && v !== x.title) pstore.put(col, id, {...x, title: v}); else renderPlan(); };
+  inp.addEventListener("keydown", e => { if (e.key === "Enter"){ e.preventDefault(); finish(true); } if (e.key === "Escape"){ e.stopPropagation(); finish(false); } });
+  inp.addEventListener("blur", () => finish(true));
+}
+
+/* drag tasks between days */
+let dragTask = null;
+document.addEventListener("dragstart", e => { const li = e.target.closest?.("li[data-task]"); if (!li) return; dragTask = li.dataset.task; li.classList.add("dragging"); e.dataTransfer.effectAllowed = "move"; try{ e.dataTransfer.setData("text/plain", dragTask); }catch(_){} });
+document.addEventListener("dragend", e => { e.target.closest?.("li")?.classList.remove("dragging"); document.querySelectorAll(".pday.over").forEach(c => c.classList.remove("over")); dragTask = null; });
+document.addEventListener("dragover", e => { const d = e.target.closest?.(".pday"); if (!d || !dragTask) return; e.preventDefault(); document.querySelectorAll(".pday.over").forEach(c => c !== d && c.classList.remove("over")); d.classList.add("over"); });
+document.addEventListener("drop", e => { const d = e.target.closest?.(".pday"); if (!d || !dragTask) return; e.preventDefault(); d.classList.remove("over");
+  const x = tasks[dragTask]; if (x && x.date !== d.dataset.day) pstore.put("tasks", dragTask, {...x, date: d.dataset.day}); });
+document.addEventListener("keydown", e => { if (e.key === "Escape" && !editing && !document.getElementById("planner").hidden) closePlanner(); });
+
+/* keep "today" right after midnight */
+let lastDay = todayISO();
+setInterval(() => { if (todayISO() !== lastDay){ lastDay = todayISO(); renderPlan(); } }, 60000);
+
+bootPlan();
+</script>
+</body>
+</html>
