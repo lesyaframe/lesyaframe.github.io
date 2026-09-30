@@ -1,0 +1,313 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Уютный трекер на 12 недель</title>
+<meta name="description" content="Трекер в стиле бумажного блокнота: сферы жизни, бумажка дня, цели и прогресс. Открывается с телефона и компьютера.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Prata&family=Bad+Script&family=Golos+Text:wght@400;500;600&family=PT+Mono&display=swap">
+<style>
+:root{
+  --pink:#eeb4c3; --pink-lt:#f8dde4; --pink-dk:#d0708a;
+  --bord:#7d1f2d; --choc:#4b2a20; --caramel:#c99a86; --latte:#ead8cb;
+  --milk:#fbf4ea; --blue:#a9c3e4; --blue-dk:#4f76a8;
+  --ink:#3b211a; --ink-soft:#7a5a4e;
+  --f-disp:"Prata", Georgia, serif;
+  --f-body:"Golos Text", "Segoe UI", system-ui, sans-serif;
+  --f-hand:"Bad Script", "Segoe Print", cursive;
+  --f-mono:"PT Mono", ui-monospace, Menlo, monospace;
+  --pat-tartan:
+    repeating-linear-gradient(90deg, transparent 0 18px, rgba(251,244,234,.55) 18px 20px, transparent 20px 26px, rgba(40,6,10,.35) 26px 36px),
+    repeating-linear-gradient(0deg, transparent 0 18px, rgba(251,244,234,.55) 18px 20px, transparent 20px 26px, rgba(40,6,10,.35) 26px 36px),
+    #9a2b37;
+  --pat-stripe: repeating-linear-gradient(90deg, var(--pink) 0 22px, var(--choc) 22px 26px, var(--milk) 26px 29px, var(--choc) 29px 33px), var(--pink);
+  --pat-dots: radial-gradient(circle, var(--milk) 30%, transparent 32%) 0 0/28px 28px, radial-gradient(circle, var(--milk) 30%, transparent 32%) 14px 14px/28px 28px, var(--choc);
+  --pat-ging: linear-gradient(90deg, rgba(79,118,168,.42) 50%, transparent 0) 0 0/16px 16px, linear-gradient(rgba(79,118,168,.42) 50%, transparent 0) 0 0/16px 16px, #f3f6fb;
+  --pat-gingpink: linear-gradient(90deg, rgba(184,67,90,.4) 50%, transparent 0) 0 0/18px 18px, linear-gradient(rgba(184,67,90,.4) 50%, transparent 0) 0 0/18px 18px, #fdf0f3;
+  --pat-dotspink: radial-gradient(circle, var(--bord) 24%, transparent 26%) 0 0/26px 26px, radial-gradient(circle, var(--bord) 24%, transparent 26%) 13px 13px/26px 26px, #f4c3cf;
+  color-scheme: light;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:var(--f-body);color:var(--ink);font-size:16px;line-height:1.55;overflow-x:hidden;
+  background:repeating-linear-gradient(90deg, transparent 0 52px, rgba(208,112,138,.14) 52px 55px, transparent 55px 59px, rgba(208,112,138,.14) 59px 62px, transparent 62px 120px), #f6ece5}
+img{display:block;max-width:100%;height:auto}
+a{color:inherit}
+.wrap{max-width:1160px;margin:0 auto;padding:0 20px}
+section{padding:72px 0}
+.eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft)}
+h1,h2,h3{font-family:var(--f-disp);font-weight:400;margin:0;line-height:1.08;text-wrap:balance}
+h2{font-size:clamp(32px,4.4vw,50px);color:var(--bord);margin:8px 0 14px}
+.lead{font-size:18px;color:var(--ink-soft);max-width:56ch;margin:0}
+.hand{font-family:var(--f-hand);color:var(--pink-dk)}
+.btn{display:inline-flex;align-items:center;gap:10px;border:0;border-radius:999px;padding:15px 28px;font-size:16px;font-weight:600;text-decoration:none;
+  background:var(--bord);color:var(--milk);box-shadow:0 8px 18px rgba(125,31,45,.28);transition:transform .15s, box-shadow .15s}
+.btn:hover{transform:translateY(-2px);box-shadow:0 12px 24px rgba(125,31,45,.32)}
+.btn.ghost{background:transparent;color:var(--choc);border:1.5px solid var(--choc);box-shadow:none}
+.tape{position:absolute;width:96px;height:24px;background:rgba(238,180,195,.75);box-shadow:0 1px 2px rgba(0,0,0,.1);z-index:3}
+.tape.blue{background:rgba(169,195,228,.8)}
+.sticker{position:absolute;z-index:4;pointer-events:none;filter:drop-shadow(0 2px 3px rgba(0,0,0,.2))}
+.sticker svg{display:block;width:100%;height:auto}
+
+/* ---------- top bar ---------- */
+.bar{display:flex;justify-content:space-between;align-items:center;padding:14px 0;font-family:var(--f-mono);font-size:13px;color:var(--choc)}
+.bar b{font-family:var(--f-disp);font-weight:400;font-size:20px;color:var(--bord);letter-spacing:0}
+.bar a{text-decoration:none;border-bottom:1.5px solid currentColor}
+
+/* ---------- hero ---------- */
+.hero{padding:8px 0 36px;min-height:calc(100vh - 62px);display:flex;align-items:center}
+.hero > .wrap{width:100%}
+.hero-grid{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.15fr);gap:56px;align-items:center}
+.hero-card{position:relative;background:var(--milk);padding:clamp(34px,6vh,50px) 34px clamp(24px,4.5vh,36px);box-shadow:0 14px 34px rgba(90,40,40,.14);transform:rotate(-.6deg)}
+.hero-card::before{content:"";position:absolute;left:0;right:0;top:0;height:18px;background:var(--pat-tartan)}
+.hero h1{font-size:clamp(34px,min(4.1vw,8.2vh),52px);color:var(--bord)}
+.hero h1 .hand{display:block;font-size:clamp(19px,min(2vw,3.8vh),28px);margin-top:10px;color:var(--pink-dk)}
+.hero p{font-size:17px;color:var(--ink-soft);margin:clamp(12px,2.4vh,18px) 0 clamp(16px,3.2vh,24px);max-width:42ch}
+.hero-cta{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.hero-note{font-family:var(--f-mono);font-size:12px;color:var(--ink-soft);margin-top:14px}
+.devices{position:relative;padding:40px 0 20px}
+.laptop{position:relative;background:#2b1a14;border-radius:16px 16px 6px 6px;padding:12px 12px 16px;box-shadow:0 26px 50px rgba(60,20,20,.3)}
+.laptop img{border-radius:4px}
+.laptop::after{content:"";position:absolute;left:-6%;right:-6%;bottom:-14px;height:14px;background:linear-gradient(#d9c7bc,#b9a498);border-radius:0 0 14px 14px;box-shadow:0 10px 20px rgba(60,20,20,.2)}
+.phone{position:absolute;right:-10px;bottom:-6px;width:31%;background:#2b1a14;border-radius:26px;padding:8px;box-shadow:0 20px 40px rgba(60,20,20,.35);transform:rotate(3deg)}
+.phone img{border-radius:19px;aspect-ratio:9/17;object-fit:cover;object-position:top}
+.badge-round{position:absolute;left:34%;top:-64px;width:112px;height:112px;border-radius:50%;background:var(--bord);color:var(--milk);display:grid;place-items:center;text-align:center;
+  font-family:var(--f-hand);font-size:17px;line-height:1.15;transform:rotate(-10deg);box-shadow:0 8px 18px rgba(125,31,45,.3);z-index:5;padding:10px;border:3px dashed rgba(251,244,234,.5)}
+
+/* ---------- ribbon ---------- */
+.ribbon{background:var(--choc);color:var(--milk);overflow:hidden;padding:14px 0;transform:rotate(-1deg);margin:0 -20px}
+.ribbon-track{display:flex;gap:34px;white-space:nowrap;font-family:var(--f-disp);font-size:20px;animation:roll 40s linear infinite;width:max-content}
+.ribbon-track span::after{content:"✦";margin-left:34px;color:var(--pink)}
+@keyframes roll{to{transform:translateX(-50%)}}
+
+/* ---------- pains ---------- */
+.pains{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:22px;margin-top:34px}
+.note{position:relative;background:#fffdf8;padding:28px 20px 22px;box-shadow:0 10px 22px rgba(90,40,40,.12);
+  background-image:repeating-linear-gradient(transparent 0 27px, rgba(208,112,138,.25) 27px 28px);background-position:0 18px;font-size:16px}
+.note:nth-child(odd){transform:rotate(-1.2deg)} .note:nth-child(even){transform:rotate(1deg)}
+.note .tape{top:-12px;left:50%;transform:translateX(-50%) rotate(-4deg)}
+.note:nth-child(2) .tape{background:rgba(169,195,228,.8)}
+.pains-after{margin-top:40px;font-family:var(--f-disp);font-size:clamp(22px,2.6vw,30px);color:var(--choc);max-width:32ch}
+.pains-after .hand{font-size:.9em}
+
+/* ---------- features ---------- */
+.feats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:26px;margin-top:34px}
+.feat{background:var(--milk);box-shadow:0 12px 26px rgba(90,40,40,.14);display:flex;flex-direction:column}
+.feat-h{height:78px;background:var(--pat);display:flex;align-items:flex-end;padding:0 16px 12px}
+.feat-h span{font-family:var(--f-mono);font-size:12px;letter-spacing:.08em;background:var(--milk);color:var(--c);padding:3px 10px;border:1.5px solid var(--c);box-shadow:2px 2px 0 var(--c)}
+.feat-b{padding:18px 20px 22px}
+.feat h3{font-size:22px;color:var(--c);margin-bottom:8px}
+.feat p{margin:0;color:var(--ink-soft);font-size:15px}
+
+/* ---------- gallery ---------- */
+.shots{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:26px;margin-top:34px;align-items:start}
+.shot{position:relative;background:var(--milk);padding:10px;box-shadow:0 14px 30px rgba(90,40,40,.16)}
+.shot figcaption{font-family:var(--f-hand);font-size:18px;color:var(--bord);padding:10px 6px 4px}
+.shot .tape{top:-12px;left:28px;transform:rotate(-5deg)}
+.shots-col{display:flex;flex-direction:column;gap:26px}
+.shot.phone-shot{max-width:320px;margin:0 auto;border-radius:30px;padding:9px;background:#2b1a14}
+.shot.phone-shot img{border-radius:22px}
+.shot.phone-shot figcaption{color:var(--milk);text-align:center}
+
+/* ---------- steps ---------- */
+.steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;margin-top:34px;counter-reset:s}
+.step{position:relative;background:var(--latte);padding:30px 24px 26px;border-top:5px solid var(--choc)}
+.step::before{counter-increment:s;content:"0" counter(s);font-family:var(--f-disp);font-size:48px;line-height:1;color:var(--bord);display:block;margin-bottom:10px}
+.step h3{font-size:22px;color:var(--choc);margin-bottom:6px}
+.step p{margin:0;color:var(--ink-soft);font-size:15px}
+
+/* ---------- about ---------- */
+.about{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:40px;align-items:center}
+.about-card{position:relative;background:var(--pat-dots);padding:22px;box-shadow:0 14px 30px rgba(90,40,40,.18);transform:rotate(-1deg)}
+.about-card .in{background:var(--pink-lt);padding:30px 26px;font-family:var(--f-hand);font-size:22px;line-height:1.35;color:var(--bord)}
+.about p{margin:0 0 14px;font-size:17px}
+
+/* ---------- faq ---------- */
+.faq{max-width:780px;margin-top:30px}
+.faq details{background:var(--milk);margin-bottom:12px;box-shadow:0 6px 16px rgba(90,40,40,.08);border-left:5px solid var(--pink-dk)}
+.faq details:nth-child(3n+2){border-left-color:var(--bord)} .faq details:nth-child(3n){border-left-color:var(--blue-dk)}
+.faq summary{cursor:pointer;list-style:none;padding:18px 22px;font-weight:600;display:flex;justify-content:space-between;gap:16px}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";font-family:var(--f-disp);font-size:24px;line-height:1;color:var(--bord);transition:transform .2s}
+.faq details[open] summary::after{transform:rotate(45deg)}
+.faq details p{margin:0;padding:0 22px 20px;color:var(--ink-soft)}
+
+/* ---------- final ---------- */
+.final{position:relative;background:var(--bord);color:var(--milk);padding:64px 40px;text-align:center;box-shadow:0 20px 40px rgba(90,20,30,.3);overflow:hidden}
+.final::before{content:"";position:absolute;left:0;right:0;top:0;height:18px;background:var(--pat-gingpink)}
+.final h2{color:var(--milk);margin-top:10px}
+.final p{max-width:46ch;margin:0 auto 28px;color:#f4d6dd;font-size:18px}
+.final .btn{background:var(--milk);color:var(--bord)}
+.final .word{display:inline-block;font-family:var(--f-mono);background:var(--milk);color:var(--bord);padding:2px 10px;margin:0 4px;border-radius:4px}
+
+footer{padding:34px 0 50px;font-family:var(--f-mono);font-size:13px;color:var(--ink-soft);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+
+/* ---------- responsive ---------- */
+@media (max-width: 960px){
+  .hero{min-height:0;padding:10px 0 50px}
+  .hero h1{font-size:clamp(38px,8vw,64px)}
+  .hero-grid{grid-template-columns:minmax(0,1fr);gap:40px}
+  .pains{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .feats{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .shots{grid-template-columns:minmax(0,1fr)}
+  .about{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width: 600px){
+  section{padding:52px 0}
+  .wrap{padding:0 16px}
+  .hero-card{padding:44px 22px 26px;transform:none}
+  .hero p{font-size:16px}
+  .btn{padding:14px 22px;width:100%;justify-content:center}
+  .badge-round{width:84px;height:84px;font-size:13px;left:-6px;top:-30px}
+  .phone{width:36%;right:-4px}
+  .pains{grid-template-columns:minmax(0,1fr);gap:18px}
+  .feats{grid-template-columns:minmax(0,1fr)}
+  .steps{grid-template-columns:minmax(0,1fr)}
+  .about-card .in{font-size:19px;padding:22px 18px}
+  .final{padding:52px 20px}
+  .ribbon-track{font-size:17px}
+}
+@media (prefers-reduced-motion: reduce){ *{animation:none!important;transition:none!important} }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <div class="bar"><b>уютный трекер</b><a href="https://www.instagram.com/lesya.frame/" target="_blank" rel="noopener">@lesya.frame</a></div>
+</div>
+
+<!-- hero -->
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div class="hero-card">
+      <div class="eyebrow">трекер на 12 недель</div>
+      <h1 style="margin-top:10px">уютные будни<br>в одном месте<span class="hand">как бумажный блокнот, только в телефоне</span></h1>
+      <p>все твои дела, разложенные по сферам жизни. отмечаешь, что успела, вытягиваешь бумажку дня и видишь, как складывается неделя.</p>
+      <div class="hero-cta">
+        <a class="btn" href="#want">хочу трекер</a>
+        <a class="btn ghost" href="#inside">что внутри</a>
+      </div>
+      <div class="hero-note">открывается в браузере · телефон и компьютер · без приложений</div>
+    </div>
+    <div class="devices">
+      <div class="badge-round">сделано дизайнером с любовью</div>
+      <div class="laptop"><img src="img/top.webp" alt="трекер на экране ноутбука: название, бумажка дня и недели" width="1770" height="765"></div>
+      <div class="phone"><img src="img/phone.webp" alt="трекер на телефоне" width="780" height="1640"></div>
+    </div>
+  </div>
+</section>
+
+<div class="ribbon" aria-hidden="true"><div class="ribbon-track">
+  <span>сферы жизни</span><span>бумажка дня</span><span>цели на сезон</span><span>итоги недели</span><span>серии дней</span><span>календари</span><span>свои даты</span>
+  <span>сферы жизни</span><span>бумажка дня</span><span>цели на сезон</span><span>итоги недели</span><span>серии дней</span><span>календари</span><span>свои даты</span>
+</div></div>
+
+<!-- pains -->
+<section>
+  <div class="wrap">
+    <div class="eyebrow">узнаёшь себя?</div>
+    <h2>если дел много, а в голове каша</h2>
+    <div class="pains">
+      <div class="note"><div class="tape"></div>в заметках пять списков дел, и ни один не доделан</div>
+      <div class="note"><div class="tape"></div>покупаешь красивый ежедневник, а через пару недель он лежит пустой</div>
+      <div class="note"><div class="tape"></div>утром не понимаешь, за что браться, и день уходит сам собой</div>
+      <div class="note"><div class="tape"></div>в конце недели кажется, что ничего не успела, хотя крутилась всё время</div>
+    </div>
+    <p class="pains-after">дела никуда не деваются, их просто не видно. <span class="hand">трекер собирает их перед глазами.</span></p>
+  </div>
+</section>
+
+<!-- features -->
+<section id="inside">
+  <div class="wrap">
+    <div class="eyebrow">что внутри</div>
+    <h2>всё, что нужно, и ничего лишнего</h2>
+    <p class="lead">трекер собран как личный блокнот: полоска, клетка, горошек, наклейки. только он не теряется и всегда под рукой.</p>
+    <div class="feats">
+      <article class="feat" style="--pat:var(--pat-tartan);--c:#8a2433"><div class="feat-h"><span>01</span></div><div class="feat-b"><h3>сферы жизни</h3><p>движение, забота о себе, дом, время для себя или твои. сферы можно переименовать, добавить и убрать.</p></div></article>
+      <article class="feat" style="--pat:var(--pat-stripe);--c:#c9607c"><div class="feat-h"><span>02</span></div><div class="feat-b"><h3>дела по неделям</h3><p>у каждой недели свой список. одно дело можно отметить хоть пять раз, например тренировки или чтение.</p></div></article>
+      <article class="feat" style="--pat:var(--pat-dots);--c:#6b3f2c"><div class="feat-h"><span>03</span></div><div class="feat-b"><h3>бумажка дня</h3><p>утром вытягиваешь бумажку с маленькой идеей на сегодня. не нужно думать, с чего начать.</p></div></article>
+      <article class="feat" style="--pat:var(--pat-ging);--c:#4f76a8"><div class="feat-h"><span>04</span></div><div class="feat-b"><h3>цели на сезон</h3><p>«прочитать 5 книг» или «20 тренировок». считаются сами из отмеченных дел или вручную.</p></div></article>
+      <article class="feat" style="--pat:var(--pat-gingpink);--c:#b8435a"><div class="feat-h"><span>05</span></div><div class="feat-b"><h3>итоги недели</h3><p>сколько сделано по каждой сфере и один вопрос в конце: что было хорошего на этой неделе?</p></div></article>
+      <article class="feat" style="--pat:var(--pat-dotspink);--c:#7d1f2d"><div class="feat-h"><span>06</span></div><div class="feat-b"><h3>прогресс и серии</h3><p>график по неделям, серия дней подряд и недели, где было что-то из каждой сферы.</p></div></article>
+    </div>
+  </div>
+</section>
+
+<!-- gallery -->
+<section>
+  <div class="wrap">
+    <div class="eyebrow">как это выглядит</div>
+    <h2>полистай</h2>
+    <div class="shots">
+      <div class="shots-col">
+        <figure class="shot" style="margin:0"><div class="tape"></div><img src="img/spheres.webp" alt="сферы жизни с делами и отметками" loading="lazy" width="1770" height="1170"><figcaption>сферы и дела на неделю</figcaption></figure>
+        <figure class="shot" style="margin:0"><div class="tape blue"></div><img src="img/cals-book.webp" alt="календари, цели и итоги недели" loading="lazy" width="1770" height="1290"><figcaption>календари, цели и итоги недели</figcaption></figure>
+        <figure class="shot" style="margin:0"><div class="tape"></div><img src="img/progress.webp" alt="график прогресса по неделям" loading="lazy" width="1770" height="690"><figcaption>весь сезон на одном графике</figcaption></figure>
+      </div>
+      <figure class="shot phone-shot" style="margin:0 auto"><img src="img/phone2.webp" alt="трекер на телефоне" loading="lazy" width="780" height="1640"><figcaption>и в телефоне тоже</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<!-- steps -->
+<section>
+  <div class="wrap">
+    <div class="eyebrow">как получить</div>
+    <h2>три шага</h2>
+    <div class="steps">
+      <div class="step"><h3>пишешь мне</h3><p>в директ слово «трекер». расскажу детали и отвечу на вопросы.</p></div>
+      <div class="step"><h3>оплачиваешь</h3><p>после оплаты добавляю твою почту в список доступа.</p></div>
+      <div class="step"><h3>входишь по почте</h3><p>открываешь ссылку, входишь со своей почтой и пользуешься. твои записи видишь только ты.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- about -->
+<section>
+  <div class="wrap about">
+    <div class="about-card"><div class="in">«сначала я сделала этот трекер для себя. а потом меня попросили: сделай такой же»</div></div>
+    <div>
+      <div class="eyebrow">кто делает</div>
+      <h2>привет, я леся</h2>
+      <p>я веб-дизайнер. у меня работа, блог, щенок рэм, учёба на кинолога и куча хобби. всё это долго жило в голове и в заметках, пока я не собрала себе трекер.</p>
+      <p>показала его в рилс, и мне начали писать: хочу такой же. так он и стал продуктом. я слежу, чтобы он был удобным и красивым, и дорабатываю по отзывам.</p>
+    </div>
+  </div>
+</section>
+
+<!-- faq -->
+<section>
+  <div class="wrap">
+    <div class="eyebrow">вопросы</div>
+    <h2>частые вопросы</h2>
+    <div class="faq">
+      <details><summary>нужно что-то скачивать?</summary><p>нет. трекер открывается по ссылке в браузере, как сайт. на телефоне его можно добавить на экран «домой», и он будет как приложение.</p></details>
+      <details><summary>можно пользоваться и с телефона, и с компьютера?</summary><p>да. входишь по своей почте, и записи будут одни и те же на всех устройствах.</p></details>
+      <details><summary>можно поменять дела и сферы под себя?</summary><p>да. дела добавляешь, переименовываешь и удаляешь сама. сферы тоже можно переименовать, добавить или убрать.</p></details>
+      <details><summary>а если я начну не с понедельника?</summary><p>даты начала и конца выбираешь сама в настройках. трекер перестроится под них.</p></details>
+      <details><summary>что будет, если я пропущу неделю?</summary><p>ничего страшного. трекер не ругает. просто открываешь следующую неделю и продолжаешь.</p></details>
+      <details><summary>кто видит мои записи?</summary><p>только ты. у каждого свой вход по почте, и чужие записи никому не видны.</p></details>
+    </div>
+  </div>
+</section>
+
+<!-- final -->
+<section id="want">
+  <div class="wrap">
+    <div class="final">
+      <div class="eyebrow" style="color:#f4c3cf">хочешь такой же?</div>
+      <h2>давай сделаем твои будни уютнее</h2>
+      <p>напиши мне в директ слово <span class="word">трекер</span>, и я всё расскажу</p>
+      <a class="btn" href="https://ig.me/m/lesya.frame" target="_blank" rel="noopener">написать в директ</a>
+    </div>
+  </div>
+</section>
+
+<div class="wrap"><footer><span>уютный трекер · леся</span><a href="https://www.instagram.com/lesya.frame/" target="_blank" rel="noopener">instagram @lesya.frame</a></footer></div>
+
+</body>
+</html>
