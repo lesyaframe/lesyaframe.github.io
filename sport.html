@@ -19,11 +19,11 @@ body{margin:0;font:14px/1.4 system-ui,-apple-system,sans-serif;background:#F7F0D
 img{max-width:100%}
 [hidden]{display:none!important}
 </style>
-<script src="firebase-config.js?v=20260930165635"></script>
+<script src="firebase-config.js?v=20261001114159"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
-<script src="portal.js?v=20260930165635" data-app="sport"></script>
+<script src="portal.js?v=20261001114159" data-app="sport"></script>
 </head>
 <body>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -204,6 +204,12 @@ main{max-width:1300px;margin-inline:auto;padding:24px var(--gutter) 60px;display
 .exrow{display:grid;grid-template-columns:1fr 140px 30px;gap:8px;align-items:center}
 .exrow input{border:1.5px solid var(--line);background:#fff;border-radius:8px;padding:8px 10px;width:100%}
 .exlist{display:flex;flex-direction:column;gap:6px}
+.vid{position:relative;width:100%;aspect-ratio:16/9;border-radius:12px;overflow:hidden;background:#000;box-shadow:0 20px 40px -20px rgba(0,0,0,.8)}
+.vid iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.vlink{font-size:13px;font-weight:600;color:var(--paper);opacity:.75;align-self:flex-end;margin-top:-12px}
+.thumb{all:unset;cursor:pointer;position:relative;display:block;margin-top:18px;border-radius:8px;overflow:hidden;aspect-ratio:16/9;background:#2a1a14 center/cover}
+.thumb::after{content:"▶";position:absolute;left:50%;top:50%;translate:-50% -50%;width:44px;height:44px;border-radius:50%;background:rgba(37,10,10,.75);color:var(--paper);display:grid;place-items:center;font-size:16px;padding-left:3px;box-sizing:border-box}
+.thumb:hover::after{background:var(--red)}
 </style>
 
 <header class="top">
@@ -329,6 +335,21 @@ const TYPES = [
   {id:"yoga", name:"йога"}, {id:"walk", name:"прогулка"}, {id:"other", name:"другое"}
 ];
 const FEEL = [{id:"easy", name:"легко"}, {id:"ok", name:"норм"}, {id:"hard", name:"тяжело"}];
+/* ссылка на YouTube → id ролика и время старта */
+function yt(url){
+  url = String(url || "").trim(); if (!url) return null;
+  if (/^[\w-]{11}$/.test(url)) return {id: url, start: 0};
+  let u; try{ u = new URL(url); }catch(e){ return null; }
+  const h = u.hostname.replace(/^(www|m|music)\./, ""); let id = null;
+  if (h === "youtu.be") id = u.pathname.slice(1).split("/")[0];
+  else if (h === "youtube.com" || h === "youtube-nocookie.com") id = u.searchParams.get("v") || (u.pathname.match(/\/(embed|shorts|live|v)\/([\w-]{11})/) || [])[2];
+  if (!id || !/^[\w-]{11}$/.test(id)) return null;
+  const t = u.searchParams.get("t") || u.searchParams.get("start") || "";
+  let start = 0;
+  if (/^\d+$/.test(t)) start = +t;
+  else if (t){ const m = t.match(/^(?:(\d+)h)?(?:(\d+)m)?(?:(\d+)s)?$/); if (m) start = (+m[1] || 0) * 3600 + (+m[2] || 0) * 60 + (+m[3] || 0); }
+  return {id, start};
+}
 const tName = id => (TYPES.find(t => t.id === id) || TYPES[5]).name;
 const store = makeStore({key:"sport-v1", cols:["workouts","logs"], docs:{"settings/goal":{perWeek:3}}, onChange: render});
 let calYM = {y: new Date().getFullYear(), m: new Date().getMonth()};
@@ -364,6 +385,7 @@ function renderWorkouts(){
   $("#wks").innerHTML = list.map(([id,w]) => { const ex = w.exercises || [], l = last(id);
     return `<article class="wk t-${esc(w.type)}">
       <button type="button" class="link edit" data-wedit="${esc(id)}">изменить</button>
+      ${yt(w.video) ? `<button type="button" class="thumb" data-start="${esc(id)}" style="background-image:url(https://i.ytimg.com/vi/${yt(w.video).id}/mqdefault.jpg)" aria-label="Начать с видео"></button>` : ""}
       <h3>${esc(w.name)}</h3>
       <div class="meta"><span class="chip">${tName(w.type)}</span>${w.minutes ? `<span>~${w.minutes} мин</span>` : ""}<span>${ex.length} ${plural(ex.length,"упражнение","упражнения","упражнений")}</span></div>
       ${ex.length ? `<ul>${ex.slice(0,4).map(e => `<li>${esc(e.name)}${e.amount ? " — " + esc(e.amount) : ""}</li>`).join("")}${ex.length > 4 ? `<li>и ещё ${ex.length - 4}</li>` : ""}</ul>` : ""}
@@ -402,6 +424,7 @@ function editWorkout(id){
       <div class="fld"><label for="w-type">Тип</label><select id="w-type">${TYPES.map(t => `<option value="${t.id}"${t.id === w.type ? " selected" : ""}>${t.name}</option>`).join("")}</select></div>
       <div class="fld"><label for="w-min">Примерно минут</label><input id="w-min" type="number" min="0" value="${esc(w.minutes)}"></div>
     </div>
+    <div class="fld"><label for="w-yt">Видео с YouTube</label><input id="w-yt" value="${esc(w.video || "")}" placeholder="Вставь ссылку на ролик, если тренируешься по видео" inputmode="url"><span class="sub" id="w-yt-msg"></span></div>
     <span class="lbl">Упражнения</span>
     <div class="exlist" id="w-ex">${rows()}</div>
     <button type="button" class="link" id="w-add" style="align-self:flex-start">+ упражнение</button>
@@ -413,7 +436,9 @@ function editWorkout(id){
       if (id) armDelete(dlg.querySelector("#w-del"), () => store.del("workouts", id));
       dlg.querySelector("#w-save").addEventListener("click", () => {
         const name = dlg.querySelector("#w-name").value.trim(); if (!name) return dlg.querySelector("#w-name").focus();
-        store.put("workouts", id || store.newId("workouts"), {...w, name, type: dlg.querySelector("#w-type").value,
+        const video = dlg.querySelector("#w-yt").value.trim();
+        if (video && !yt(video)){ dlg.querySelector("#w-yt-msg").textContent = "Это не похоже на ссылку на ролик YouTube. Скопируй её через «Поделиться» → «Копировать ссылку»."; return dlg.querySelector("#w-yt").focus(); }
+        store.put("workouts", id || store.newId("workouts"), {...w, name, type: dlg.querySelector("#w-type").value, video,
           minutes: +dlg.querySelector("#w-min").value || null,
           exercises: ex.filter(e => e.name.trim()).map(e => ({name: e.name.trim(), amount: e.amount.trim()})),
           createdAt: w.createdAt || Date.now(), updatedAt: Date.now()});
@@ -429,17 +454,20 @@ function startWorkout(id){
   const w = store.data.workouts[id]; if (!w) return;
   S = {id, w, start: Date.now(), paused: 0, pauseAt: null, done: new Set()};
   $("#sess").hidden = false; document.body.style.overflow = "hidden";
+  const v = yt(w.video);
+  $("#sess").innerHTML = `<div class="sess-in"><div id="sessHead"></div>
+    ${v ? `<div class="vid"><iframe src="https://www.youtube-nocookie.com/embed/${v.id}?rel=0&playsinline=1${v.start ? "&start=" + v.start : ""}" title="Видео тренировки" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div>
+    <a class="vlink" href="${esc(w.video)}" rel="noopener" target="_blank">открыть на YouTube ↗</a>` : ""}
+    <div id="sessBody" style="display:flex;flex-direction:column;gap:20px"></div></div>`;
   renderSess(); tick = setInterval(paintTimer, 1000);
 }
 const elapsed = () => Math.floor(((S.pauseAt || Date.now()) - S.start - S.paused) / 1000);
 function paintTimer(){ const t = $("#timer"); if (t && S) t.textContent = mmss(elapsed()); }
 function renderSess(){
   const ex = S.w.exercises || [];
-  $("#sess").innerHTML = `<div class="sess-in">
-    <div class="sess-top"><div><span class="lbl">${tName(S.w.type)}</span><h2>${esc(S.w.name)}</h2></div><div style="text-align:right"><div class="timer num" id="timer">${mmss(elapsed())}</div><button type="button" class="link" style="color:var(--paper)" id="pause">${S.pauseAt ? "продолжить" : "пауза"}</button></div></div>
-    ${ex.length ? `<div class="sess-list">${ex.map((e,i) => `<button type="button" class="${S.done.has(i) ? "on" : ""}" data-ex="${i}" aria-pressed="${S.done.has(i)}"><span class="box"></span><span>${esc(e.name)}</span><span>${esc(e.amount || "")}</span></button>`).join("")}</div>` : `<p class="lbl">В этой тренировке нет списка упражнений: просто засекай время.</p>`}
-    <div class="sess-foot"><button type="button" class="btn btn-line" id="cancelS">Отменить</button><span class="lbl num">${S.done.size} из ${ex.length} упражнений</span><button type="button" class="btn btn-butter" id="finishS">Завершить ✓</button></div>
-  </div>`;
+  $("#sessHead").innerHTML = `<div class="sess-top"><div><span class="lbl">${tName(S.w.type)}</span><h2>${esc(S.w.name)}</h2></div><div style="text-align:right"><div class="timer num" id="timer">${mmss(elapsed())}</div><button type="button" class="link" style="color:var(--paper)" id="pause">${S.pauseAt ? "продолжить" : "пауза"}</button></div></div>`;
+  $("#sessBody").innerHTML = `${ex.length ? `<div class="sess-list">${ex.map((e,i) => `<button type="button" class="${S.done.has(i) ? "on" : ""}" data-ex="${i}" aria-pressed="${S.done.has(i)}"><span class="box"></span><span>${esc(e.name)}</span><span>${esc(e.amount || "")}</span></button>`).join("")}</div>` : `<p class="lbl">${yt(S.w.video) ? "Занимайся по видео, таймер идёт." : "В этой тренировке нет списка упражнений: просто засекай время."}</p>`}
+    <div class="sess-foot"><button type="button" class="btn btn-line" id="cancelS">Отменить</button><span class="lbl num">${S.done.size} из ${ex.length} упражнений</span><button type="button" class="btn btn-butter" id="finishS">Завершить ✓</button></div>`;
 }
 $("#sess").addEventListener("click", e => {
   const b = e.target.closest("[data-ex]");
@@ -448,7 +476,7 @@ $("#sess").addEventListener("click", e => {
   if (e.target.closest("#cancelS")){ endSess(); return; }
   if (e.target.closest("#finishS")){ const mins = Math.max(1, Math.round(elapsed() / 60)); const snap = S; endSess(); logDialog(null, {workoutId: snap.id, name: snap.w.name, type: snap.w.type, minutes: mins, date: todayISO(), doneCount: snap.done.size, total: (snap.w.exercises || []).length}); }
 });
-function endSess(){ clearInterval(tick); S = null; $("#sess").hidden = true; document.body.style.overflow = ""; }
+function endSess(){ clearInterval(tick); S = null; $("#sess").hidden = true; $("#sess").innerHTML = ""; document.body.style.overflow = ""; }
 
 /* ---- log an activity (after a session, or by hand) ---- */
 function logDialog(id, preset){
