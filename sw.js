@@ -1,6 +1,6 @@
 /* Кэш для работы без сети. Страницы берутся из сети, если она есть
    (так обновления приходят сразу), иначе из кэша. */
-const VERSION = "hub-20261001114159";
+const VERSION = "hub-20261001114551";
 const SHELL = [
   "./", "index.html", "blog.html", "budget.html", "sport.html", "work.html", "personal.html",
   "randomizer.html", "osen.html", "data.html", "portal.js", "firebase-config.js", "manifest.webmanifest",
@@ -21,7 +21,8 @@ self.addEventListener("fetch", e => {
   if (!own && !lib) return; // база и вход Firebase идут напрямую
   if (own && (req.mode === "navigate" || url.pathname.endsWith(".html") || url.pathname.endsWith("/"))) {
     // страницы: сначала сеть, без сети — кэш
-    e.respondWith(fetch(req).then(r => { const copy = r.clone(); caches.open(VERSION).then(c => c.put(req, copy)); return r; })
+    // cache: "no-cache" — всегда спрашиваем сервер, нет ли новой версии страницы
+    e.respondWith(fetch(req, { cache: "no-cache" }).then(r => { const copy = r.clone(); caches.open(VERSION).then(c => c.put(req, copy)); return r; })
       .catch(() => caches.match(req, { ignoreSearch: true }).then(r => r || caches.match("index.html"))));
     return;
   }
