@@ -19,11 +19,11 @@ body{margin:0;font:14px/1.4 system-ui,-apple-system,sans-serif;background:#F7F0D
 img{max-width:100%}
 [hidden]{display:none!important}
 </style>
-<script src="firebase-config.js?v=20261001114551"></script>
+<script src="firebase-config.js?v=20261002155853"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
-<script src="portal.js?v=20261001114551" data-app="personal"></script>
+<script src="portal.js?v=20261002155853" data-app="personal"></script>
 </head>
 <body>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -478,8 +478,8 @@ function renderVisits(){
   $("#up").innerHTML = upcoming.map(([id,v]) => { const s = sp(v.specialistId) || {}; const d = new Date(v.date + "T12:00");
     return `<button type="button" class="appt k-${esc(s.kind || "other")}" data-vedit="${esc(id)}">
       <span class="date"><b class="num">${d.getDate()}</b><span>${MON_G[d.getMonth()].slice(0,3)} · ${wd(v.date)}</span></span>
-      <span><span class="who">${esc(s.name || "Без мастера")}${v.time ? ` · ${esc(v.time)}` : ""}</span>
-      <span class="info"><span>${esc(v.service || s.service || kName(s.kind))}${v.price ? " · " + rub(v.price) : ""}</span>${s.address ? `<span>${esc(s.address)}</span>` : ""}<span>${relDay(v.date)}</span></span></span>
+      <span><span class="who">${esc(v.title || v.service || s.name || "Запись")}${v.time ? ` · ${esc(v.time)}` : ""}</span>
+      <span class="info">${s.name || v.price ? `<span>${[s.name ? esc(s.name) : "", v.price ? rub(v.price) : ""].filter(Boolean).join(" · ")}</span>` : ""}${s.address ? `<span>${esc(s.address)}</span>` : ""}<span>${relDay(v.date)}${v.remind !== false && v.time ? " · напомню в Telegram" : ""}</span></span></span>
     </button>`; }).join("") || `<div class="empty"><span class="v">никуда</span>Ближайших записей нет</div>`;
   $("#specs").innerHTML = specs.map(([id,s]) => {
     const past = visits.filter(([,v]) => v.specialistId === id && v.date < t0).map(([,v]) => v.date).sort().pop();
@@ -495,7 +495,7 @@ function renderVisits(){
       <div class="acts"><button type="button" class="link" data-sedit="${esc(id)}">изменить</button><button type="button" class="btn btn-ink" data-vnew="${esc(id)}">+ запись</button></div>
     </article>`; }).join("") || `<div class="empty"><span class="v">пока пусто</span>Добавь мастера, массажиста или врача</div>`;
   const past = visits.filter(([,v]) => v.date < t0).sort((a,b) => b[1].date.localeCompare(a[1].date)).slice(0, 15);
-  $("#past").innerHTML = past.map(([id,v]) => `<button type="button" data-vedit="${esc(id)}"><span class="d">${dshort(v.date)}</span><span>${esc(sp(v.specialistId)?.name || "—")}${v.service ? " · " + esc(v.service) : ""}</span><span class="num">${v.price ? rub(v.price) : ""}</span></button>`).join("")
+  $("#past").innerHTML = past.map(([id,v]) => `<button type="button" data-vedit="${esc(id)}"><span class="d">${dshort(v.date)}</span><span>${esc(v.title || v.service || sp(v.specialistId)?.name || "—")}${(v.title || v.service) && sp(v.specialistId) ? " · " + esc(sp(v.specialistId).name) : ""}</span><span class="num">${v.price ? rub(v.price) : ""}</span></button>`).join("")
     || `<p class="sub">Здесь будут прошедшие визиты.</p>`;
 }
 function editSpec(id){
@@ -520,21 +520,25 @@ function editSpec(id){
 }
 function editVisit(id, specId){
   const specs = store.list("specialists").sort((a,b) => a[1].name.localeCompare(b[1].name));
-  if (!specs.length && !id) return editSpec(null);
-  const v = id ? store.data.visits[id] : {specialistId: specId || specs[0]?.[0], date: todayISO(), time:"", service:"", price:"", note:""};
-  openModal(`<h2>${id ? "Запись" : "Новая"} <span class="v">${id ? "визит" : "запись"}</span></h2>
-    <div class="fld"><label for="v-spec">К кому</label><select id="v-spec">${specs.map(([sid,s]) => `<option value="${esc(sid)}"${sid === v.specialistId ? " selected" : ""}>${esc(s.name)} · ${kName(s.kind)}</option>`).join("")}</select></div>
-    <div class="row3"><div class="fld"><label for="v-date">Дата</label><input id="v-date" type="date" value="${esc(v.date)}"></div>
-      <div class="fld"><label for="v-time">Время</label><input id="v-time" type="time" value="${esc(v.time)}"></div>
-      <div class="fld"><label for="v-price">Цена, ₽</label><input id="v-price" type="number" min="0" value="${esc(v.price)}"></div></div>
-    <div class="fld"><label for="v-serv">Услуга</label><input id="v-serv" value="${esc(v.service)}" maxlength="80" placeholder="Если отличается от обычной"></div>
+  const v = id ? store.data.visits[id] : {title:"", specialistId: specId || "", date: "", time:"", price:"", note:"", remind: true};
+  const spec0 = specId && store.data.specialists[specId];
+  openModal(`<h2>${id ? "Запись" : "Новая"} <span class="v">запись</span></h2>
+    <div class="fld"><label for="v-title">Название</label><input id="v-title" value="${esc(v.title || v.service || (spec0 ? spec0.service || "" : ""))}" maxlength="80" placeholder="Например, брови"></div>
+    <div class="row2"><div class="fld"><label for="v-date">День</label><input id="v-date" type="date" value="${esc(v.date)}"></div>
+      <div class="fld"><label for="v-time">Время</label><input id="v-time" type="time" value="${esc(v.time)}"></div></div>
+    <label style="display:flex;gap:10px;align-items:center;font-size:14px;cursor:pointer"><input type="checkbox" id="v-remind"${v.remind !== false ? " checked" : ""} style="width:18px;height:18px;accent-color:var(--ink)"> Напомнить в Telegram за день и за полтора часа</label>
+    <div class="row2"><div class="fld"><label for="v-spec">Мастер или врач</label><select id="v-spec"><option value="">не выбран</option>${specs.map(([sid,s]) => `<option value="${esc(sid)}"${sid === v.specialistId ? " selected" : ""}>${esc(s.name)} · ${kName(s.kind)}</option>`).join("")}</select></div>
+      <div class="fld"><label for="v-price">Цена, ₽</label><input id="v-price" type="number" min="0" value="${esc(v.price)}" placeholder="необязательно"></div></div>
     <div class="fld"><label for="v-note">Заметка</label><input id="v-note" value="${esc(v.note)}" maxlength="200" placeholder="Что взять, что сказать"></div>
     <div class="dlg-foot">${id ? `<button type="button" class="btn btn-line" id="v-del">Удалить</button>` : ""}<div class="r"><button type="button" class="btn btn-line" data-close>Отмена</button><button type="button" class="btn btn-ink" id="v-save">Сохранить</button></div></div>`, dlg => {
       if (id) armDelete(dlg.querySelector("#v-del"), () => store.del("visits", id));
       dlg.querySelector("#v-save").addEventListener("click", () => {
+        const title = dlg.querySelector("#v-title").value.trim(); if (!title) return dlg.querySelector("#v-title").focus();
         const date = dlg.querySelector("#v-date").value; if (!date) return dlg.querySelector("#v-date").focus();
-        store.put("visits", id || store.newId("visits"), {...v, specialistId: dlg.querySelector("#v-spec").value, date, time: dlg.querySelector("#v-time").value,
-          price: +dlg.querySelector("#v-price").value || null, service: dlg.querySelector("#v-serv").value.trim(), note: dlg.querySelector("#v-note").value.trim(), createdAt: v.createdAt || Date.now()});
+        const time = dlg.querySelector("#v-time").value;
+        store.put("visits", id || store.newId("visits"), {...v, title, specialistId: dlg.querySelector("#v-spec").value, date, time,
+          remind: dlg.querySelector("#v-remind").checked,
+          price: +dlg.querySelector("#v-price").value || null, note: dlg.querySelector("#v-note").value.trim(), createdAt: v.createdAt || Date.now()});
         closeModal();
       });
   });
