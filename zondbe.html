@@ -1,0 +1,518 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Счётчик зондбе</title>
+<meta name="theme-color" content="#3B1B14">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Хаб">
+<style>
+html{background:#3B1B14}
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{margin:0;font:14px/1.4 system-ui,-apple-system,sans-serif;background:#F7F0DA}
+img{max-width:100%}
+[hidden]{display:none!important}
+</style>
+<script src="firebase-config.js?v=20261003162739"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+<script src="portal.js?v=20261003162739" data-app="zondbe"></script>
+</head>
+<body>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;800&family=Golos+Text:wght@400;500;600&display=swap">
+<style>
+:root{
+  --bg:#EDF1F5; --surface:#FFFFFF; --surface-2:#F5F7FA; --ink:#0F1B2D; --muted:#5B6B7F; --line:#D6DDE6;
+  --red:#C8102E; --red-soft:#FBE7EA; --navy:#13233F;
+  --board-bg:#13233F; --board-ink:#F3F6FA; --board-muted:#9AAAC0; --board-line:#2A3D5E;
+  --good:#1D7F47; --good-soft:#E3F3EA;
+  --display:"Unbounded","Arial Black",system-ui,sans-serif;
+  --body:"Golos Text",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --bg:#0A1320; --surface:#111D2E; --surface-2:#172538; --ink:#E6ECF3; --muted:#8FA0B5; --line:#24344B;
+    --red:#F0414F; --red-soft:#3A1720; --navy:#0B1626;
+    --board-bg:#060D18; --board-ink:#F3F6FA; --board-muted:#8093AD; --board-line:#1E2E47;
+    --good:#43C983; --good-soft:#12301F;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#0A1320; --surface:#111D2E; --surface-2:#172538; --ink:#E6ECF3; --muted:#8FA0B5; --line:#24344B;
+  --red:#F0414F; --red-soft:#3A1720; --navy:#0B1626;
+  --board-bg:#060D18; --board-ink:#F3F6FA; --board-muted:#8093AD; --board-line:#1E2E47;
+  --good:#43C983; --good-soft:#12301F;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.5}
+.wrap{max-width:860px;margin:0 auto;padding-inline:16px;padding-block:24px 64px;display:flex;flex-direction:column;gap:28px}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--red);outline-offset:2px}
+
+.back{align-self:flex-start;font-size:14px;font-weight:600;color:var(--muted);text-decoration:none;border:1px solid var(--line);border-radius:999px;padding:5px 14px;background:var(--surface);margin-bottom:-12px}
+.back:hover{color:var(--ink);border-color:var(--muted)}
+.top{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap}
+.top h1{font-size:clamp(22px,5vw,30px);font-weight:800;letter-spacing:-.01em}
+.top h1 span{color:var(--red)}
+.top p{margin:0;color:var(--muted);font-size:13px;letter-spacing:.04em;text-transform:uppercase}
+
+/* scoreboard */
+.board{background:var(--board-bg);color:var(--board-ink);border-radius:18px;overflow:hidden;position:relative}
+.board::before{content:"";display:block;height:8px;background:linear-gradient(90deg,var(--red) 0 60%,#fff 60% 70%,var(--red) 70% 100%)}
+.board-grid{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:22px 20px 18px;gap:8px}
+.side{display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center;min-width:0}
+.side .nm{font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--board-muted);font-weight:600;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.side .num{font-family:var(--display);font-weight:800;font-size:clamp(56px,15vw,104px);line-height:1;font-variant-numeric:tabular-nums;letter-spacing:-.03em}
+.side.lead .num{color:#FF5A66}
+.side.lead .nm{color:var(--board-ink)}
+.side .stat{font-size:12px;color:var(--board-muted);font-variant-numeric:tabular-nums}
+.mid{display:flex;flex-direction:column;align-items:center;gap:6px}
+.mid .colon{font-family:var(--display);font-size:clamp(36px,9vw,64px);font-weight:700;color:var(--board-muted);line-height:1}
+.mid .unit{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--board-muted)}
+.board-foot{border-top:1px solid var(--board-line);padding:10px 20px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:13px;color:var(--board-muted)}
+.board-foot b{color:var(--board-ink);font-weight:600}
+
+/* sections */
+.sec-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:12px;flex-wrap:wrap}
+.sec-head h2{font-size:17px;font-weight:700}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px}
+.match{display:flex;flex-direction:column}
+.match-head{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:16px 18px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.match-title{font-family:var(--display);font-weight:700;font-size:18px}
+.match-title .vs{color:var(--muted);font-weight:500;padding-inline:6px}
+.meta{color:var(--muted);font-size:13px}
+.pill{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;padding:3px 10px;border-radius:999px;background:var(--surface-2);color:var(--muted);letter-spacing:.02em}
+.pill.live{background:var(--red-soft);color:var(--red)}
+.pill.live::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+
+.bets{display:grid;grid-template-columns:1fr 1fr}
+.bet{padding:16px 18px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.bet + .bet{border-left:1px solid var(--line)}
+.bet h3{font-family:var(--body);font-size:13px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.bet-shown .sc{font-family:var(--display);font-size:32px;font-weight:800;font-variant-numeric:tabular-nums;line-height:1.1}
+.bet-shown .who{font-size:14px}
+.bet-empty{color:var(--muted);font-size:14px}
+
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.score-in{display:flex;align-items:center;gap:6px}
+.score-in input{width:58px;text-align:center;font-family:var(--display);font-size:22px;font-weight:700;padding:6px 4px}
+.score-in span{font-family:var(--display);font-size:20px;color:var(--muted)}
+.lbl{font-size:12px;color:var(--muted);display:block;margin-bottom:4px}
+input[type=text],input[type=number],input[type=date],select{background:var(--surface-2);border:1px solid var(--line);border-radius:9px;padding:8px 10px;width:100%;min-width:0}
+.score-in input{width:58px}
+input::placeholder{color:var(--muted);opacity:.8}
+.sugg{display:flex;flex-wrap:wrap;gap:6px}
+.sugg button{border:1px dashed var(--line);background:transparent;border-radius:999px;padding:2px 10px;font-size:12px;color:var(--muted);cursor:pointer}
+.sugg button:hover{color:var(--ink);border-color:var(--muted)}
+
+.btn{border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:8px 14px;font-weight:600;cursor:pointer;white-space:nowrap}
+.btn:hover{border-color:var(--muted)}
+.btn.primary{background:var(--red);border-color:var(--red);color:#fff}
+.btn.primary:hover{filter:brightness(1.07)}
+.btn.ghost{border-color:transparent;background:transparent;color:var(--muted);padding-inline:8px}
+.btn.ghost:hover{color:var(--ink)}
+.btn.danger{color:var(--red)}
+.btn:disabled{opacity:.5;cursor:default}
+.linkbtn{border:0;background:none;padding:0;color:var(--muted);font-size:13px;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+
+.result{border-top:1px solid var(--line);padding:16px 18px;background:var(--surface-2);border-radius:0 0 14px 14px;display:flex;flex-direction:column;gap:12px}
+.result h3{font-family:var(--body);font-size:13px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.res-grid{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:end}
+.preview{display:flex;gap:10px;flex-wrap:wrap;font-size:14px}
+.preview .pv{background:var(--surface);border:1px solid var(--line);border-radius:9px;padding:6px 12px}
+.preview .pv b{font-variant-numeric:tabular-nums}
+
+.newform{padding:16px 18px;display:grid;grid-template-columns:2fr 1fr 1fr auto;gap:12px;align-items:end}
+
+/* history */
+.hist{display:flex;flex-direction:column}
+.h-row{display:grid;grid-template-columns:110px 1fr 1fr 1fr auto;gap:12px;align-items:center;padding:12px 16px;border-top:1px solid var(--line)}
+.h-row:first-child{border-top:0}
+.h-when{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+.h-game .opp{font-weight:600}
+.h-game .fs{font-family:var(--display);font-weight:700;font-variant-numeric:tabular-nums}
+.h-game .scorers{font-size:12px;color:var(--muted)}
+.h-bet{font-size:13px;min-width:0}
+.h-bet .who{color:var(--muted);font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:600}
+.h-bet .g{font-variant-numeric:tabular-nums}
+.award{display:inline-block;font-weight:700;font-variant-numeric:tabular-nums;font-size:12px;padding:1px 8px;border-radius:999px;background:var(--surface-2);color:var(--muted);margin-left:4px}
+.award.pos{background:var(--good-soft);color:var(--good)}
+.hit{color:var(--good);font-weight:600}
+.h-actions{display:flex;gap:2px;justify-content:flex-end}
+.empty{padding:22px 18px;color:var(--muted)}
+
+.rules{display:flex;gap:10px;flex-wrap:wrap}
+.rules div{flex:1 1 200px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;display:flex;align-items:baseline;gap:10px}
+.rules b{font-family:var(--display);font-size:20px;color:var(--red);font-variant-numeric:tabular-nums}
+.rules span{font-size:14px}
+
+details.settings summary{cursor:pointer;color:var(--muted);font-size:14px}
+.set-grid{margin-top:12px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;padding:16px 18px}
+.set-grid .full{grid-column:1/-1;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.note{font-size:12px;color:var(--muted)}
+
+.toast{position:fixed;left:50%;bottom:calc(16px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:10px;font-size:14px;max-width:calc(100% - 32px);z-index:10}
+.status{padding:14px 18px;color:var(--muted)}
+
+@media (max-width:680px){
+  .bets{grid-template-columns:1fr}
+  .bet + .bet{border-left:0;border-top:1px solid var(--line)}
+  .newform{grid-template-columns:1fr 1fr}
+  .newform .opp-field{grid-column:1/-1}
+  .newform .btn{grid-column:1/-1}
+  .h-row{grid-template-columns:1fr 1fr;row-gap:8px}
+  .h-when{grid-column:1/2}
+  .h-actions{grid-column:2/3;grid-row:1}
+  .h-game{grid-column:1/-1}
+  .res-grid{grid-template-columns:1fr}
+  .set-grid{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:no-preference){
+  .side .num{transition:color .3s}
+}
+</style>
+
+<div class="wrap">
+  <a class="back" href="index.html">← в хаб</a>
+  <header class="top">
+    <h1>Счётчик <span>зондбе</span></h1>
+    <p>Ставки на матчи ХК «Локомотив» · КХЛ</p>
+  </header>
+
+  <section class="board" aria-label="Общий счёт">
+    <div class="board-grid">
+      <div class="side" id="side-a"><div class="nm" id="nm-a">…</div><div class="num" id="num-a">–</div><div class="stat" id="st-a"></div></div>
+      <div class="mid"><div class="colon">:</div><div class="unit">зондбе</div></div>
+      <div class="side" id="side-b"><div class="nm" id="nm-b">…</div><div class="num" id="num-b">–</div><div class="stat" id="st-b"></div></div>
+    </div>
+    <div class="board-foot"><span id="leader">Загружаю счёт…</span><span id="played"></span></div>
+  </section>
+
+  <div class="rules">
+    <div><b>1</b><span>зондбе за точный счёт матча</span></div>
+    <div><b>0,5</b><span>зондбе за каждого угаданного автора гола</span></div>
+  </div>
+
+  <section>
+    <div class="sec-head"><h2>Ближайшие матчи</h2><button class="btn" data-act="new-open" id="new-open-btn">+ Новый матч</button></div>
+    <div id="open" style="display:flex;flex-direction:column;gap:14px"><div class="card status">Загружаю матчи…</div></div>
+  </section>
+
+  <section>
+    <div class="sec-head"><h2>История</h2></div>
+    <div class="card hist" id="history"><div class="empty">Пока нет сыгранных матчей.</div></div>
+  </section>
+
+  <details class="settings" id="settings">
+    <summary>Имена и стартовый счёт</summary>
+    <div class="card set-grid">
+      <label><span class="lbl">Имя слева</span><input type="text" id="set-name-a" maxlength="24"></label>
+      <label><span class="lbl">Имя справа</span><input type="text" id="set-name-b" maxlength="24"></label>
+      <label><span class="lbl">Стартовые зондбе (до сайта)</span><input type="number" id="set-base-a" step="0.5" min="0"></label>
+      <label><span class="lbl">Стартовые зондбе (до сайта)</span><input type="number" id="set-base-b" step="0.5" min="0"></label>
+      <div class="full"><button class="btn primary" data-act="settings-save">Сохранить</button><span class="note">Стартовый счёт прибавляется к очкам за матчи на сайте.</span></div>
+    </div>
+  </details>
+</div>
+
+<datalist id="khl-teams">
+  <option value="ЦСКА"><option value="СКА"><option value="Спартак"><option value="Динамо Москва"><option value="Динамо Минск">
+  <option value="Торпедо"><option value="Северсталь"><option value="Металлург Мг"><option value="Трактор"><option value="Авангард">
+  <option value="Ак Барс"><option value="Салават Юлаев"><option value="Нефтехимик"><option value="Автомобилист"><option value="Барыс">
+  <option value="Сибирь"><option value="Амур"><option value="Адмирал"><option value="Лада"><option value="Шанхайские Драконы"><option value="Сочи">
+</datalist>
+
+<div class="toast" id="toast" hidden></div>
+
+<script>
+const P = ['a','b'];
+let db = null, meta = null, matches = [], loaded = {meta:false, matches:false};
+const ui = { editing:{}, showNew:false, confirmDel:null, busy:false };
+
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmt = n => (Math.round(n*100)/100).toLocaleString('ru-RU');
+const sign = n => n > 0 ? '+' + fmt(n) : fmt(n);
+const norm = s => (String(s).toLowerCase().replace(/ё/g,'е').replace(/[^a-zа-я0-9\s-]/g,' ').trim().split(/\s+/).pop()) || '';
+const parseScorers = s => String(s||'').split(/[,;\n]/).map(x => x.trim()).filter(Boolean);
+const todayISO = () => { const d = new Date(); d.setMinutes(d.getMinutes()-d.getTimezoneOffset()); return d.toISOString().slice(0,10); };
+const dateLabel = iso => { if(!iso) return ''; const d = new Date(iso+'T12:00'); return isNaN(d) ? iso : d.toLocaleDateString('ru-RU',{weekday:'short',day:'numeric',month:'long'}); };
+const dateShort = iso => { if(!iso) return ''; const d = new Date(iso+'T12:00'); return isNaN(d) ? iso : d.toLocaleDateString('ru-RU',{day:'numeric',month:'short',year:'2-digit'}); };
+
+function names(){ return { a: meta?.names?.a || 'Игрок 1', b: meta?.names?.b || 'Игрок 2' }; }
+function base(){ return { a: Number(meta?.base?.a) || 0, b: Number(meta?.base?.b) || 0 }; }
+
+function toast(msg){ const t = $('#toast'); t.textContent = msg; t.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(() => t.hidden = true, 3200); }
+
+function computeAward(bet, res){
+  if(!bet || !res) return { total:0, exact:false, hits:[] };
+  const exact = Number(bet.loko) === Number(res.loko) && Number(bet.opp) === Number(res.opp);
+  const resSet = new Set((res.scorers||[]).map(norm).filter(Boolean));
+  const seen = new Set(), hits = [];
+  for(const s of bet.scorers || []){ const k = norm(s); if(k && resSet.has(k) && !seen.has(k)){ seen.add(k); hits.push(s); } }
+  return { total: (exact ? 1 : 0) + hits.length * 0.5, exact, hits };
+}
+
+function knownPlayers(){
+  const freq = new Map();
+  for(const m of matches){
+    const lists = [m.result?.scorers || [], ...P.map(p => m.bets?.[p]?.scorers || [])];
+    for(const l of lists) for(const s of l){ const k = norm(s); if(!k) continue; const e = freq.get(k) || {name:s, n:0}; e.n++; e.name = s; freq.set(k, e); }
+  }
+  return [...freq.values()].sort((x,y) => y.n - x.n).slice(0,10).map(e => e.name);
+}
+
+/* ---------- rendering ---------- */
+function renderBoard(){
+  const n = names(), b = base();
+  const tot = {...b}, stats = { a:{exact:0,hits:0}, b:{exact:0,hits:0} };
+  const done = matches.filter(m => m.status === 'done');
+  for(const m of done){
+    for(const p of P){
+      tot[p] += Number(m.awards?.[p]?.total) || 0;
+      if(m.awards?.[p]?.exact) stats[p].exact++;
+      stats[p].hits += (m.awards?.[p]?.hits || []).length;
+    }
+  }
+  for(const p of P){
+    $('#nm-'+p).textContent = n[p];
+    $('#num-'+p).textContent = loaded.meta && loaded.matches ? fmt(tot[p]) : '–';
+    $('#st-'+p).textContent = done.length ? `точный счёт: ${stats[p].exact} · авторы голов: ${stats[p].hits}` : '';
+    $('#side-'+p).classList.toggle('lead', tot[p] > tot[P.find(q => q !== p)]);
+  }
+  if(loaded.meta && loaded.matches){
+    const diff = tot.a - tot.b;
+    $('#leader').innerHTML = diff === 0 ? '<b>Ничья</b>' : `Ведёт <b>${esc(diff > 0 ? n.a : n.b)}</b> на ${fmt(Math.abs(diff))}`;
+    $('#played').textContent = `Матчей на сайте: ${done.length}`;
+  }
+}
+
+function betView(m, p){
+  const n = names(), bet = m.bets?.[p], key = m.id + p;
+  if(ui.editing[key] || !bet){
+    if(!ui.editing[key] && !bet){
+      return `<div class="bet"><h3>${esc(n[p])}</h3><div class="bet-empty">Ставки пока нет</div><div><button class="btn" data-act="bet-edit" data-id="${m.id}" data-p="${p}">Сделать ставку</button></div></div>`;
+    }
+    const pre = `bet-${m.id}-${p}`;
+    const sugg = knownPlayers();
+    return `<div class="bet"><h3>${esc(n[p])}</h3>
+      <div><span class="lbl">Счёт: Локомотив : ${esc(m.opponent)}</span>
+        <div class="score-in"><input type="number" inputmode="numeric" min="0" max="20" id="${pre}-loko" value="${bet?.loko ?? ''}" aria-label="Голы Локомотива"><span>:</span><input type="number" inputmode="numeric" min="0" max="20" id="${pre}-opp" value="${bet?.opp ?? ''}" aria-label="Голы соперника"></div></div>
+      <label><span class="lbl">Кто забьёт (через запятую)</span><input type="text" id="${pre}-sc" value="${esc((bet?.scorers||[]).join(', '))}" placeholder="Фамилия, Фамилия"></label>
+      ${sugg.length ? `<div class="sugg">${sugg.map(s => `<button type="button" data-act="sugg" data-target="${pre}-sc" data-name="${esc(s)}">+ ${esc(s)}</button>`).join('')}</div>` : ''}
+      <div class="row"><button class="btn primary" data-act="bet-save" data-id="${m.id}" data-p="${p}">Сохранить ставку</button>${bet ? `<button class="btn ghost" data-act="bet-cancel" data-id="${m.id}" data-p="${p}">Отмена</button>` : ''}</div>
+    </div>`;
+  }
+  return `<div class="bet bet-shown"><h3>${esc(n[p])}</h3>
+    <div class="sc">${bet.loko} : ${bet.opp}</div>
+    <div class="who">${bet.scorers?.length ? 'Забьют: ' + esc(bet.scorers.join(', ')) : '<span class="meta">Без авторов голов</span>'}</div>
+    <div><button class="linkbtn" data-act="bet-edit" data-id="${m.id}" data-p="${p}">Изменить</button></div>
+  </div>`;
+}
+
+function openCard(m){
+  const pre = `res-${m.id}`, r = m.result;
+  return `<article class="card match">
+    <div class="match-head">
+      <div><div class="match-title">Локомотив<span class="vs">—</span>${esc(m.opponent)}</div>
+      <div class="meta">${esc(dateLabel(m.date))} · ${m.venue === 'away' ? 'в гостях' : 'дома, Ярославль'}</div></div>
+      <span class="pill live">Ставки открыты</span>
+    </div>
+    <div class="bets">${P.map(p => betView(m, p)).join('')}</div>
+    <div class="result">
+      <h3>Итог матча</h3>
+      <div class="res-grid">
+        <div><span class="lbl">Локомотив : ${esc(m.opponent)}</span>
+          <div class="score-in"><input type="number" inputmode="numeric" min="0" max="20" id="${pre}-loko" value="${r?.loko ?? ''}" data-preview="${m.id}" aria-label="Итог: голы Локомотива"><span>:</span><input type="number" inputmode="numeric" min="0" max="20" id="${pre}-opp" value="${r?.opp ?? ''}" data-preview="${m.id}" aria-label="Итог: голы соперника"></div></div>
+        <label><span class="lbl">Кто забил (через запятую)</span><input type="text" id="${pre}-sc" value="${esc((r?.scorers||[]).join(', '))}" data-preview="${m.id}" placeholder="Все авторы голов"></label>
+      </div>
+      <div class="preview" id="pv-${m.id}"></div>
+      <div class="row"><button class="btn primary" data-act="res-save" data-id="${m.id}">Засчитать итог</button>
+        ${ui.confirmDel === m.id
+          ? `<button class="btn danger" data-act="del-yes" data-id="${m.id}">Да, удалить матч</button><button class="btn ghost" data-act="del-no">Отмена</button>`
+          : `<button class="btn ghost" data-act="del" data-id="${m.id}">Удалить матч</button>`}
+      </div>
+    </div>
+  </article>`;
+}
+
+function readResult(id){
+  const loko = $(`#res-${id}-loko`)?.value, opp = $(`#res-${id}-opp`)?.value;
+  if(loko === '' || opp === '' || loko == null || opp == null) return null;
+  return { loko: Number(loko), opp: Number(opp), scorers: parseScorers($(`#res-${id}-sc`)?.value) };
+}
+
+function updatePreview(id){
+  const el = $('#pv-'+id); if(!el) return;
+  const m = matches.find(x => x.id === id), res = readResult(id), n = names();
+  if(!m || !res){ el.innerHTML = '<span class="meta">Впишите счёт, и здесь появится, кому сколько зондбе.</span>'; return; }
+  el.innerHTML = P.map(p => {
+    const a = computeAward(m.bets?.[p], res);
+    const why = [a.exact ? 'точный счёт' : '', a.hits.length ? 'голы: ' + a.hits.join(', ') : ''].filter(Boolean).join(' · ');
+    return `<div class="pv">${esc(n[p])}: <b>${sign(a.total)}</b>${why ? ` <span class="meta">(${esc(why)})</span>` : ''}</div>`;
+  }).join('');
+}
+
+function newForm(){
+  return `<div class="card"><div class="newform">
+    <label class="opp-field"><span class="lbl">Соперник</span><input type="text" id="nm-opp" list="khl-teams" placeholder="Например, СКА"></label>
+    <label><span class="lbl">Дата</span><input type="date" id="nm-date" value="${todayISO()}"></label>
+    <label><span class="lbl">Где играем</span><select id="nm-venue"><option value="home">Дома</option><option value="away">В гостях</option></select></label>
+    <div class="row"><button class="btn primary" data-act="new-create">Создать матч</button>${matches.some(m => m.status !== 'done') ? '<button class="btn ghost" data-act="new-cancel">Отмена</button>' : ''}</div>
+  </div></div>`;
+}
+
+function renderOpen(){
+  const open = matches.filter(m => m.status !== 'done').sort((x,y) => String(x.date).localeCompare(String(y.date)));
+  const showNew = ui.showNew || open.length === 0;
+  $('#new-open-btn').hidden = showNew;
+  $('#open').innerHTML = (showNew ? newForm() : '') + open.map(openCard).join('');
+  open.forEach(m => updatePreview(m.id));
+}
+
+function renderHistory(){
+  const done = matches.filter(m => m.status === 'done').sort((x,y) => String(y.date).localeCompare(String(x.date)) || (y.createdAt||0) - (x.createdAt||0));
+  const n = names();
+  if(!done.length){ $('#history').innerHTML = '<div class="empty">Пока нет сыгранных матчей. После финальной сирены впишите итог в карточке матча, и он появится здесь.</div>'; return; }
+  $('#history').innerHTML = done.map(m => {
+    const r = m.result || {};
+    const bets = P.map(p => {
+      const b = m.bets?.[p], a = m.awards?.[p] || {total:0, hits:[]};
+      const hitSet = new Set((a.hits||[]).map(norm));
+      const sc = b ? `<span class="g ${a.exact ? 'hit' : ''}">${b.loko}:${b.opp}</span>` : '<span class="meta">без ставки</span>';
+      const who = b?.scorers?.length ? ' · ' + b.scorers.map(s => hitSet.has(norm(s)) ? `<span class="hit">${esc(s)}</span>` : esc(s)).join(', ') : '';
+      return `<div class="h-bet"><div class="who">${esc(n[p])}<span class="award ${a.total > 0 ? 'pos' : ''}">${sign(a.total)}</span></div>${sc}${who}</div>`;
+    }).join('');
+    const del = ui.confirmDel === m.id
+      ? `<button class="btn ghost danger" data-act="del-yes" data-id="${m.id}">Удалить?</button><button class="btn ghost" data-act="del-no">Нет</button>`
+      : `<button class="btn ghost" data-act="reopen" data-id="${m.id}" title="Исправить итог или ставки">Изменить</button><button class="btn ghost" data-act="del" data-id="${m.id}" aria-label="Удалить матч">✕</button>`;
+    return `<div class="h-row">
+      <div class="h-when">${esc(dateShort(m.date))}<br>${m.venue === 'away' ? 'в гостях' : 'дома'}</div>
+      <div class="h-game"><div><span class="opp">${esc(m.opponent)}</span> <span class="fs">${r.loko ?? '?'}:${r.opp ?? '?'}</span></div>${r.scorers?.length ? `<div class="scorers">${esc(r.scorers.join(', '))}</div>` : ''}</div>
+      ${bets}
+      <div class="h-actions">${del}</div>
+    </div>`;
+  }).join('');
+}
+
+function fillSettings(){
+  const n = meta?.names || {}, b = meta?.base || {};
+  for(const p of P){
+    const ni = $('#set-name-'+p), bi = $('#set-base-'+p);
+    if(document.activeElement !== ni) ni.value = n[p] ?? '';
+    if(document.activeElement !== bi) bi.value = b[p] ?? 0;
+  }
+}
+
+function render(){
+  // то, что уже вписано в открытые формы, не теряется при обновлениях
+  const saved = {}; let focus = null;
+  document.querySelectorAll('#open input, #open select').forEach(el => { saved[el.id] = el.value; });
+  if(document.activeElement?.id && document.activeElement.closest('#open')){
+    const f = document.activeElement; focus = { id:f.id, s:f.selectionStart, e:f.selectionEnd };
+  }
+  renderBoard();
+  if(loaded.matches){
+    renderOpen(); renderHistory();
+    for(const [id, v] of Object.entries(saved)){ const el = document.getElementById(id); if(el) el.value = v; }
+    document.querySelectorAll('#open [data-preview]').forEach(el => updatePreview(el.dataset.preview));
+    if(focus){ const el = document.getElementById(focus.id); if(el){ el.focus(); try{ el.setSelectionRange(focus.s, focus.e); }catch(e){} } }
+  }
+  fillSettings();
+}
+
+/* ---------- actions ---------- */
+async function write(fn, okMsg){
+  if(!db){ toast('Нет связи с базой. Обновите страницу.'); return false; }
+  if(ui.busy) return false;
+  ui.busy = true;
+  try{ await fn(); if(okMsg) toast(okMsg); return true; }
+  catch(e){ toast('Не получилось сохранить. Попробуйте ещё раз.'); return false; }
+  finally { ui.busy = false; }
+}
+
+function readScore(pre){
+  const l = $(`#${pre}-loko`).value, o = $(`#${pre}-opp`).value;
+  if(l === '' || o === '') return null;
+  const loko = Number(l), opp = Number(o);
+  if(!Number.isInteger(loko) || !Number.isInteger(opp) || loko < 0 || opp < 0) return null;
+  return { loko, opp };
+}
+
+document.addEventListener('click', async e => {
+  const b = e.target.closest('[data-act]'); if(!b) return;
+  const { act, id, p } = b.dataset;
+  const ref = id ? db?.collection('matches').doc(id) : null;
+
+  if(act === 'new-open'){ ui.showNew = true; render(); $('#nm-opp')?.focus(); }
+  else if(act === 'new-cancel'){ ui.showNew = false; render(); }
+  else if(act === 'new-create'){
+    const opponent = $('#nm-opp').value.trim();
+    if(!opponent){ toast('Впишите соперника.'); $('#nm-opp').focus(); return; }
+    const ok = await write(() => db.collection('matches').add({ opponent, date: $('#nm-date').value || todayISO(), venue: $('#nm-venue').value, status:'open', bets:{}, createdAt: Date.now() }), 'Матч создан. Делайте ставки!');
+    if(ok){ ui.showNew = false; render(); }
+  }
+  else if(act === 'bet-edit'){ ui.editing[id+p] = true; render(); document.getElementById(`bet-${id}-${p}-loko`)?.focus(); }
+  else if(act === 'bet-cancel'){ delete ui.editing[id+p]; render(); }
+  else if(act === 'bet-save'){
+    const pre = `bet-${id}-${p}`, sc = readScore(pre);
+    if(!sc){ toast('Впишите счёт двумя целыми числами.'); return; }
+    const scorers = parseScorers($(`#${pre}-sc`).value);
+    // путь через точку: Firestore обновит только эту ставку и не тронет ставку второго
+    const ok = await write(() => ref.update({ ['bets.' + p]: { ...sc, scorers, at: Date.now() } }), 'Ставка принята.');
+    if(ok){ delete ui.editing[id+p]; render(); }
+  }
+  else if(act === 'sugg'){
+    const inp = document.getElementById(b.dataset.target); if(!inp) return;
+    const cur = parseScorers(inp.value);
+    if(!cur.some(s => norm(s) === norm(b.dataset.name))) cur.push(b.dataset.name);
+    inp.value = cur.join(', '); inp.focus();
+  }
+  else if(act === 'res-save'){
+    const m = matches.find(x => x.id === id), sc = readScore(`res-${id}`);
+    if(!m || !sc){ toast('Впишите итоговый счёт.'); return; }
+    const result = { ...sc, scorers: parseScorers($(`#res-${id}-sc`).value) };
+    const awards = {}; for(const q of P) awards[q] = computeAward(m.bets?.[q], result);
+    await write(() => ref.update({ status:'done', result, awards, finishedAt: Date.now() }), `Засчитано: ${names().a} ${sign(awards.a.total)}, ${names().b} ${sign(awards.b.total)}`);
+  }
+  else if(act === 'reopen'){ await write(() => ref.update({ status:'open' }), 'Матч снова открыт. Поправьте и засчитайте заново.'); }
+  else if(act === 'del'){ ui.confirmDel = id; render(); }
+  else if(act === 'del-no'){ ui.confirmDel = null; render(); }
+  else if(act === 'del-yes'){ ui.confirmDel = null; await write(() => ref.delete(), 'Матч удалён.'); render(); }
+  else if(act === 'settings-save'){
+    const nm = {}, bs = {};
+    for(const q of P){ nm[q] = $('#set-name-'+q).value.trim() || (q === 'a' ? 'Игрок 1' : 'Игрок 2'); bs[q] = Number(String($('#set-base-'+q).value).replace(',','.')) || 0; }
+    await write(() => db.doc('meta/state').set({ names:nm, base:bs }), 'Сохранено.');
+  }
+});
+
+document.addEventListener('input', e => { const id = e.target.dataset?.preview; if(id) updatePreview(id); });
+
+/* ---------- boot ---------- */
+render();
+(async () => {
+  db = await window.claude?.use?.('db') ?? null;
+  if(!db){
+    $('#open').innerHTML = '<div class="card status">Нет связи с базой. Обновите страницу.</div>';
+    $('#leader').textContent = 'Нет связи с базой';
+    return;
+  }
+  db.doc('meta/state').onSnapshot(s => { meta = s.exists ? s.data() : null; loaded.meta = true; render(); }, () => { loaded.meta = true; render(); });
+  db.collection('matches').onSnapshot(s => { matches = s.docs.map(d => ({ id:d.id, ...d.data() })); loaded.matches = true; render(); },
+    () => { $('#open').innerHTML = '<div class="card status">Связь с базой прервалась. Обновите страницу.</div>'; });
+})();
+</script>
+</body>
+</html>

@@ -19,11 +19,11 @@ body{margin:0;font:14px/1.4 system-ui,-apple-system,sans-serif;background:#F7F0D
 img{max-width:100%}
 [hidden]{display:none!important}
 </style>
-<script src="firebase-config.js?v=20261002155853"></script>
+<script src="firebase-config.js?v=20261003162739"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
-<script src="portal.js?v=20261002155853" data-app="hub"></script>
+<script src="portal.js?v=20261003162739" data-app="hub"></script>
 </head>
 <body>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -260,7 +260,8 @@ const S = [
   {id:"pers", cls:"f-pers", name:"Личное", hand:"для себя", color:"var(--choco-2)", dark:true,
    subs:[{t:"Бюджет", d:"Доходы, расходы по категориям и лимиты на месяц.", href:"budget.html"},{t:"Моя осень · 12 недель", d:"Маленькие дела для себя по неделям, бумажка дня, зарядка перед сном.", href:"osen.html"},
          {t:"Осенний трекер", d:"Что хочу успеть этой осенью.", href:"personal.html#autumn"},{t:"Список покупок", d:"Что купить, по магазинам.", href:"personal.html#shopping"},
-         {t:"Дневник здоровья", d:"Самочувствие, сон, лекарства.", href:"personal.html#health"},{t:"Записи", d:"Бьюти-мастера, массажист, врач: к кому и когда.", href:"personal.html#visits"}]}
+         {t:"Дневник здоровья", d:"Самочувствие, сон, лекарства.", href:"personal.html#health"},{t:"Записи", d:"Бьюти-мастера, массажист, врач: к кому и когда.", href:"personal.html#visits"},
+         {t:"Счётчик зондбе", d:"Ставки с Кириллом на матчи «Локомотива»: счёт, авторы голов, общий счёт.", href:"zondbe.html"}]}
 ];
 const esc = s => s.replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const cnt = n => n === 1 ? "1 раздел" : n < 5 ? n + " раздела" : n + " разделов";
