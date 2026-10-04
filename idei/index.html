@@ -1,0 +1,408 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<meta name="color-scheme" content="light">
+<title>идеи для lesya.frame</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Inter:wght@300;400;500;600;700&display=swap">
+<style>
+  @font-face {
+    font-family: "NauryzRedKeds";
+    src: url("NauryzRedKeds.woff") format("woff");
+    font-weight: 400 700; font-style: normal; font-display: swap;
+  }
+  /* стиль сайта iramolokan.tilda.ws: монохром, жёлтый акцент, мятая бумага, золотая скрепка */
+  :root {
+    --paper: #F9F9F9;
+    --white: #FFFFFF;
+    --ink: #2C2C2C;
+    --grey: #797979;
+    --line: #D0D0D0;
+    --soft: #EFEFEE;
+    --yellow: #F1CF29;
+    --yellow-deep: #D9B614;
+    --gold: #C9A24A;
+    --display: "NauryzRedKeds", "Inter", Arial, sans-serif;
+    --body: "Inter", "Helvetica Neue", Arial, sans-serif;
+    --hand: "Caveat", "Segoe Print", "Bradley Hand", cursive;
+    --crumple: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='420' height='420'%3E%3Cfilter id='c'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.012 .018' numOctaves='5' seed='7'/%3E%3CfeDiffuseLighting lighting-color='%23fff' surfaceScale='2.2'%3E%3CfeDistantLight azimuth='45' elevation='58'/%3E%3C/feDiffuseLighting%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23c)'/%3E%3C/svg%3E");
+    --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .16 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--paper); color: var(--ink);
+    font-family: var(--body); font-size: 15px; line-height: 1.5;
+    padding: clamp(16px, 3vw, 32px) 16px 64px;
+  }
+  button { font: inherit; color: inherit; cursor: pointer; }
+  :focus-visible { outline: 2px solid var(--yellow-deep); outline-offset: 3px; }
+  .wrap { max-width: 1140px; margin: 0 auto; display: grid; gap: clamp(40px, 6vw, 72px); }
+
+  .label { font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--grey); margin: 0; }
+  h1, h2 { font-family: var(--display); font-weight: 500; line-height: 1; letter-spacing: .06em; word-spacing: .18em; margin: 0; text-wrap: balance; }
+  h1 { font-size: clamp(40px, 7vw, 84px); margin-top: 10px; }
+  h2 { font-size: clamp(28px, 4vw, 44px); margin-top: 8px; }
+  .mark { background: linear-gradient(transparent 62%, var(--yellow) 62%, var(--yellow) 90%, transparent 90%); padding-inline: .04em; }
+  .sub { margin: 14px 0 0; color: var(--grey); max-width: 52ch; }
+  .sec-head { display: grid; gap: 4px; margin-bottom: 22px; }
+  .sec-head p.sub { margin-top: 8px; }
+
+  /* ——— шапка ——— */
+  .hero { display: grid; gap: 28px; align-items: center; }
+  @media (min-width: 920px) { .hero { grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); } }
+  .board {
+    position: relative; overflow: hidden; border-radius: 14px; min-height: 340px;
+    background: var(--grain), radial-gradient(120% 90% at 50% 30%, #8E8E8C 0%, #6C6C6A 55%, #4B4B49 100%);
+    display: grid; place-items: center; padding: 64px 20px 32px;
+  }
+  .board-tag { position: absolute; top: 14px; right: 16px; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--white); opacity: .85; }
+  .scribble {
+    position: absolute; top: 14px; left: 20px; font-family: var(--hand); font-weight: 500;
+    font-size: clamp(28px, 4vw, 38px); line-height: 1; color: var(--yellow); transform: rotate(-5deg); transform-origin: left;
+  }
+  .note {
+    position: relative; width: min(100%, 420px); padding: 34px 28px 26px; border-radius: 14px;
+    background: var(--crumple), var(--white); background-size: 420px 420px; background-blend-mode: multiply;
+    box-shadow: 0 18px 36px -20px rgba(0,0,0,.7); transform: rotate(-1.4deg);
+  }
+  .clip {
+    position: absolute; top: -18px; left: 38px; width: 22px; height: 54px; border-radius: 11px;
+    border: 3px solid var(--gold); border-bottom-color: transparent; transform: rotate(-8deg);
+    box-shadow: 1px 2px 2px rgba(0,0,0,.18);
+  }
+  .clip::after { content: ""; position: absolute; left: 3px; right: 3px; top: 7px; height: 32px; border-radius: 8px; border: 3px solid var(--gold); border-top-color: transparent; }
+  .formula { font-family: var(--display); font-size: clamp(22px, 2.6vw, 28px); line-height: 1.15; letter-spacing: .04em; margin: 8px 0 12px; }
+  .note p { margin: 0; font-size: 14px; color: var(--grey); }
+  .note .dots { position: absolute; right: 18px; bottom: 16px; display: flex; gap: 6px; }
+  .dots i { width: 9px; height: 9px; border-radius: 50%; background: var(--yellow); }
+  .dots i:last-child { background: var(--ink); }
+
+  /* ——— рубрики ——— */
+  .rubrics { display: grid; gap: 14px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 150px), 1fr)); }
+  .rubric {
+    position: relative; padding: 20px 18px 18px; border-radius: 14px; background: var(--white);
+    border: 1px solid var(--soft); box-shadow: 0 12px 30px -26px rgba(0,0,0,.6);
+  }
+  .rubric .num { font-family: var(--hand); font-size: 30px; line-height: 1; color: var(--yellow-deep); }
+  .rubric h3 { margin: 6px 0 6px; font-size: 16px; font-weight: 600; line-height: 1.25; }
+  .rubric p { margin: 0; font-size: 13px; color: var(--grey); }
+
+  /* ——— фильтры ——— */
+  .toolbar { display: grid; gap: 12px; margin-bottom: 22px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chip {
+    display: inline-flex; align-items: center; gap: 8px; font-weight: 500; font-size: 13px;
+    padding: 6px 13px; border-radius: 1000px; background: var(--white); border: 1px solid var(--line);
+    transition: background .2s, border-color .2s, transform .15s;
+  }
+  .chip:hover { border-color: var(--ink); transform: translateY(-1px); }
+  .chip[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: var(--white); }
+  .tools-row { display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: center; justify-content: space-between; }
+  .btn {
+    font-weight: 600; font-size: 14px; border: none; border-radius: 1000px; padding: 11px 22px;
+    background: var(--yellow); color: var(--ink); transition: background .2s, transform .15s;
+  }
+  .btn:hover { background: var(--yellow-deep); transform: translateY(-1px); }
+  .btn.dark { background: var(--ink); color: var(--white); }
+  .btn.dark:hover { background: #000; }
+  .stats { margin: 0; font-size: 13px; color: var(--grey); font-variant-numeric: tabular-nums; }
+  .stats strong { color: var(--ink); font-weight: 600; }
+
+  /* ——— карточки идей ——— */
+  .grid { display: grid; gap: 18px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr)); }
+  .idea {
+    --rot: 0deg;
+    position: relative; display: flex; flex-direction: column; gap: 12px; padding: 22px 20px 18px; border-radius: 14px;
+    background: var(--crumple), var(--white); background-size: 420px 420px; background-blend-mode: multiply;
+    box-shadow: 0 1px 0 rgba(0,0,0,.04), 0 14px 30px -24px rgba(0,0,0,.6);
+    transform: rotate(var(--rot)); transition: transform .25s ease, box-shadow .25s ease;
+    animation: fade .4s ease both;
+  }
+  .idea:hover { transform: rotate(0) translateY(-3px); box-shadow: 0 22px 40px -26px rgba(0,0,0,.7); }
+  .idea.picked { box-shadow: inset 0 0 0 2px var(--yellow), 0 14px 30px -24px rgba(0,0,0,.6); }
+  .idea.flash { animation: flash 1.4s ease; }
+  .idea-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--grey); }
+  .fmt { color: var(--ink); font-weight: 600; }
+  .tag { font-family: var(--hand); font-size: 19px; letter-spacing: 0; text-transform: none; color: var(--ink); background: var(--yellow); padding: 0 8px; border-radius: 4px; transform: rotate(2deg); white-space: nowrap; }
+  .hook { margin: 0; font-family: var(--display); font-weight: 500; font-size: 21px; line-height: 1.15; letter-spacing: .03em; }
+  .idea dl { margin: 0; display: grid; gap: 8px; font-size: 14px; }
+  .idea dt { font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--grey); }
+  .idea dd { margin: 2px 0 0; }
+  .idea dd.why { color: var(--grey); font-size: 13px; }
+  .idea-foot { margin-top: auto; padding-top: 6px; display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+  .rub { font-size: 12px; color: var(--grey); display: inline-flex; align-items: center; gap: 6px; }
+  .rub::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--c); box-shadow: inset 0 0 0 1px rgba(0,0,0,.15); }
+  .take { font-size: 13px; font-weight: 500; background: var(--white); border: 1px solid var(--line); border-radius: 1000px; padding: 5px 13px; transition: background .2s, border-color .2s; }
+  .take:hover { border-color: var(--ink); }
+  .take[aria-pressed="true"] { background: var(--yellow); border-color: var(--yellow); }
+  .empty { font-family: var(--hand); font-size: 26px; color: var(--grey); margin: 0; }
+
+  /* ——— в целом ——— */
+  .tips {
+    background: var(--white); border-radius: 14px; border-top: 4px solid var(--yellow);
+    padding: 8px clamp(18px, 3vw, 32px); box-shadow: 0 12px 30px -24px rgba(0,0,0,.5);
+    counter-reset: tip; margin: 0; list-style: none;
+  }
+  .tips li { counter-increment: tip; display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 4px 12px; padding: 18px 0; border-bottom: 1px solid var(--soft); }
+  .tips li:last-child { border-bottom: none; }
+  .tips li::before { content: counter(tip, decimal-leading-zero); grid-row: span 2; font-family: var(--display); font-size: 26px; line-height: 1; color: var(--yellow-deep); }
+  .tips b { font-weight: 600; }
+  .tips span { color: var(--grey); font-size: 14px; }
+
+  .foot { text-align: center; color: var(--grey); font-size: 13px; }
+  .foot .hand { font-family: var(--hand); font-size: 26px; color: var(--ink); display: block; }
+
+  .toast {
+    position: fixed; left: 50%; bottom: calc(22px + env(safe-area-inset-bottom, 0px)); transform: translate(-50%, 140%); opacity: 0;
+    background: var(--ink); color: var(--white); padding: 11px 20px; border-radius: 1000px; font-weight: 500; font-size: 14px;
+    max-width: calc(100% - 32px); transition: transform .4s cubic-bezier(.2,1.3,.4,1), opacity .3s; z-index: 30;
+  }
+  .toast.show { transform: translate(-50%, 0); opacity: 1; }
+
+  @keyframes fade { from { opacity: 0; transform: translateY(8px) rotate(var(--rot)); } }
+  @keyframes flash { 0%, 60% { box-shadow: 0 0 0 6px var(--yellow), 0 22px 40px -26px rgba(0,0,0,.7); } }
+  @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <div>
+      <p class="label">[ lesya.frame · октябрь–ноябрь 2026 ]</p>
+      <h1>о чём <span class="mark">снимать</span> дальше</h1>
+      <p class="sub">идеи собраны из твоей жизни: Рэм, учёба, приложения, которые ты себе сделала, список на октябрь. ничего придуманного, только то, что уже есть или ты сама запланировала.</p>
+    </div>
+    <div class="board">
+      <span class="scribble">формула блога</span>
+      <span class="board-tag">[ на память ]</span>
+      <div class="note">
+        <span class="clip" aria-hidden="true"></span>
+        <p class="label">[ каждый пост ]</p>
+        <div class="formula">мой опыт + поддержка тому, кто сейчас там же</div>
+        <p>не «как правильно», а «вот как у нас, и ты не одна». так заходят твои лучшие посты про Рэма.</p>
+        <span class="dots" aria-hidden="true"><i></i><i></i></span>
+      </div>
+    </div>
+  </header>
+
+  <section>
+    <div class="sec-head">
+      <p class="label">[ рубрики ]</p>
+      <h2>5 полок для идей</h2>
+      <p class="sub">когда у постов есть узнаваемые рубрики, человеку проще понять, зачем подписываться.</p>
+    </div>
+    <div class="rubrics" id="rubrics"></div>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <p class="label">[ идеи ]</p>
+      <h2>что можно снять</h2>
+    </div>
+    <div class="toolbar">
+      <div class="chips" id="rubChips"></div>
+      <div class="chips" id="fmtChips"></div>
+      <div class="tools-row">
+        <p class="stats" id="stats"></p>
+        <div class="chips">
+          <button class="chip" id="onlyPicked" aria-pressed="false">только отмеченные</button>
+          <button class="btn" id="random">не знаю, что снять</button>
+        </div>
+      </div>
+    </div>
+    <div class="grid" id="grid"></div>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <p class="label">[ в целом ]</p>
+      <h2>идеи для роста блога</h2>
+    </div>
+    <ol class="tips">
+      <li><b>сделать из Рэма сериал с номерами</b><span>«Рэм-подросток, неделя 14», «дневник дистанций, день 9». к сериалу возвращаются, чтобы узнать, что дальше, и подписываются, чтобы не пропустить.</span></li>
+      <li><b>сгоревшая шарлотка как общая шутка</b><span>она уже была в итогах сентября. дальше в каждой выпечке можно мелькать с «в этот раз без пожара?». свои шутки делают из подписчиков своих людей.</span></li>
+      <li><b>отвечать постом на комментарии</b><span>в постах про Рэма задавать конкретный вопрос («на каком расстоянии твоя собака справляется?»), а лучшие ответы собрать в следующую карусель с отметками авторов.</span></li>
+      <li><b>сходки спаниелей как место для коллаб</b><span>общий рилс с прогулки, отметка организаторов и хозяев. их подписчики это ровно твоя аудитория: собачники из Ярославля.</span></li>
+      <li><b>три закрепа, которые объясняют блог</b><span>знакомство, Рэм и лай, «я сделала себе приложение». новый человек за 10 секунд видит, что тут собака, дизайн и честная жизнь.</span></li>
+      <li><b>одна тема, три формата</b><span>сняла рилс про лай: в тот же день опрос в сторис «твоя собака лает на других?», через неделю карусель с итогами. так одна мысль работает неделю.</span></li>
+      <li><b>мягко вести на трекер «мой сезон»</b><span>когда показываешь свой трекер осени, в сторис ссылка на лендинг. без «купи», просто «если тоже хочешь такой, вот он».</span></li>
+      <li><b>сохраняшки для прогулок</b><span>в конце полезных каруселей «сохрани, чтобы открыть на прогулке». сохранения сильнее всего двигают пост к новым людям.</span></li>
+    </ol>
+  </section>
+
+  <footer class="foot">
+    <span class="hand">отмечай «беру», они запомнятся в этом браузере</span>
+    сделано для lesya.frame
+  </footer>
+</div>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+const RUB = {
+  rem:   { name: "Рэм-подросток", c: "#F1CF29", text: "лай, пубертат, прогулки. честно, с откатами и маленькими победами." },
+  study: { name: "учусь на зоопсихолога", c: "#2C2C2C", text: "что узнала на курсе и как это сработало (или нет) у нас." },
+  make:  { name: "дизайнер делает себе", c: "#C9A24A", text: "приложения, трекеры и сайты, которые ты собрала для своей жизни." },
+  first: { name: "пробую впервые", c: "#B8B8B6", text: "список на октябрь как контент: получилось / сгорело." },
+  city:  { name: "Ярославль и уют", c: "#FFFFFF", text: "хоккей, прогулки, книги, вечера. жизнь вокруг." }
+};
+const FMT = { reel: "рилс", car: "карусель", talk: "разговорное", story: "сторис" };
+
+const IDEAS = [
+  { r: "rem", f: "reel", hook: "мой пёс лает на собак, но он не злой",
+    show: "замедленный кусок лая, где видно, как хвост машет во все стороны. текстом: звонкий лай, поскуливание, широкий хвост = «пустите поздороваться», а не агрессия.",
+    why: "хозяева «лающих» собак. их много, и они сохраняют такое себе." },
+  { r: "rem", f: "car", hook: "наша лесенка: от спокойной прогулки до центра города",
+    show: "ваши места по сложности: район → вечернее собачье место → центр. на каждой ступеньке фото и как Рэм там справляется.",
+    why: "даёт людям понятную схему для своей собаки, хочется сохранить.", tag: "уже есть основа" },
+  { r: "rem", f: "story", hook: "дневник дистанций, день 1",
+    show: "одна сторис после прогулки: где были, с какого расстояния заметили собаку, лаял или нет. через месяц собрать итог каруселью.",
+    why: "возвращает людей в сторис каждый день, а итог станет отдельным постом." },
+  { r: "rem", f: "talk", hook: "тепличные условия или бережность?",
+    show: "твои сомнения вслух: знакомить ли Рэма с собакой после лая, если боишься закрепить лай. и что думают близкие. спросить, как делают другие.",
+    why: "тема без единого ответа, на неё пишут длинные комментарии." },
+  { r: "rem", f: "reel", hook: "почему мой пёс не даёт себя гладить незнакомцам (и это ок)",
+    show: "контраст: с чужими нюхает руку и уворачивается, дома сам просит лапой погладить. текстом: осторожность с чужими это нормально.",
+    why: "многие стесняются, что собака «невежливая». им станет легче." },
+  { r: "rem", f: "reel", hook: "самый спокойный пёс на сходке. угадайте, кто лает на улице",
+    show: "кадры с сходки спаниелей, где Рэм вежливо играет, потом склейка с прогулкой. в подписи коротко про разницу знакомых и незнакомых собак.",
+    why: "смешной контраст + отметка сходки приведёт местных собачников." },
+  { r: "study", f: "car", hook: "проверила на Рэме игру «посмотри на собаку»",
+    show: "что это за игра (LAT), как пробовали, что вышло через неделю. если не вышло, так и написать.",
+    why: "полезно и честно, это сохраняют и пересылают.", tag: "после того как попробуешь" },
+  { r: "study", f: "talk", hook: "журналист, дизайнер, а теперь учусь на зоопсихолога",
+    show: "почему пошла учиться: Рэм, интерес, планы. без пафоса, как подруге за кофе.",
+    why: "личная история, после которой хочется следить за путём." },
+  { r: "study", f: "reel", hook: "конспект с курса кинолога за 30 секунд",
+    show: "руки, тетрадь, маркер. одна мысль с занятия и сразу кадр, как это выглядит у Рэма.",
+    why: "лицо не нужно, а польза есть. хорошо для новой аудитории." },
+  { r: "make", f: "reel", hook: "бот сам напоминает мне про ветеринара",
+    show: "продолжение рилса про портал: записываешь визит, за день и за полтора часа приходит сообщение в телеграм.",
+    why: "людям нравятся «умные» мелочи, а предыдущий рилс уже есть как часть 1.", tag: "часть 2" },
+  { r: "make", f: "reel", hook: "мы спорим на матчи Локомотива, и я сделала для этого счётчик",
+    show: "экран счётчика, ставки, кто сколько выиграл. кусок матча или шарф на фоне.",
+    why: "хоккей + дизайн, необычное сочетание, которое запоминается." },
+  { r: "make", f: "car", hook: "как я делаю карусель: от идеи до Figma",
+    show: "заметка с темой → фото из галереи → макет → готовые слайды. скрины по шагам.",
+    why: "блогеры и начинающие дизайнеры, которые хотят так же." },
+  { r: "make", f: "reel", hook: "веду трекер осени и вот что в нём",
+    show: "твой трекер «моя осень»: неделя, галочки, что получилось. в сторис потом ссылка на «мой сезон».",
+    why: "смотрят ради красоты, а кому-то захочется такой же.", tag: "мягкая реклама" },
+  { r: "make", f: "talk", hook: "6 лет в дизайне без диплома дизайнера: что бы я сказала себе в начале",
+    show: "три-четыре мысли из своего опыта самоучки. только то, что правда помогло.",
+    why: "приводит людей, которые сами учатся с нуля." },
+  { r: "first", f: "reel", hook: "первая фотосессия в жизни, ещё и с собакой",
+    show: "закулисье: как Рэм не сидит, как ты стесняешься, а в конце пара готовых кадров.",
+    why: "смешно и мило, такое пересылают друзьям.", tag: "из списка на октябрь" },
+  { r: "first", f: "reel", hook: "синнабоны не из готового теста. в этот раз без пожара?",
+    show: "весь процесс быстро, честный результат. отсылка к сгоревшей шарлотке из сентября.",
+    why: "подписчики узнают шутку, новые смеются.", tag: "из списка на октябрь" },
+  { r: "first", f: "car", hook: "довязала сумку. вот путь от клубка до готовой",
+    show: "фото по этапам, что было сложно, что переделывала. в конце: следующий проект, свитер Рэму?",
+    why: "вязальщицы любят процесс и сохраняют такие посты.", tag: "когда довяжешь" },
+  { r: "first", f: "reel", hook: "тихая интровертка, которая играет на барабанах",
+    show: "сначала спокойные кадры: вязание, книга, плед. потом резко барабаны.",
+    why: "сильный контраст в первые секунды, его досматривают." },
+  { r: "first", f: "reel", hook: "алмазная мозаика: успела ли я 1/4 за месяц",
+    show: "таймлапс по вечерам, в конце честный процент.",
+    why: "медитативное видео, его смотрят до конца.", tag: "из списка на октябрь" },
+  { r: "city", f: "reel", hook: "20 лет болею за Локомотив. вот как проходит день матча",
+    show: "что берёшь с собой, дорога, трибуна, эмоции. Рэм провожает или встречает.",
+    why: "ярославцы и хоккейные болельщики, новая аудитория." },
+  { r: "city", f: "car", hook: "где гулять с собакой в Ярославле осенью",
+    show: "только места, где вы правда гуляете: фото, чем удобно, сколько там собак.",
+    why: "местные собачники, сохраняют и делятся в чатах." },
+  { r: "city", f: "reel", hook: "книжное свидание с подругой: как мы его устроили",
+    show: "книги в крафте, кофе, момент распаковки. в подписи правила, если захотят повторить.",
+    why: "готовая идея для встречи, её отправляют подруге.", tag: "из списка на октябрь" },
+  { r: "city", f: "talk", hook: "мы отложили переезд. как я с этим живу",
+    show: "без подробностей, если не хочется. про то, как радоваться месту, где ты сейчас.",
+    why: "многие сейчас в похожей точке, тема вызывает отклик.", tag: "если готова говорить" },
+  { r: "city", f: "story", hook: "опрос: что спасает тебя осенью?",
+    show: "серия из 3–4 сторис после карусели «что спасает осенью»: твои варианты + поле для ответа. ответы потом в пост.",
+    why: "вовлекает тех, кто уже подписан, и даёт материал на следующий пост." }
+];
+
+const KEY = "lesya-ideas-picked-v1";
+let picked = new Set();
+try { picked = new Set(JSON.parse(localStorage.getItem(KEY) || "[]")); } catch (e) {}
+const save = () => { try { localStorage.setItem(KEY, JSON.stringify([...picked])); } catch (e) {} };
+
+const state = { r: "all", f: "all", onlyPicked: false };
+const $ = id => document.getElementById(id);
+const esc = s => s.replace(/[&<>"]/g, ch => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[ch]));
+
+$("rubrics").innerHTML = Object.values(RUB).map((r, i) =>
+  `<article class="rubric"><span class="num">№${i + 1}</span><h3>${r.name}</h3><p>${r.text}</p></article>`).join("");
+
+function chipRow(el, map, key, allLabel) {
+  const items = [["all", allLabel], ...Object.entries(map).map(([k, v]) => [k, v.name || v])];
+  el.innerHTML = items.map(([k, v]) => `<button class="chip" data-k="${k}" aria-pressed="${state[key] === k}">${v}</button>`).join("");
+  el.onclick = e => {
+    const b = e.target.closest(".chip"); if (!b) return;
+    state[key] = b.dataset.k;
+    el.querySelectorAll(".chip").forEach(c => c.setAttribute("aria-pressed", c === b));
+    render();
+  };
+}
+chipRow($("rubChips"), RUB, "r", "все рубрики");
+chipRow($("fmtChips"), FMT, "f", "все форматы");
+
+const rot = i => [-0.8, 0.6, -0.4, 0.9, -0.6, 0.3][i % 6];
+
+function visible() {
+  return IDEAS.map((d, i) => ({ ...d, i })).filter(d =>
+    (state.r === "all" || d.r === state.r) && (state.f === "all" || d.f === state.f) && (!state.onlyPicked || picked.has(d.i)));
+}
+
+function render() {
+  const list = visible();
+  $("grid").innerHTML = list.length ? list.map(d => `
+    <article class="idea${picked.has(d.i) ? " picked" : ""}" id="idea-${d.i}" style="--rot:${rot(d.i)}deg">
+      <div class="idea-top"><span>[ <span class="fmt">${FMT[d.f]}</span> ]</span>${d.tag ? `<span class="tag">${d.tag}</span>` : ""}</div>
+      <p class="hook">${esc(d.hook)}</p>
+      <dl>
+        <div><dt>что показать</dt><dd>${esc(d.show)}</dd></div>
+        <div><dt>кого приведёт</dt><dd class="why">${esc(d.why)}</dd></div>
+      </dl>
+      <div class="idea-foot">
+        <span class="rub" style="--c:${RUB[d.r].c}">${RUB[d.r].name}</span>
+        <button class="take" data-i="${d.i}" aria-pressed="${picked.has(d.i)}">${picked.has(d.i) ? "беру ★" : "беру ☆"}</button>
+      </div>
+    </article>`).join("") : `<p class="empty">тут пока пусто. отметь пару идей «беру»</p>`;
+  $("stats").innerHTML = `показано <strong>${list.length}</strong> из ${IDEAS.length} · в работе <strong>${picked.size}</strong>`;
+}
+
+$("grid").onclick = e => {
+  const b = e.target.closest(".take"); if (!b) return;
+  const i = +b.dataset.i;
+  picked.has(i) ? picked.delete(i) : picked.add(i);
+  save(); render();
+  if (picked.has(i)) toast("добавила в «в работе»");
+};
+$("onlyPicked").onclick = e => {
+  state.onlyPicked = !state.onlyPicked;
+  e.currentTarget.setAttribute("aria-pressed", state.onlyPicked);
+  render();
+};
+$("random").onclick = () => {
+  let list = visible();
+  if (!list.length) { state.r = state.f = "all"; state.onlyPicked = false; chipRow($("rubChips"), RUB, "r", "все рубрики"); chipRow($("fmtChips"), FMT, "f", "все форматы"); $("onlyPicked").setAttribute("aria-pressed", false); render(); list = visible(); }
+  const d = list[Math.floor(Math.random() * list.length)];
+  const el = $("idea-" + d.i);
+  el.scrollIntoView({ behavior: "smooth", block: "center" });
+  el.classList.remove("flash"); void el.offsetWidth; el.classList.add("flash");
+  toast("вот это: " + FMT[d.f]);
+};
+
+let tt;
+function toast(t) { const el = $("toast"); el.textContent = t; el.classList.add("show"); clearTimeout(tt); tt = setTimeout(() => el.classList.remove("show"), 1800); }
+
+render();
+</script>
+</body>
+</html>
