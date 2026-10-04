@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Шпаргалка по SQL</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root { --bg: #eeedf3; --ink: #1d1e23; --muted: #6b6d78; --lav: #ddd5f6; --mint: #d5e9e1; --sky: #dce6f6; --lime: #e8f3cf; --peach: #f8e3d6; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 14px/1.5 Manrope, system-ui, sans-serif; }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 24px 16px 40px; }
+  header { display: flex; justify-content: space-between; align-items: end; gap: 16px; flex-wrap: wrap; margin-bottom: 18px; }
+  h1 { font-size: 36px; margin: 0; letter-spacing: -.02em; }
+  header p { margin: 4px 0 0; color: var(--muted); }
+  a.btn, button { font: 700 14px Manrope; border: 0; border-radius: 99px; padding: 10px 18px; background: var(--ink); color: #fff; text-decoration: none; cursor: pointer; }
+  .grid { columns: 3 320px; column-gap: 14px; }
+  .box { break-inside: avoid; background: #fff; border-radius: 22px; padding: 16px 18px; margin: 0 0 14px; }
+  .box h2 { font-size: 16px; margin: 0 0 8px; display: inline-block; padding: 4px 12px; border-radius: 99px; }
+  pre { margin: 6px 0; padding: 10px 12px; background: #f6f5fa; border-radius: 12px; font: 500 12.5px/1.5 "JetBrains Mono", monospace; white-space: pre-wrap; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  td { padding: 4px 0; border-top: 1px dashed #e2e0ea; vertical-align: top; }
+  td:first-child { font: 600 12.5px "JetBrains Mono", monospace; padding-right: 10px; white-space: nowrap; }
+  .k { color: #6a3fd1; font-weight: 700; }
+  @media print { body { background: #fff; } .box { border: 1px solid #ddd; } a.btn, button { display: none; } .grid { columns: 3; } }
+</style>
+</head>
+<body><div class="wrap">
+<header><div><h1>Шпаргалка по SQL</h1><p>Курс «SQL с нуля» · PostgreSQL · база «Уютная лавка»</p></div>
+<div style="display:flex;gap:8px"><a class="btn" href="./">← К курсу</a><button onclick="print()">Распечатать</button></div></header>
+<div class="grid">
+
+<div class="box"><h2 style="background:var(--lav)">Каркас запроса</h2>
+<pre><span class="k">SELECT</span> столбцы, выражения <span class="k">AS</span> имя
+<span class="k">FROM</span> таблица <span class="k">AS</span> t
+<span class="k">JOIN</span> другая d <span class="k">ON</span> d.id = t.id
+<span class="k">WHERE</span> условие на строки
+<span class="k">GROUP BY</span> поля
+<span class="k">HAVING</span> условие на группы
+<span class="k">ORDER BY</span> поле <span class="k">DESC</span>
+<span class="k">LIMIT</span> 10;</pre>
+<p style="margin:6px 0 0;color:var(--muted)">Порядок выполнения: FROM → JOIN → WHERE → GROUP BY → HAVING → окна → SELECT → DISTINCT → ORDER BY → LIMIT</p></div>
+
+<div class="box"><h2 style="background:var(--mint)">Фильтры WHERE</h2><table>
+<tr><td>= &lt;&gt; &gt; &lt; &gt;= &lt;=</td><td>сравнение</td></tr>
+<tr><td>AND, OR, NOT</td><td>логика; с OR ставь скобки</td></tr>
+<tr><td>IN ('a', 'b')</td><td>в списке</td></tr>
+<tr><td>BETWEEN 1 AND 5</td><td>диапазон, границы включены</td></tr>
+<tr><td>LIKE 'Кофе%'</td><td>шаблон: % любые символы, _ один</td></tr>
+<tr><td>ILIKE '%кофе%'</td><td>без учёта регистра</td></tr>
+<tr><td>IS NULL / IS NOT NULL</td><td>пусто / не пусто (не через =)</td></tr>
+</table></div>
+
+<div class="box"><h2 style="background:var(--sky)">Строки</h2><table>
+<tr><td>a || ' ' || b</td><td>склеить (NULL съедает всё)</td></tr>
+<tr><td>concat(a, b)</td><td>склеить, NULL пропускает</td></tr>
+<tr><td>lower / upper / initcap</td><td>регистр</td></tr>
+<tr><td>trim(s)</td><td>пробелы по краям</td></tr>
+<tr><td>length(s)</td><td>длина</td></tr>
+<tr><td>replace(s, 'a', 'b')</td><td>замена</td></tr>
+<tr><td>left / right(s, n)</td><td>первые / последние n</td></tr>
+<tr><td>substring(s, 2, 3)</td><td>кусок</td></tr>
+<tr><td>split_part(s, '@', 2)</td><td>часть по разделителю</td></tr>
+<tr><td>regexp_replace(s, '\D', '', 'g')</td><td>оставить только цифры</td></tr>
+</table></div>
+
+<div class="box"><h2 style="background:var(--lime)">Числа</h2><table>
+<tr><td>round(x, 2)</td><td>округлить</td></tr>
+<tr><td>ceil / floor</td><td>вверх / вниз</td></tr>
+<tr><td>abs, power, mod</td><td>модуль, степень, остаток</td></tr>
+<tr><td>7 / 2 = 3 !</td><td>целое деление; пиши 7 / 2.0</td></tr>
+<tr><td>x / nullif(y, 0)</td><td>без деления на ноль</td></tr>
+<tr><td>x::numeric, x::int</td><td>приведение типа</td></tr>
+</table></div>
+
+<div class="box"><h2 style="background:var(--peach)">Даты: части и формат</h2><table>
+<tr><td>current_date, now()</td><td>сегодня, сейчас</td></tr>
+<tr><td>d::date</td><td>отрезать время</td></tr>
+<tr><td>extract(year from d)</td><td>year, quarter, month, day, hour</td></tr>
+<tr><td>extract(isodow from d)</td><td>1 = пн … 7 = вс</td></tr>
+<tr><td>date_trunc('month', d)</td><td>начало месяца (week, year…)</td></tr>
+<tr><td>to_char(d, 'DD.MM.YYYY')</td><td>дату в текст</td></tr>
+<tr><td>to_date(s, 'DD.MM.YYYY')</td><td>текст в дату</td></tr>
+<tr><td>to_timestamp(s, '… HH24:MI')</td><td>текст в дату и время</td></tr>
+<tr><td>make_date(2026, 9, 1)</td><td>собрать дату</td></tr>
+</table></div>
+
+<div class="box"><h2 style="background:var(--lav)">Даты: арифметика и периоды</h2><table>
+<tr><td>d + 7</td><td>плюс 7 дней (для date)</td></tr>
+<tr><td>d + interval '1 month'</td><td>сдвиг на интервал</td></tr>
+<tr><td>d2 - d1</td><td>дни (date) или interval (timestamp)</td></tr>
+<tr><td>age(d2, d1)</td><td>разница в годах/месяцах</td></tr>
+<tr><td>extract(epoch from i)/3600</td><td>интервал в часах</td></tr>
+</table>
+<pre>-- за месяц, без потерь
+<span class="k">WHERE</span> created_at &gt;= '2026-09-01'
+  <span class="k">AND</span> created_at &lt;  '2026-10-01'
+-- за конкретный день
+<span class="k">WHERE</span> created_at::date = '2026-09-15'</pre></div>
+
+<div class="box"><h2 style="background:var(--mint)">Агрегаты</h2><table>
+<tr><td>count(*)</td><td>строк</td></tr>
+<tr><td>count(x)</td><td>непустых x</td></tr>
+<tr><td>count(DISTINCT x)</td><td>разных x</td></tr>
+<tr><td>sum, avg, min, max</td><td>сумма, среднее, мин, макс</td></tr>
+<tr><td>count(*) FILTER (WHERE …)</td><td>условный счётчик</td></tr>
+<tr><td>string_agg(x, ', ')</td><td>склеить группу в строку</td></tr>
+</table>
+<p style="margin:6px 0 0">В SELECT с GROUP BY только поля группировки и агрегаты. Условие на агрегат пишется в HAVING.</p></div>
+
+<div class="box"><h2 style="background:var(--sky)">JOIN</h2><table>
+<tr><td>JOIN</td><td>только пары</td></tr>
+<tr><td>LEFT JOIN</td><td>всё слева, справа NULL</td></tr>
+<tr><td>FULL JOIN</td><td>всё из обеих</td></tr>
+<tr><td>CROSS JOIN</td><td>каждая с каждой (сетки)</td></tr>
+</table>
+<pre>-- у кого нет пары
+<span class="k">FROM</span> customers c
+<span class="k">LEFT JOIN</span> orders o <span class="k">ON</span> o.customer_id = c.customer_id
+<span class="k">WHERE</span> o.order_id <span class="k">IS NULL</span></pre>
+<p style="margin:6px 0 0">Фильтр по правой таблице при LEFT JOIN пиши в ON. После JOIN «один ко многим» проверяй count(DISTINCT).</p></div>
+
+<div class="box"><h2 style="background:var(--lime)">Подзапросы, WITH, UNION</h2>
+<pre><span class="k">WITH</span> t <span class="k">AS</span> (
+  <span class="k">SELECT</span> order_id, sum(quantity*price) total
+  <span class="k">FROM</span> order_items <span class="k">GROUP BY</span> order_id
+)
+<span class="k">SELECT</span> * <span class="k">FROM</span> t
+<span class="k">WHERE</span> total &gt; (<span class="k">SELECT</span> avg(total) <span class="k">FROM</span> t);</pre>
+<table>
+<tr><td>x IN (SELECT …)</td><td>в списке из запроса</td></tr>
+<tr><td>EXISTS (SELECT …)</td><td>есть хоть одна строка</td></tr>
+<tr><td>UNION / UNION ALL</td><td>друг под другом (без дублей / с ними)</td></tr>
+<tr><td>EXCEPT / INTERSECT</td><td>разница / пересечение</td></tr>
+<tr><td>coalesce(x, 0)</td><td>NULL заменить на 0</td></tr>
+</table></div>
+
+<div class="box"><h2 style="background:var(--peach)">Оконные функции</h2>
+<pre>f() <span class="k">OVER</span> (<span class="k">PARTITION BY</span> группа
+         <span class="k">ORDER BY</span> порядок
+         <span class="k">ROWS BETWEEN</span> 2 <span class="k">PRECEDING AND CURRENT ROW</span>)</pre>
+<table>
+<tr><td>row_number()</td><td>1, 2, 3, 4</td></tr>
+<tr><td>rank()</td><td>1, 1, 3, 4</td></tr>
+<tr><td>dense_rank()</td><td>1, 1, 2, 3</td></tr>
+<tr><td>lag(x) / lead(x)</td><td>прошлая / следующая строка</td></tr>
+<tr><td>lag(x, 12)</td><td>год назад (по месяцам)</td></tr>
+<tr><td>sum(x) OVER (ORDER BY m)</td><td>нарастающий итог</td></tr>
+<tr><td>x / sum(x) OVER ()</td><td>доля от общего</td></tr>
+</table>
+<p style="margin:6px 0 0">Фильтровать по окну только снаружи: WITH … SELECT … WHERE rn = 1.</p></div>
+
+<div class="box"><h2 style="background:var(--lav)">CASE и сетка дат</h2>
+<pre><span class="k">CASE</span>
+  <span class="k">WHEN</span> price &lt; 500  <span class="k">THEN</span> 'эконом'
+  <span class="k">WHEN</span> price &lt; 1500 <span class="k">THEN</span> 'средний'
+  <span class="k">ELSE</span> 'премиум'
+<span class="k">END AS</span> segment</pre>
+<pre><span class="k">SELECT</span> generate_series('2026-01-01'::date,
+  '2026-09-01'::date, interval '1 month')::date <span class="k">AS</span> month</pre></div>
+
+<div class="box"><h2 style="background:var(--mint)">Изменение данных</h2>
+<pre><span class="k">CREATE TABLE</span> t (id integer <span class="k">PRIMARY KEY</span>,
+  name text <span class="k">NOT NULL</span>, price numeric(10,2));
+<span class="k">INSERT INTO</span> t (id, name) <span class="k">VALUES</span> (1, 'a'), (2, 'b');
+<span class="k">UPDATE</span> t <span class="k">SET</span> price = 100 <span class="k">WHERE</span> id = 1;
+<span class="k">DELETE FROM</span> t <span class="k">WHERE</span> id = 2;
+<span class="k">ALTER TABLE</span> t <span class="k">ADD COLUMN</span> flag boolean;
+<span class="k">CREATE TABLE</span> t2 <span class="k">AS SELECT</span> …;
+<span class="k">CREATE VIEW</span> v <span class="k">AS SELECT</span> …;</pre>
+<p style="margin:6px 0 0">Перед UPDATE и DELETE сначала SELECT с тем же WHERE. Изменения оборачивай в BEGIN … COMMIT / ROLLBACK.</p></div>
+
+<div class="box"><h2 style="background:var(--sky)">DBeaver</h2><table>
+<tr><td>Ctrl + Enter</td><td>выполнить запрос под курсором</td></tr>
+<tr><td>Alt + X</td><td>выполнить весь скрипт</td></tr>
+<tr><td>Ctrl + Shift + F</td><td>отформатировать</td></tr>
+<tr><td>Ctrl + Space</td><td>подсказка имён</td></tr>
+<tr><td>ПКМ → Экспорт данных</td><td>CSV / XLSX</td></tr>
+</table></div>
+
+</div></div></body></html>
