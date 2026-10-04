@@ -389,9 +389,9 @@ footer .wrap { display: flex; justify-content: space-between; gap: 20px; flex-wr
 .hero > *, .hero-side > *, .grid2 > *, .grid3 > *, .stats > * { min-width: 0; }
 .tile { overflow-x: auto; }
 .cal-head { flex-wrap: wrap; }
-/* первый экран: главный блок целиком помещается в окно, календарь может уходить ниже */
-.hero { align-items: start; }
-.hero-main { min-height: 0; height: clamp(420px, calc(100vh - 104px), 600px); }
-.hero-art { top: 12px; right: 12px; width: auto; max-width: none; height: calc(100% - 320px); max-height: 320px; }
-@media (max-height: 760px) { .hero-main h1 { font-size: clamp(32px, 4.2vw, 50px); } .hero-art { height: calc(100% - 300px); } }
-@media (max-width: 860px) { .hero-main { height: auto; min-height: 520px; } .hero-art { height: 210px; } }
+/* первый экран: текст и кнопки сверху, блок тянется вровень с календарём, картинка внизу */
+.hero { align-items: stretch; }
+.hero-main { justify-content: flex-start; min-height: 470px; }
+.hero-main h1 { margin-top: 6px; }
+.hero-art { top: auto; bottom: 28px; right: 28px; width: 62%; max-width: 460px; height: auto; max-height: calc(100% - 360px); }
+@media (max-width: 860px) { .hero-main { min-height: 0; padding-bottom: 250px; } .hero-art { width: auto; height: 210px; max-height: none; bottom: 20px; } }
