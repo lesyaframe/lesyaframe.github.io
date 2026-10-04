@@ -311,16 +311,22 @@
     const solved = Object.keys(S.done).filter(k => /:(p|h):/.test(k)).length;
     const s = startDate(), wk = currentWeek();
     const today = new Date(); today.setHours(0, 0, 0, 0);
-    let cal = '<div class="cal"><span></span>' + ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"].map(d => `<span class="dname">${d}</span>`).join("");
+    // календарь: две колонки по 4 недели, чтобы первый экран не был длинным
+    const head = '<span class="dname">нед</span>' + ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"].map(d => `<span class="dname">${d}</span>`).join("");
     const base = mondayOf(s || today);
-    for (let w = 0; w < 8; w++) {
-      const col = WEEKS[w].color;
-      cal += `<span class="wk">Нед ${w + 1}</span>`;
-      for (let d = 0; d < 7; d++) {
-        const day = new Date(base.getTime() + (w * 7 + d) * DAY + 3 * 36e5); day.setHours(0, 0, 0, 0);
-        const isT = day.getTime() === today.getTime();
-        cal += `<span class="d ${isT ? "today" : ""}" style="${isT ? "" : `background:var(--${col})`}" title="${WEEKS[w].title}">${day.getDate()}</span>`;
+    let cal = '<div class="cal2">';
+    for (let half = 0; half < 2; half++) {
+      cal += '<div class="cal">' + head;
+      for (let w = half * 4; w < half * 4 + 4; w++) {
+        const col = WEEKS[w].color;
+        cal += `<span class="wk" title="${WEEKS[w].title}">${w + 1}</span>`;
+        for (let d = 0; d < 7; d++) {
+          const day = new Date(base.getTime() + (w * 7 + d) * DAY + 3 * 36e5); day.setHours(0, 0, 0, 0);
+          const isT = day.getTime() === today.getTime();
+          cal += `<span class="d ${isT ? "today" : ""}" style="${isT ? "" : `background:var(--${col})`}" title="Неделя ${w + 1}: ${WEEKS[w].title}">${day.getDate()}</span>`;
+        }
       }
+      cal += "</div>";
     }
     cal += "</div>";
     const art = `<svg class="hero-art" viewBox="0 0 300 300" aria-hidden="true">
