@@ -19,11 +19,11 @@ body{margin:0;font:14px/1.4 system-ui,-apple-system,sans-serif;background:#F7F0D
 img{max-width:100%}
 [hidden]{display:none!important}
 </style>
-<script src="firebase-config.js?v=20261005110041"></script>
+<script src="firebase-config.js?v=20261005131727"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
-<script src="portal.js?v=20261005110041" data-app="budget"></script>
+<script src="portal.js?v=20261005131727" data-app="budget"></script>
 </head>
 <body>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -204,6 +204,14 @@ td.note{color:var(--muted);width:100%}
 .ytable td.avg{font-size:12px;color:var(--muted);text-align:right;padding:0 6px;white-space:nowrap;font-variant-numeric:tabular-nums}
 .ytable td.yoy{font-size:12px;text-align:right;padding:0 4px;white-space:nowrap}
 #pasteText{min-height:220px;font-family:ui-monospace,Menlo,monospace;font-size:13px}
+.tl-tile{cursor:pointer;transition:box-shadow .2s,transform .2s}
+.tl-tile:hover,.tl-tile:focus-visible{transform:translateY(-2px);box-shadow:0 14px 22px -14px rgba(37,10,10,.55)}
+.tl-edit{font-style:normal;font-size:11px;font-weight:600;color:var(--muted);text-decoration:underline;text-underline-offset:2px;margin-left:6px;opacity:.7}
+.tl-opts{display:flex;flex-direction:column;gap:8px}
+.tl-opts label{display:flex;gap:10px;align-items:center;background:#fff;border:1.5px solid var(--line);border-radius:10px;padding:11px 12px;cursor:pointer;font-weight:600;font-size:14px}
+.tl-opts label:has(input:checked){border-color:var(--ink)}
+.tl-opts label small{font-weight:500;color:var(--muted);margin-left:auto;font-size:12px}
+.tl-opts input[type=radio]{accent-color:var(--ink);width:16px;height:16px}
 .mchg{display:block;font-size:11px;font-weight:600;color:var(--olive)}
 .lmrow{display:grid;grid-template-columns:1fr 120px auto;gap:10px;align-items:center;padding:6px 0;border-bottom:1px dashed var(--line)}
 .lmrow:last-child{border-bottom:0}
@@ -384,7 +392,7 @@ function render(){
   const t = totals(list);
   const pm = ym.m === 0 ? {y: ym.y - 1, m: 11} : {y: ym.y, m: ym.m - 1};
   const prev = totals(monthOps(pm.y, pm.m));
-  const limitSum = cats.expense.reduce((s,c) => s + (+effLimit(c) || 0), 0);
+  const tl = totalLimit(), limitSum = tl.amount || 0;
   const rest = t.inc - t.exp;
   const pct = limitSum ? t.exp / limitSum * 100 : null;
   const prevName = ["январе","феврале","марте","апреле","мае","июне","июле","августе","сентябре","октябре","ноябре","декабре"][pm.m];
@@ -392,9 +400,9 @@ function render(){
     <div class="tile"><span>Доходы</span><b class="num">${rub(t.inc)}</b><small>в ${prevName}: ${rub(prev.inc)}</small></div>
     <div class="tile"><span>Расходы</span><b class="num">${rub(t.exp)}</b><small>в ${prevName}: ${rub(prev.exp)}</small></div>
     <div class="tile rest${rest < 0 ? " neg" : ""}"><span>Остаток</span><b class="num">${rub(rest)}</b><small>доходы минус расходы</small></div>
-    <div class="tile"><span>Лимиты на месяц</span>${limitSum
-      ? `<b class="num">${Math.round(pct)}%</b><div class="meter"><i class="${pct > 100 ? "over" : ""}" style="width:${Math.min(100, pct)}%"></i></div><small class="num">${rub(t.exp)} из ${rub(limitSum)}</small>`
-      : `<b>—</b><small>задай лимиты в «категории и лимиты»</small>`}</div>`;
+    <div class="tile tl-tile" id="totalTile" role="button" tabindex="0" title="Изменить общий лимит"><span>Лимит на месяц <em class="tl-edit">изменить</em></span>${limitSum
+      ? `<b class="num">${Math.round(pct)}%</b><div class="meter"><i class="${pct > 100 ? "over" : ""}" style="width:${Math.min(100, pct)}%"></i></div><small class="num">${rub(t.exp)} из ${rub(limitSum)}${tl.src === "month" ? " · на этот месяц" : tl.src === "default" ? "" : " · по категориям"}</small>`
+      : `<b>—</b><small>${tl.src === "none" ? "без лимита" + (tl.month ? " в этом месяце" : "") : "нажми, чтобы задать"}</small>`}</div>`;
   $("#editMonthLimits").textContent = "лимиты на " + MON_P[ym.m];
   renderCats(t);
   renderOps(list);
@@ -409,6 +417,15 @@ function renderCatSelect(){
 // лимит категории в показанном месяце: изменённый на месяц важнее обычного
 const monthOverrides = () => limits[ymKey(ym.y, ym.m)] || {};
 const effLimit = c => { const ov = monthOverrides(); return Object.prototype.hasOwnProperty.call(ov, c.id) ? ov[c.id] : c.limit; };
+// общий лимит месяца: на этот месяц → обычный → сумма лимитов категорий
+function totalLimit(){
+  const ov = monthOverrides(), has = Object.prototype.hasOwnProperty.call(ov, "__total");
+  if (has) return ov.__total == null ? {amount: null, src: "none", month: true} : {amount: +ov.__total, src: "month"};
+  if (cats.total === null) return {amount: null, src: "none"};
+  if (typeof cats.total === "number") return {amount: cats.total, src: "default"};
+  const sum = cats.expense.reduce((s,c) => s + (+effLimit(c) || 0), 0);
+  return {amount: sum || null, src: "cats"};
+}
 function renderCats(t){
   const ov = monthOverrides();
   const rows = cats.expense.map(c => ({...c, limit: effLimit(c), changed: Object.prototype.hasOwnProperty.call(ov, c.id), spent: t.byCat[c.id] || 0}));
@@ -726,11 +743,62 @@ function editMonthLimits(){
         if (e.target.closest("[data-off]")){ if (has(id) && draft[id] == null) delete draft[id]; else draft[id] = null; box.innerHTML = body(); }
         if (e.target.closest("[data-reset]")){ delete draft[id]; box.innerHTML = body(); }
       });
-      dlg.querySelector("#lm-clear").addEventListener("click", () => { Object.keys(draft).forEach(id => delete draft[id]); box.innerHTML = body(); });
+      dlg.querySelector("#lm-clear").addEventListener("click", () => { Object.keys(draft).filter(id => id !== "__total").forEach(id => delete draft[id]); box.innerHTML = body(); });
       dlg.querySelector("#lm-save").addEventListener("click", () => { store.setLimits(k, draft); closeModal(); });
   });
 }
 document.addEventListener("click", e => { if (e.target.closest("#editMonthLimits")) editMonthLimits(); });
+
+/* ---------- общий лимит на месяц ---------- */
+function editTotalLimit(){
+  const k = ymKey(ym.y, ym.m), cur = totalLimit();
+  const catSum = cats.expense.reduce((s,c) => s + (+effLimit(c) || 0), 0);
+  const gen = ["января","февраля","марта","апреля","мая","июня","июля","августа","сентября","октября","ноября","декабря"][ym.m];
+  const modeNow = cur.src === "none" ? "none" : cur.src === "cats" ? "cats" : "own";
+  openModal(`<h2>Лимит <span class="v">на ${MON_P[ym.m]}</span></h2>
+    <p class="sub">Сколько всего хочешь потратить за месяц. Сейчас потрачено ${rub(totals(monthOps(ym.y, ym.m)).exp)}.</p>
+    <div class="tl-opts" id="tl-opts">
+      <label><input type="radio" name="tl" value="own"${modeNow === "own" ? " checked" : ""}> Своя сумма <small>впиши ниже</small></label>
+      <div class="fld" id="tl-amount-box"><input id="tl-amount" type="number" min="0" step="any" value="${cur.amount && cur.src !== "cats" ? cur.amount : ""}" placeholder="например, 35000" aria-label="Сумма лимита"></div>
+      <label><input type="radio" name="tl" value="cats"${modeNow === "cats" ? " checked" : ""}> Сложить лимиты категорий <small>${catSum ? rub(catSum) : "лимитов у категорий нет"}</small></label>
+      <label><input type="radio" name="tl" value="none"${modeNow === "none" ? " checked" : ""}> Без лимита</label>
+    </div>
+    <div class="fld"><span class="lbl">Для каких месяцев</span>
+      <div class="seg" id="tl-scope"><button type="button" data-sc="month">только ${gen} ${ym.y}</button><button type="button" data-sc="all">все месяцы</button></div></div>
+    <div class="dlg-foot"><span></span><div class="r"><button type="button" class="btn btn-line" data-close>Отмена</button><button type="button" class="btn btn-ink" id="tl-save">Сохранить</button></div></div>`, dlg => {
+      let sc = "month";
+      const scBox = dlg.querySelector("#tl-scope");
+      const paintSc = () => scBox.querySelectorAll("[data-sc]").forEach(b => b.setAttribute("aria-pressed", b.dataset.sc === sc));
+      scBox.addEventListener("click", e => { const b = e.target.closest("[data-sc]"); if (b){ sc = b.dataset.sc; paintSc(); } });
+      paintSc();
+      const scope = () => sc;
+      const amt = dlg.querySelector("#tl-amount");
+      const mode = () => dlg.querySelector('input[name="tl"]:checked')?.value || "own";
+      const sync = () => { amt.disabled = mode() !== "own"; };
+      dlg.querySelector("#tl-opts").addEventListener("change", sync);
+      amt.addEventListener("focus", () => { dlg.querySelector('input[value="own"]').checked = true; sync(); });
+      sync();
+      dlg.querySelector("#tl-save").addEventListener("click", async () => {
+        const m = mode();
+        if (m === "own" && !(+amt.value > 0)) return amt.focus();
+        const value = m === "own" ? Math.round(+amt.value) : m === "none" ? null : undefined;
+        const ov = {...(limits[k] || {})};
+        if (scope() === "month"){
+          if (value === undefined) delete ov.__total; else ov.__total = value;
+          await store.setLimits(k, ov);
+        } else {
+          const c = structuredClone(cats);
+          if (value === undefined) delete c.total; else c.total = value;
+          delete ov.__total;                  // этот месяц тоже по общему правилу
+          await store.setLimits(k, ov);
+          await store.setCats(c);
+        }
+        closeModal();
+      });
+  });
+}
+document.addEventListener("click", e => { if (e.target.closest("#totalTile")) editTotalLimit(); });
+document.addEventListener("keydown", e => { if ((e.key === "Enter" || e.key === " ") && e.target.closest?.("#totalTile")){ e.preventDefault(); editTotalLimit(); } });
 
 boot();
 </script>
