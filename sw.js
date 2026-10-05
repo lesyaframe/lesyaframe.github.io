@@ -1,6 +1,6 @@
 /* Кэш для работы без сети. Страницы берутся из сети, если она есть
    (так обновления приходят сразу), иначе из кэша. */
-const VERSION = "hub-20261003162739";
+const VERSION = "hub-20261005110041";
 const SHELL = [
   "./", "index.html", "blog.html", "budget.html", "sport.html", "work.html", "personal.html",
   "randomizer.html", "osen.html", "zondbe.html", "data.html", "portal.js", "firebase-config.js", "manifest.webmanifest",

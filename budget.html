@@ -19,11 +19,11 @@ body{margin:0;font:14px/1.4 system-ui,-apple-system,sans-serif;background:#F7F0D
 img{max-width:100%}
 [hidden]{display:none!important}
 </style>
-<script src="firebase-config.js?v=20261003162739"></script>
+<script src="firebase-config.js?v=20261005110041"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
-<script src="portal.js?v=20261003162739" data-app="budget"></script>
+<script src="portal.js?v=20261005110041" data-app="budget"></script>
 </head>
 <body>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -204,6 +204,18 @@ td.note{color:var(--muted);width:100%}
 .ytable td.avg{font-size:12px;color:var(--muted);text-align:right;padding:0 6px;white-space:nowrap;font-variant-numeric:tabular-nums}
 .ytable td.yoy{font-size:12px;text-align:right;padding:0 4px;white-space:nowrap}
 #pasteText{min-height:220px;font-family:ui-monospace,Menlo,monospace;font-size:13px}
+.mchg{display:block;font-size:11px;font-weight:600;color:var(--olive)}
+.lmrow{display:grid;grid-template-columns:1fr 120px auto;gap:10px;align-items:center;padding:6px 0;border-bottom:1px dashed var(--line)}
+.lmrow:last-child{border-bottom:0}
+.lmrow .nm{font-weight:700;font-size:14px}
+.lmrow .nm small{display:block;font-weight:500;font-size:12px;color:var(--muted)}
+.lmrow input{border:1.5px solid var(--line);background:#fff;border-radius:8px;padding:8px 10px;width:100%}
+.lmrow input:disabled{background:transparent;color:var(--muted)}
+.lmrow .acts{display:flex;gap:6px;min-width:196px}
+.lmrow .acts button{border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:6px 10px;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap}
+.lmrow .acts button[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.lmrow .acts button:hover{border-color:var(--ink)}
+@media (max-width:560px){.lmrow{grid-template-columns:1fr 96px}.lmrow .acts{grid-column:1/-1}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 
@@ -251,7 +263,7 @@ td.note{color:var(--muted);width:100%}
 
   <div class="cols">
     <section class="panel">
-      <div class="panel-h"><h2>По <span class="v">категориям</span></h2><button type="button" class="link" id="editCats">категории и лимиты</button></div>
+      <div class="panel-h"><h2>По <span class="v">категориям</span></h2><span style="display:flex;gap:14px;flex-wrap:wrap"><button type="button" class="link" id="editMonthLimits">лимиты на месяц</button><button type="button" class="link" id="editCats">категории и обычные лимиты</button></span></div>
       <div class="cats" id="cats"></div>
       <p class="cats-foot">Чёрная отметка на полосе показывает лимит на месяц. Нажми на категорию, чтобы увидеть только её траты.</p>
     </section>
@@ -294,6 +306,7 @@ const DEFAULT_CATS = {
 
 /* ---------- state ---------- */
 let ops = {};                 // id -> {type, amount, category, date, note, createdAt}
+let limits = {};              // "ГГГГ-ММ" -> {id категории: сумма или null}: лимиты, изменённые на этот месяц
 let hist = {};                // "ГГГГ-ММ" -> {amount, note}: доход за месяц, внесённый вручную
 let view = location.hash === "#history" ? "history" : "month";
 let cats = structuredClone(DEFAULT_CATS);
@@ -316,14 +329,19 @@ const catName = (type, id) => (cats[type].find(c => c.id === id) || {name: "Бе
 
 /* ---------- storage: synced db, or this browser as a fallback ---------- */
 const LS = "budget-v1";
-function saveLocal(){ try{ localStorage.setItem(LS, JSON.stringify({ops, cats, hist})); }catch(e){} }
-function loadLocal(){ try{ const d = JSON.parse(localStorage.getItem(LS) || "null"); if (d){ ops = d.ops || {}; if (d.cats) cats = d.cats; hist = d.hist || {}; } }catch(e){} }
+function saveLocal(){ try{ localStorage.setItem(LS, JSON.stringify({ops, cats, hist, limits})); }catch(e){} }
+function loadLocal(){ try{ const d = JSON.parse(localStorage.getItem(LS) || "null"); if (d){ ops = d.ops || {}; if (d.cats) cats = d.cats; hist = d.hist || {}; limits = d.limits || {}; } }catch(e){} }
 const newId = () => mode === "db" ? db.collection("ops").doc().id : rid();
 const store = {
   async put(id, data){ if (mode === "db"){ try{ await db.collection("ops").doc(id).set(data); }catch(e){ fail(e); } } else { ops[id] = data; saveLocal(); render(); } },
   async del(id){ if (mode === "db"){ try{ await db.collection("ops").doc(id).delete(); }catch(e){ fail(e); } } else { delete ops[id]; saveLocal(); render(); } },
   async putHist(k, data){ if (mode === "db"){ try{ await db.collection("history").doc(k).set(data); }catch(e){ fail(e); } } else { hist[k] = data; saveLocal(); render(); } },
   async delHist(k){ if (mode === "db"){ try{ await db.collection("history").doc(k).delete(); }catch(e){ fail(e); } } else { delete hist[k]; saveLocal(); render(); } },
+  async setLimits(k, map){
+    const empty = !Object.keys(map).length;
+    if (mode === "db"){ try{ empty ? await db.collection("limits").doc(k).delete() : await db.collection("limits").doc(k).set(map); }catch(e){ fail(e); } }
+    else { if (empty) delete limits[k]; else limits[k] = map; saveLocal(); render(); }
+  },
   async setCats(c){ if (mode === "db"){ try{ await db.doc("settings/categories").set(c); }catch(e){ fail(e); } } else { cats = c; saveLocal(); render(); } }
 };
 function fail(e){
@@ -341,6 +359,7 @@ async function boot(){
   db = d; mode = "db"; setSync("ok", "синхронизируется");
   const onErr = () => setSync("", "нет связи, обнови страницу");
   db.collection("ops").onSnapshot(snap => { const m = {}; snap.docs.forEach(x => m[x.id] = x.data()); ops = m; render(); }, onErr);
+  db.collection("limits").onSnapshot(snap => { const m = {}; snap.docs.forEach(x => m[x.id] = x.data()); limits = m; render(); }, onErr);
   db.collection("history").onSnapshot(snap => { const m = {}; snap.docs.forEach(x => m[x.id] = x.data()); hist = m; render(); }, onErr);
   db.doc("settings/categories").onSnapshot(s => { const c = s.exists && s.data(); cats = (c && c.expense) ? c : structuredClone(DEFAULT_CATS); render(); }, onErr);
 }
@@ -365,7 +384,7 @@ function render(){
   const t = totals(list);
   const pm = ym.m === 0 ? {y: ym.y - 1, m: 11} : {y: ym.y, m: ym.m - 1};
   const prev = totals(monthOps(pm.y, pm.m));
-  const limitSum = cats.expense.reduce((s,c) => s + (+c.limit || 0), 0);
+  const limitSum = cats.expense.reduce((s,c) => s + (+effLimit(c) || 0), 0);
   const rest = t.inc - t.exp;
   const pct = limitSum ? t.exp / limitSum * 100 : null;
   const prevName = ["январе","феврале","марте","апреле","мае","июне","июле","августе","сентябре","октябре","ноябре","декабре"][pm.m];
@@ -376,6 +395,7 @@ function render(){
     <div class="tile"><span>Лимиты на месяц</span>${limitSum
       ? `<b class="num">${Math.round(pct)}%</b><div class="meter"><i class="${pct > 100 ? "over" : ""}" style="width:${Math.min(100, pct)}%"></i></div><small class="num">${rub(t.exp)} из ${rub(limitSum)}</small>`
       : `<b>—</b><small>задай лимиты в «категории и лимиты»</small>`}</div>`;
+  $("#editMonthLimits").textContent = "лимиты на " + MON_P[ym.m];
   renderCats(t);
   renderOps(list);
 }
@@ -386,8 +406,12 @@ function renderCatSelect(){
   if ([...sel.options].some(o => o.value === keep)) sel.value = keep;
 }
 
+// лимит категории в показанном месяце: изменённый на месяц важнее обычного
+const monthOverrides = () => limits[ymKey(ym.y, ym.m)] || {};
+const effLimit = c => { const ov = monthOverrides(); return Object.prototype.hasOwnProperty.call(ov, c.id) ? ov[c.id] : c.limit; };
 function renderCats(t){
-  const rows = cats.expense.map(c => ({...c, spent: t.byCat[c.id] || 0}));
+  const ov = monthOverrides();
+  const rows = cats.expense.map(c => ({...c, limit: effLimit(c), changed: Object.prototype.hasOwnProperty.call(ov, c.id), spent: t.byCat[c.id] || 0}));
   const known = new Set(cats.expense.map(c => c.id));
   const orphan = Object.entries(t.byCat).filter(([id]) => !known.has(id)).reduce((s,[,v]) => s + v, 0);
   if (orphan) rows.push({id:"__none", name:"Без категории", limit:null, spent: orphan});
@@ -398,7 +422,7 @@ function renderCats(t){
     const over = r.limit && r.spent > r.limit;
     return `<div class="cat" role="button" tabindex="0" data-cat="${esc(r.id)}" aria-pressed="${catFilter === r.id}" title="${esc(r.name)}: ${rub(r.spent)}${r.limit ? " из " + rub(r.limit) : ""}">
       <span class="nm">${esc(r.name)} ${over ? `<span class="flag">превышен на ${rub(r.spent - r.limit)}</span>` : ""}</span>
-      <span class="vl num"><b>${rub(r.spent)}</b>${r.limit ? ` / ${rub(r.limit)}` : ""}</span>
+      <span class="vl num"><b>${rub(r.spent)}</b>${r.limit ? ` / ${rub(r.limit)}` : ""}${r.changed ? `<small class="mchg">${r.limit ? "на этот месяц" : "без лимита в этом месяце"}</small>` : ""}</span>
       <span class="track"><i class="${over ? "over" : ""}" style="width:${r.spent / max * 100}%"></i>${r.limit ? `<s style="left:calc(${r.limit / max * 100}% - 1px)"></s>` : ""}</span>
     </div>`; }).join("")
     : `<div class="empty"><span class="v">пока пусто</span>Добавь первую трату в форме выше</div>`;
@@ -670,6 +694,43 @@ document.addEventListener("click", e => {
 const showInfo = e => { const b = e.target.closest?.(".hbar"); if (b) $("#hInfo").innerHTML = "<b>" + esc(b.dataset.info).replace(": ", ":</b> "); };
 document.addEventListener("mouseover", showInfo);
 document.addEventListener("focusin", showInfo);
+
+/* ---------- лимиты на конкретный месяц ---------- */
+function editMonthLimits(){
+  const k = ymKey(ym.y, ym.m), draft = {...(limits[k] || {})};
+  const has = id => Object.prototype.hasOwnProperty.call(draft, id);
+  const row = c => {
+    const off = has(c.id) && draft[c.id] == null;
+    const val = has(c.id) ? (draft[c.id] ?? "") : (c.limit ?? "");
+    return `<div class="lmrow" data-id="${esc(c.id)}">
+      <span class="nm">${esc(c.name)}<small>${c.limit ? "обычно " + rub(c.limit) : "обычно без лимита"}${has(c.id) ? " · изменён" : ""}</small></span>
+      <input type="number" min="0" step="any" value="${esc(val)}" placeholder="без лимита" aria-label="Лимит: ${esc(c.name)}"${off ? " disabled" : ""}>
+      <span class="acts"><button type="button" data-off aria-pressed="${off}">без лимита</button>${has(c.id) ? `<button type="button" data-reset>как обычно</button>` : ""}</span>
+    </div>`;
+  };
+  const body = () => cats.expense.map(row).join("");
+  openModal(`<h2>Лимиты на <span class="v">${MON_P[ym.m]}</span></h2>
+    <p class="sub">Меняются только для ${["января","февраля","марта","апреля","мая","июня","июля","августа","сентября","октября","ноября","декабря"][ym.m]} ${ym.y}. В остальных месяцах останутся обычные лимиты, их можно поменять в «категории и обычные лимиты».</p>
+    <div id="lm-body">${body()}</div>
+    <div class="dlg-foot"><button type="button" class="btn btn-line" id="lm-clear">Вернуть все как обычно</button><div class="r"><button type="button" class="btn btn-line" data-close>Отмена</button><button type="button" class="btn btn-ink" id="lm-save">Сохранить</button></div></div>`, dlg => {
+      const box = dlg.querySelector("#lm-body");
+      box.addEventListener("input", e => {
+        const r = e.target.closest(".lmrow"); if (!r) return;
+        const c = cats.expense.find(x => x.id === r.dataset.id), v = e.target.value;
+        const n = v === "" ? null : Math.max(0, +v);
+        if (n === (c.limit ?? null)) delete draft[c.id]; else draft[c.id] = n;
+      });
+      box.addEventListener("click", e => {
+        const r = e.target.closest(".lmrow"); if (!r) return;
+        const id = r.dataset.id;
+        if (e.target.closest("[data-off]")){ if (has(id) && draft[id] == null) delete draft[id]; else draft[id] = null; box.innerHTML = body(); }
+        if (e.target.closest("[data-reset]")){ delete draft[id]; box.innerHTML = body(); }
+      });
+      dlg.querySelector("#lm-clear").addEventListener("click", () => { Object.keys(draft).forEach(id => delete draft[id]); box.innerHTML = body(); });
+      dlg.querySelector("#lm-save").addEventListener("click", () => { store.setLimits(k, draft); closeModal(); });
+  });
+}
+document.addEventListener("click", e => { if (e.target.closest("#editMonthLimits")) editMonthLimits(); });
 
 boot();
 </script>
