@@ -119,8 +119,8 @@ b{letter-spacing:-.03em}
 }
 
 /* ============ SERVICES ============ */
-.services{position:relative;background:linear-gradient(rgba(59,27,20,.06) 1px,transparent 1px) 0 0/26px 26px,linear-gradient(90deg,rgba(59,27,20,.06) 1px,transparent 1px) 0 0/26px 26px,var(--paper);padding:clamp(90px,10vw,140px) var(--gut) clamp(70px,8vw,110px)}
-.services::before{content:"";position:absolute;left:0;right:0;top:0;height:26px;background:radial-gradient(circle at 13px 0,var(--cherry) 13px,transparent 13.5px) 0 0/26px 26px repeat-x}
+.services{position:relative;z-index:3;border-radius:36px 36px 0 0;margin-top:-36px;box-shadow:0 -12px 30px -24px rgba(59,27,20,.5);background:linear-gradient(rgba(59,27,20,.06) 1px,transparent 1px) 0 0/26px 26px,linear-gradient(90deg,rgba(59,27,20,.06) 1px,transparent 1px) 0 0/26px 26px,var(--paper);padding:clamp(90px,10vw,140px) var(--gut) clamp(70px,8vw,110px)}
+
 .svc-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:20px}
 .svc-head h2{font-size:clamp(48px,6.4vw,96px);color:var(--choco)}
 .svc-head h2 .v{color:var(--cherry);font-size:1.1em}
@@ -174,7 +174,7 @@ b{letter-spacing:-.03em}
 @keyframes roll{to{transform:translateX(-50%)}}
 
 /* ============ PROCESS (calendar) ============ */
-.process{background:repeating-linear-gradient(90deg,var(--olive) 0 30px,var(--olive2) 30px 60px);padding:clamp(80px,9vw,120px) var(--gut);color:var(--paper)}
+.process{background:repeating-linear-gradient(90deg,var(--olive) 0 30px,var(--olive2) 30px 60px);padding:clamp(80px,9vw,120px) var(--gut) calc(clamp(80px,9vw,120px) + 36px);color:var(--paper)}
 .process h2{font-size:clamp(48px,6.4vw,96px);text-align:center}
 .process h2 .v{color:var(--butter);font-size:1.1em}
 .cal{position:relative;max-width:1060px;margin:clamp(36px,5vw,60px) auto 0;background:#FBF6E6;color:var(--ink);border-radius:14px;padding:58px clamp(18px,3vw,40px) clamp(26px,3vw,40px);box-shadow:0 30px 50px -30px rgba(0,0,0,.6)}
@@ -209,7 +209,7 @@ b{letter-spacing:-.03em}
 }
 
 /* ============ FIT (clouds) ============ */
-.fit{position:relative;background:conic-gradient(from 45deg at 50% 50%,rgba(241,234,145,.55) 25%,transparent 0 50%,rgba(241,234,145,.55) 0 75%,transparent 0) 0 0/90px 90px,var(--paper);padding:clamp(80px,9vw,120px) var(--gut);min-height:100svh;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.fit{position:relative;z-index:2;box-shadow:0 -12px 30px -24px rgba(59,27,20,.5);border-radius:36px 36px 0 0;margin-top:-36px;background:conic-gradient(from 45deg at 50% 50%,rgba(241,234,145,.55) 25%,transparent 0 50%,rgba(241,234,145,.55) 0 75%,transparent 0) 0 0/90px 90px,var(--paper);padding:clamp(80px,9vw,120px) var(--gut);min-height:100svh;display:flex;align-items:center;justify-content:center;overflow:hidden}
 .fit-in{position:relative;width:100%;max-width:1200px;min-height:640px;display:grid;place-items:center}
 .center{position:relative;z-index:2;text-align:center;display:flex;flex-direction:column;align-items:center;gap:18px;background:var(--paper);padding:30px 40px;border-radius:24px;box-shadow:0 0 0 10px rgba(251,246,230,.7)}
 .center h2{font-size:clamp(44px,5.4vw,82px);color:var(--choco)}
@@ -269,13 +269,13 @@ b{letter-spacing:-.03em}
 @media (max-width:760px){.feel{grid-template-columns:1fr}.fit{min-height:0}}
 
 /* ============ FORM ============ */
-.form-sec{background:repeating-linear-gradient(90deg,var(--olive) 0 30px,var(--olive2) 30px 60px);padding:clamp(60px,8vh,90px) var(--gut);min-height:100svh;display:grid;grid-template-columns:.8fr 1.2fr;gap:clamp(24px,4vw,60px);align-items:center;color:var(--paper)}
+.form-sec{position:relative;z-index:3;border-radius:36px 36px 0 0;margin-top:-36px;background:var(--choco);padding:clamp(60px,8vh,90px) var(--gut);min-height:100svh;display:grid;grid-template-columns:.8fr 1.2fr;gap:clamp(24px,4vw,60px);align-items:center;color:var(--paper)}
 .form-head{display:flex;flex-direction:column;gap:16px}
 .form-head h2{font-size:clamp(44px,5.4vw,84px)}
 .form-head h2 .v{display:block;color:var(--butter);margin:.08em 0 0 .2em;rotate:-3deg;transform-origin:left}
 .form-head p{font-size:18px;max-width:30ch;opacity:.9}
 .sheet{position:relative;background:var(--paper);color:var(--ink);border-radius:16px;padding:46px clamp(20px,3vw,40px) 28px;box-shadow:0 30px 50px -30px rgba(0,0,0,.6);display:flex;flex-direction:column;gap:20px;min-height:460px}
-.holes{position:absolute;left:24px;right:24px;top:14px;height:20px;background:radial-gradient(circle,var(--olive) 8px,transparent 8.5px) 0 0/38px 20px repeat-x}
+.holes{position:absolute;left:24px;right:24px;top:14px;height:20px;background:radial-gradient(circle,var(--choco) 8px,transparent 8.5px) 0 0/38px 20px repeat-x}
 .steps-bar{display:flex;align-items:center;gap:10px;font-size:13px;font-weight:600;color:var(--muted)}
 .steps-bar i{flex:1;height:4px;border-radius:4px;background:var(--cream);overflow:hidden}
 .steps-bar b{display:block;height:100%;width:20%;background:var(--choco);transition:width .35s}
@@ -302,10 +302,10 @@ b{letter-spacing:-.03em}
 @media (max-width:900px){.form-sec{grid-template-columns:1fr;min-height:0}}
 
 /* ============ CONTACT (awning) ============ */
-.contact{position:relative;background:var(--cream);padding:0 var(--gut) clamp(70px,8vw,110px)}
+.contact{position:relative;z-index:2;box-shadow:0 -12px 30px -24px rgba(59,27,20,.5);background:var(--paper);border-radius:36px 36px 0 0;margin-top:-36px;padding:0 var(--gut) clamp(70px,8vw,110px)}
 .awning{position:relative;margin:0 calc(-1*var(--gut));height:70px;background:repeating-linear-gradient(90deg,var(--choco) 0 60px,var(--cream) 60px 120px)}
 .awning::after{content:"";position:absolute;left:0;right:0;bottom:-30px;height:30px;background:radial-gradient(circle at 30px 0,var(--choco) 30px,transparent 30.5px) 0 0/120px 30px repeat-x,radial-gradient(circle at 90px 0,var(--cream) 30px,transparent 30.5px) 0 0/120px 30px repeat-x}
-.shop{display:grid;grid-template-columns:1.1fr .9fr;gap:clamp(30px,5vw,80px);align-items:center;max-width:1200px;margin:clamp(80px,9vw,120px) auto 0}
+.shop{display:grid;grid-template-columns:1.1fr .9fr;gap:clamp(30px,5vw,80px);align-items:center;max-width:1200px;margin:0 auto;padding-top:clamp(70px,8vw,110px)}
 .shop .sign{display:inline-block;background:var(--choco);color:var(--butter);font-family:var(--script);font-size:30px;padding:8px 22px 6px;border-radius:8px;rotate:-3deg;box-shadow:0 10px 18px -10px rgba(0,0,0,.6)}
 .shop h2{font-size:clamp(50px,6.6vw,100px);color:var(--choco);margin-top:22px}
 .shop p{margin-top:18px;max-width:44ch;font-size:18px}
@@ -412,9 +412,7 @@ footer .v{color:var(--butter);font-size:26px}
   <p class="svc-note">Маркетинг и копирайтинг в работу не входят, если мы отдельно не договорились.</p>
 </section>
 
-<div class="band" aria-hidden="true"></div>
 <a class="marq" href="#zayavka" aria-label="Записаться к Лесе"><div><span>оставить заявку<i>✦</i>сайты с чистого листа<i>✦</i>Tilda и Figma<i>✦</i>оставить заявку<i>✦</i>сайты с чистого листа<i>✦</i>Tilda и Figma<i>✦</i></span><span>оставить заявку<i>✦</i>сайты с чистого листа<i>✦</i>Tilda и Figma<i>✦</i>оставить заявку<i>✦</i>сайты с чистого листа<i>✦</i>Tilda и Figma<i>✦</i></span></div></a>
-<div class="band" aria-hidden="true"></div>
 
 <!-- PROCESS -->
 <section class="process" id="process">
@@ -532,7 +530,6 @@ footer .v{color:var(--butter);font-size:26px}
 
 <!-- CONTACT -->
 <section class="contact" id="contact">
-  <div class="awning" aria-hidden="true"></div>
   <div class="shop">
     <div data-in>
       <span class="sign">запись открыта</span>
