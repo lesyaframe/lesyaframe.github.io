@@ -198,7 +198,7 @@ b{letter-spacing:-.03em}
 @keyframes ring{from{stroke-dashoffset:640}}
 .detail{display:grid;grid-template-columns:1fr auto;gap:20px;align-items:end;margin-top:28px}
 .detail h3{font-size:clamp(30px,3.4vw,46px);color:var(--choco)}
-.detail p{margin-top:10px;color:var(--muted);max-width:52ch}
+.detail p{white-space:pre-line;margin-top:10px;color:var(--muted);max-width:52ch}
 @media (max-width:700px){
   .days{grid-template-columns:repeat(5,1fr)}
   .day{padding:8px 4px 10px;min-height:0;gap:6px}
@@ -233,9 +233,9 @@ b{letter-spacing:-.03em}
 
 
 /* ============ SERVICES (fits one screen) ============ */
-.services{min-height:100svh;padding:clamp(56px,7vh,80px) var(--gut) clamp(30px,4vh,50px);display:flex;flex-direction:column;justify-content:center;gap:clamp(18px,3vh,32px)}
+.services{min-height:100svh;padding:clamp(50px,6vh,70px) var(--gut) clamp(26px,3.5vh,44px);display:flex;flex-direction:column;justify-content:center;gap:clamp(18px,3vh,32px)}
 .svc-head h2{font-size:clamp(44px,5.4vw,80px)}
-.svc-grid{display:grid;grid-template-columns:.85fr 1.15fr;gap:clamp(24px,4vw,64px);align-items:center}
+.svc-grid{display:grid;grid-template-columns:.72fr 1.28fr;gap:clamp(24px,4vw,64px);align-items:center}
 .main-svc{display:flex;flex-direction:column;align-items:flex-start;gap:12px;margin:0}
 .main-svc h3{font-size:clamp(30px,3.2vw,46px);margin:0}
 .badges{margin:8px 0 10px}
@@ -251,6 +251,23 @@ b{letter-spacing:-.03em}
 .svc-note{margin:0}
 @media (max-width:980px){.svc-grid{grid-template-columns:1fr}.services{min-height:0}}
 @media (max-width:560px){.tags{grid-template-columns:1fr 1fr}.line svg.rope{display:none}}
+
+
+.tabs{display:flex;flex-direction:column;padding-top:26px}
+.tab{position:relative;display:grid;grid-template-columns:1fr auto;align-items:center;gap:6px 18px;margin-top:-14px;border-radius:18px 18px 0 0;padding:11px 24px 34px;text-decoration:none;color:var(--ink);box-shadow:0 -10px 20px -16px rgba(59,27,20,.5);transition:transform .25s}
+.tab:first-child{margin-top:0}
+.tab:last-child{border-radius:18px;padding-bottom:13px}
+.tab:hover{transform:translateY(-6px)}
+.tab::before{content:attr(data-n);position:absolute;top:-22px;right:calc(6% + (6 - var(--i))*11%);height:24px;padding:5px 14px 0;border-radius:10px 10px 0 0;background:inherit;font-size:11px;font-weight:700}
+.tab b{display:block;font-size:clamp(17px,1.5vw,21px);font-weight:800;letter-spacing:-.04em;line-height:1.1}
+.tab small{display:block;font-size:12.5px;opacity:.75;margin-top:3px;line-height:1.3}
+.tab .pr{font-size:clamp(16px,1.4vw,20px);font-weight:800;letter-spacing:-.04em;display:flex;align-items:center;gap:10px;white-space:nowrap}
+.tab .pr i{font-style:normal;width:32px;height:32px;border-radius:50%;display:grid;place-items:center;font-size:14px;box-shadow:inset 0 0 0 1.5px currentColor;transition:background .2s}
+.tab:hover .pr i{background:currentColor}
+.tab:hover .pr i::first-letter{color:var(--paper)}
+.tab:nth-child(1){background:var(--cream)}.tab:nth-child(2){background:#E4E0B8}.tab:nth-child(3){background:var(--butter)}
+.tab:nth-child(4){background:#B9B579}.tab:nth-child(5){background:var(--olive);color:var(--paper)}.tab:nth-child(6){background:#5A3A2E;color:var(--paper)}.tab:nth-child(7){background:var(--choco);color:var(--paper)}
+@media (max-width:560px){.tab{grid-template-columns:1fr;padding:14px 18px 26px}.tab .pr{font-size:17px}.tab::before{right:calc(4% + (6 - var(--i))*12%)}}
 
 /* ============ FIT ============ */
 .fit{display:flex;flex-direction:column;align-items:stretch;justify-content:center;gap:clamp(24px,4vh,40px);min-height:100svh}
@@ -347,7 +364,7 @@ footer .v{color:var(--butter);font-size:26px}
   </div>
   <div class="hr">
     <h1>собираю сайты <span class="v">с чистого листа</span></h1>
-    <p>я веб-дизайнер и собираю сайты на Tilda. продумываю, рисую, собираю, запускаю. и не пропадаю после запуска ☺️</p>
+    <p>я веб-дизайнер и собираю сайты на Tilda<br>продумываю, рисую, собираю, запускаю<br>и не пропадаю после запуска ☺️</p>
     <div class="hrow"><a class="btn btn-butter" href="#zayavka">обсудить проект</a><a class="btn btn-line" href="#services">услуги и цены</a></div>
   </div>
   <div class="hribbon" aria-hidden="true"></div>
@@ -359,9 +376,9 @@ footer .v{color:var(--butter);font-size:26px}
   <div class="txt" data-in>
     <span class="eyebrow" style="color:var(--cherry)">обо мне</span>
     <h2>привет, я <span class="v">Леся</span></h2>
-    <p class="big">делаю сайты уже около шести лет. почти всему научилась сама, на своих ошибках 😅</p>
-    <p>по образованию я журналист, поэтому сначала разбираюсь, что и кому должен сказать сайт, а рисую уже потом. больше всего люблю момент, когда передо мной пустой лист и из него понемногу вырастает проект</p>
-    <p>работаю из дома в Ярославле. рядом почти всегда спит Рэм, мой английский кокер. он отвечает за настроение и иногда за клавиатуру</p>
+    <p class="big">делаю сайты уже около шести лет<br>почти всему научилась сама, на своих ошибках 😅</p>
+    <p>по образованию я журналист, поэтому сначала разбираюсь, что и кому должен сказать сайт, а рисую уже потом<br>больше всего люблю момент, когда передо мной пустой лист и из него понемногу вырастает проект</p>
+    <p>работаю из дома в Ярославле<br>рядом почти всегда спит Рэм, мой английский кокер<br>он отвечает за настроение и иногда за клавиатуру</p>
     <div class="row"><a class="btn btn-choco" href="#services">что я делаю</a></div>
   </div>
   <div class="comp">
@@ -382,7 +399,7 @@ footer .v{color:var(--butter);font-size:26px}
 <section class="services" id="services">
   <div class="svc-head">
     <h2>чем могу <span class="v">помочь</span></h2>
-    <p>цены примерные, чтобы было понятно, от чего отталкиваться. точную сумму назову, когда разберёмся в задаче</p>
+    <p>цены примерные, чтобы было понятно, от чего отталкиваться<br>точную сумму назову, когда разберёмся в задаче</p>
   </div>
   <div class="svc-grid">
     <div class="main-svc" data-in>
@@ -390,24 +407,21 @@ footer .v{color:var(--butter);font-size:26px}
       <h3>Сайт с нуля под ключ</h3>
       <p>разбираемся в задаче и собираем структуру, потом рисую дизайн в Figma, собираю всё на Tilda, проверяю на телефоне, запускаю и настраиваю базовую SEO и аналитику</p>
       <div class="badges">
-        <div class="badge" data-flower="#3B1B14"><div><b>45–60</b><small>тыс. ₽</small></div></div>
+        <div class="badge" data-flower="#3B1B14"><div><b>от 50</b><small>тысяч ₽</small></div></div>
         <div class="badge" data-flower="#737038"><div><b>10–12</b><small>блоков</small></div></div>
         <div class="badge lt" data-flower="#F1EA91"><div><b>~20</b><small>рабочих дней</small></div></div>
       </div>
-      <a class="btn btn-choco" href="#zayavka" data-svc="Сайт с нуля">оставить заявку</a>
+      <a class="btn btn-choco" href="#zayavka" data-svc="Сайт с нуля под ключ">оставить заявку</a>
     </div>
-    <div class="line">
-      <svg class="rope" viewBox="0 0 1000 60" preserveAspectRatio="none" aria-hidden="true"><path d="M0 6 Q 500 46 1000 6" fill="none" stroke="#3B1B14" stroke-width="2"/></svg>
-      <svg class="rope r2" viewBox="0 0 1000 60" preserveAspectRatio="none" aria-hidden="true"><path d="M0 6 Q 500 46 1000 6" fill="none" stroke="#3B1B14" stroke-width="2"/></svg>
-      <div class="tags">
-        <a class="gt" href="#zayavka" data-svc="Полная переделка сайта"><span class="pin"></span><span class="card"><b>Полная переделка сайта</b><span class="pr">≈ 40 000 ₽</span><small>7–10 дней</small><span class="go">хочу это</span></span></a>
-        <a class="gt" href="#zayavka" data-svc="Новая цветовая схема"><span class="pin"></span><span class="card"><b>Новая цветовая схема</b><span class="pr">7 000 ₽</span><small>около 2 дней</small><span class="go">хочу это</span></span></a>
-        <a class="gt" href="#zayavka" data-svc="Отдельный блок"><span class="pin"></span><span class="card"><b>Отдельный блок</b><span class="pr">4 500 ₽</span><small>Zero Block, телефон и ПК</small><span class="go">хочу это</span></span></a>
-        <a class="gt" href="#zayavka" data-svc="Обложки для хайлайтс"><span class="pin"></span><span class="card"><b>Обложки для хайлайтс</b><span class="pr">3 000 ₽</span><small>в стиле профиля</small><span class="go">хочу это</span></span></a>
-        <a class="gt" href="#zayavka" data-svc="Пакет для соцсетей"><span class="pin"></span><span class="card"><b>Пакет для соцсетей</b><span class="pr">10 000 ₽</span><small>профиль в едином стиле</small><span class="go">хочу это</span></span></a>
-        <a class="gt" href="#zayavka" data-svc="Поддержка после запуска"><span class="pin"></span><span class="card"><b>Поддержка после запуска</b><span class="pr">договорная</span><small>правки, страницы, тексты</small><span class="go">хочу это</span></span></a>
-      </div>
-    </div>
+    <div class="tabs">
+<a class="tab" style="--i:0" data-n="01" href="#zayavka" data-svc="Дизайн сайта в Figma"><span class="tt"><b>Дизайн сайта в Figma</b><small>без вёрстки, макет для вас или вашего разработчика</small></span><span class="pr">от 20 000 ₽<i>→</i></span></a>
+<a class="tab" style="--i:1" data-n="02" href="#zayavka" data-svc="Редизайн существующего сайта"><span class="tt"><b>Редизайн существующего сайта</b><small>новый дизайн и вёрстка на Tilda</small></span><span class="pr">от 30 000 ₽<i>→</i></span></a>
+<a class="tab" style="--i:2" data-n="03" href="#zayavka" data-svc="Портал, пространство, приложение"><span class="tt"><b>Портал, пространство, приложение</b><small>личный кабинет для учеников, трекер или планер, база материалов для клиентов</small></span><span class="pr">от 30 000 ₽<i>→</i></span></a>
+<a class="tab" style="--i:3" data-n="04" href="#zayavka" data-svc="Интернет-магазин"><span class="tt"><b>Интернет-магазин</b><small>каталог, карточки товаров, корзина и оплата</small></span><span class="pr">от 70 000 ₽<i>→</i></span></a>
+<a class="tab" style="--i:4" data-n="05" href="#zayavka" data-svc="Пакет для соцсетей"><span class="tt"><b>Пакет для соцсетей</b><small>профиль, обложки и шаблоны в едином стиле</small></span><span class="pr">от 15 000 ₽<i>→</i></span></a>
+<a class="tab" style="--i:5" data-n="06" href="#zayavka" data-svc="Поддержка после запуска"><span class="tt"><b>Поддержка после запуска</b><small>правки, новые страницы, замена текстов</small></span><span class="pr">1 год бесплатно<i>→</i></span></a>
+<a class="tab" style="--i:6" data-n="07" href="#zayavka" data-svc="Дизайнер на абонементе"><span class="tt"><b>Дизайнер на абонементе</b><small>для брендов и компаний, у которых постоянно много задач</small></span><span class="pr">от 60 000 ₽/мес<i>→</i></span></a>
+</div>
   </div>
   <p class="svc-note">*маркетинг и тексты под ключ я не делаю, если только мы отдельно об этом не договорились</p>
 </section>
@@ -428,7 +442,7 @@ footer .v{color:var(--butter);font-size:26px}
       <svg class="ring" id="ring" aria-hidden="true"><ellipse id="ringE"/></svg>
     </div>
     <div class="detail">
-      <div><h3 id="dT">Разговор о задаче</h3><p id="dP">созваниваемся или переписываемся: для кого сайт и что он должен делать. я смотрю конкурентов и вашу аудиторию</p></div>
+      <div><h3 id="dT">Разговор о задаче</h3><p id="dP">созваниваемся или переписываемся: для кого сайт и что он должен делать<br>я смотрю конкурентов и вашу аудиторию</p></div>
       <button class="btn btn-choco" type="button" id="dNext">дальше →</button>
     </div>
   </div>
@@ -466,7 +480,7 @@ footer .v{color:var(--butter);font-size:26px}
   <div class="form-head">
     <span class="eyebrow">заявка</span>
     <h2>расскажите <span class="v">о проекте</span></h2>
-    <p>пара вопросов, займёт минуту. потом я напишу и предложу, с чего начать</p>
+    <p>пара вопросов, займёт минуту<br>потом я напишу и предложу, с чего начать</p>
   </div>
   <form class="sheet" id="form" novalidate>
     <div class="holes" aria-hidden="true"></div>
@@ -474,9 +488,7 @@ footer .v{color:var(--butter);font-size:26px}
 
     <fieldset class="q on" data-q="1">
       <legend>что нужно?</legend><p class="hint">можно выбрать несколько</p>
-      <div class="chips" data-name="svc" data-multi>
-        <button type="button">Сайт с нуля</button><button type="button">Полная переделка сайта</button><button type="button">Новая цветовая схема</button><button type="button">Отдельный блок</button><button type="button">Обложки для хайлайтс</button><button type="button">Пакет для соцсетей</button><button type="button">Поддержка после запуска</button><button type="button">пока не знаю, подскажите</button>
-      </div>
+      <div class="chips" data-name="svc" data-multi><button type="button">Сайт с нуля под ключ</button><button type="button">Дизайн сайта в Figma</button><button type="button">Редизайн существующего сайта</button><button type="button">Портал, пространство, приложение</button><button type="button">Интернет-магазин</button><button type="button">Пакет для соцсетей</button><button type="button">Поддержка после запуска</button><button type="button">Дизайнер на абонементе</button><button type="button">пока не знаю, подскажите</button></div>
     </fieldset>
 
     <fieldset class="q" data-q="2">
@@ -501,9 +513,7 @@ footer .v{color:var(--butter);font-size:26px}
         <button type="button">Как можно скорее</button><button type="button">В течение месяца</button><button type="button">Через 1–3 месяца</button><button type="button">Пока присматриваюсь</button>
       </div>
       <legend class="sub">а по бюджету примерно?</legend>
-      <div class="chips" data-name="budget">
-        <button type="button">до 10 000 ₽</button><button type="button">10–40 000 ₽</button><button type="button">40–60 000 ₽</button><button type="button">больше 60 000 ₽</button><button type="button">Не знаю</button>
-      </div>
+      <div class="chips" data-name="budget"><button type="button">до 20 000 ₽</button><button type="button">20–50 000 ₽</button><button type="button">50–70 000 ₽</button><button type="button">больше 70 000 ₽</button><button type="button">не знаю</button></div>
     </fieldset>
 
     <fieldset class="q" data-q="5">
@@ -515,7 +525,7 @@ footer .v{color:var(--butter);font-size:26px}
 
     <div class="done" id="done" hidden>
       <span class="v">спасибо!</span>
-      <p>осталось отправить это мне в Instagram. текст я уже скопировала, просто вставьте его в сообщение ☺️</p>
+      <p>осталось отправить это мне в Instagram<br>текст я уже скопировала, просто вставьте его в сообщение ☺️</p>
       <pre id="summary"></pre>
       <div class="nav-row"><a class="btn btn-choco" href="https://www.instagram.com/lesya.frame/" target="_blank" rel="noopener">открыть Instagram</a><button type="button" class="btn btn-ghost" id="copyAgain">скопировать ещё раз</button></div>
     </div>
@@ -534,7 +544,7 @@ footer .v{color:var(--butter);font-size:26px}
     <div data-in>
       <span class="sign">запись открыта</span>
       <h2>давайте начнём</h2>
-      <p>напишите пару слов о проекте: что хочется, для кого и к какому сроку. отвечаю сама, без менеджеров и шаблонных ответов</p>
+      <p>напишите пару слов о проекте: что хочется, для кого и к какому сроку<br>отвечаю сама, без менеджеров и шаблонных ответов</p>
       <div class="row">
         <a class="btn btn-cherry" href="https://www.instagram.com/lesya.frame/" target="_blank" rel="noopener">написать в Instagram</a>
         <button class="handle" type="button" id="copy">@lesya.frame · скопировать</button>
@@ -587,11 +597,11 @@ footer .v{color:var(--butter);font-size:26px}
 
   /* calendar */
   var S=[
-    ['Разговор о задаче','созваниваемся или переписываемся: для кого сайт и что он должен делать. я смотрю конкурентов и вашу аудиторию'],
-    ['Структура','раскладываю всё по блокам: что, где и в каком порядке. сайт уже понятен, хоть пока и без красоты'],
-    ['Референсы и визуал','собираю референсы, цвета и шрифты. ищем настроение вместе, пока вы не скажете «да, это оно»'],
-    ['Дизайн в Figma','рисую дизайн в Figma под ваш проект. без шаблонов, честно'],
-    ['Сборка и запуск','собираю на Tilda, делаю адаптив, базовую SEO и аналитику. запускаем, а я остаюсь на связи ☺️']
+    ['Разговор о задаче','созваниваемся или переписываемся: для кого сайт и что он должен делать\nя смотрю конкурентов и вашу аудиторию'],
+    ['Структура','раскладываю всё по блокам: что, где и в каком порядке\nсайт уже понятен, хоть пока и без красоты'],
+    ['Референсы и визуал','собираю референсы, цвета и шрифты\nищем настроение вместе, пока вы не скажете «да, это оно»'],
+    ['Дизайн в Figma','рисую дизайн в Figma под ваш проект\nбез шаблонов, честно'],
+    ['Сборка и запуск','собираю на Tilda, делаю адаптив, базовую SEO и аналитику\nзапускаем, а я остаюсь на связи ☺️']
   ];
   var days=[].slice.call(document.querySelectorAll('.day')),ring=document.getElementById('ring'),re=document.getElementById('ringE'),box=document.getElementById('days'),cur=0;
   function place(){
