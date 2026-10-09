@@ -60,7 +60,7 @@ b{letter-spacing:-.03em}
 .hr::after{content:"";position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(90deg,transparent 0 6px,rgba(0,0,0,.12) 6px 7px);mix-blend-mode:multiply}
 .hr>*{position:relative;z-index:1}
 .hr h1{font-size:min(7.8vw,14vh,124px);font-weight:900;letter-spacing:-.065em;line-height:.84}
-.hr h1 .v{display:inline-block;vertical-align:top;color:var(--butter);font-size:.46em;margin:-.1em 0 0 .25em;rotate:-8deg;transform-origin:left;white-space:nowrap}
+.hr h1 .v{display:inline-block;vertical-align:top;color:var(--butter);font-size:.46em;margin:.28em 0 0 .25em;rotate:-8deg;transform-origin:left;white-space:nowrap}
 .hr p{font-size:clamp(15px,2.1vh,18px);max-width:32em;opacity:.85;line-height:1.4}
 .hrow{display:flex;flex-wrap:wrap;gap:12px}
 .btn-butter{background:var(--butter);color:var(--ink)}
@@ -549,7 +549,7 @@ footer .v{color:var(--butter);font-size:26px}
       <div class="chips" data-name="niche">
         <button type="button">Психология</button><button type="button">Beauty</button><button type="button">Обучение, курсы</button><button type="button">Личный бренд</button><button type="button">Бизнес, магазин</button><button type="button">Другое</button>
       </div>
-      <label class="fld"><span>пара слов о проекте, если хочется</span><input id="about" type="text" placeholder="например, школа рисования для взрослых"></label>
+      <label class="fld"><span>пара слов о проекте, если хочется</span><input id="afield" type="text" placeholder="например, школа рисования для взрослых"></label>
     </fieldset>
 
     <fieldset class="q" data-q="3">
@@ -724,7 +724,7 @@ footer .v{color:var(--butter);font-size:26px}
       if(false){err.textContent='без имени и контакта я вас не найду 🥲';return}
       var t='Заявка с сайта\n'+
         'Услуги: '+picked('svc').join(', ')+'\n'+
-        'Сфера: '+(picked('niche')[0]||'—')+(val('about')?' ('+val('about')+')':'')+'\n'+
+        'Сфера: '+(picked('niche')[0]||'—')+(val("afield")?' ('+val("afield")+')':'')+'\n'+
         'Сайт сейчас: '+(picked('has')[0]||'—')+(val('link')?' '+val('link'):'')+'\n'+
         'Сроки: '+(picked('when')[0]||'—')+'\n'+
         'Бюджет: '+(picked('budget')[0]||'—')+'\n'+
