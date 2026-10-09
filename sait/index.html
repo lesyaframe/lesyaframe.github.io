@@ -80,7 +80,7 @@ b{letter-spacing:-.03em}
   .hr p{font-size:15px}
   .hl{grid-row:2;padding:20px var(--gut) 70px;container-type:size}
   .hstamp{width:min(60cqh,70vw)}
-  .pills a:not(.btn):not(.hlogo){display:none}
+  .pills a:not(.btn):not(.hlogo):not(.ntg){display:none}
   .hribbon{bottom:46px;height:28px}
   .hbow{width:110px;left:auto;right:12%;bottom:-6px}
   .hero .btn{padding:13px 18px;font-size:14px}
@@ -269,6 +269,22 @@ b{letter-spacing:-.03em}
 @media (hover:none){.tab small{max-height:none;margin-top:2px}}
 @media (max-width:560px){.tab{padding:10px 16px 22px}.tab b{font-size:15px}.tab .pr{font-size:14px}}
 
+
+.tgi{width:18px;height:18px;flex:none}
+.btn-tg{background:#E4E0B8;color:var(--choco)}
+.btn-tg:hover{background:#ECE7C4}
+.btn-tgl{background:transparent;color:var(--choco);box-shadow:inset 0 0 0 1.5px var(--choco)}
+.hr .btn-tg{background:transparent;color:var(--paper);box-shadow:inset 0 0 0 1.5px var(--paper)}
+.hnote{align-self:flex-start;font-family:var(--script);font-size:clamp(30px,4.4vh,40px);line-height:1;color:var(--cream);opacity:.9;margin-top:-10px;transform:rotate(-2deg);transform-origin:left}
+.pills .ntg{display:grid;place-items:center;width:40px;height:40px;border-radius:50%;background:rgba(245,237,201,.15);color:var(--paper);opacity:1}
+.pills .ntg:hover{background:rgba(245,237,201,.3)}
+.lead2{max-width:none!important;white-space:nowrap;text-align:right}
+.alt{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin-top:8px}
+.alt span{font-family:var(--script);font-size:26px;color:var(--butter)}
+.fab{display:flex;gap:8px;align-items:center}
+.fab .btn-tg{padding:13px;border-radius:50%;box-shadow:0 8px 18px -10px rgba(59,27,20,.6)}
+.contact .handle{text-decoration:none}
+@media (max-width:860px){.lead2{white-space:normal;text-align:left}.pills .ntg{width:36px;height:36px}}
 /* ============ FIT ============ */
 .fit{display:flex;flex-direction:column;align-items:stretch;justify-content:center;gap:clamp(24px,4vh,40px);min-height:100svh}
 .fit-top{text-align:center;display:flex;flex-direction:column;gap:12px;align-items:center}
@@ -357,15 +373,17 @@ footer .v{color:var(--butter);font-size:26px}
     <a class="hlogo" href="#top">Леся</a>
     <span class="sp"></span>
     <a href="#about">обо мне</a><a href="#services">услуги и цены</a><a href="#process">как работаю</a><a href="#fit">кому подойду</a>
+    <a class="ntg" href="https://t.me/LesyaLesya8" target="_blank" rel="noopener" aria-label="Telegram"><svg class="tgi" viewBox="0 0 24 24" aria-hidden="true"><path d="M21.5 4.3 2.9 11.5c-1.3.5-1.3 1.2-.2 1.5l4.8 1.5 1.8 5.6c.2.6.4.8.9.8.4 0 .6-.2.9-.5l2.3-2.2 4.7 3.5c.9.5 1.5.2 1.7-.8l3.1-14.6c.3-1.3-.5-1.9-1.4-1.5ZM9.6 14.7l-.4 4.1-1.6-5 9.9-6.3-7.9 7.2Z" fill="currentColor"/></svg></a>
     <a class="btn btn-butter" href="#zayavka">оставить заявку</a>
   </nav>
   <div class="hl">
     <div class="hstamp" data-in style="--rr:-4deg"><div class="stamp"><img src="img/lesya-sweater.jpg" alt="Леся в коричневом свитере"></div></div>
   </div>
   <div class="hr">
-    <h1>собираю сайты <span class="v">с чистого листа</span></h1>
-    <p>я веб-дизайнер и собираю сайты на Tilda<br>продумываю, рисую, собираю, запускаю<br>и не пропадаю после запуска ☺️</p>
-    <div class="hrow"><a class="btn btn-butter" href="#zayavka">обсудить проект</a><a class="btn btn-line" href="#services">услуги и цены</a></div>
+    <h1>собираю сайты <span class="v">с нуля</span></h1>
+    <span class="hnote">сначала смысл, потом красота</span>
+    <p>я дизайнер-разработчик<br>создаю для вас и про вас сайты на Tilda, в которых легко разобраться и хочется задержаться</p>
+    <div class="hrow"><a class="btn btn-butter" href="#zayavka">обсудить проект</a><a class="btn btn-tg" href="https://t.me/LesyaLesya8" target="_blank" rel="noopener"><svg class="tgi" viewBox="0 0 24 24" aria-hidden="true"><path d="M21.5 4.3 2.9 11.5c-1.3.5-1.3 1.2-.2 1.5l4.8 1.5 1.8 5.6c.2.6.4.8.9.8.4 0 .6-.2.9-.5l2.3-2.2 4.7 3.5c.9.5 1.5.2 1.7-.8l3.1-14.6c.3-1.3-.5-1.9-1.4-1.5ZM9.6 14.7l-.4 4.1-1.6-5 9.9-6.3-7.9 7.2Z" fill="currentColor"/></svg>написать в Telegram</a></div>
   </div>
   <div class="hribbon" aria-hidden="true"></div>
 </header>
@@ -376,16 +394,17 @@ footer .v{color:var(--butter);font-size:26px}
   <div class="txt" data-in>
     <span class="eyebrow" style="color:var(--cherry)">обо мне</span>
     <h2>привет, я <span class="v">Леся</span></h2>
-    <p class="big">делаю сайты уже около шести лет<br>почти всему научилась сама, на своих ошибках 😅</p>
-    <p>по образованию я журналист, поэтому сначала разбираюсь, что и кому должен сказать сайт, а рисую уже потом<br>больше всего люблю момент, когда передо мной пустой лист и из него понемногу вырастает проект</p>
-    <p>работаю из дома в Ярославле<br>рядом почти всегда спит Рэм, мой английский кокер<br>он отвечает за настроение и иногда за клавиатуру</p>
+    <p class="big">делаю сайты седьмой год</p>
+    <p>по образованию я журналист</p>
+    <p>моя страсть: гармоничное объединение результатов аналитики и визуала, создание удобного и привлекательного интерфейса</p>
+    <p>работаю из дома в Ярославле<br>рядом почти всегда спит Рэм, мой английский кокер</p>
     <div class="row"><a class="btn btn-choco" href="#services">что я делаю</a></div>
   </div>
   <div class="comp">
     <svg class="star" viewBox="0 0 600 600" aria-hidden="true"><polygon id="starPoly" fill="#F1EA91"/></svg>
     <div class="stampw s1" data-in style="--rr:-7deg"><div class="stamp"><img src="img/lesya-portrait.jpg" alt="Леся, портрет"></div></div>
     <div class="stampw s2" data-in style="--rr:6deg"><div class="stamp cher"><img src="img/lesya-bag-rem.jpg" alt="Леся с вязаной сумкой, рядом прыгает Рэм"></div></div>
-    <span class="cnt c1">♥ ~6 лет в сайтах</span>
+    <span class="cnt c1">♥ седьмой год в сайтах</span>
     <span class="cnt c2">✦ клиенты по рекомендации</span>
     <span class="cnt c3">↻ бывает, работаем 2–3 года</span>
     <div class="anno a1 draw">журналист<br>по образованию<svg viewBox="0 0 70 60"><path d="M50 2 C 60 24, 46 44, 14 52 M24 42 L12 53 L27 58"/></svg></div>
@@ -399,31 +418,31 @@ footer .v{color:var(--butter);font-size:26px}
 <section class="services" id="services">
   <div class="svc-head">
     <h2>чем могу <span class="v">помочь</span></h2>
-    <p>цены примерные, чтобы было понятно, от чего отталкиваться<br>точную сумму назову, когда разберёмся в задаче</p>
+    <p class="lead2">цены примерные, чтобы было понятно, от чего отталкиваться<br>точную сумму назову, когда разберёмся в задаче</p>
   </div>
   <div class="svc-grid">
     <div class="main-svc" data-in>
       <span class="eyebrow">главное</span>
       <h3>Сайт с нуля под ключ</h3>
-      <p>разбираемся в задаче и собираем структуру, потом рисую дизайн в Figma, собираю всё на Tilda, проверяю на телефоне, запускаю и настраиваю базовую SEO и аналитику</p>
+      <p>разбираюсь в задаче и собираю структуру (или помогаю с вашей), потом создаю дизайн-макет в Figma, собираю всё на Tilda, подключаю домен, платёжные системы, интеграции с сервисами, анимирую, запускаю, проверяю и ещё год поддерживаю сайт</p>
       <div class="badges">
-        <div class="badge" data-flower="#3B1B14"><div><b>от 50</b><small>тысяч ₽</small></div></div>
+        <div class="badge" data-flower="#3B1B14"><div><b>от 50</b><small>тысяч ₽</small></div></div>
         <div class="badge" data-flower="#737038"><div><b>10–12</b><small>блоков</small></div></div>
         <div class="badge lt" data-flower="#F1EA91"><div><b>~20</b><small>рабочих дней</small></div></div>
       </div>
-      <a class="btn btn-choco" href="#zayavka" data-svc="Сайт с нуля под ключ">оставить заявку</a>
+      <div class="hrow"><a class="btn btn-choco" href="#zayavka" data-svc="Сайт с нуля под ключ">оставить заявку</a><a class="btn btn-tgl" href="https://t.me/LesyaLesya8" target="_blank" rel="noopener"><svg class="tgi" viewBox="0 0 24 24" aria-hidden="true"><path d="M21.5 4.3 2.9 11.5c-1.3.5-1.3 1.2-.2 1.5l4.8 1.5 1.8 5.6c.2.6.4.8.9.8.4 0 .6-.2.9-.5l2.3-2.2 4.7 3.5c.9.5 1.5.2 1.7-.8l3.1-14.6c.3-1.3-.5-1.9-1.4-1.5ZM9.6 14.7l-.4 4.1-1.6-5 9.9-6.3-7.9 7.2Z" fill="currentColor"/></svg>Telegram</a></div>
     </div>
     <div class="tabs">
-<a class="tab" style="--i:0" data-n="01" href="#zayavka" data-svc="Дизайн сайта в Figma"><span class="tt"><b>Дизайн сайта в Figma</b><small>без вёрстки, макет для вас или вашего разработчика</small></span><span class="pr">от 20 000 ₽<i>→</i></span></a>
-<a class="tab" style="--i:1" data-n="02" href="#zayavka" data-svc="Редизайн существующего сайта"><span class="tt"><b>Редизайн существующего сайта</b><small>новый дизайн и вёрстка на Tilda</small></span><span class="pr">от 30 000 ₽<i>→</i></span></a>
-<a class="tab" style="--i:2" data-n="03" href="#zayavka" data-svc="Портал, пространство, приложение"><span class="tt"><b>Портал, пространство, приложение</b><small>личный кабинет для учеников, трекер или планер, база материалов для клиентов</small></span><span class="pr">от 30 000 ₽<i>→</i></span></a>
-<a class="tab" style="--i:3" data-n="04" href="#zayavka" data-svc="Интернет-магазин"><span class="tt"><b>Интернет-магазин</b><small>каталог, карточки товаров, корзина и оплата</small></span><span class="pr">от 70 000 ₽<i>→</i></span></a>
-<a class="tab" style="--i:4" data-n="05" href="#zayavka" data-svc="Пакет для соцсетей"><span class="tt"><b>Пакет для соцсетей</b><small>профиль, обложки и шаблоны в едином стиле</small></span><span class="pr">от 15 000 ₽<i>→</i></span></a>
+<a class="tab" style="--i:0" data-n="01" href="#zayavka" data-svc="Дизайн сайта в Figma"><span class="tt"><b>Дизайн сайта в Figma</b><small>без вёрстки, макет для вас или вашего разработчика</small></span><span class="pr">от 20 000 ₽<i>→</i></span></a>
+<a class="tab" style="--i:1" data-n="02" href="#zayavka" data-svc="Редизайн существующего сайта"><span class="tt"><b>Редизайн существующего сайта</b><small>новый дизайн и вёрстка на Tilda</small></span><span class="pr">от 30 000 ₽<i>→</i></span></a>
+<a class="tab" style="--i:2" data-n="03" href="#zayavka" data-svc="Портал, пространство, приложение"><span class="tt"><b>Портал, пространство, приложение</b><small>личный кабинет для учеников, трекер или планер, база материалов для клиентов</small></span><span class="pr">от 30 000 ₽<i>→</i></span></a>
+<a class="tab" style="--i:3" data-n="04" href="#zayavka" data-svc="Интернет-магазин"><span class="tt"><b>Интернет-магазин</b><small>каталог, карточки товаров, корзина и оплата</small></span><span class="pr">от 70 000 ₽<i>→</i></span></a>
+<a class="tab" style="--i:4" data-n="05" href="#zayavka" data-svc="Пакет для соцсетей"><span class="tt"><b>Пакет для соцсетей</b><small>профиль, обложки и шаблоны в едином стиле</small></span><span class="pr">от 15 000 ₽<i>→</i></span></a>
 <a class="tab" style="--i:5" data-n="06" href="#zayavka" data-svc="Поддержка после запуска"><span class="tt"><b>Поддержка после запуска</b><small>правки, новые страницы, замена текстов</small></span><span class="pr">1 год бесплатно<i>→</i></span></a>
-<a class="tab" style="--i:6" data-n="07" href="#zayavka" data-svc="Дизайнер на абонементе"><span class="tt"><b>Дизайнер на абонементе</b><small>для брендов и компаний, у которых постоянно много задач</small></span><span class="pr">от 60 000 ₽/мес<i>→</i></span></a>
+<a class="tab" style="--i:6" data-n="07" href="#zayavka" data-svc="Дизайнер на абонементе"><span class="tt"><b>Дизайнер на абонементе</b><small>для брендов и компаний, у которых постоянно много задач</small></span><span class="pr">от 60 000 ₽/мес<i>→</i></span></a>
 </div>
   </div>
-  <p class="svc-note">*маркетинг и тексты под ключ я не делаю, если только мы отдельно об этом не договорились</p>
+  <p class="svc-note">*тексты входят в стоимость работ</p>
 </section>
 
 <a class="marq" href="#zayavka" aria-label="Записаться к Лесе"><div><span>оставить заявку<i>✦</i>сайты с чистого листа<i>✦</i>Tilda и Figma<i>✦</i>оставить заявку<i>✦</i>сайты с чистого листа<i>✦</i>Tilda и Figma<i>✦</i></span><span>оставить заявку<i>✦</i>сайты с чистого листа<i>✦</i>Tilda и Figma<i>✦</i>оставить заявку<i>✦</i>сайты с чистого листа<i>✦</i>Tilda и Figma<i>✦</i></span></div></a>
@@ -434,7 +453,7 @@ footer .v{color:var(--butter);font-size:26px}
   <div class="cal">
     <div class="ct">нажимайте на этапы</div>
     <div class="days" id="days">
-      <button class="day on" type="button" data-i="0"><span class="top"><span>этап 1</span><span>старт</span></span><svg viewBox="0 0 48 48"><path d="M8 12 h32 a4 4 0 0 1 4 4 v14 a4 4 0 0 1 -4 4 H22 l-8 7 v-7 H8 a4 4 0 0 1 -4 -4 V16 a4 4 0 0 1 4 -4 z"/><path d="M14 22 h20 M14 27 h12"/></svg><span class="nm">разговор о задаче</span></button>
+      <button class="day on" type="button" data-i="0"><span class="top"><span>этап 1</span><span>старт</span></span><svg viewBox="0 0 48 48"><path d="M8 12 h32 a4 4 0 0 1 4 4 v14 a4 4 0 0 1 -4 4 H22 l-8 7 v-7 H8 a4 4 0 0 1 -4 -4 V16 a4 4 0 0 1 4 -4 z"/><path d="M14 22 h20 M14 27 h12"/></svg><span class="nm">знакомство с проектом</span></button>
       <button class="day" type="button" data-i="1"><span class="top"><span>этап 2</span><span></span></span><svg viewBox="0 0 48 48"><rect x="6" y="6" width="36" height="8" rx="2"/><rect x="6" y="18" width="20" height="24" rx="2"/><rect x="30" y="18" width="12" height="11" rx="2"/><rect x="30" y="32" width="12" height="10" rx="2"/></svg><span class="nm">структура</span></button>
       <button class="day" type="button" data-i="2"><span class="top"><span>этап 3</span><span></span></span><svg viewBox="0 0 48 48"><path d="M24 6 C 12 6, 4 15, 4 25 c 0 9 7 15 14 15 c 4 0 4 -4 2 -6 c -2 -2 -1 -6 3 -6 h 6 c 7 0 15 -4 15 -11 C 44 12, 35 6, 24 6 z"/><circle cx="14" cy="22" r="2.5"/><circle cx="22" cy="14" r="2.5"/><circle cx="32" cy="15" r="2.5"/></svg><span class="nm">референсы и визуал</span></button>
       <button class="day" type="button" data-i="3"><span class="top"><span>этап 4</span><span></span></span><svg viewBox="0 0 48 48"><path d="M10 38 L 14 26 L 34 6 L 42 14 L 22 34 Z"/><path d="M30 10 L 38 18 M10 38 L 22 34"/></svg><span class="nm">дизайн в Figma</span></button>
@@ -442,7 +461,7 @@ footer .v{color:var(--butter);font-size:26px}
       <svg class="ring" id="ring" aria-hidden="true"><ellipse id="ringE"/></svg>
     </div>
     <div class="detail">
-      <div><h3 id="dT">Разговор о задаче</h3><p id="dP">созваниваемся или переписываемся: для кого сайт и что он должен делать<br>я смотрю конкурентов и вашу аудиторию</p></div>
+      <div><h3 id="dT">Знакомство с проектом</h3><p id="dP">созваниваемся или обсуждаем в переписке: для кого сайт и что он должен делать<br>я изучаю конкурентов и вашу ЦА</p></div>
       <button class="btn btn-choco" type="button" id="dNext">дальше →</button>
     </div>
   </div>
@@ -481,6 +500,7 @@ footer .v{color:var(--butter);font-size:26px}
     <span class="eyebrow">заявка</span>
     <h2>расскажите <span class="v">о проекте</span></h2>
     <p>пара вопросов, займёт минуту<br>потом я напишу и предложу, с чего начать</p>
+    <div class="alt"><span>не любите формы?</span><a class="btn btn-tg" href="https://t.me/LesyaLesya8" target="_blank" rel="noopener"><svg class="tgi" viewBox="0 0 24 24" aria-hidden="true"><path d="M21.5 4.3 2.9 11.5c-1.3.5-1.3 1.2-.2 1.5l4.8 1.5 1.8 5.6c.2.6.4.8.9.8.4 0 .6-.2.9-.5l2.3-2.2 4.7 3.5c.9.5 1.5.2 1.7-.8l3.1-14.6c.3-1.3-.5-1.9-1.4-1.5ZM9.6 14.7l-.4 4.1-1.6-5 9.9-6.3-7.9 7.2Z" fill="currentColor"/></svg>напишите в Telegram</a></div>
   </div>
   <form class="sheet" id="form" novalidate>
     <div class="holes" aria-hidden="true"></div>
@@ -488,7 +508,7 @@ footer .v{color:var(--butter);font-size:26px}
 
     <fieldset class="q on" data-q="1">
       <legend>что нужно?</legend><p class="hint">можно выбрать несколько</p>
-      <div class="chips" data-name="svc" data-multi><button type="button">Сайт с нуля под ключ</button><button type="button">Дизайн сайта в Figma</button><button type="button">Редизайн существующего сайта</button><button type="button">Портал, пространство, приложение</button><button type="button">Интернет-магазин</button><button type="button">Пакет для соцсетей</button><button type="button">Поддержка после запуска</button><button type="button">Дизайнер на абонементе</button><button type="button">пока не знаю, подскажите</button></div>
+      <div class="chips" data-name="svc" data-multi><button type="button">Сайт с нуля под ключ</button><button type="button">Дизайн сайта в Figma</button><button type="button">Редизайн существующего сайта</button><button type="button">Портал, пространство, приложение</button><button type="button">Интернет-магазин</button><button type="button">Пакет для соцсетей</button><button type="button">Поддержка после запуска</button><button type="button">Дизайнер на абонементе</button><button type="button">пока не знаю, подскажите</button></div>
     </fieldset>
 
     <fieldset class="q" data-q="2">
@@ -513,21 +533,21 @@ footer .v{color:var(--butter);font-size:26px}
         <button type="button">Как можно скорее</button><button type="button">В течение месяца</button><button type="button">Через 1–3 месяца</button><button type="button">Пока присматриваюсь</button>
       </div>
       <legend class="sub">а по бюджету примерно?</legend>
-      <div class="chips" data-name="budget"><button type="button">до 20 000 ₽</button><button type="button">20–50 000 ₽</button><button type="button">50–70 000 ₽</button><button type="button">больше 70 000 ₽</button><button type="button">не знаю</button></div>
+      <div class="chips" data-name="budget"><button type="button">до 20 000 ₽</button><button type="button">20–50 000 ₽</button><button type="button">50–70 000 ₽</button><button type="button">больше 70 000 ₽</button><button type="button">не знаю</button></div>
     </fieldset>
 
     <fieldset class="q" data-q="5">
       <legend>как к вам обращаться и где написать?</legend>
       <label class="fld"><span>имя</span><input id="name" type="text" autocomplete="name"></label>
       <label class="fld"><span>тг, инстаграм или телефон</span><input id="contact" type="text" placeholder="@ник или +7..."></label>
-      <label class="fld"><span>что ещё мне стоит знать (по желанию)</span><textarea id="note" rows="2"></textarea></label>
+      <label class="fld"><span>что ещё мне стоит знать (по желанию)</span><textarea id="note" rows="2"></textarea></label>
     </fieldset>
 
     <div class="done" id="done" hidden>
       <span class="v">спасибо!</span>
-      <p>осталось отправить это мне в Instagram<br>текст я уже скопировала, просто вставьте его в сообщение ☺️</p>
+      <p>осталось отправить это мне в Telegram или Instagram<br>текст я уже скопировала, просто вставьте его в сообщение ☺️</p>
       <pre id="summary"></pre>
-      <div class="nav-row"><a class="btn btn-choco" href="https://www.instagram.com/lesya.frame/" target="_blank" rel="noopener">открыть Instagram</a><button type="button" class="btn btn-ghost" id="copyAgain">скопировать ещё раз</button></div>
+      <div class="nav-row"><a class="btn btn-choco" href="https://t.me/LesyaLesya8" target="_blank" rel="noopener">отправить в Telegram</a><a class="btn btn-ghost" href="https://www.instagram.com/lesya.frame/" target="_blank" rel="noopener">в Instagram</a><button type="button" class="btn btn-ghost" id="copyAgain">скопировать ещё раз</button></div>
     </div>
 
     <div class="nav-row" id="navRow">
@@ -542,12 +562,13 @@ footer .v{color:var(--butter);font-size:26px}
 <section class="contact" id="contact">
   <div class="shop">
     <div data-in>
-      <span class="sign">запись открыта</span>
-      <h2>давайте начнём</h2>
-      <p>напишите пару слов о проекте: что хочется, для кого и к какому сроку<br>отвечаю сама, без менеджеров и шаблонных ответов</p>
+      <span class="sign">есть место для нового проекта</span>
+      <h2>давайте знакомиться</h2>
+      <p>напишите пару слов о проекте: что хочется, для кого и к какому сроку<br>отвечаю сама)</p>
       <div class="row">
-        <a class="btn btn-cherry" href="https://www.instagram.com/lesya.frame/" target="_blank" rel="noopener">написать в Instagram</a>
-        <button class="handle" type="button" id="copy">@lesya.frame · скопировать</button>
+        <a class="btn btn-tg" href="https://t.me/LesyaLesya8" target="_blank" rel="noopener"><svg class="tgi" viewBox="0 0 24 24" aria-hidden="true"><path d="M21.5 4.3 2.9 11.5c-1.3.5-1.3 1.2-.2 1.5l4.8 1.5 1.8 5.6c.2.6.4.8.9.8.4 0 .6-.2.9-.5l2.3-2.2 4.7 3.5c.9.5 1.5.2 1.7-.8l3.1-14.6c.3-1.3-.5-1.9-1.4-1.5ZM9.6 14.7l-.4 4.1-1.6-5 9.9-6.3-7.9 7.2Z" fill="currentColor"/></svg>написать в Telegram</a>
+        <a class="btn btn-choco" href="https://www.instagram.com/lesya.frame/" target="_blank" rel="noopener">в Instagram</a>
+        <a class="handle" href="#zayavka">или заполнить заявку</a>
       </div>
       <div class="rules">
         <div><b>прозрачно</b>сразу говорю, что входит в работу, а что нет</div>
@@ -564,7 +585,7 @@ footer .v{color:var(--butter);font-size:26px}
 </section>
 <footer><span>© 2026 Леся · веб-дизайн и сайты на Tilda · Ярославль</span><span class="v">до встречи!</span></footer>
 
-<a class="btn btn-cherry fab" id="fab" href="#zayavka">оставить заявку</a>
+<div class="fab" id="fab"><a class="btn btn-tg" href="https://t.me/LesyaLesya8" target="_blank" rel="noopener" aria-label="Написать в Telegram"><svg class="tgi" viewBox="0 0 24 24" aria-hidden="true"><path d="M21.5 4.3 2.9 11.5c-1.3.5-1.3 1.2-.2 1.5l4.8 1.5 1.8 5.6c.2.6.4.8.9.8.4 0 .6-.2.9-.5l2.3-2.2 4.7 3.5c.9.5 1.5.2 1.7-.8l3.1-14.6c.3-1.3-.5-1.9-1.4-1.5ZM9.6 14.7l-.4 4.1-1.6-5 9.9-6.3-7.9 7.2Z" fill="currentColor"/></svg></a><a class="btn btn-cherry" href="#zayavka">оставить заявку</a></div>
 
 <script>
 (function(){
@@ -597,11 +618,11 @@ footer .v{color:var(--butter);font-size:26px}
 
   /* calendar */
   var S=[
-    ['Разговор о задаче','созваниваемся или переписываемся: для кого сайт и что он должен делать\nя смотрю конкурентов и вашу аудиторию'],
-    ['Структура','раскладываю всё по блокам: что, где и в каком порядке\nсайт уже понятен, хоть пока и без красоты'],
-    ['Референсы и визуал','собираю референсы, цвета и шрифты\nищем настроение вместе, пока вы не скажете «да, это оно»'],
-    ['Дизайн в Figma','рисую дизайн в Figma под ваш проект\nбез шаблонов, честно'],
-    ['Сборка и запуск','собираю на Tilda, делаю адаптив, базовую SEO и аналитику\nзапускаем, а я остаюсь на связи ☺️']
+    ['Знакомство с проектом','созваниваемся или обсуждаем в переписке: для кого сайт и что он должен делать\nя изучаю конкурентов и вашу ЦА'],
+    ['Структура','раскладываю всё по блокам: что, где и в каком порядке'],
+    ['Референсы и визуал','собираю референсы, цвета и шрифты'],
+    ['Дизайн в Figma','создаю дизайн-макет в Figma, предлагаю на выбор несколько вариантов, вносим правки при необходимости'],
+    ['Сборка и запуск','верстаю на Tilda, делаю адаптивы, анимирую, подключаю домен и все необходимые интеграции\nзапускаем сайт, и ещё год я остаюсь на связи для бесплатных корректировок ☺️']
   ];
   var days=[].slice.call(document.querySelectorAll('.day')),ring=document.getElementById('ring'),re=document.getElementById('ringE'),box=document.getElementById('days'),cur=0;
   function place(){
