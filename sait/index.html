@@ -541,13 +541,22 @@ footer .v{color:var(--butter);font-size:26px}
       <label class="fld"><span>имя</span><input id="name" type="text" autocomplete="name"></label>
       <label class="fld"><span>тг, инстаграм или телефон</span><input id="contact" type="text" placeholder="@ник или +7..."></label>
       <label class="fld"><span>что ещё мне стоит знать (по желанию)</span><textarea id="note" rows="2"></textarea></label>
+      <input id="website" name="website" type="text" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
     </fieldset>
 
     <div class="done" id="done" hidden>
-      <span class="v">спасибо!</span>
-      <p>осталось отправить это мне в Telegram или Instagram<br>текст я уже скопировала, просто вставьте его в сообщение ☺️</p>
-      <pre id="summary"></pre>
-      <div class="nav-row"><a class="btn btn-choco" href="https://t.me/LesyaLesya8" target="_blank" rel="noopener">отправить в Telegram</a><a class="btn btn-ghost" href="https://www.instagram.com/lesya.frame/" target="_blank" rel="noopener">в Instagram</a><button type="button" class="btn btn-ghost" id="copyAgain">скопировать ещё раз</button></div>
+      <div id="okBox" hidden>
+        <span class="v">спасибо!</span>
+        <p>заявка уже у меня<br>напишу вам сама, как только прочитаю ☺️</p>
+        <div class="nav-row"><a class="btn btn-ghost" href="https://t.me/LesyaLesya8" target="_blank" rel="noopener">если срочно, пишите в Telegram</a></div>
+      </div>
+      <div id="failBox" hidden>
+        <span class="v">ой</span>
+        <p>заявка почему-то не отправилась 🥲<br>текст я скопировала, просто вставьте его мне в сообщение</p>
+        <pre id="summary"></pre>
+        <div class="nav-row"><a class="btn btn-choco" href="https://t.me/LesyaLesya8" target="_blank" rel="noopener">отправить в Telegram</a><a class="btn btn-ghost" href="https://www.instagram.com/lesya.frame/" target="_blank" rel="noopener">в Instagram</a><button type="button" class="btn btn-ghost" id="copyAgain">скопировать ещё раз</button></div>
+      </div>
+    </div>
     </div>
 
     <div class="nav-row" id="navRow">
@@ -680,9 +689,17 @@ footer .v{color:var(--butter);font-size:26px}
         'Бюджет: '+(picked('budget')[0]||'—')+'\n'+
         'Имя: '+val('name')+'\nСвязь: '+val('contact')+(val('note')?'\nКомментарий: '+val('note'):'');
       document.getElementById('summary').textContent=t;
-      qs.forEach(function(q){q.classList.remove('on')});document.getElementById('navRow').hidden=true;document.querySelector('.steps-bar').hidden=true;document.getElementById('done').hidden=false;
-      function cp(){if(navigator.clipboard)navigator.clipboard.writeText(t).catch(function(){})}
-      cp();document.getElementById('copyAgain').onclick=function(){cp();this.textContent='скопировано ✓'};
+      function finish(ok){
+        qs.forEach(function(q){q.classList.remove('on')});document.getElementById('navRow').hidden=true;document.querySelector('.steps-bar').hidden=true;document.getElementById('done').hidden=false;
+        document.getElementById('okBox').hidden=!ok;document.getElementById('failBox').hidden=ok;
+        if(!ok){var cp=function(){if(navigator.clipboard)navigator.clipboard.writeText(t).catch(function(){})};cp();document.getElementById('copyAgain').onclick=function(){cp();this.textContent='скопировано ✓'}}
+      }
+      if(document.getElementById('website').value){finish(true);return}
+      next.disabled=true;next.textContent='отправляю...';
+      var F=function(v){return {stringValue:String(v).slice(0,2900)}};
+      fetch('https://firestore.googleapis.com/v1/projects/lesya-hub/databases/(default)/documents/leads',{method:'POST',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({fields:{text:F(t),name:F(val('name').slice(0,90)),contact:F(val('contact').slice(0,190)),page:F(location.href.slice(0,190))}})})
+        .then(function(r){finish(r.ok)},function(){finish(false)});
     });
     back.addEventListener('click',function(){if(cur>0)show(cur-1)});
   })();

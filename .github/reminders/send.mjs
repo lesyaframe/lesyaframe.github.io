@@ -1,4 +1,5 @@
-// Присылает в Telegram напоминания: задачи из «Работы» и записи из «Личного» (за день и за полтора часа).
+// Присылает в Telegram напоминания: задачи из «Работы» и записи из «Личного» (за день и за полтора часа),
+// а также новые заявки с сайта (коллекция leads).
 // Запускается GitHub Actions каждые 10 минут (см. .github/workflows/reminders.yml).
 import admin from "firebase-admin";
 
@@ -84,6 +85,21 @@ for (const doc of visits.docs) {
   sentV++;
 }
 console.log(`Проверено записей: ${visits.size}, отправлено напоминаний: ${sentV}`);
+
+/* ---------- заявки с сайта lesyaframe.github.io/sait ---------- */
+const leads = await db.collection("leads").get();
+let sentL = 0;
+for (const doc of leads.docs) {
+  const l = doc.data();
+  if (l.tgSent) continue;
+  const c = String(l.contact || "").trim();
+  const tgLink = /^@?[A-Za-z0-9_]{5,32}$/.test(c) ? `\n<a href="https://t.me/${c.replace(/^@/, "")}">написать в Telegram</a>` : "";
+  const text = `📬 <b>Новая заявка с сайта</b>\n\n${esc(String(l.text || "").slice(0, 3500))}${tgLink}`;
+  if (!(await tg(text))) continue;
+  await doc.ref.update({ tgSent: true, tgSentAt: admin.firestore.FieldValue.serverTimestamp() });
+  sentL++;
+}
+console.log(`Заявок в базе: ${leads.size}, отправлено новых: ${sentL}`);
 
 async function tg(text) {
   const r = await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {
