@@ -1,0 +1,369 @@
+<!doctype html>
+<html lang="ru" data-mood="cocoa">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>Леся · сайты под настроение</title>
+<meta name="description" content="Леся, веб-дизайнер и разработчик сайтов на Tilda. Сайты под ключ, редизайн, отдельные блоки. Цены и запись.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap">
+<style>
+@font-face{font-family:"Vasek";src:url("fonts/Vasek.ttf") format("truetype");font-display:swap;size-adjust:135%}
+@property --bg{syntax:"<color>";inherits:true;initial-value:#3B1B14}
+@property --soft{syntax:"<color>";inherits:true;initial-value:#4A2319}
+@property --fg{syntax:"<color>";inherits:true;initial-value:#F7F0DA}
+@property --acc{syntax:"<color>";inherits:true;initial-value:#F1EA91}
+@property --bbg{syntax:"<color>";inherits:true;initial-value:#F1EA91}
+@property --bfg{syntax:"<color>";inherits:true;initial-value:#250A0A}
+@property --sfg{syntax:"<color>";inherits:true;initial-value:#F5EDC9}
+@property --sacc{syntax:"<color>";inherits:true;initial-value:#F5EDC9}
+@property --sbbg{syntax:"<color>";inherits:true;initial-value:#F5EDC9}
+@property --sbfg{syntax:"<color>";inherits:true;initial-value:#F5EDC9}
+:root{
+  --sans:"Inter","Helvetica Neue",Arial,sans-serif;
+  --script:"Vasek","Segoe Script","Brush Script MT",cursive;
+  --gut:clamp(16px,4vw,64px);
+  --head:64px;
+  transition:--bg .7s,--soft .7s,--fg .7s,--acc .7s,--bbg .7s,--bfg .7s,--sfg .7s,--sacc .7s,--sbbg .7s,--sbfg .7s;
+}
+html[data-mood="cocoa"]{--bg:#3B1B14;--soft:#F5EDC9;--sfg:#250A0A;--sacc:#3B1B14;--sbbg:#3B1B14;--sbfg:#F7F0DA;--fg:#F7F0DA;--acc:#F1EA91;--bbg:#F1EA91;--bfg:#250A0A;--pat:repeating-linear-gradient(90deg,rgba(0,0,0,.18) 0 2px,transparent 2px 7px)}
+html[data-mood="olive"]{--bg:#737038;--soft:#FBF6E6;--sfg:#250A0A;--sacc:#737038;--sbbg:#737038;--sbfg:#FBF6E6;--fg:#FBF6E6;--acc:#F1EA91;--bbg:#F1EA91;--bfg:#250A0A;--pat:repeating-linear-gradient(90deg,rgba(0,0,0,.07) 0 26px,transparent 26px 52px)}
+html[data-mood="sky"]{--bg:#A6BFD2;--soft:#F5EDC9;--sfg:#250A0A;--sacc:#4F7FA8;--sbbg:#3B1B14;--sbfg:#F7F0DA;--fg:#250A0A;--acc:#3B1B14;--bbg:#3B1B14;--bfg:#F7F0DA;--pat:linear-gradient(rgba(37,10,10,.06) 1px,transparent 1px) 0 0/30px 30px,linear-gradient(90deg,rgba(37,10,10,.06) 1px,transparent 1px) 0 0/30px 30px}
+html[data-mood="cream"]{--bg:#F5EDC9;--soft:#3B1B14;--sfg:#F7F0DA;--sacc:#F1EA91;--sbbg:#F1EA91;--sbfg:#250A0A;--fg:#250A0A;--acc:#737038;--bbg:#3B1B14;--bfg:#F7F0DA;--pat:radial-gradient(circle,rgba(115,112,56,.22) 1.6px,transparent 2px) 0 0/22px 22px}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:56px}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--sans);font-size:17px;line-height:1.42;letter-spacing:-.012em;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+img{max-width:100%;display:block}
+a{color:inherit}
+p{margin:0}
+h1,h2,h3{margin:0;font-weight:800;letter-spacing:-.055em;line-height:.9;text-wrap:balance}
+.v{font-family:var(--script);font-weight:400;letter-spacing:0;line-height:.85;color:var(--acc)}
+:focus-visible{outline:2px solid var(--acc);outline-offset:3px}
+.btn{display:inline-flex;align-items:center;gap:8px;font:600 15px/1 var(--sans);letter-spacing:-.01em;padding:16px 22px;border-radius:999px;text-decoration:none;border:0;cursor:pointer;background:var(--bbg);color:var(--bfg);transition:transform .2s}
+.btn:hover{transform:translateY(-2px)}
+.btn.ghost{background:transparent;color:var(--fg);box-shadow:inset 0 0 0 1.5px currentColor}
+.eyebrow{font-size:13px;font-weight:600;letter-spacing:.02em;opacity:.7}
+.screen{position:relative;min-height:100svh;padding:calc(var(--head) + clamp(24px,5vh,60px)) var(--gut) clamp(40px,7vh,80px);display:flex;flex-direction:column;justify-content:center}
+.alt{background:var(--soft);color:var(--sfg);--fg:var(--sfg);--acc:var(--sacc);--bbg:var(--sbbg);--bfg:var(--sbfg)}
+
+/* header */
+.head{position:fixed;top:0;left:0;right:0;z-index:50;height:calc(var(--head) + env(safe-area-inset-top,0px));padding:env(safe-area-inset-top,0px) var(--gut) 0;display:flex;align-items:center;gap:22px;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);transition:height .25s}
+.head.small{--head:52px}
+.logo{font-family:var(--script);font-size:36px;color:var(--acc);text-decoration:none;line-height:1;padding-top:6px}
+.head nav{display:flex;gap:24px;margin-left:auto}
+.head nav a{font-size:14px;font-weight:500;text-decoration:none;opacity:.8}
+.head nav a:hover{opacity:1}
+.dots{display:flex;gap:6px}
+.dots button{width:18px;height:18px;border-radius:50%;border:2px solid var(--fg);padding:0;cursor:pointer;opacity:.55;transition:opacity .2s,transform .2s}
+.dots button:hover{opacity:1;transform:scale(1.1)}
+.dots button[aria-pressed="true"]{opacity:1;box-shadow:0 0 0 2px var(--bg),0 0 0 3.5px var(--fg)}
+.head .btn{padding:11px 16px;font-size:14px}
+@media (max-width:900px){.head nav{display:none}.head .dots{margin-left:auto}}
+@media (max-width:420px){.head .btn{display:none}}
+
+/* HERO */
+.hero{height:100svh;min-height:0;padding:0;display:grid;grid-template-columns:1.1fr .9fr;background:var(--pat),var(--bg)}
+.hero-l{padding:calc(var(--head) + clamp(16px,4vh,48px)) var(--gut) clamp(20px,4vh,44px);display:flex;flex-direction:column;justify-content:space-between;gap:clamp(14px,3vh,30px);min-width:0}
+.hero-main{display:flex;flex-direction:column;gap:clamp(14px,2.6vh,26px);margin-block:auto}
+.hero h1{font-size:min(9vw,15vh,150px);font-weight:900;letter-spacing:-.065em;line-height:.84}
+.hero h1 .v{display:block;font-size:.6em;margin:.14em 0 0 .2em;rotate:-4deg;transform-origin:left}
+.hero .lead{font-size:clamp(15px,2.2vh,19px);max-width:38ch;opacity:.88}
+.row{display:flex;flex-wrap:wrap;gap:10px}
+.hero-r{position:relative;overflow:hidden}
+.hero-r img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .7s}
+.hero-r img.on{opacity:1}
+.hero-r img[data-m="sky"]{object-position:50% 25%}
+/* mood dial */
+.dial{display:flex;flex-direction:column;gap:12px;max-width:520px}
+.dial-top{display:flex;align-items:baseline;gap:12px}
+.dial-top .eyebrow{white-space:nowrap}
+.dial-top .now{font-family:var(--script);font-size:clamp(30px,4.4vh,42px);color:var(--acc);line-height:1}
+.track{position:relative;height:56px;border-radius:999px;background:color-mix(in srgb,var(--fg) 10%,transparent);display:grid;grid-template-columns:repeat(4,1fr);padding:6px;touch-action:none;user-select:none}
+.knob{position:absolute;top:6px;bottom:6px;left:6px;width:calc((100% - 12px)/4);border-radius:999px;background:var(--fg);transition:transform .45s cubic-bezier(.3,1.3,.5,1);z-index:0;box-shadow:0 8px 18px -10px rgba(0,0,0,.5)}
+.track.drag .knob{transition:none}
+.track button{position:relative;z-index:1;border:0;background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;font:600 14px var(--sans);color:var(--fg);border-radius:999px;transition:color .3s}
+.track button i{width:14px;height:14px;border-radius:50%;flex:none;box-shadow:inset 0 0 0 1.5px rgba(0,0,0,.25)}
+.track button[aria-checked="true"]{color:var(--bg)}
+@media (max-width:860px){
+  .hero{grid-template-columns:1fr;grid-template-rows:auto 1fr auto}
+  .hero-l{display:contents}
+  .hero-main{grid-row:1;padding:calc(var(--head) + 14px) var(--gut) 14px;gap:12px;margin:0}
+  .hero h1{font-size:min(15vw,8.4vh)}
+  .hero .lead{font-size:15px}
+  .hero-r{grid-row:2;margin:0 var(--gut);border-radius:18px}
+  .dial{grid-row:3;padding:12px var(--gut) calc(14px + env(safe-area-inset-bottom,0px));max-width:none}
+  .track{height:50px}
+  .track button span{display:none}
+  .track button i{width:18px;height:18px}
+  .hero .btn{padding:13px 18px;font-size:14px}
+}
+
+/* ABOUT */
+.about{display:grid;grid-template-columns:1fr 1fr;padding:0;min-height:100svh}
+.about-pic{position:relative;overflow:hidden;min-height:60vh}
+.about-pic img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.about-txt{padding:calc(var(--head) + clamp(24px,5vh,60px)) var(--gut) clamp(40px,7vh,80px);display:flex;flex-direction:column;justify-content:center;gap:22px}
+.about h2{font-size:clamp(48px,6.4vw,100px)}
+.about h2 .v{font-size:1.05em;margin-left:.08em}
+.about .big{font-size:clamp(20px,2vw,26px);font-weight:600;letter-spacing:-.03em;line-height:1.2;max-width:28ch}
+.about p{max-width:50ch;opacity:.9}
+.facts{display:grid;grid-template-columns:repeat(3,auto);justify-content:start;gap:12px 40px;margin-top:10px;padding-top:24px;border-top:1px solid color-mix(in srgb,var(--fg) 25%,transparent)}
+.facts b{display:block;font-size:clamp(28px,3vw,42px);font-weight:900;letter-spacing:-.06em;line-height:1}
+.facts span{font-size:14px;opacity:.75}
+@media (max-width:860px){
+  .about{grid-template-columns:1fr}
+  .about-pic{min-height:56vh}
+  .about-txt{padding-top:40px}
+  .facts{grid-template-columns:1fr 1fr}
+}
+
+/* PROCESS */
+.process{background:var(--pat),var(--bg)}
+.process h2{font-size:clamp(48px,6.4vw,100px);max-width:10em}
+.process h2 .v{font-size:1.05em}
+.steps{list-style:none;margin:clamp(40px,7vh,80px) 0 0;padding:0;display:grid;grid-template-columns:repeat(5,1fr);border-top:1.5px solid var(--fg)}
+.steps li{padding:22px 22px 10px 0;display:flex;flex-direction:column;gap:10px;position:relative}
+.steps li+li{padding-left:22px;border-left:1px solid color-mix(in srgb,var(--fg) 22%,transparent)}
+.steps .n{font-family:var(--script);font-size:46px;color:var(--acc);line-height:.8}
+.steps h3{font-size:clamp(20px,1.8vw,26px);letter-spacing:-.04em;line-height:1.05}
+.steps p{font-size:15px;opacity:.8}
+@media (max-width:1000px){.steps{grid-template-columns:1fr 1fr}.steps li+li{border-left:0;padding-left:0}.steps li{border-bottom:1px solid color-mix(in srgb,var(--fg) 22%,transparent);padding-right:16px}}
+@media (max-width:560px){.steps{grid-template-columns:1fr}.steps li{flex-direction:row;flex-wrap:wrap;gap:4px 14px}.steps .n{font-size:36px;width:40px}.steps h3{flex:1;align-self:center}.steps p{flex-basis:100%;padding-left:54px}}
+
+/* PRICE */
+.price h2{font-size:clamp(48px,6.4vw,100px)}
+.price h2 .v{font-size:1.05em}
+.price-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:20px}
+.price-head p{max-width:40ch;font-size:16px;opacity:.8}
+.menu{list-style:none;margin:clamp(30px,5vh,56px) 0 0;padding:0;border-top:1.5px solid var(--fg)}
+.menu li{border-bottom:1px solid color-mix(in srgb,var(--fg) 22%,transparent)}
+.menu a{display:grid;grid-template-columns:1fr auto auto;align-items:center;gap:8px 28px;padding:18px 0;text-decoration:none;transition:padding .3s}
+.menu .nm{font-size:clamp(20px,2.2vw,30px);font-weight:700;letter-spacing:-.04em;line-height:1.1}
+.menu .nm small{display:block;font-size:14px;font-weight:500;letter-spacing:-.01em;opacity:.7;margin-top:4px}
+.menu .pr{font-size:clamp(20px,2.2vw,30px);font-weight:900;letter-spacing:-.05em;white-space:nowrap;font-variant-numeric:tabular-nums}
+.menu .go{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;box-shadow:inset 0 0 0 1.5px var(--fg);font-size:18px;transition:background .25s,color .25s}
+.menu a:hover{padding-inline:12px}
+.menu a:hover .go{background:var(--bbg);color:var(--bfg);box-shadow:none}
+.price .note{margin-top:20px;font-size:14px;opacity:.7}
+@media (max-width:640px){.menu a{grid-template-columns:1fr auto;gap:6px 14px}.menu .go{display:none}.menu .pr{font-size:20px}}
+
+/* FIT */
+.fit{background:var(--pat),var(--bg)}
+.fit h2{font-size:clamp(44px,5.6vw,88px)}
+.fit h2 .v{font-size:1.05em}
+.who{display:flex;flex-wrap:wrap;gap:6px 0;margin-top:clamp(30px,5vh,50px);font-size:clamp(28px,4.2vw,64px);font-weight:800;letter-spacing:-.05em;line-height:1.1}
+.who span{display:inline-flex;align-items:baseline}
+.who span::after{content:"/";font-weight:400;opacity:.35;margin:0 .3em}
+.who span:last-child::after{content:none}
+.who small{font-size:.32em;font-weight:500;letter-spacing:-.01em;opacity:.7;margin-left:.4em;max-width:16ch;line-height:1.2;align-self:center}
+.rules{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;margin-top:clamp(40px,7vh,80px);padding-top:24px;border-top:1px solid color-mix(in srgb,var(--fg) 25%,transparent)}
+.rules b{display:block;font-size:19px;letter-spacing:-.03em;margin-bottom:6px}
+.rules span{font-size:15px;opacity:.8}
+@media (max-width:860px){.rules{grid-template-columns:1fr 1fr}.who small{display:none}}
+
+/* CONTACT */
+.contact{display:grid;grid-template-columns:1.1fr .9fr;padding:0;min-height:100svh}
+.contact-txt{padding:calc(var(--head) + clamp(24px,5vh,60px)) var(--gut) clamp(40px,7vh,80px);display:flex;flex-direction:column;justify-content:center;gap:24px}
+.contact .v.huge{font-size:clamp(70px,10vw,160px);line-height:.8;rotate:-4deg;transform-origin:left}
+.contact p{max-width:40ch;font-size:18px;opacity:.9}
+.handle{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:15px}
+.handle code{font:600 15px var(--sans);padding:10px 14px;border-radius:999px;box-shadow:inset 0 0 0 1.5px color-mix(in srgb,var(--fg) 35%,transparent)}
+.handle button{border:0;background:transparent;color:var(--fg);font:600 14px var(--sans);text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.contact-pic{position:relative;overflow:hidden}
+.contact-pic img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 40%}
+.contact-pic .cap{position:absolute;left:20px;bottom:18px;font-family:var(--script);font-size:30px;color:#F7F0DA;text-shadow:0 2px 10px rgba(0,0,0,.5)}
+footer{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;padding:18px var(--gut) calc(18px + env(safe-area-inset-bottom,0px));font-size:13px;opacity:.7;background:var(--bg)}
+@media (max-width:860px){.contact{grid-template-columns:1fr}.contact-pic{min-height:50vh;order:-1}}
+
+/* circular mood reveal */
+::view-transition-old(root),::view-transition-new(root){animation:none;mix-blend-mode:normal}
+::view-transition-new(root){z-index:2}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  html{scroll-behavior:auto}
+}
+</style>
+</head>
+<body>
+
+<header class="head" id="head">
+  <a class="logo" href="#top">Леся</a>
+  <nav aria-label="Разделы">
+    <a href="#about">обо мне</a>
+    <a href="#process">как работаю</a>
+    <a href="#price">услуги и цены</a>
+    <a href="#contact">контакты</a>
+  </nav>
+  <div class="dots" id="dots" aria-label="Настроение сайта"></div>
+  <a class="btn" href="#contact">написать</a>
+</header>
+
+<section class="hero" id="top">
+  <div class="hero-l">
+    <div class="hero-main">
+      <span class="eyebrow">веб-дизайнер · сайты на Tilda · Ярославль</span>
+      <h1>собираю сайты <span class="v">с чистого листа</span></h1>
+      <p class="lead">Делаю сайты под ключ: от структуры и референсов до запуска и поддержки. Для экспертов, небольшого бизнеса и личных брендов.</p>
+      <div class="row"><a class="btn" href="#contact">обсудить проект</a><a class="btn ghost" href="#price">услуги и цены</a></div>
+    </div>
+    <div class="dial">
+      <div class="dial-top"><span class="eyebrow">настроение сайта:</span><span class="now" id="now">какао</span></div>
+      <div class="track" id="track" role="radiogroup" aria-label="Настроение сайта"><span class="knob" id="knob"></span></div>
+    </div>
+  </div>
+  <div class="hero-r" id="heroPics">
+    <img data-m="cocoa" src="img/lesya-mirror.jpg" alt="Леся в коричневом, селфи в зеркале" class="on">
+    <img data-m="olive" src="img/lesya-bag-rem.jpg" alt="Леся с зелёной вязаной сумкой, рядом прыгает Рэм" loading="lazy">
+    <img data-m="sky" src="img/lesya-ivy.jpg" alt="Леся в голубом топе у стены с плющом" loading="lazy">
+    <img data-m="cream" src="img/lesya-yellow.jpg" alt="Леся в жёлтом свитере" loading="lazy">
+  </div>
+</section>
+
+<section class="about alt" id="about">
+  <div class="about-pic"><img src="img/lesya-portrait.jpg" alt="Леся, портрет"></div>
+  <div class="about-txt">
+    <span class="eyebrow">обо мне</span>
+    <h2>привет, я <span class="v">Леся</span></h2>
+    <p class="big">Около шести лет делаю сайты. Почти всему научилась сама.</p>
+    <p>По образованию я журналист, поэтому сначала разбираюсь, что и кому должен сказать сайт, и только потом рисую. Больше всего люблю момент, когда передо мной пустой лист и из него постепенно появляется проект.</p>
+    <p>Работаю из дома в Ярославле. Рядом обычно спит Рэм, мой английский кокер-спаниель и главный по контролю качества.</p>
+    <div class="facts">
+      <div><b>~6 лет</b><span>делаю сайты</span></div>
+      <div><b>2–3 года</b><span>длится работа с некоторыми клиентами</span></div>
+      <div><b>чаще всего</b><span>новые клиенты приходят по рекомендации</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="screen process" id="process">
+  <span class="eyebrow">как я работаю</span>
+  <h2>от пустого листа <span class="v">до запуска</span></h2>
+  <ol class="steps">
+    <li><span class="n">1</span><h3>Разговор о задаче</h3><p>Разбираемся, для кого сайт и что он должен делать. Смотрю конкурентов и аудиторию.</p></li>
+    <li><span class="n">2</span><h3>Структура</h3><p>Собираю логику страницы: какие блоки нужны и в каком порядке.</p></li>
+    <li><span class="n">3</span><h3>Референсы и визуал</h3><p>Подбираю референсы, цвета и шрифты. То самое настроение, только для вас.</p></li>
+    <li><span class="n">4</span><h3>Дизайн в Figma</h3><p>Рисую дизайн под ваш проект, без шаблонов.</p></li>
+    <li><span class="n">5</span><h3>Сборка и запуск</h3><p>Собираю на Tilda, делаю адаптив, базовую SEO и аналитику. После запуска остаюсь на связи.</p></li>
+  </ol>
+</section>
+
+<section class="screen price alt" id="price">
+  <div class="price-head">
+    <div><span class="eyebrow">услуги и цены</span><h2 style="margin-top:12px">сколько <span class="v">стоит</span></h2></div>
+    <p>Точную стоимость считаю после разговора о задаче. Нажмите на услугу, чтобы написать мне про неё.</p>
+  </div>
+  <ul class="menu">
+    <li><a href="https://www.instagram.com/lesya.frame/" target="_blank" rel="noopener"><span class="nm">Сайт с нуля<small>10–12 блоков, структура, дизайн, сборка, запуск · около 20 рабочих дней</small></span><span class="pr">45–60 тыс. ₽</span><span class="go" aria-hidden="true">→</span></a></li>
+    <li><a href="https://www.instagram.com/lesya.frame/" target="_blank" rel="noopener"><span class="nm">Полная переделка сайта<small>новый дизайн существующего сайта · 7–10 дней</small></span><span class="pr">≈ 40 000 ₽</span><span class="go" aria-hidden="true">→</span></a></li>
+    <li><a href="https://www.instagram.com/lesya.frame/" target="_blank" rel="noopener"><span class="nm">Новая цветовая схема<small>перекрашу сайт в новое настроение · около 2 дней</small></span><span class="pr">7 000 ₽</span><span class="go" aria-hidden="true">→</span></a></li>
+    <li><a href="https://www.instagram.com/lesya.frame/" target="_blank" rel="noopener"><span class="nm">Отдельный блок<small>дизайн и сборка в Zero Block, версии для телефона и ПК</small></span><span class="pr">4 500 ₽</span><span class="go" aria-hidden="true">→</span></a></li>
+    <li><a href="https://www.instagram.com/lesya.frame/" target="_blank" rel="noopener"><span class="nm">Обложки для хайлайтс<small>в стиле вашего профиля</small></span><span class="pr">3 000 ₽</span><span class="go" aria-hidden="true">→</span></a></li>
+    <li><a href="https://www.instagram.com/lesya.frame/" target="_blank" rel="noopener"><span class="nm">Пакет для соцсетей<small>оформление профиля в едином стиле</small></span><span class="pr">10 000 ₽</span><span class="go" aria-hidden="true">→</span></a></li>
+    <li><a href="https://www.instagram.com/lesya.frame/" target="_blank" rel="noopener"><span class="nm">Поддержка после запуска<small>правки, новые страницы, замена текстов</small></span><span class="pr">договорная</span><span class="go" aria-hidden="true">→</span></a></li>
+  </ul>
+  <p class="note">Маркетинг и копирайтинг в работу не входят, если мы отдельно не договорились.</p>
+</section>
+
+<section class="screen fit" id="fit">
+  <span class="eyebrow">кому подойду</span>
+  <h2>вам ко мне, <span class="v">если вы...</span></h2>
+  <div class="who">
+    <span>психолог<small>сайт, где клиенту спокойно</small></span>
+    <span>beauty-мастер<small>эстетично и на вашем уровне</small></span>
+    <span>эксперт<small>личный бренд</small></span>
+    <span>запускаете курс<small>понятно, как записаться</small></span>
+    <span>небольшой бизнес<small>без сайта как у всех</small></span>
+  </div>
+  <div class="rules">
+    <div><b>Прозрачно</b><span>Заранее проговариваем, что входит в работу.</span></div>
+    <div><b>Без давления</b><span>Спокойно отвечаю на любые вопросы.</span></div>
+    <div><b>Понятные сроки</b><span>Вы знаете, на каком мы этапе.</span></div>
+    <div><b>С заботой</b><span>Думаю о логике и аудитории, а не только о картинке.</span></div>
+  </div>
+</section>
+
+<section class="contact alt" id="contact">
+  <div class="contact-txt">
+    <span class="eyebrow">контакты</span>
+    <span class="v huge">давайте начнём</span>
+    <p>Расскажите о проекте: что за задача, для кого сайт и к какому сроку он нужен. Я отвечу и предложу, с чего начать.</p>
+    <div class="row"><a class="btn" href="https://www.instagram.com/lesya.frame/" target="_blank" rel="noopener">написать в Instagram</a></div>
+    <div class="handle"><code id="h">@lesya.frame</code><button type="button" id="copy">скопировать</button><span id="copied"></span></div>
+  </div>
+  <div class="contact-pic"><img src="img/rem-sun.jpg" alt="Леся и Рэм в вечернем свете"><span class="cap">мы с Рэмом ждём</span></div>
+</section>
+<footer><span>© 2026 Леся · веб-дизайн и сайты на Tilda · Ярославль</span><span>сайт сейчас в настроении «<span id="fm">какао</span>»</span></footer>
+
+<script>
+(function(){
+  var M=[
+    {id:'cocoa',name:'какао',c:'#3B1B14'},
+    {id:'olive',name:'олива',c:'#737038'},
+    {id:'sky',name:'небо',c:'#A6BFD2'},
+    {id:'cream',name:'сливки',c:'#F5EDC9'}
+  ];
+  var root=document.documentElement,track=document.getElementById('track'),knob=document.getElementById('knob'),dots=document.getElementById('dots');
+  var now=document.getElementById('now'),fm=document.getElementById('fm'),pics=[].slice.call(document.querySelectorAll('#heroPics img'));
+  var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches,cur=0;
+
+  M.forEach(function(m,i){
+    var b=document.createElement('button');b.type='button';b.setAttribute('role','radio');b.innerHTML='<i style="background:'+m.c+'"></i><span>'+m.name+'</span>';b.setAttribute('aria-label',m.name);
+    b.addEventListener('click',function(e){if(!track._dragged)set(i,e.clientX,e.clientY)});track.appendChild(b);
+    var d=document.createElement('button');d.type='button';d.style.background=m.c;d.title=m.name;d.setAttribute('aria-label','настроение '+m.name);
+    d.addEventListener('click',function(e){set(i,e.clientX,e.clientY)});dots.appendChild(d);
+  });
+  function paint(i){
+    cur=i;var m=M[i];root.dataset.mood=m.id;now.textContent=m.name;fm.textContent=m.name;
+    knob.style.transform='translateX('+(i*100)+'%)';
+    [].forEach.call(track.querySelectorAll('button'),function(b,j){b.setAttribute('aria-checked',j===i)});
+    [].forEach.call(dots.children,function(b,j){b.setAttribute('aria-pressed',j===i)});
+    pics.forEach(function(p){p.classList.toggle('on',p.dataset.m===m.id)});
+    try{localStorage.setItem('lesya-mood',m.id)}catch(e){}
+  }
+  function set(i,x,y){
+    if(i===cur) return;
+    if(!document.startViewTransition||reduce){paint(i);return}
+    var vt=document.startViewTransition(function(){root.style.transition='none';paint(i)});
+    vt.ready.then(function(){
+      var r=Math.hypot(Math.max(x,innerWidth-x),Math.max(y,innerHeight-y));
+      root.animate({clipPath:['circle(0px at '+x+'px '+y+'px)','circle('+r+'px at '+x+'px '+y+'px)']},{duration:750,easing:'cubic-bezier(.65,0,.35,1)',pseudoElement:'::view-transition-new(root)'});
+    });
+    vt.finished.then(function(){root.style.transition=''});
+  }
+  /* drag the knob */
+  var drag=false,startX=0;
+  track.addEventListener('pointerdown',function(e){drag=true;startX=e.clientX;track._dragged=false;track.setPointerCapture(e.pointerId)});
+  track.addEventListener('pointermove',function(e){
+    if(!drag) return;
+    if(Math.abs(e.clientX-startX)>6){track._dragged=true;track.classList.add('drag')}
+    if(!track._dragged) return;
+    var r=track.getBoundingClientRect(),w=(r.width-12)/4,x=Math.min(Math.max(e.clientX-r.left-6-w/2,0),w*3);
+    knob.style.transform='translateX('+x+'px)';
+  });
+  track.addEventListener('pointerup',function(e){
+    if(!drag) return;drag=false;track.classList.remove('drag');
+    if(track._dragged){
+      var r=track.getBoundingClientRect(),i=Math.min(3,Math.max(0,Math.floor((e.clientX-r.left)/(r.width/4))));
+      if(i===cur) paint(i); else set(i,e.clientX,e.clientY);
+      setTimeout(function(){track._dragged=false},0);
+    }
+  });
+  var saved=0;try{var s=localStorage.getItem('lesya-mood');M.forEach(function(m,i){if(m.id===s)saved=i})}catch(e){}
+  root.style.transition='none';paint(saved);requestAnimationFrame(function(){root.style.transition=''});
+
+  /* header shrinks */
+  var head=document.getElementById('head');
+  function onS(){head.classList.toggle('small',scrollY>30)}
+  addEventListener('scroll',onS,{passive:true});onS();
+
+  /* copy handle */
+  document.getElementById('copy').addEventListener('click',function(){
+    var t=document.getElementById('h').textContent,c=document.getElementById('copied');
+    if(navigator.clipboard){navigator.clipboard.writeText(t).then(function(){c.textContent='готово'},function(){c.textContent='не получилось, выделите вручную'})}
+  });
+})();
+</script>
+</body>
+</html>
