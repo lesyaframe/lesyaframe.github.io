@@ -48,11 +48,11 @@ b{letter-spacing:-.03em}
 
 /* ============ HERO ============ */
 .hero{position:relative;height:100svh;min-height:560px;display:grid;grid-template-columns:1fr 1fr;overflow:hidden}
-.hl{position:relative;background:repeating-linear-gradient(90deg,var(--olive) 0 34px,var(--olive2) 34px 68px);display:grid;place-items:center;padding:90px 40px 120px}
+.hl{position:relative;background:repeating-linear-gradient(90deg,var(--olive) 0 34px,var(--olive2) 34px 68px);display:grid;place-items:center;padding:90px 40px 110px}
 .hstamp{width:min(440px,74%,52vh);rotate:-4deg;filter:drop-shadow(0 26px 30px rgba(0,0,0,.35))}
 .hstamp .stamp{background:var(--paper);padding:18px}
 .hstamp .stamp img{aspect-ratio:3/3.6}
-.hr{position:relative;color:var(--paper);padding:110px clamp(30px,5vw,80px) 140px clamp(30px,5vw,90px);display:flex;flex-direction:column;justify-content:center;gap:clamp(16px,3vh,26px);
+.hr{position:relative;color:var(--paper);padding:100px clamp(30px,5vw,80px) clamp(110px,17vh,150px) clamp(30px,5vw,90px);display:flex;flex-direction:column;justify-content:center;gap:clamp(16px,3vh,26px);
   background:
    radial-gradient(circle,rgba(245,237,201,.07) 1.6px,transparent 2px) 0 0/18px 18px,
    repeating-linear-gradient(90deg,rgba(0,0,0,.22) 0 2px,rgba(255,255,255,.035) 2px 3px,transparent 3px 7px),
@@ -60,7 +60,7 @@ b{letter-spacing:-.03em}
 .hr::after{content:"";position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(90deg,transparent 0 6px,rgba(0,0,0,.12) 6px 7px);mix-blend-mode:multiply}
 .hr>*{position:relative;z-index:1}
 .hr h1{font-size:min(7.8vw,14vh,124px);font-weight:900;letter-spacing:-.065em;line-height:.84}
-.hr h1 .v{display:block;color:var(--butter);font-size:.72em;margin:.2em 0 0 .3em;rotate:-4deg;transform-origin:left}
+.hr h1 .v{display:inline-block;vertical-align:top;color:var(--butter);font-size:.46em;margin:-.1em 0 0 .25em;rotate:-8deg;transform-origin:left;white-space:nowrap}
 .hr p{font-size:clamp(15px,2.1vh,18px);max-width:32em;opacity:.85;line-height:1.4}
 .hrow{display:flex;flex-wrap:wrap;gap:12px}
 .btn-butter{background:var(--butter);color:var(--ink)}
@@ -71,7 +71,7 @@ b{letter-spacing:-.03em}
 .pills .hlogo{font-family:var(--script);font-size:38px;color:var(--butter);opacity:1;line-height:1}
 .pills .sp{flex:1}
 .pills .btn{padding:11px 18px;font-size:14px;opacity:1;color:var(--ink)}
-.hribbon{position:absolute;left:-40px;right:-40px;bottom:clamp(70px,12vh,120px);height:38px;rotate:-5deg;background:var(--ging);z-index:4;box-shadow:0 10px 18px -10px rgba(0,0,0,.5)}
+.hribbon{position:absolute;left:-40px;right:-40px;bottom:clamp(14px,3vh,30px);height:34px;rotate:-3deg;background:var(--ging);z-index:4;box-shadow:0 10px 18px -10px rgba(0,0,0,.5)}
 .hbow{position:absolute;left:calc(50% - 85px);bottom:calc(clamp(70px,12vh,120px) - 92px);width:170px;z-index:5;rotate:-5deg;filter:drop-shadow(0 10px 12px rgba(0,0,0,.3))}
 @media (max-width:860px){
   .hero{grid-template-columns:1fr;grid-template-rows:auto 1fr}
@@ -89,7 +89,7 @@ b{letter-spacing:-.03em}
 /* ============ ABOUT (star) ============ */
 .about{position:relative;background:var(--paper);border-radius:36px 36px 0 0;margin-top:-36px;z-index:2;padding:clamp(70px,9vw,120px) var(--gut) clamp(80px,9vw,120px);display:grid;grid-template-columns:.85fr 1.15fr;gap:clamp(20px,4vw,60px);align-items:center;overflow:hidden}
 .about h2{font-size:clamp(48px,6.4vw,96px)}
-.about h2 .v{display:block;color:var(--blue);font-size:1.15em;margin:.05em 0 0 .3em;rotate:-4deg;transform-origin:left}
+.about h2 .v{display:inline-block;color:var(--blue);font-size:1.15em;margin-left:.08em;rotate:-4deg;transform-origin:left}
 .about .txt{display:flex;flex-direction:column;gap:18px;max-width:52ch;position:relative;z-index:3}
 .about .big{font-size:clamp(19px,1.7vw,23px);font-weight:600;line-height:1.3}
 .about .row{display:flex;flex-wrap:wrap;gap:10px;margin-top:6px}
@@ -106,7 +106,7 @@ b{letter-spacing:-.03em}
 .anno path{fill:none;stroke:var(--blue);stroke-width:2;stroke-linecap:round}
 .a1{right:4%;top:2%;rotate:4deg}
 .a2{left:0;bottom:22%;rotate:-6deg}
-.a3{right:6%;bottom:6%;rotate:-3deg}
+.a3{right:2%;top:4%;rotate:4deg}
 .ribbon{position:absolute;right:clamp(16px,3vw,48px);top:0;bottom:0;width:30px;background:var(--ging);z-index:1;box-shadow:inset 2px 0 0 rgba(0,0,0,.05)}
 .bow{position:absolute;right:calc(clamp(16px,3vw,48px) - 66px);top:clamp(40px,6vw,80px);width:162px;z-index:5;filter:drop-shadow(0 10px 12px rgba(0,0,0,.2))}
 .stk-heart{position:absolute;left:clamp(12px,3vw,40px);bottom:28px;width:clamp(70px,8vw,110px);rotate:-12deg;z-index:3;filter:drop-shadow(0 8px 10px rgba(0,0,0,.2))}
@@ -285,6 +285,21 @@ b{letter-spacing:-.03em}
 .fab .btn-tg{padding:13px;border-radius:50%;box-shadow:0 8px 18px -10px rgba(59,27,20,.6)}
 .contact .handle{text-decoration:none}
 @media (max-width:860px){.lead2{white-space:normal;text-align:left}.pills .ntg{width:36px;height:36px}}
+
+footer.foot{display:grid;grid-template-columns:1fr 1.4fr 1fr;gap:20px 40px;align-items:start;padding:34px var(--gut) calc(34px + env(safe-area-inset-bottom,0px));font-size:13px;line-height:1.5}
+footer .fl,footer .fr,footer .docs{display:flex;flex-direction:column;gap:6px}
+footer .fl .v{font-size:40px;color:var(--butter);line-height:1}
+footer a{color:rgba(251,246,230,.85);text-decoration:none}
+footer a:hover{color:var(--butter);text-decoration:underline}
+footer .fr{text-align:right;align-items:flex-end}
+.fill-op{background:rgba(241,234,145,.25);padding:0 4px;border-radius:4px}
+.cookie{position:fixed;left:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:70;max-width:420px;background:var(--paper);color:var(--ink);border-radius:16px;padding:14px 16px;display:flex;gap:14px;align-items:center;font-size:13px;box-shadow:0 14px 30px -14px rgba(59,27,20,.55)}
+.cookie a{color:var(--olive)}
+.cookie .btn{padding:10px 16px;font-size:13px;flex:none}
+.consent{display:flex;gap:10px;align-items:flex-start;font-size:13px;color:var(--muted);line-height:1.4;cursor:pointer}
+.consent input{margin-top:2px;width:18px;height:18px;accent-color:var(--choco);flex:none}
+.consent a{color:var(--olive)}
+@media (max-width:860px){footer.foot{grid-template-columns:1fr}footer .fr{text-align:left;align-items:flex-start}.cookie{right:16px;max-width:none}}
 /* ============ FIT ============ */
 .fit{display:flex;flex-direction:column;align-items:stretch;justify-content:center;gap:clamp(24px,4vh,40px);min-height:100svh}
 .fit-top{text-align:center;display:flex;flex-direction:column;gap:12px;align-items:center}
@@ -335,19 +350,19 @@ b{letter-spacing:-.03em}
 @media (max-width:900px){.form-sec{grid-template-columns:1fr;min-height:0}}
 
 /* ============ CONTACT (awning) ============ */
-.contact{position:relative;z-index:2;box-shadow:0 -12px 30px -24px rgba(59,27,20,.5);background:var(--paper);border-radius:36px 36px 0 0;margin-top:-36px;padding:0 var(--gut) clamp(70px,8vw,110px)}
+.contact{position:relative;z-index:2;box-shadow:0 -12px 30px -24px rgba(59,27,20,.5);background:var(--paper);border-radius:36px 36px 0 0;margin-top:-36px;padding:0 var(--gut) clamp(40px,6vh,70px)}
 .awning{position:relative;margin:0 calc(-1*var(--gut));height:70px;background:repeating-linear-gradient(90deg,var(--choco) 0 60px,var(--cream) 60px 120px)}
 .awning::after{content:"";position:absolute;left:0;right:0;bottom:-30px;height:30px;background:radial-gradient(circle at 30px 0,var(--choco) 30px,transparent 30.5px) 0 0/120px 30px repeat-x,radial-gradient(circle at 90px 0,var(--cream) 30px,transparent 30.5px) 0 0/120px 30px repeat-x}
-.shop{display:grid;grid-template-columns:1.1fr .9fr;gap:clamp(30px,5vw,80px);align-items:center;max-width:1200px;margin:0 auto;padding-top:clamp(70px,8vw,110px)}
+.shop{display:grid;grid-template-columns:1.25fr .75fr;gap:clamp(30px,5vw,80px);align-items:center;max-width:1200px;margin:0 auto;padding-top:clamp(56px,7vh,80px)}
 .shop .sign{display:inline-block;background:var(--choco);color:var(--butter);font-family:var(--script);font-size:30px;padding:8px 22px 6px;border-radius:8px;rotate:-3deg;box-shadow:0 10px 18px -10px rgba(0,0,0,.6)}
-.shop h2{font-size:clamp(50px,6.6vw,100px);color:var(--choco);margin-top:22px}
+.shop h2{font-size:clamp(44px,5vw,78px);color:var(--choco);margin-top:16px}
 .shop p{margin-top:18px;max-width:44ch;font-size:18px}
 .shop .row{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-top:26px}
 .handle{font-weight:700;background:#FBF6E6;padding:12px 16px;border-radius:999px;border:0;cursor:pointer;font:700 14px var(--sans);color:var(--ink)}
-.rules{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:34px;max-width:560px}
+.rules{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:24px;max-width:640px}
 .rules div{background:#FBF6E6;border-radius:12px;padding:12px 14px;font-size:14px;color:var(--muted)}
 .rules b{display:block;font-family:var(--sans);font-weight:800;letter-spacing:-.04em;font-size:19px;color:var(--choco)}
-.shop .pic{position:relative;max-width:400px;justify-self:center;width:100%}
+.shop .pic{position:relative;max-width:min(330px,40vh);justify-self:center;width:100%}
 .shop .pic .stampw{rotate:-4deg}
 .shop .pic .tag{left:auto;right:-24px;bottom:auto;top:24px;rotate:8deg}
 footer{background:var(--choco);color:rgba(251,246,230,.7);font-size:13px;padding:18px var(--gut) calc(18px + env(safe-area-inset-bottom,0px));display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px}
@@ -380,8 +395,8 @@ footer .v{color:var(--butter);font-size:26px}
     <div class="hstamp" data-in style="--rr:-4deg"><div class="stamp"><img src="img/lesya-sweater.jpg" alt="Леся в коричневом свитере"></div></div>
   </div>
   <div class="hr">
-    <h1>собираю сайты <span class="v">с нуля</span></h1>
-    <span class="hnote">сначала смысл, потом красота</span>
+    <h1>собираю<br>сайты<span class="v">под ключ</span></h1>
+    <span class="hnote">передаю смыслы через визуал</span>
     <p>я дизайнер-разработчик<br>создаю для вас и про вас сайты на Tilda, в которых легко разобраться и хочется задержаться</p>
     <div class="hrow"><a class="btn btn-butter" href="#zayavka">обсудить проект</a><a class="btn btn-tg" href="https://t.me/LesyaLesya8" target="_blank" rel="noopener"><svg class="tgi" viewBox="0 0 24 24" aria-hidden="true"><path d="M21.5 4.3 2.9 11.5c-1.3.5-1.3 1.2-.2 1.5l4.8 1.5 1.8 5.6c.2.6.4.8.9.8.4 0 .6-.2.9-.5l2.3-2.2 4.7 3.5c.9.5 1.5.2 1.7-.8l3.1-14.6c.3-1.3-.5-1.9-1.4-1.5ZM9.6 14.7l-.4 4.1-1.6-5 9.9-6.3-7.9 7.2Z" fill="currentColor"/></svg>написать в Telegram</a></div>
   </div>
@@ -393,7 +408,7 @@ footer .v{color:var(--butter);font-size:26px}
   
   <div class="txt" data-in>
     <span class="eyebrow" style="color:var(--cherry)">обо мне</span>
-    <h2>привет, я <span class="v">Леся</span></h2>
+    <h2>привет,<br>я <span class="v">Леся</span></h2>
     <p class="big">делаю сайты седьмой год</p>
     <p>по образованию я журналист</p>
     <p>моя страсть: гармоничное объединение результатов аналитики и визуала, создание удобного и привлекательного интерфейса</p>
@@ -404,11 +419,10 @@ footer .v{color:var(--butter);font-size:26px}
     <svg class="star" viewBox="0 0 600 600" aria-hidden="true"><polygon id="starPoly" fill="#F1EA91"/></svg>
     <div class="stampw s1" data-in style="--rr:-7deg"><div class="stamp"><img src="img/lesya-portrait.jpg" alt="Леся, портрет"></div></div>
     <div class="stampw s2" data-in style="--rr:6deg"><div class="stamp cher"><img src="img/lesya-bag-rem.jpg" alt="Леся с вязаной сумкой, рядом прыгает Рэм"></div></div>
-    <span class="cnt c1">♥ седьмой год в сайтах</span>
+    <span class="cnt c1">✎ помогаю с текстами</span>
     <span class="cnt c2">✦ клиенты по рекомендации</span>
-    <span class="cnt c3">↻ бывает, работаем 2–3 года</span>
-    <div class="anno a1 draw">журналист<br>по образованию<svg viewBox="0 0 70 60"><path d="M50 2 C 60 24, 46 44, 14 52 M24 42 L12 53 L27 58"/></svg></div>
-    <div class="anno a2 draw"><svg viewBox="0 0 70 60"><path d="M10 58 C 6 34, 24 12, 60 8 M48 0 L61 8 L50 18"/></svg>Figma, Tilda<br>и Zero Block</div>
+    <span class="cnt c3">↻ со мной работают годами</span>
+        <div class="anno a2 draw"><svg viewBox="0 0 70 60"><path d="M10 58 C 6 34, 24 12, 60 8 M48 0 L61 8 L50 18"/></svg>Figma, Tilda,<br>нейросети</div>
     <div class="anno a3 draw">Рэм отвечает<br>за настроение</div>
   </div>
   <svg class="stk-heart" viewBox="0 0 100 92" aria-hidden="true"><defs><pattern id="g2" width="10" height="10" patternUnits="userSpaceOnUse"><rect width="10" height="10" fill="#FBF6E6"/><rect width="5" height="10" fill="#737038" opacity=".5"/><rect width="10" height="5" fill="#737038" opacity=".5"/></pattern></defs><path d="M50 88 C 18 66, 4 46, 6 28 C 8 10, 32 2, 50 22 C 68 2, 92 10, 94 28 C 96 46, 82 66, 50 88 Z" fill="url(#g2)" stroke="#fff" stroke-width="6" stroke-linejoin="round"/><path d="M50 80 C 22 60, 12 44, 13 29 C 15 15, 33 10, 50 30 C 67 10, 85 15, 87 29 C 88 44, 78 60, 50 80 Z" fill="none" stroke="#737038" stroke-width="1.5" stroke-dasharray="4 4"/></svg>
@@ -417,7 +431,7 @@ footer .v{color:var(--butter);font-size:26px}
 <!-- SERVICES -->
 <section class="services" id="services">
   <div class="svc-head">
-    <h2>чем могу <span class="v">помочь</span></h2>
+    <h2>услуги <span class="v">и прайс</span></h2>
     <p class="lead2">цены примерные, чтобы было понятно, от чего отталкиваться<br>точную сумму назову, когда разберёмся в задаче</p>
   </div>
   <div class="svc-grid">
@@ -539,22 +553,23 @@ footer .v{color:var(--butter);font-size:26px}
     <fieldset class="q" data-q="5">
       <legend>как к вам обращаться и где написать?</legend>
       <label class="fld"><span>имя</span><input id="name" type="text" autocomplete="name"></label>
-      <label class="fld"><span>тг, инстаграм или телефон</span><input id="contact" type="text" placeholder="@ник или +7..."></label>
+      <label class="fld"><span>тг, инстаграм или телефон</span><input id="cfield" type="text" placeholder="@ник или +7..."></label>
       <label class="fld"><span>что ещё мне стоит знать (по желанию)</span><textarea id="note" rows="2"></textarea></label>
+      <label class="consent"><input id="agree" type="checkbox"><span>соглашаюсь на <a href="soglasie.html" target="_blank">обработку персональных данных</a> и с <a href="privacy.html" target="_blank">политикой</a></span></label>
       <input id="website" name="website" type="text" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
     </fieldset>
 
     <div class="done" id="done" hidden>
       <div id="okBox" hidden>
         <span class="v">спасибо!</span>
-        <p>заявка уже у меня<br>напишу вам сама, как только прочитаю ☺️</p>
-        <div class="nav-row"><a class="btn btn-ghost" href="https://t.me/LesyaLesya8" target="_blank" rel="noopener">если срочно, пишите в Telegram</a></div>
+        <p>заявка уже у меня<br>напишу вам сама, как только прочитаю ☺️</p>
+        <div class="nav-row"><a class="btn btn-ghost" href="https://t.me/LesyaLesya8" target="_blank" rel="noopener">если срочно, пишите в Telegram</a></div>
       </div>
       <div id="failBox" hidden>
         <span class="v">ой</span>
-        <p>заявка почему-то не отправилась 🥲<br>текст я скопировала, просто вставьте его мне в сообщение</p>
+        <p>заявка почему-то не отправилась 🥲<br>текст я скопировала, просто вставьте его мне в сообщение</p>
         <pre id="summary"></pre>
-        <div class="nav-row"><a class="btn btn-choco" href="https://t.me/LesyaLesya8" target="_blank" rel="noopener">отправить в Telegram</a><a class="btn btn-ghost" href="https://www.instagram.com/lesya.frame/" target="_blank" rel="noopener">в Instagram</a><button type="button" class="btn btn-ghost" id="copyAgain">скопировать ещё раз</button></div>
+        <div class="nav-row"><a class="btn btn-choco" href="https://t.me/LesyaLesya8" target="_blank" rel="noopener">отправить в Telegram</a><a class="btn btn-ghost" href="https://www.instagram.com/lesya.frame/" target="_blank" rel="noopener">в Instagram</a><button type="button" class="btn btn-ghost" id="copyAgain">скопировать ещё раз</button></div>
       </div>
     </div>
     </div>
@@ -592,7 +607,12 @@ footer .v{color:var(--butter);font-size:26px}
     </div>
   </div>
 </section>
-<footer><span>© 2026 Леся · веб-дизайн и сайты на Tilda · Ярославль</span><span class="v">до встречи!</span></footer>
+<footer class="foot">
+  <div class="fl"><span class="v">Леся</span><span>веб-дизайн и сайты на Tilda · Ярославль</span></div>
+  <nav class="docs" aria-label="Документы"><a href="privacy.html">Политика обработки персональных данных</a><a href="soglasie.html">Согласие на обработку данных</a><a href="cookies.html">Использование cookie</a></nav>
+  <div class="fr"><a href="https://t.me/LesyaLesya8" target="_blank" rel="noopener">Telegram @LesyaLesya8</a><a href="https://www.instagram.com/lesya.frame/" target="_blank" rel="noopener">Instagram @lesya.frame</a><span>© 2026 <span class="fill-op">[ФИО, самозанятая, ИНН]</span></span></div>
+</footer>
+<div class="cookie" id="cookie" hidden><span>сайт использует только технически необходимые данные и шрифты Google, подробнее <a href="cookies.html">здесь</a></span><button type="button" class="btn btn-choco" id="cookieOk">хорошо</button></div>
 
 <div class="fab" id="fab"><a class="btn btn-tg" href="https://t.me/LesyaLesya8" target="_blank" rel="noopener" aria-label="Написать в Telegram"><svg class="tgi" viewBox="0 0 24 24" aria-hidden="true"><path d="M21.5 4.3 2.9 11.5c-1.3.5-1.3 1.2-.2 1.5l4.8 1.5 1.8 5.6c.2.6.4.8.9.8.4 0 .6-.2.9-.5l2.3-2.2 4.7 3.5c.9.5 1.5.2 1.7-.8l3.1-14.6c.3-1.3-.5-1.9-1.4-1.5ZM9.6 14.7l-.4 4.1-1.6-5 9.9-6.3-7.9 7.2Z" fill="currentColor"/></svg></a><a class="btn btn-cherry" href="#zayavka">оставить заявку</a></div>
 
@@ -680,14 +700,16 @@ footer .v{color:var(--butter);font-size:26px}
     next.addEventListener('click',function(){
       if(cur===0&&!picked('svc').length){err.textContent='выберите хоть что-нибудь, можно «пока не знаю»';return}
       if(cur<qs.length-1){show(cur+1);return}
-      if(!val('name')||!val('contact')){err.textContent='без имени и контакта я вас не найду 🥲';return}
+      if(!val('name')||!val("cfield")){err.textContent='без имени и контакта я вас не найду 🥲';return}
+      if(!document.getElementById('agree').checked){err.textContent='нужно согласие на обработку данных';return}
+      if(false){err.textContent='без имени и контакта я вас не найду 🥲';return}
       var t='Заявка с сайта\n'+
         'Услуги: '+picked('svc').join(', ')+'\n'+
         'Сфера: '+(picked('niche')[0]||'—')+(val('about')?' ('+val('about')+')':'')+'\n'+
         'Сайт сейчас: '+(picked('has')[0]||'—')+(val('link')?' '+val('link'):'')+'\n'+
         'Сроки: '+(picked('when')[0]||'—')+'\n'+
         'Бюджет: '+(picked('budget')[0]||'—')+'\n'+
-        'Имя: '+val('name')+'\nСвязь: '+val('contact')+(val('note')?'\nКомментарий: '+val('note'):'');
+        'Имя: '+val('name')+'\nСвязь: '+val("cfield")+(val('note')?'\nКомментарий: '+val('note'):'');
       document.getElementById('summary').textContent=t;
       function finish(ok){
         qs.forEach(function(q){q.classList.remove('on')});document.getElementById('navRow').hidden=true;document.querySelector('.steps-bar').hidden=true;document.getElementById('done').hidden=false;
@@ -698,14 +720,16 @@ footer .v{color:var(--butter);font-size:26px}
       next.disabled=true;next.textContent='отправляю...';
       var F=function(v){return {stringValue:String(v).slice(0,2900)}};
       fetch('https://firestore.googleapis.com/v1/projects/lesya-hub/databases/(default)/documents/leads',{method:'POST',headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({fields:{text:F(t),name:F(val('name').slice(0,90)),contact:F(val('contact').slice(0,190)),page:F(location.href.slice(0,190))}})})
+        body:JSON.stringify({fields:{text:F(t),name:F(val('name').slice(0,90)),contact:F(val("cfield").slice(0,190)),page:F(location.href.slice(0,190))}})})
         .then(function(r){finish(r.ok)},function(){finish(false)});
     });
     back.addEventListener('click',function(){if(cur>0)show(cur-1)});
   })();
 
+  /* cookie notice */
+  (function(){var c=document.getElementById('cookie'),k='lesya-cookie-ok',ok=false;try{ok=localStorage.getItem(k)==='1'}catch(e){}
+    if(!ok)c.hidden=false;document.getElementById('cookieOk').onclick=function(){c.hidden=true;try{localStorage.setItem(k,'1')}catch(e){}}})();
   /* copy */
-  document.getElementById('copy').addEventListener('click',function(){var b=this;if(navigator.clipboard)navigator.clipboard.writeText('@lesya.frame').then(function(){b.textContent='скопировано ✓'})});
 })();
 </script>
 </body>
