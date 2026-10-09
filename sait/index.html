@@ -74,16 +74,20 @@ b{letter-spacing:-.03em}
 .hribbon{position:absolute;left:-40px;right:-40px;bottom:clamp(14px,3vh,30px);height:34px;rotate:-3deg;background:var(--ging);z-index:4;box-shadow:0 10px 18px -10px rgba(0,0,0,.5)}
 .hbow{position:absolute;left:calc(50% - 85px);bottom:calc(clamp(70px,12vh,120px) - 92px);width:170px;z-index:5;rotate:-5deg;filter:drop-shadow(0 10px 12px rgba(0,0,0,.3))}
 @media (max-width:860px){
-  .hero{grid-template-columns:1fr;grid-template-rows:auto 1fr}
-  .hr{grid-row:1;padding:84px var(--gut) 26px;gap:14px}
-  .hr h1{font-size:min(14vw,8vh)}
-  .hr p{font-size:15px}
-  .hl{grid-row:2;padding:20px var(--gut) 70px;container-type:size}
-  .hstamp{width:min(60cqh,70vw)}
+  .hero{grid-template-columns:1fr;grid-template-rows:1fr auto;min-height:0}
+  .hl{grid-row:1;padding:78px var(--gut) 18px;container-type:size;min-height:0}
+  .hstamp{width:min(78cqh,76vw)}
+  .hstamp .stamp{padding:13px}
+  .hr{grid-row:2;padding:22px var(--gut) 66px;gap:12px}
+  .hr h1{font-size:min(13vw,6.6vh)}
+  .hnote{font-size:24px;margin-top:-4px}
+  .hr p{font-size:14.5px;line-height:1.4}
+  .dm{display:none}
+  .hrow{flex-wrap:nowrap;gap:8px}
+  .hero .btn{padding:13px 16px;font-size:14px;white-space:nowrap}
   .pills a:not(.btn):not(.hlogo):not(.ntg){display:none}
-  .hribbon{bottom:46px;height:28px}
-  .hbow{width:110px;left:auto;right:12%;bottom:-6px}
-  .hero .btn{padding:13px 18px;font-size:14px}
+  .pills .hlogo{color:var(--paper)}
+  .hribbon{bottom:18px;height:26px;rotate:-3deg}
 }
 
 /* ============ ABOUT (star) ============ */
@@ -300,6 +304,21 @@ footer .fr{text-align:right;align-items:flex-end}
 .consent input{margin-top:2px;width:18px;height:18px;accent-color:var(--choco);flex:none}
 .consent a{color:var(--olive)}
 @media (max-width:860px){footer.foot{grid-template-columns:1fr}footer .fr{text-align:left;align-items:flex-start}.cookie{right:16px;max-width:none}}
+
+.lead2{font-size:14px!important;opacity:.8}
+@media (max-width:900px){
+  .about h2{font-size:clamp(40px,11vw,56px)}
+  .about h2 .dm{display:none}
+  .stk-heart{display:none}
+  .comp{margin-bottom:120px}
+  .cnt{font-size:12px;padding:7px 11px}
+  .c1{left:0;top:auto;bottom:-40px}
+  .c2{right:0;top:auto;bottom:-40px}
+  .c3{left:50%;translate:-50% 0;bottom:-84px;white-space:nowrap}
+  .a2{display:none}
+  .a3{right:0;top:-8%;font-size:20px}
+  .lead2{font-size:13px!important}
+}
 /* ============ FIT ============ */
 .fit{display:flex;flex-direction:column;align-items:stretch;justify-content:center;gap:clamp(24px,4vh,40px);min-height:100svh}
 .fit-top{text-align:center;display:flex;flex-direction:column;gap:12px;align-items:center}
@@ -367,7 +386,7 @@ footer .fr{text-align:right;align-items:flex-end}
 .shop .pic .tag{left:auto;right:-24px;bottom:auto;top:24px;rotate:8deg}
 footer{background:var(--choco);color:rgba(251,246,230,.7);font-size:13px;padding:18px var(--gut) calc(18px + env(safe-area-inset-bottom,0px));display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px}
 footer .v{color:var(--butter);font-size:26px}
-@media (max-width:860px){.shop{grid-template-columns:1fr}.shop .pic{max-width:300px}.rules{grid-template-columns:1fr}}
+@media (max-width:860px){.shop{grid-template-columns:1fr}.shop .pic{max-width:300px}.rules{grid-template-columns:1fr 1fr;gap:8px}.rules div{padding:10px 12px;font-size:12.5px}.rules b{font-size:16px}}
 
 /* floating write button */
 .fab{position:fixed;right:max(16px,env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:60;transform:translateY(120px);transition:transform .35s cubic-bezier(.3,1.4,.5,1)}
@@ -397,8 +416,8 @@ footer .v{color:var(--butter);font-size:26px}
   <div class="hr">
     <h1>собираю<br>сайты<span class="v">под ключ</span></h1>
     <span class="hnote">передаю смыслы через визуал</span>
-    <p>я дизайнер-разработчик<br>создаю для вас и про вас сайты на Tilda, в которых легко разобраться и хочется задержаться</p>
-    <div class="hrow"><a class="btn btn-butter" href="#zayavka">обсудить проект</a><a class="btn btn-tg" href="https://t.me/LesyaLesya8" target="_blank" rel="noopener"><svg class="tgi" viewBox="0 0 24 24" aria-hidden="true"><path d="M21.5 4.3 2.9 11.5c-1.3.5-1.3 1.2-.2 1.5l4.8 1.5 1.8 5.6c.2.6.4.8.9.8.4 0 .6-.2.9-.5l2.3-2.2 4.7 3.5c.9.5 1.5.2 1.7-.8l3.1-14.6c.3-1.3-.5-1.9-1.4-1.5ZM9.6 14.7l-.4 4.1-1.6-5 9.9-6.3-7.9 7.2Z" fill="currentColor"/></svg>написать в Telegram</a></div>
+    <p><span class="dm">я дизайнер-разработчик<br></span>создаю для вас и про вас сайты на Tilda, в которых легко разобраться и хочется задержаться</p>
+    <div class="hrow"><a class="btn btn-butter" href="#zayavka">обсудить проект</a><a class="btn btn-tg" href="https://t.me/LesyaLesya8" target="_blank" rel="noopener"><svg class="tgi" viewBox="0 0 24 24" aria-hidden="true"><path d="M21.5 4.3 2.9 11.5c-1.3.5-1.3 1.2-.2 1.5l4.8 1.5 1.8 5.6c.2.6.4.8.9.8.4 0 .6-.2.9-.5l2.3-2.2 4.7 3.5c.9.5 1.5.2 1.7-.8l3.1-14.6c.3-1.3-.5-1.9-1.4-1.5ZM9.6 14.7l-.4 4.1-1.6-5 9.9-6.3-7.9 7.2Z" fill="currentColor"/></svg><span class="dm">написать в </span>Telegram</a></div>
   </div>
   <div class="hribbon" aria-hidden="true"></div>
 </header>
@@ -408,7 +427,7 @@ footer .v{color:var(--butter);font-size:26px}
   
   <div class="txt" data-in>
     <span class="eyebrow" style="color:var(--cherry)">обо мне</span>
-    <h2>привет,<br>я <span class="v">Леся</span></h2>
+    <h2>привет,<br class="dm"> я <span class="v">Леся</span></h2>
     <p class="big">делаю сайты седьмой год</p>
     <p>по образованию я журналист</p>
     <p>моя страсть: гармоничное объединение результатов аналитики и визуала, создание удобного и привлекательного интерфейса</p>
@@ -603,7 +622,7 @@ footer .v{color:var(--butter);font-size:26px}
     </div>
     <div class="pic" data-in style="--rr:-4deg">
       <div class="stampw"><div class="stamp olv"><img src="img/rem-sun.jpg" alt="Леся и Рэм в вечернем свете"></div></div>
-      <span class="tag">мы на месте</span>
+      <span class="tag">готовы к работе</span>
     </div>
   </div>
 </section>
