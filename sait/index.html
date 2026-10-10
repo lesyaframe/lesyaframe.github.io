@@ -237,7 +237,7 @@ b{letter-spacing:-.03em}
 
 
 /* ============ SERVICES (fits one screen) ============ */
-.services{min-height:100svh;padding:clamp(50px,6vh,70px) var(--gut) clamp(26px,3.5vh,44px);display:flex;flex-direction:column;justify-content:center;gap:clamp(18px,3vh,32px)}
+.services{min-height:100svh;padding:clamp(50px,6vh,70px) var(--gut) calc(clamp(26px,3.5vh,44px) + 40px);display:flex;flex-direction:column;justify-content:center;gap:clamp(18px,3vh,32px)}
 .svc-head h2{font-size:clamp(44px,5.4vw,80px)}
 .svc-grid{display:grid;grid-template-columns:.72fr 1.28fr;gap:clamp(24px,4vw,64px);align-items:center}
 .main-svc{display:flex;flex-direction:column;align-items:flex-start;gap:12px;margin:0}
@@ -385,8 +385,8 @@ html.anim.go .hstamp{animation:dropIn 1s .15s cubic-bezier(.3,1.3,.5,1) forwards
 .w-track::-webkit-scrollbar{display:none}
 .w-track.drag{cursor:grabbing;scroll-snap-type:none}
 .w-track.drag a{pointer-events:none}
-.pf{flex:0 0 auto;scroll-snap-align:start;display:flex;flex-direction:column;gap:12px;width:calc(min(48vh,440px) * .78)}
-.pf-img{height:min(48vh,440px);border-radius:18px;overflow:hidden;background:var(--cream);box-shadow:0 20px 34px -22px rgba(0,0,0,.7);transition:transform .4s cubic-bezier(.2,.8,.2,1)}
+.pf{flex:0 0 auto;scroll-snap-align:start;display:flex;flex-direction:column;gap:12px;width:calc(min(46vh,440px) * .78)}
+.pf-img{height:min(46vh,440px);border-radius:18px;overflow:hidden;background:var(--cream);box-shadow:0 20px 34px -22px rgba(0,0,0,.7);transition:transform .4s cubic-bezier(.2,.8,.2,1)}
 .pf-img img{width:100%;height:100%;object-fit:cover;object-position:50% 0;transition:object-position 3.2s ease-in-out;user-select:none}
 .pf:hover .pf-img{transform:translateY(-6px) rotate(-.6deg)}
 .pf:hover .pf-img img{object-position:50% 100%}
@@ -403,8 +403,11 @@ html.anim.go .hstamp{animation:dropIn 1s .15s cubic-bezier(.3,1.3,.5,1) forwards
 .w-more a:not(.btn):hover{border-color:var(--butter);background:rgba(241,234,145,.08)}
 .w-more b{font-size:13px}
 .w-more a span{font-size:11.5px;opacity:.6}
-.w-more .btn{margin-left:auto;margin-right:200px}
-@media (max-width:860px){.works{min-height:0}.w-lead{display:none}.w-more{display:grid;grid-template-columns:1fr 1fr}.w-more .hand-s,.w-more .btn{grid-column:1/-1}.w-more .btn{justify-content:center}.w-more .btn{margin-right:0}.w-lead{margin-left:0}.w-nav{display:none}.pf{width:72vw}.pf-img{height:auto;aspect-ratio:3/3.8}.w-more .btn{margin-left:0}}
+.w-more .btn{margin-left:auto}
+@media (min-width:861px){.works .w-more{padding-right:calc(var(--gut) + 230px)}}
+.w-foot{display:flex;justify-content:center;padding:0 var(--gut)}
+@media (max-width:860px){.works{min-height:0}.w-lead{display:none}.w-more{display:grid;grid-template-columns:1fr 1fr}.w-more .hand-s,.w-more .btn{grid-column:1/-1}.w-more .btn{justify-content:center}.w-more .btn{margin-right:0}.w-lead{margin-left:0}.w-nav{display:none}.pf{width:72vw}.pf-img{height:auto;aspect-ratio:3/3.8}.w-more .btn{margin-left:auto}
+@media (min-width:861px){.works .w-more{padding-right:calc(var(--gut) + 230px)}}}
 /* ============ FIT ============ */
 .fit{display:flex;flex-direction:column;align-items:stretch;justify-content:center;gap:clamp(24px,4vh,40px);min-height:100svh}
 .fit-top{text-align:center;display:flex;flex-direction:column;gap:12px;align-items:center}
@@ -489,7 +492,7 @@ footer .v{color:var(--butter);font-size:26px}
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><pattern id="g" width="12" height="12" patternUnits="userSpaceOnUse"><rect width="12" height="12" fill="#F7F0DA"/><rect width="6" height="12" fill="#3B1B14" opacity=".55"/><rect width="12" height="6" fill="#3B1B14" opacity=".55"/></pattern></defs></svg>
 
 <!-- HERO -->
-<div class="pre" id="pre" aria-hidden="true"><div class="pre-w"><span class="pre-o">сайты</span><span class="pre-f" id="preF">сайты</span></div><span class="pre-t">собираю с чистого листа</span><span class="pre-n" id="preN">0</span></div>
+<div class="pre" id="pre" aria-hidden="true"><div class="pre-w"><span class="pre-o">сайты</span><span class="pre-f" id="preF">сайты</span></div><span class="pre-t">которые работают, пока вы отдыхаете</span><span class="pre-n" id="preN">0</span></div>
 <div class="stack">
 <header class="hero" id="top">
   <nav class="pills" aria-label="Разделы">
@@ -572,22 +575,23 @@ footer .v{color:var(--butter);font-size:26px}
 <section class="works" id="works">
   <div class="w-head">
     <div><span class="eyebrow">портфолио</span><h2>мои <span class="v">работы</span></h2></div>
-    <p class="w-lead">одни из последних проектов<br>листайте или тяните мышкой, наведите на макет, чтобы посмотреть его целиком</p>
+    <p class="w-lead">одни из последних проектов<br>наведите на макет, чтобы посмотреть его целиком</p>
     <div class="w-nav"><button type="button" id="wPrev" aria-label="Назад">←</button><button type="button" id="wNext" aria-label="Вперёд">→</button></div>
   </div>
   <div class="w-track" id="wTrack">
-<article class="pf"><div class="pf-img"><img src="img/pf/aliart.jpg" alt="Ali Art Beauty" loading="lazy" draggable="false"></div><div class="pf-cap"><span class="pf-n">01</span><div><b>Ali Art Beauty</b><small>брендбук и сайт для студии красоты, Москва</small></div></div><a class="pf-go" href="https://aliartbeauty.ru/" target="_blank" rel="noopener">aliartbeauty.ru ↗</a></article>
+<article class="pf"><div class="pf-img"><img src="img/pf/aliart.jpg" alt="Ali Art Beauty" loading="lazy" draggable="false"></div><div class="pf-cap"><span class="pf-n">01</span><div><b>Ali Art Beauty</b><small>сайт для студии красоты, Москва</small></div></div><a class="pf-go" href="https://aliartbeauty.ru/" target="_blank" rel="noopener">aliartbeauty.ru ↗</a></article>
 <article class="pf"><div class="pf-img"><img src="img/pf/marmelad.jpg" alt="Капитан Мармелад" loading="lazy" draggable="false"></div><div class="pf-cap"><span class="pf-n">02</span><div><b>Капитан Мармелад</b><small>сайт для франшизы сладостей</small></div></div><a class="pf-go" href="https://xn----7sbabaaiavd8aftd4bxj.xn--p1ai/" target="_blank" rel="noopener">капитан-мармелад.рф ↗</a></article>
-<article class="pf"><div class="pf-img"><img src="img/pf/marmelad-do-posle.jpg" alt="Капитан Мармелад: до и после" loading="lazy" draggable="false"></div><div class="pf-cap"><span class="pf-n">03</span><div><b>Капитан Мармелад: до и после</b><small>редизайн старого сайта франшизы</small></div></div><a class="pf-go" href="https://xn----7sbabaaiavd8aftd4bxj.xn--p1ai/" target="_blank" rel="noopener">капитан-мармелад.рф ↗</a></article>
+<article class="pf"><div class="pf-img"><img src="img/pf/tracker.jpg" alt="Уютные будни" loading="lazy" draggable="false"></div><div class="pf-cap"><span class="pf-n">03</span><div><b>Уютные будни</b><small>личный трекер на 13 недель: цели, привычки, календарь</small></div></div><a class="pf-go" href="https://lesyaframe.github.io/uyutnye-budni/" target="_blank" rel="noopener">открыть трекер ↗</a></article>
 <article class="pf"><div class="pf-img"><img src="img/pf/symphony.jpg" alt="Symphony" loading="lazy" draggable="false"></div><div class="pf-cap"><span class="pf-n">04</span><div><b>Symphony</b><small>лендинг для вокальной студии</small></div></div><a class="pf-go" href="http://symphony-vocal.ru" target="_blank" rel="noopener">symphony-vocal.ru ↗</a></article>
 <article class="pf"><div class="pf-img"><img src="img/pf/elevate.jpg" alt="Elevate" loading="lazy" draggable="false"></div><div class="pf-cap"><span class="pf-n">05</span><div><b>Elevate</b><small>многостраничный сайт для digital-агентства</small></div></div><a class="pf-go" href="https://elevate-agency.ru/" target="_blank" rel="noopener">elevate-agency.ru ↗</a></article>
-<article class="pf"><div class="pf-img"><img src="img/pf/heyzagar.jpg" alt="Hey Zagar" loading="lazy" draggable="false"></div><div class="pf-cap"><span class="pf-n">06</span><div><b>Hey Zagar</b><small>сайт и презентация для студии загара, СПб</small></div></div><a class="pf-go" href="https://heyzagar.ru" target="_blank" rel="noopener">heyzagar.ru ↗</a></article>
-<article class="pf"><div class="pf-img"><img src="img/pf/elitshkaf.jpg" alt="elitshkaf" loading="lazy" draggable="false"></div><div class="pf-cap"><span class="pf-n">07</span><div><b>elitshkaf</b><small>сайт для производства гардеробов на заказ</small></div></div><span class="pf-go muted">концепт</span></article>
-<article class="pf"><div class="pf-img"><img src="img/pf/loveyouton.jpg" alt="Love You Ton" loading="lazy" draggable="false"></div><div class="pf-cap"><span class="pf-n">08</span><div><b>Love You Ton</b><small>сайт для бренда косметики для обуви</small></div></div><span class="pf-go muted">концепт</span></article>
-<article class="pf"><div class="pf-img"><img src="img/pf/psihosomatika.jpg" alt="Психосоматика" loading="lazy" draggable="false"></div><div class="pf-cap"><span class="pf-n">09</span><div><b>Психосоматика</b><small>презентация для психолога</small></div></div><span class="pf-go muted">концепт</span></article>
-<article class="pf"><div class="pf-img"><img src="img/pf/bebronze.jpg" alt="Be Bronze" loading="lazy" draggable="false"></div><div class="pf-cap"><span class="pf-n">10</span><div><b>Be Bronze</b><small>сертификат для студии загара</small></div></div><span class="pf-go muted">концепт</span></article>
+<article class="pf"><div class="pf-img"><img src="img/pf/social.jpg" alt="Соцсети lesya.frame" loading="lazy" draggable="false"></div><div class="pf-cap"><span class="pf-n">06</span><div><b>Соцсети lesya.frame</b><small>обложки, карусели и рилс для своего блога</small></div></div><a class="pf-go" href="https://www.instagram.com/lesya.frame/" target="_blank" rel="noopener">смотреть в Instagram ↗</a></article>
+<article class="pf"><div class="pf-img"><img src="img/pf/heyzagar.jpg" alt="Hey Zagar" loading="lazy" draggable="false"></div><div class="pf-cap"><span class="pf-n">07</span><div><b>Hey Zagar</b><small>сайт и презентация для студии загара, СПб</small></div></div><a class="pf-go" href="https://heyzagar.ru" target="_blank" rel="noopener">heyzagar.ru ↗</a></article>
+<article class="pf"><div class="pf-img"><img src="img/pf/elitshkaf.jpg" alt="elitshkaf" loading="lazy" draggable="false"></div><div class="pf-cap"><span class="pf-n">08</span><div><b>elitshkaf</b><small>сайт для производства гардеробов на заказ</small></div></div><span class="pf-go muted">сайт больше не работает, остался макет</span></article>
+<article class="pf"><div class="pf-img"><img src="img/pf/loveyouton.jpg" alt="Love You Ton" loading="lazy" draggable="false"></div><div class="pf-cap"><span class="pf-n">09</span><div><b>Love You Ton</b><small>сайт для бренда косметики для обуви</small></div></div><span class="pf-go muted">сайт больше не работает, остался макет</span></article>
+<article class="pf"><div class="pf-img"><img src="img/pf/psihosomatika.jpg" alt="Психосоматика" loading="lazy" draggable="false"></div><div class="pf-cap"><span class="pf-n">10</span><div><b>Психосоматика</b><small>презентация для психолога</small></div></div><span class="pf-go muted">не сайт, поэтому без ссылки</span></article>
+<article class="pf"><div class="pf-img"><img src="img/pf/bebronze.jpg" alt="Be Bronze" loading="lazy" draggable="false"></div><div class="pf-cap"><span class="pf-n">11</span><div><b>Be Bronze</b><small>сертификат для студии загара</small></div></div><span class="pf-go muted">не сайт, поэтому без ссылки</span></article>
   </div>
-  <div class="w-more"><span class="hand-s">ещё сайты:</span><a href="https://mindalflower.ru/" target="_blank" rel="noopener"><b>mindalflower.ru</b><span>интернет-магазин цветочной студии</span></a><a href="http://honeyshine.ru" target="_blank" rel="noopener"><b>honeyshine.ru</b><span>студия загара, Москва</span></a><a href="http://mp-consulting.ru/" target="_blank" rel="noopener"><b>mp-consulting.ru</b><span>консалтинг для маркетплейсов</span></a><a href="https://buanacafe.ru/" target="_blank" rel="noopener"><b>buanacafe.ru</b><span>детское кафе, СПб</span></a><a class="btn btn-butter" href="#zayavka">хочу так же</a></div>
+  <div class="w-more"><span class="hand-s">ещё сайты:</span><a href="https://mindalflower.ru/" target="_blank" rel="noopener"><b>mindalflower.ru</b><span>интернет-магазин цветочной студии</span></a><a href="http://honeyshine.ru" target="_blank" rel="noopener"><b>honeyshine.ru</b><span>студия загара, Москва</span></a><a href="http://mp-consulting.ru/" target="_blank" rel="noopener"><b>mp-consulting.ru</b><span>консалтинг для маркетплейсов</span></a><a href="https://buanacafe.ru/" target="_blank" rel="noopener"><b>buanacafe.ru</b><span>детское кафе, СПб</span></a><a class="btn btn-butter" href="#zayavka">хочу так же →</a></div>
 </section>
 <a class="marq" href="#zayavka" aria-label="Записаться к Лесе"><div><span>оставить заявку<i>✦</i>сайты с чистого листа<i>✦</i>Tilda и Figma<i>✦</i>оставить заявку<i>✦</i>сайты с чистого листа<i>✦</i>Tilda и Figma<i>✦</i></span><span>оставить заявку<i>✦</i>сайты с чистого листа<i>✦</i>Tilda и Figma<i>✦</i>оставить заявку<i>✦</i>сайты с чистого листа<i>✦</i>Tilda и Figma<i>✦</i></span></div></a>
 
