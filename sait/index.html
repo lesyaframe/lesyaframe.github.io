@@ -319,6 +319,54 @@ footer .fr{text-align:right;align-items:flex-end}
   .a3{right:0;top:-8%;font-size:20px}
   .lead2{font-size:13px!important}
 }
+
+/* ============ ANIMATIONS ============ */
+.nw{white-space:nowrap}
+.pre{position:fixed;inset:0;z-index:200;background:var(--paper);display:grid;place-items:center;transition:transform .9s cubic-bezier(.76,0,.24,1),border-radius .9s;will-change:transform}
+.pre.out{transform:translateY(-104%);border-radius:0 0 50% 50%/0 0 120px 120px}
+.pre-in{display:flex;flex-direction:column;align-items:center;gap:10px}
+.pre-name{font-family:var(--script);font-size:clamp(90px,16vw,170px);line-height:1;color:var(--choco);clip-path:inset(0 100% 0 0);animation:preWrite 1.1s .15s cubic-bezier(.6,0,.3,1) forwards;padding:0 .1em}
+.pre-sub{font-size:13px;font-weight:600;color:var(--muted);opacity:0;animation:preFade .5s .8s forwards}
+.pre-n{font-size:15px;font-weight:700;color:var(--olive);font-variant-numeric:tabular-nums;margin-top:4px}
+.pre-n::after{content:"%"}
+.pre-bar{position:absolute;left:0;bottom:0;height:6px;width:0;background:var(--olive)}
+@keyframes preWrite{to{clip-path:inset(0 0 0 0)}}
+@keyframes preFade{to{opacity:1}}
+html.pre-on body{overflow:hidden}
+/* hero entrance after preloader */
+html.anim .hr h1,html.anim .hnote,html.anim .hr p,html.anim .hrow,html.anim .hstamp,html.anim .pills{opacity:0}
+html.anim.go .hr h1{animation:upIn .9s .05s cubic-bezier(.2,.8,.2,1) forwards}
+html.anim.go .hnote{animation:upIn .8s .3s cubic-bezier(.2,.8,.2,1) forwards}
+html.anim.go .hr p{animation:upIn .8s .42s cubic-bezier(.2,.8,.2,1) forwards}
+html.anim.go .hrow{animation:upIn .8s .54s cubic-bezier(.2,.8,.2,1) forwards}
+html.anim.go .pills{animation:fadeIn .8s .6s forwards}
+html.anim.go .hstamp{animation:dropIn 1s .15s cubic-bezier(.3,1.3,.5,1) forwards}
+@keyframes upIn{from{opacity:0;transform:translateY(36px)}to{opacity:1;transform:none}}
+@keyframes fadeIn{to{opacity:1}}
+@keyframes dropIn{from{opacity:0;transform:translateY(-60px) rotate(8deg) scale(.92)}to{opacity:1;transform:none}}
+/* hero stays, next block slides over it */
+.hero{position:sticky;top:0;z-index:0;transform-origin:50% 100%}
+.about{z-index:2}
+/* heading words */
+.rv{opacity:0;transform:translateY(34px);transition:opacity .8s,transform .9s cubic-bezier(.2,.8,.2,1)}
+.rv.on{opacity:1;transform:none}
+.rv .v{clip-path:inset(-40% 100% -40% -10%);transition:clip-path 1.1s .35s cubic-bezier(.6,0,.3,1)}
+.rv.on .v{clip-path:inset(-40% -10% -40% -10%)}
+/* tabs & badges stagger */
+.anim-list>*{opacity:0;transform:translateX(40px);transition:opacity .6s,transform .7s cubic-bezier(.2,.8,.2,1);transition-delay:calc(var(--k)*80ms)}
+.anim-list.on>*{opacity:1;transform:none}
+.anim-list.on>.tab:hover{transform:translateX(-6px)}
+.anim-list.done>*{transition-delay:0s}
+.badges.anim-list>*{transform:scale(.4) rotate(-20deg)}
+.badges.anim-list.on>*{transform:none}
+.feel.anim-list>*{transform:translateY(24px)}
+/* easter egg */
+.paw{position:fixed;z-index:150;pointer-events:none;width:26px;height:26px;margin:-13px 0 0 -13px;animation:pawFade 1.6s forwards}
+@keyframes pawFade{0%{opacity:0;transform:scale(.4) rotate(var(--r))}15%{opacity:.9;transform:scale(1) rotate(var(--r))}100%{opacity:0;transform:scale(1) rotate(var(--r))}}
+.woof{position:fixed;z-index:151;pointer-events:none;font-family:var(--script);font-size:34px;color:var(--choco);background:var(--butter);padding:6px 16px 2px;border-radius:999px;transform:translate(-50%,-120%) rotate(-6deg);animation:woof 1.8s forwards}
+@keyframes woof{0%{opacity:0;transform:translate(-50%,-80%) rotate(-6deg) scale(.6)}15%{opacity:1;transform:translate(-50%,-120%) rotate(-6deg) scale(1)}80%{opacity:1}100%{opacity:0;transform:translate(-50%,-170%) rotate(-6deg)}}
+.rem-egg{cursor:pointer}
+@media (prefers-reduced-motion:reduce){.pre{display:none}html.anim .hr h1,html.anim .hnote,html.anim .hr p,html.anim .hrow,html.anim .hstamp,html.anim .pills,.rv,.anim-list>*{opacity:1!important;transform:none!important;animation:none!important}.hero{position:relative}}
 /* ============ FIT ============ */
 .fit{display:flex;flex-direction:column;align-items:stretch;justify-content:center;gap:clamp(24px,4vh,40px);min-height:100svh}
 .fit-top{text-align:center;display:flex;flex-direction:column;gap:12px;align-items:center}
@@ -397,11 +445,13 @@ footer .v{color:var(--butter);font-size:26px}
 [data-in].wait{opacity:0;transform:translateY(40px) rotate(var(--rr,0deg))}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}html{scroll-behavior:auto}.draw path{stroke-dashoffset:0}}
 </style>
+<script>(function(){var r=document.documentElement;if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;r.classList.add('anim');var seen=false;try{seen=sessionStorage.getItem('lesya-pre')==='1'}catch(e){}if(!seen)r.classList.add('pre-on')})();</script>
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><pattern id="g" width="12" height="12" patternUnits="userSpaceOnUse"><rect width="12" height="12" fill="#F7F0DA"/><rect width="6" height="12" fill="#3B1B14" opacity=".55"/><rect width="12" height="6" fill="#3B1B14" opacity=".55"/></pattern></defs></svg>
 
 <!-- HERO -->
+<div class="pre" id="pre" aria-hidden="true"><div class="pre-in"><span class="pre-name">Леся</span><span class="pre-sub">собираю для вас сайт...</span><span class="pre-n" id="preN">0</span></div><span class="pre-bar" id="preBar"></span></div>
 <header class="hero" id="top">
   <nav class="pills" aria-label="Разделы">
     <a class="hlogo" href="#top">Леся</a>
@@ -427,7 +477,7 @@ footer .v{color:var(--butter);font-size:26px}
   
   <div class="txt" data-in>
     <span class="eyebrow" style="color:var(--cherry)">обо мне</span>
-    <h2>привет,<br class="dm"> я <span class="v">Леся</span></h2>
+    <h2>привет,<br class="dm"> <span class="nw">я <span class="v">Леся</span></span></h2>
     <p class="big">делаю сайты седьмой год</p>
     <p>по образованию я журналист</p>
     <p>моя страсть: гармоничное объединение результатов аналитики и визуала, создание удобного и привлекательного интерфейса</p>
@@ -437,7 +487,7 @@ footer .v{color:var(--butter);font-size:26px}
   <div class="comp">
     <svg class="star" viewBox="0 0 600 600" aria-hidden="true"><polygon id="starPoly" fill="#F1EA91"/></svg>
     <div class="stampw s1" data-in style="--rr:-7deg"><div class="stamp"><img src="img/lesya-portrait.jpg" alt="Леся, портрет"></div></div>
-    <div class="stampw s2" data-in style="--rr:6deg"><div class="stamp cher"><img src="img/lesya-bag-rem.jpg" alt="Леся с вязаной сумкой, рядом прыгает Рэм"></div></div>
+    <div class="stampw s2 rem-egg" title="погладить Рэма" data-in style="--rr:6deg"><div class="stamp cher"><img src="img/lesya-bag-rem.jpg" alt="Леся с вязаной сумкой, рядом прыгает Рэм"></div></div>
     <span class="cnt c1">✎ помогаю с текстами</span>
     <span class="cnt c2">✦ клиенты по рекомендации</span>
     <span class="cnt c3">↻ со мной работают годами</span>
@@ -743,6 +793,50 @@ footer .v{color:var(--butter);font-size:26px}
         .then(function(r){finish(r.ok)},function(){finish(false)});
     });
     back.addEventListener('click',function(){if(cur>0)show(cur-1)});
+  })();
+
+
+  /* ===== preloader + hero entrance ===== */
+  (function(){
+    var r=document.documentElement,pre=document.getElementById('pre');
+    if(!r.classList.contains('anim')){pre.remove();return}
+    if(!r.classList.contains('pre-on')){pre.remove();r.classList.add('go');return}
+    var n=document.getElementById('preN'),bar=document.getElementById('preBar'),t0=performance.now(),D=1500;
+    (function tick(t){var k=Math.min(1,(t-t0)/D),e=1-Math.pow(1-k,3);n.textContent=Math.round(e*100);bar.style.width=(e*100)+'%';if(k<1)requestAnimationFrame(tick);else done()})(t0);
+    function done(){
+      var go=function(){pre.classList.add('out');r.classList.remove('pre-on');setTimeout(function(){r.classList.add('go')},250);setTimeout(function(){pre.remove()},1000);try{sessionStorage.setItem('lesya-pre','1')}catch(e){}};
+      (document.fonts&&document.fonts.ready?document.fonts.ready:Promise.resolve()).then(function(){setTimeout(go,150)});
+    }
+  })();
+
+  /* ===== hero sinks under next block ===== */
+  (function(){
+    if(reduce)return;var h=document.querySelector('.hero'),tk=false;
+    function f(){tk=false;var p=Math.min(1,Math.max(0,scrollY/innerHeight));h.style.filter=p?'brightness('+(1-.4*p).toFixed(3)+')':''}
+    addEventListener('scroll',function(){if(!tk){tk=true;requestAnimationFrame(f)}},{passive:true});
+  })();
+
+  /* ===== headings: words rise ===== */
+  (function(){
+    if(reduce||!('IntersectionObserver' in window))return;
+    var hs=[].slice.call(document.querySelectorAll('section h2'));hs.forEach(function(h){h.classList.add('rv')});
+    var lists=[document.querySelector('.tabs'),document.querySelector('.badges'),document.querySelector('.feel')].filter(Boolean);
+    lists.forEach(function(l){l.classList.add('anim-list');[].forEach.call(l.children,function(c,i){c.style.setProperty('--k',i)})});
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){var t=e.target;t.classList.add('on');setTimeout(function(){t.classList.add('done')},1600);io.unobserve(t)}})},{rootMargin:'0px 0px -12% 0px'});
+    hs.concat(lists).forEach(function(x){io.observe(x)});
+  })();
+
+  /* ===== easter egg: pet Rem ===== */
+  (function(){
+    var egg=document.querySelector('.rem-egg');if(!egg)return;
+    var paw='<svg viewBox="0 0 24 24"><g fill="#3B1B14" opacity=".8"><ellipse cx="12" cy="16" rx="5" ry="4.2"/><circle cx="6" cy="10" r="2.2"/><circle cx="10" cy="6.5" r="2.2"/><circle cx="14" cy="6.5" r="2.2"/><circle cx="18" cy="10" r="2.2"/></g></svg>';
+    var lines=['гав!','Рэм одобряет','ещё погладь','это я, Рэм','мур... то есть гав'],li=0,trail=0;
+    function drop(x,y){var d=document.createElement('div');d.className='paw';d.style.left=x+'px';d.style.top=y+'px';d.style.setProperty('--r',(Math.random()*60-30)+'deg');d.innerHTML=paw;document.body.appendChild(d);setTimeout(function(){d.remove()},1700)}
+    egg.addEventListener('click',function(e){
+      var w=document.createElement('div');w.className='woof';w.textContent=lines[li++%lines.length];w.style.left=e.clientX+'px';w.style.top=e.clientY+'px';document.body.appendChild(w);setTimeout(function(){w.remove()},1900);
+      drop(e.clientX,e.clientY);trail=Date.now()+3500;
+    });
+    var last=0;addEventListener('pointermove',function(e){if(Date.now()>trail)return;var t=Date.now();if(t-last<110)return;last=t;drop(e.clientX,e.clientY)},{passive:true});
   })();
 
   /* cookie notice */
