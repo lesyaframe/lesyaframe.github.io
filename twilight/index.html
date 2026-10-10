@@ -1,0 +1,1001 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Вечер в Форксе</title>
+<meta name="description" content="Квиз, задания и мини-игры по «Сумеркам» для компании или одного игрока">
+<meta name="theme-color" content="#0c1311">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍎</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600;1,700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0b1210; --bg2:#121d19; --moss:#1d2c26; --moss2:#26392f;
+  --ink:#f1ebe0; --mute:#a7b5ad; --dim:#6f8178;
+  --red:#c51f3a; --red2:#93122a; --blood:#e2344f;
+  --amber:#d9a45b; --pale:#e8dccb;
+  --ok:#5fbf8a; --bad:#e2344f;
+  --r:22px;
+  --serif:"Cormorant Garamond", Georgia, serif;
+  --sans:"Manrope", system-ui, sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+html{font-variant-numeric:lining-nums}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.45;overflow-x:hidden;-webkit-tap-highlight-color:transparent}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
+input{font:inherit;color:inherit}
+
+/* ---------- атмосфера ---------- */
+.sky{position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(120% 70% at 50% -10%, #23362f 0%, transparent 60%),
+    radial-gradient(80% 50% at 85% 20%, rgba(197,31,58,.10), transparent 70%),
+    linear-gradient(180deg,#0f1a17 0%, #0b1210 60%, #080d0b 100%)}
+.fog{position:fixed;left:-30%;width:160%;height:45vh;z-index:1;pointer-events:none;filter:blur(30px);opacity:.55}
+.fog.f1{bottom:4vh;background:radial-gradient(50% 50% at 30% 60%, rgba(190,205,198,.16), transparent 70%),radial-gradient(40% 40% at 75% 50%, rgba(190,205,198,.12), transparent 70%);animation:drift 38s ease-in-out infinite alternate}
+.fog.f2{bottom:-8vh;background:radial-gradient(45% 50% at 60% 50%, rgba(190,205,198,.14), transparent 70%);animation:drift 52s ease-in-out infinite alternate-reverse}
+@keyframes drift{to{transform:translateX(14%)}}
+.pines{position:fixed;left:0;right:0;bottom:0;height:26vh;z-index:1;pointer-events:none}
+.pines svg{position:absolute;bottom:0;width:100%;height:100%}
+#rain{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.5}
+.flash{position:fixed;inset:0;z-index:50;pointer-events:none;background:#dfe9ff;opacity:0}
+.flash.on{animation:flash .7s ease-out}
+@keyframes flash{0%{opacity:0}8%{opacity:.55}16%{opacity:.05}26%{opacity:.35}100%{opacity:0}}
+
+/* ---------- каркас ---------- */
+#app{position:relative;z-index:2;min-height:100svh;display:flex;flex-direction:column}
+.screen{flex:1;width:100%;max-width:760px;margin:0 auto;padding:22px 16px 40px;display:flex;flex-direction:column;animation:in .45s cubic-bezier(.2,.8,.2,1)}
+@keyframes in{from{opacity:0;transform:translateY(14px)}}
+.serif{font-family:var(--serif)}
+h1,h2,h3{font-family:var(--serif);font-weight:700;line-height:1.02;letter-spacing:-.01em}
+.eyebrow{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--mute);font-weight:700}
+
+/* кнопки: сплошная заливка */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:56px;padding:0 30px;border-radius:999px;background:var(--red);color:#fff;font-weight:800;font-size:17px;letter-spacing:.01em;box-shadow:0 12px 30px -12px rgba(197,31,58,.75);transition:transform .15s, background .2s, box-shadow .2s}
+.btn:hover{background:var(--blood)}
+.btn:active{transform:scale(.97)}
+.btn.soft{background:rgba(241,235,224,.09);box-shadow:none;color:var(--ink)}
+.btn.soft:hover{background:rgba(241,235,224,.16)}
+.btn.wide{width:100%}
+.btn:disabled{opacity:.35;pointer-events:none}
+
+/* ---------- главная ---------- */
+.hero{height:100svh;min-height:520px;max-width:none;padding:0 16px;align-items:center;justify-content:center;text-align:center;position:relative}
+.hero .apple{width:min(30vw,20vh,170px);margin-bottom:2.2vh;animation:bob 5s ease-in-out infinite;filter:drop-shadow(0 20px 40px rgba(197,31,58,.45))}
+@keyframes bob{50%{transform:translateY(-10px) rotate(-3deg)}}
+.hero h1{font-size:min(17vw,13vh,150px);font-style:italic}
+.hero h1 span{display:block;font-size:clamp(11px,3vw,20px);font-style:normal;letter-spacing:.28em;text-transform:uppercase;font-family:var(--sans);font-weight:800;color:var(--mute);margin-bottom:1.6vh}
+.hero p{max-width:440px;margin:2.4vh auto 3.4vh;color:var(--mute);font-size:min(18px,2.4vh)}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:2.6vh}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:999px;background:rgba(241,235,224,.07);font-size:13px;font-weight:600;color:var(--mute)}
+
+/* ---------- настройка ---------- */
+.top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:18px}
+.back{width:44px;height:44px;border-radius:50%;background:rgba(241,235,224,.08);display:grid;place-items:center;font-size:20px}
+.setup h2{font-size:clamp(40px,9vw,64px);font-style:italic;margin:4px 0 24px}
+.block{margin-bottom:28px}
+.block>.eyebrow{margin-bottom:12px;display:block}
+.counts{display:flex;gap:8px}
+.counts button{flex:1;height:58px;border-radius:18px;background:rgba(241,235,224,.07);font-family:var(--serif);font-size:30px;font-weight:700;transition:.2s}
+.counts button.on{background:var(--red);color:#fff;transform:translateY(-3px);box-shadow:0 10px 24px -10px rgba(197,31,58,.8)}
+.plist{display:flex;flex-direction:column;gap:10px}
+.prow{display:flex;gap:8px;align-items:center;animation:in .35s}
+.prow input{flex:1;min-width:0;height:54px;border-radius:16px;border:0;background:rgba(241,235,224,.08);padding:0 16px;font-size:17px;font-weight:600;outline:none}
+.prow input:focus{background:rgba(241,235,224,.13)}
+.team{display:flex;background:rgba(241,235,224,.06);border-radius:16px;padding:4px;flex-shrink:0}
+.team button{height:46px;padding:0 12px;border-radius:12px;font-size:14px;font-weight:700;color:var(--dim);display:flex;align-items:center;gap:6px;transition:.2s}
+.team button.on.e{background:#3a1a22;color:#ffd6dc}
+.team button.on.j{background:#3b2a16;color:#ffe2b8}
+.team b{font-size:20px}
+.rounds{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.rtog{display:flex;align-items:center;gap:12px;padding:14px;border-radius:18px;background:rgba(241,235,224,.05);text-align:left;transition:.2s;position:relative}
+.rtog .ic{font-size:26px;width:36px;text-align:center;filter:grayscale(1);opacity:.5;transition:.2s}
+.rtog b{display:block;font-size:15px;line-height:1.2}
+.rtog small{display:block;font-size:12px;color:var(--dim);margin-top:2px;line-height:1.3}
+.rtog.on{background:rgba(197,31,58,.16)}
+.rtog.on .ic{filter:none;opacity:1}
+.rtog.on::after{content:"✓";position:absolute;top:10px;right:12px;font-size:13px;font-weight:800;color:var(--blood)}
+.rtog.off{opacity:.35;pointer-events:none}
+.seg{display:flex;gap:8px}
+.seg button{flex:1;padding:12px 8px;border-radius:16px;background:rgba(241,235,224,.06);font-weight:700;font-size:15px;transition:.2s}
+.seg button small{display:block;font-weight:500;font-size:12px;color:var(--dim)}
+.seg button.on{background:var(--ink);color:var(--bg)}
+.seg button.on small{color:#4b5a53}
+.sticky-go{position:sticky;bottom:14px;margin-top:8px}
+
+/* ---------- игра ---------- */
+.bar{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.bar .rname{font-size:13px;font-weight:700;color:var(--mute);flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.prog{display:flex;gap:4px}
+.prog i{width:7px;height:7px;border-radius:50%;background:rgba(241,235,224,.15)}
+.prog i.done{background:var(--mute)}
+.prog i.now{background:var(--blood);box-shadow:0 0 10px var(--blood)}
+.board{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin:0 -16px 18px;padding:2px 16px}
+.board::-webkit-scrollbar{display:none}
+.pc{flex-shrink:0;display:flex;align-items:center;gap:7px;padding:6px 12px 6px 6px;border-radius:999px;background:rgba(241,235,224,.06);font-size:14px;font-weight:700;transition:.3s}
+.pc .av{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-size:15px;background:#3a1a22}
+.pc.j .av{background:#3b2a16}
+.pc .sc{color:var(--mute);font-variant-numeric:tabular-nums}
+.pc.act{background:var(--ink);color:var(--bg)}
+.pc.act .sc{color:#4b5a53}
+
+.turn{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.turn .who{font-family:var(--serif);font-size:28px;font-style:italic;font-weight:700}
+.turn .lab{font-size:12px;color:var(--mute);font-weight:700;letter-spacing:.12em;text-transform:uppercase}
+.timer{height:6px;border-radius:9px;background:rgba(241,235,224,.08);overflow:hidden;margin-bottom:22px}
+.timer i{display:block;height:100%;width:100%;background:linear-gradient(90deg,var(--red2),var(--blood));border-radius:9px;transform-origin:left;transition:transform .1s linear}
+.timer.low i{background:var(--blood);animation:pulse .5s infinite alternate}
+@keyframes pulse{to{opacity:.5}}
+.film{display:inline-block;font-size:12px;font-weight:700;color:var(--amber);letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px}
+.q{font-family:var(--serif);font-weight:700;font-size:clamp(28px,6.4vw,42px);line-height:1.08;margin-bottom:26px}
+.q.quote{font-style:italic}
+.q.quote::before{content:"«"}.q.quote::after{content:"»"}
+.q.emoji{font-family:var(--sans);font-size:clamp(54px,15vw,92px);letter-spacing:.08em;text-align:center;margin:10px 0 30px;line-height:1.1}
+.opts{display:grid;gap:10px}
+.opt{display:flex;align-items:center;gap:14px;min-height:62px;padding:12px 18px;border-radius:18px;background:rgba(241,235,224,.07);text-align:left;font-weight:600;font-size:17px;transition:transform .15s, background .2s, opacity .3s}
+.opt:hover{background:rgba(241,235,224,.13)}
+.opt:active{transform:scale(.98)}
+.opt .k{width:30px;height:30px;flex-shrink:0;border-radius:10px;background:rgba(241,235,224,.08);display:grid;place-items:center;font-size:13px;font-weight:800;color:var(--mute)}
+.opts.lock .opt{pointer-events:none}
+.opt.right{background:rgba(95,191,138,.22);animation:pop .4s}
+.opt.right .k{background:var(--ok);color:#0b1210}
+.opt.wrong{background:rgba(226,52,79,.22);animation:shake .4s}
+.opt.wrong .k{background:var(--bad);color:#fff}
+.opts.lock .opt:not(.right):not(.wrong){opacity:.35}
+@keyframes pop{50%{transform:scale(1.03)}}
+@keyframes shake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.tf{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.tf .opt{flex-direction:column;justify-content:center;min-height:120px;text-align:center;font-family:var(--serif);font-size:30px;font-weight:700;gap:4px}
+.tf .opt span{font-size:34px}
+
+.verdict{margin-top:18px;padding:16px 18px;border-radius:18px;background:rgba(241,235,224,.06);animation:in .35s;display:flex;gap:14px;align-items:flex-start}
+.verdict .pts{font-family:var(--serif);font-size:34px;font-weight:700;line-height:1;flex-shrink:0;min-width:56px}
+.verdict.good .pts{color:var(--ok)}
+.verdict.bad .pts{color:var(--bad)}
+.verdict b{display:block;font-size:16px}
+.verdict p{font-size:15px;color:var(--mute);margin-top:2px}
+.next{margin-top:16px}
+
+/* хронология */
+.events{display:grid;gap:10px}
+.ev{display:flex;align-items:center;gap:14px;min-height:64px;padding:12px 16px;border-radius:18px;background:rgba(241,235,224,.07);text-align:left;font-weight:600;transition:.2s}
+.ev .n{width:34px;height:34px;flex-shrink:0;border-radius:50%;display:grid;place-items:center;font-family:var(--serif);font-size:22px;font-weight:700;background:rgba(241,235,224,.06);color:var(--dim)}
+.ev.picked{background:rgba(217,164,91,.16)}
+.ev.picked .n{background:var(--amber);color:#1b130a}
+.ev.right{background:rgba(95,191,138,.2)}.ev.right .n{background:var(--ok);color:#0b1210}
+.ev.wrong{background:rgba(226,52,79,.2)}.ev.wrong .n{background:var(--bad);color:#fff}
+.ev .fix{margin-left:auto;font-size:13px;color:var(--mute);font-weight:700;white-space:nowrap}
+.row2{display:flex;gap:10px;margin-top:16px}
+.row2 .btn{flex:1}
+
+/* переходы */
+.intro{justify-content:center;text-align:center;min-height:100svh}
+.intro .big{font-size:min(26vw,18vh);line-height:1;margin-bottom:2vh;animation:bob 4s ease-in-out infinite}
+.intro .num{color:var(--blood)}
+.intro h2{font-size:clamp(46px,11vw,84px);font-style:italic;margin:10px 0 16px}
+.intro p{color:var(--mute);max-width:440px;margin:0 auto 32px;font-size:17px}
+.intro .btn{align-self:center;min-width:240px}
+.ready > .av{width:92px;height:92px;border-radius:50%;margin:0 auto 18px;display:grid;place-items:center;font-size:48px;background:#3a1a22}
+.ready.j > .av{background:#3b2a16}
+
+/* задания */
+.task{font-family:var(--serif);font-size:clamp(30px,7vw,46px);font-weight:700;font-style:italic;line-height:1.1;margin:8px 0 26px}
+.clock{font-family:var(--serif);font-size:72px;font-weight:700;text-align:center;margin:0 0 18px;font-variant-numeric:tabular-nums}
+.vote{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+
+/* мини-игра: сортировка */
+.sortname{height:clamp(140px,30vh,240px);display:grid;place-items:center;text-align:center;font-family:var(--serif);font-size:clamp(48px,13vw,84px);font-weight:700;font-style:italic;border-radius:28px;background:rgba(241,235,224,.04);margin-bottom:14px;transition:background .2s}
+.sortname.ok{background:rgba(95,191,138,.18)}
+.sortname.no{background:rgba(226,52,79,.2);animation:shake .3s}
+.sortname small{display:block;font-family:var(--sans);font-style:normal;font-size:13px;font-weight:700;color:var(--mute);margin-top:6px}
+.bins{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.bin{min-height:84px;border-radius:20px;font-weight:800;font-size:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;transition:transform .12s}
+.bin span{font-size:26px}
+.bin:active{transform:scale(.96)}
+.bin.c{background:#3a1a22;color:#ffd6dc}
+.bin.w{background:#3b2a16;color:#ffe2b8}
+.bin.v{background:#24202e;color:#ddd3f5}
+.bin.n{background:#1e2c27;color:#cfe5da}
+.stat{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px}
+.stat b{font-family:var(--serif);font-size:44px;line-height:1}
+.stat span{color:var(--mute);font-size:14px;font-weight:700}
+
+/* мини-игра: бейсбол */
+.field{position:relative;height:clamp(200px,38vh,320px);border-radius:28px;overflow:hidden;margin-bottom:14px;
+  background:radial-gradient(90% 70% at 50% 110%, #2c4a3a 0%, #17261f 55%, #0e1714 100%)}
+.field .storm{position:absolute;inset:0;background:radial-gradient(60% 50% at 70% 0%, rgba(200,215,255,.10), transparent 70%)}
+.field .bolt{position:absolute;top:0;right:18%;width:60px;opacity:0}
+.field.hit .bolt{animation:bolt .6s ease-out}
+@keyframes bolt{0%,100%{opacity:0}10%,30%{opacity:1}20%{opacity:.2}}
+.track{position:absolute;left:8%;right:6%;bottom:22%;height:2px;background:repeating-linear-gradient(90deg,rgba(241,235,224,.2) 0 8px,transparent 8px 16px)}
+.zone{position:absolute;bottom:-26px;height:54px;border-radius:14px;background:rgba(226,52,79,.16)}
+.zone i{position:absolute;inset:0 38%;background:rgba(226,52,79,.35);border-radius:10px}
+.ball{position:absolute;bottom:-12px;left:0;width:26px;height:26px;margin-left:-13px;font-size:24px;line-height:26px;text-align:center;opacity:0}
+.ball.fly{transition:transform .9s cubic-bezier(.2,.7,.3,1),opacity .9s;transform:translate(160px,-260px) scale(.3)!important;opacity:0!important}
+.pitcher,.batter{position:absolute;bottom:calc(22% + 4px);font-size:40px;line-height:1}
+.pitcher{left:3%}.batter{right:2%;transform:scaleX(-1)}
+.callout{position:absolute;top:18px;left:0;right:0;text-align:center;font-family:var(--serif);font-size:clamp(30px,7vw,46px);font-weight:700;font-style:italic;text-shadow:0 4px 20px rgba(0,0,0,.6)}
+.swings{display:flex;gap:8px;justify-content:center;margin-bottom:14px}
+.swings i{width:44px;height:8px;border-radius:9px;background:rgba(241,235,224,.12)}
+.swings i.s10{background:var(--blood)}.swings i.s6{background:var(--amber)}.swings i.s3{background:var(--mute)}.swings i.s0{background:rgba(241,235,224,.3)}
+.swingbtn{width:100%;height:84px;font-size:24px}
+
+/* итоги */
+.ranks{display:grid;gap:8px;margin:8px 0 24px}
+.rk{display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:18px;background:rgba(241,235,224,.06);position:relative;overflow:hidden;animation:in .4s backwards}
+.rk .fill{position:absolute;left:0;top:0;bottom:0;background:rgba(197,31,58,.16);border-radius:18px;transition:width 1s cubic-bezier(.2,.8,.2,1)}
+.rk.j .fill{background:rgba(217,164,91,.14)}
+.rk>*:not(.fill){position:relative}
+.rk .pl{font-family:var(--serif);font-size:26px;font-weight:700;width:26px;text-align:center;color:var(--mute)}
+.rk .nm{flex:1;font-weight:700;font-size:17px}
+.rk .nm small{display:block;font-weight:500;color:var(--mute);font-size:13px}
+.rk .s{font-family:var(--serif);font-size:30px;font-weight:700}
+.rk:first-child .pl{color:var(--blood)}
+.teams{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:24px}
+.tm{padding:18px;border-radius:22px;text-align:center}
+.tm.e{background:#2a141a}.tm.j{background:#2b2012}
+.tm b{display:block;font-family:var(--serif);font-size:44px;line-height:1;margin:6px 0 2px}
+.tm small{color:var(--mute);font-weight:700;font-size:13px}
+.tm.win{outline:0;box-shadow:inset 0 0 0 2px var(--blood)}
+.tm.j.win{box-shadow:inset 0 0 0 2px var(--amber)}
+.persona{text-align:center;margin:6px 0 26px}
+.persona .face{font-size:84px;line-height:1;margin-bottom:10px;animation:bob 4s ease-in-out infinite}
+.persona h2{font-size:clamp(46px,11vw,80px);font-style:italic}
+.persona p{color:var(--mute);max-width:420px;margin:10px auto 0}
+.persona .pct{font-size:13px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--amber);margin-bottom:8px}
+.final{justify-content:center}
+.final h2.title{font-size:clamp(46px,11vw,80px);font-style:italic;text-align:center;margin:10px 0 6px}
+.final .sub{text-align:center;color:var(--mute);margin-bottom:22px}
+.crown{text-align:center;font-size:64px;line-height:1;margin-top:20px}
+.confetti{position:fixed;inset:0;pointer-events:none;z-index:40;overflow:hidden}
+.confetti i{position:absolute;top:-30px;font-size:22px;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(110vh) rotate(540deg)}}
+
+@media (min-width:700px){
+  .screen{padding-top:34px}
+  .opts.two{grid-template-columns:1fr 1fr}
+}
+@media (max-width:420px){
+  .team button .tx{display:none}
+  .rounds{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+  #rain{display:none}
+}
+</style>
+</head>
+<body>
+<div class="sky"></div>
+<canvas id="rain"></canvas>
+<div class="fog f1"></div><div class="fog f2"></div>
+<div class="pines" id="pines"></div>
+<div class="flash" id="flash"></div>
+<main id="app"></main>
+
+<script>
+/* ======================= ДАННЫЕ ======================= */
+const QUIZ = [
+  {f:"Сумерки", q:"Из какого города Белла переезжает в Форкс?", a:["Финикс","Сиэтл","Лос-Анджелес","Джексонвилл"]},
+  {f:"Сумерки", q:"Кем работает отец Беллы, Чарли?", a:["Шеф полиции","Лесник","Врач","Учитель"]},
+  {f:"Сумерки", q:"Какую машину Белла получает в Форксе?", a:["Старый красный пикап","Серебристый «Вольво»","Мотоцикл","Жёлтый «Порше»"], x:"«Вольво» у Эдварда, а жёлтый «Порше» потом достанется Элис."},
+  {f:"Сумерки", q:"На каком уроке Белла впервые сидит рядом с Эдвардом?", a:["Биология","Химия","Литература","Физкультура"]},
+  {f:"Сумерки", q:"Как Эдвард впервые спасает Беллу?", a:["Останавливает рукой фургон","Вытаскивает из воды","Отгоняет медведя","Ловит на лестнице"]},
+  {f:"Сумерки", q:"Кто рассказывает Белле легенду о «холодных»?", a:["Джейкоб","Майк","Анджела","Чарли"], x:"Это было на пляже в Ла-Пуш."},
+  {f:"Сумерки", q:"В какую игру Каллены играют только в грозу?", a:["Бейсбол","Футбол","Регби","Хоккей"], x:"Гром заглушает удары биты."},
+  {f:"Сумерки", q:"Как зовут вампира-ищейку, который охотится на Беллу?", a:["Джеймс","Лоран","Райли","Деметрий"]},
+  {f:"Сумерки", q:"Где происходит финальная схватка первого фильма?", a:["В балетной студии","На бейсбольном поле","В школе","В больнице"]},
+  {f:"Сумерки", q:"Чьи мысли Эдвард не может прочитать?", a:["Беллы","Чарли","Джейкоба","Элис"]},
+  {f:"Сумерки", q:"Какой дар у Элис?", a:["Видит будущее","Читает мысли","Управляет эмоциями","Становится невидимой"]},
+  {f:"Сумерки", q:"Что происходит с кожей вампиров на солнце?", a:["Сверкает","Горит","Становится прозрачной","Покрывается трещинами"]},
+  {f:"Сумерки", q:"Как Каллены называют себя, раз не пьют человеческую кровь?", a:["Вегетарианцы","Травоядные","Чистые","Добрые"]},
+  {f:"Сумерки", q:"Кем работает Карлайл?", a:["Врачом","Учителем","Полицейским","Адвокатом"]},
+  {f:"Сумерки", q:"Какой дар у Джаспера?", a:["Чувствует и меняет эмоции","Видит будущее","Читает мысли","Причиняет боль"]},
+  {f:"Новолуние", q:"Почему на дне рождения Беллы Джаспер бросается на неё?", a:["Она порезалась об упаковку подарка","Она разбила бокал","Она упала с лестницы","Она прикусила губу"]},
+  {f:"Новолуние", q:"Что Белла и Джейкоб чинят вместе?", a:["Мотоциклы","Пикап","Лодку","Велосипеды"]},
+  {f:"Новолуние", q:"В кого превращается Джейкоб?", a:["В огромного волка","В медведя","В ворона","В пуму"]},
+  {f:"Новолуние", q:"Как зовут вожака стаи в «Новолунии»?", a:["Сэм","Пол","Эмбри","Квил"]},
+  {f:"Новолуние", q:"В какой итальянский город Белла летит спасать Эдварда?", a:["Вольтерра","Рим","Флоренция","Венеция"]},
+  {f:"Новолуние", q:"Как Эдвард хочет заставить Вольтури убить его?", a:["Выйти на солнце при людях","Напасть на Аро","Укусить человека","Поджечь их замок"]},
+  {f:"Новолуние", q:"Что умеет Джейн из Вольтури?", a:["Причинять боль взглядом","Видеть будущее","Читать мысли","Ставить щит"]},
+  {f:"Новолуние", q:"Как Аро узнаёт чужие мысли?", a:["Через прикосновение","По взгляду","По запаху","Во сне"]},
+  {f:"Затмение", q:"Кто собирает армию новорождённых?", a:["Виктория","Джеймс","Лоран","Ирина"]},
+  {f:"Затмение", q:"Кто учит Калленов и стаю сражаться с новорождёнными?", a:["Джаспер","Эмметт","Карлайл","Эдвард"]},
+  {f:"Затмение", q:"Где Белла ночует перед битвой с новорождёнными?", a:["В палатке в горах","В доме Калленов","В Ла-Пуш","Дома у Чарли"]},
+  {f:"Затмение", q:"Как зовут новорождённую, которая сдаётся Калленам?", a:["Бри","Ирина","Лия","Джессика"]},
+  {f:"Затмение", q:"О чём Розали мечтала в человеческой жизни?", a:["О семье и детях","О сцене","О путешествиях","О бессмертии"]},
+  {f:"Затмение", q:"Что Эдвард дарит Белле, когда делает предложение?", a:["Кольцо своей матери","Браслет с волком","Ключи от машины","Медальон"], x:"Браслет с деревянным волком подарил Джейкоб."},
+  {f:"Рассвет. Часть 1", q:"Где Белла и Эдвард проводят медовый месяц?", a:["На острове Эсми","В Париже","На Аляске","В Вольтерре"]},
+  {f:"Рассвет. Часть 1", q:"Как Белла пьёт кровь во время беременности?", a:["Через трубочку из стаканчика","Из бокала для вина","Из термоса","Из детской бутылочки"]},
+  {f:"Рассвет. Часть 1", q:"Кто запечатлевается на Ренесми?", a:["Джейкоб","Сет","Сэм","Эмметт"]},
+  {f:"Рассвет. Часть 1", q:"В честь кого назвали Ренесми?", a:["Рене и Эсми","Розали и Элис","Рене и Розали","Эсми и Элис"], x:"Мама Беллы Рене + Эсми, мама Эдварда."},
+  {f:"Рассвет. Часть 1", q:"Кто уходит из стаи Сэма вслед за Джейкобом?", a:["Сет и Лия","Пол и Джаред","Эмбри и Квил","Билли и Гарри"]},
+  {f:"Рассвет. Часть 1", q:"Как Эдвард спасает Беллу после родов?", a:["Вводит свой яд прямо в сердце","Даёт ей кровь Аро","Везёт её в больницу","Просит Карлайла её укусить"]},
+  {f:"Рассвет. Часть 2", q:"Какой дар раскрывается у Беллы-вампира?", a:["Щит","Видеть будущее","Читать мысли","Управлять огнём"]},
+  {f:"Рассвет. Часть 2", q:"На кого Белла охотится в первый раз?", a:["На пуму","На оленя","На медведя","На лося"]},
+  {f:"Рассвет. Часть 2", q:"Кто доносит Вольтури о «бессмертном ребёнке»?", a:["Ирина","Виктория","Таня","Хайди"]},
+  {f:"Рассвет. Часть 2", q:"Какое прозвище Джейкоб дал Ренесми?", a:["Несси","Ренни","Мими","Эсси"], x:"Белла была в ярости: в честь Лох-Несского чудовища!"},
+  {f:"Рассвет. Часть 2", q:"Кто показывает Аро, чем закончится битва?", a:["Элис","Эдвард","Белла","Карлайл"]},
+  {f:"Рассвет. Часть 2", q:"Кто такой Науэль?", a:["Полувампир из Южной Америки","Оборотень из Ла-Пуш","Стражник Вольтури","Друг Чарли"]},
+  {f:"Рассвет. Часть 2", q:"Как Джейкоб открывает Чарли правду о себе?", a:["Превращается в волка у него на глазах","Пишет письмо","Приводит его к Калленам","Рассказывает старую легенду"]},
+];
+
+const QUOTES = [
+  {q:"Как долго тебе семнадцать?", a:"Белла"},
+  {q:"Это кожа убийцы, Белла.", a:"Эдвард"},
+  {q:"Держись крепче, паучок-мартышка.", a:"Эдвард"},
+  {q:"И лев влюбился в ягнёнка…", a:"Эдвард"},
+  {q:"Какой глупый ягнёнок.", a:"Белла"},
+  {q:"Ты как мой личный сорт героина.", a:"Эдвард"},
+  {q:"Скажи это. Вслух.", a:"Эдвард"},
+  {q:"Я знаю, что ты такое.", a:"Белла"},
+  {q:"Ты и правда вкусно пахнешь.", a:"Элис"},
+  {q:"Давай начистоту, я горячее тебя.", a:"Джейкоб"},
+  {q:"У него вообще есть рубашка?", a:"Эдвард"},
+  {q:"Я Швейцария.", a:"Белла"},
+  {q:"Ты назвал мою дочь в честь Лох-Несского чудовища?!", a:"Белла"},
+  {q:"Я буду бороться за тебя, пока твоё сердце не перестанет биться.", a:"Джейкоб"},
+  {q:"Я никогда особо не задумывалась о том, как умру.", a:"Белла"},
+  {q:"Привет, Беллз.", a:"Чарли"},
+];
+const CHARS = ["Белла","Эдвард","Джейкоб","Элис","Чарли","Розали","Аро","Эмметт","Карлайл","Джаспер"];
+
+const TF = [
+  {q:"Каллены спят в гробах.", a:false, x:"Вампиры в «Сумерках» вообще не спят."},
+  {q:"Эдвард слышит мысли Беллы.", a:false, x:"Её мысли для него тишина."},
+  {q:"Джейкоб старше Беллы.", a:false, x:"Он младше."},
+  {q:"Карлайл работает врачом в больнице Форкса.", a:true},
+  {q:"Оборотни в саге превращаются только в полнолуние.", a:false, x:"Они превращаются когда захотят или когда злятся."},
+  {q:"Ренесми растёт гораздо быстрее обычных детей.", a:true},
+  {q:"Вольтури живут в Риме.", a:false, x:"В Вольтерре."},
+  {q:"Элис не может видеть будущее оборотней.", a:true},
+  {q:"Эсми — приёмная мама семьи Калленов.", a:true},
+  {q:"Чарли так и не узнаёт, что Джейкоб оборотень.", a:false, x:"Джейкоб превращается прямо у него на глазах."},
+  {q:"Белла и Эдвард женятся в Лас-Вегасе.", a:false, x:"Свадьба была у дома Калленов, в лесу."},
+  {q:"Эмметт — муж Розали.", a:true},
+  {q:"Новорождённые вампиры сильнее взрослых.", a:true},
+  {q:"В финале «Рассвета» Аро погибает по-настоящему.", a:false, x:"Это было видение Элис."},
+  {q:"Медовый месяц проходит на острове Эсми.", a:true},
+  {q:"Каллены называют себя вегетарианцами.", a:true},
+  {q:"Белла переезжает в Форкс к маме.", a:false, x:"К папе, Чарли."},
+  {q:"Джаспер воевал ещё в человеческой жизни.", a:true},
+  {q:"У Эдварда серебристый «Вольво».", a:true},
+  {q:"Джейн из Вольтури — сестра Алека.", a:true},
+];
+
+const EMOJI = [
+  {q:"🚐✋😳", a:"Эдвард спасает Беллу от фургона"},
+  {q:"⚾⛈️🧛", a:"Бейсбол в грозу"},
+  {q:"✨☀️🧍‍♂️", a:"Эдвард сверкает на солнце"},
+  {q:"🦁❤️🐑", a:"Лев влюбился в ягнёнка"},
+  {q:"🎁✂️🩸", a:"День рождения Беллы"},
+  {q:"🏍️🔧🌧️", a:"Белла и Джейкоб чинят мотоциклы"},
+  {q:"🌊🪨🤸‍♀️", a:"Прыжок со скалы"},
+  {q:"🇮🇹⛲☀️", a:"Эдвард в Вольтерре"},
+  {q:"🏕️❄️🐺", a:"Ночь в палатке перед битвой"},
+  {q:"💍🌲👰", a:"Свадьба Беллы и Эдварда"},
+  {q:"🏝️♟️🌙", a:"Медовый месяц на острове Эсми"},
+  {q:"🥤🩸🤰", a:"Беременная Белла пьёт кровь"},
+  {q:"🐺👶💫", a:"Джейкоб запечатлевается на Ренесми"},
+  {q:"🛡️🧠⚔️", a:"Щит Беллы на поляне"},
+  {q:"👁️🔮⚔️", a:"Видение Элис о битве"},
+  {q:"🍎🤲", a:"Обложка первой книги"},
+];
+
+const ORDER = [
+  {t:"Сумерки", e:["Белла переезжает в Форкс","Эдвард останавливает фургон","Бейсбол в грозу","Схватка в балетной студии"]},
+  {t:"Новолуние", e:["День рождения Беллы","Каллены уезжают из Форкса","Белла и Джейкоб чинят мотоциклы","Белла спасает Эдварда в Вольтерре"]},
+  {t:"Затмение", e:["Виктория собирает армию","Эдвард делает предложение","Ночь в палатке","Битва с новорождёнными"]},
+  {t:"Рассвет. Часть 1", e:["Свадьба","Остров Эсми","Белла пьёт кровь через трубочку","Рождение Ренесми"]},
+  {t:"Рассвет. Часть 2", e:["Белла просыпается вампиром","Охота на пуму","Ирина видит Ренесми","Встреча с Вольтури на поляне"]},
+  {t:"Вся сага", e:["Первый поцелуй с Эдвардом","Прыжок со скалы","Предложение руки и сердца","Свадьба в лесу"]},
+];
+
+const SORT = {
+  c:["Эдвард","Элис","Джаспер","Розали","Эмметт","Карлайл","Эсми"],
+  w:["Джейкоб","Сэм","Пол","Эмбри","Квил","Сет","Лия","Джаред"],
+  v:["Аро","Кай","Маркус","Джейн","Алек","Деметрий","Феликс","Хайди"],
+  n:["Джеймс","Виктория","Лоран","Райли","Бри"],
+};
+const BINS = {c:["🩸","Каллены"], w:["🐺","Стая"], v:["👑","Вольтури"], n:["🌲","Кочевники"]};
+
+const TASKS = [
+  "Изобрази, как Белла закусывает губу и растерянно смотрит. 10 секунд, без смеха",
+  "Скажи «Держись крепче, паучок-мартышка» голосом Эдварда",
+  "Пройдись по комнате походкой Калленов в школьной столовой",
+  "Покажи, как Эдвард сверкает на солнце",
+  "Изобрази Джейкоба, который снимает футболку (снимать не обязательно 😅)",
+  "Признайся в любви соседу слева в стиле Эдварда",
+  "Ты Аро: возьми кого-нибудь за руку и угадай, о чём он думает",
+  "Перескажи сюжет любого фильма саги за 30 секунд без слов «вампир» и «оборотень»",
+  "Назови всех Калленов за 10 секунд",
+  "Изобрази превращение в волка",
+  "Изобрази Джаспера в первом фильме, которому очень тяжело среди людей",
+  "Спроси «Как долго тебе семнадцать?» так же трагично, как Белла",
+  "Защити команду Эдварда или Джейкоба за 20 секунд. Убеди остальных",
+  "Покажи без слов любую сцену из саги. Остальные угадывают",
+  "Изобрази Чарли, который знакомится с парнем дочери",
+  "Сыграй Джейн: посмотри на кого-нибудь так, чтобы ему стало больно",
+];
+
+const PERSONAS = [
+  {min:.9, face:"👑", name:"Аро", text:"Ты будто прочитал(а) мысли всех сценаристов. Вольтури уже шлют приглашение в Вольтерру."},
+  {min:.72, face:"🔮", name:"Элис", text:"Кажется, ты видишь ответы заранее. Признавайся, было видение?"},
+  {min:.52, face:"🩺", name:"Карлайл", text:"Мудро, спокойно и почти без ошибок. Тебе бы семью из пяти вампиров."},
+  {min:.32, face:"🍎", name:"Белла", text:"Ты только приехал(а) в Форкс, но уже чувствуешь: тут что-то не так."},
+  {min:0, face:"👮", name:"Чарли", text:"Всю жизнь в Форксе и ничего странного не замечаешь. Зато рыбалка отличная."},
+];
+
+const ROUNDS = [
+  {id:"quiz", icon:"🍎", title:"Квиз по фильмам", short:"сюжет всех пяти фильмов", rules:"Четыре варианта, 20 секунд. Ответишь быстро, получишь бонус за вампирскую скорость.", type:"mc", time:20, base:10, bonus:5},
+  {id:"quotes", icon:"💬", title:"Кто это сказал?", short:"узнай героя по цитате", rules:"Читаем цитату и угадываем, чья она. 15 секунд на ответ.", type:"mc", time:15, base:10, bonus:5},
+  {id:"sort", icon:"🐺", title:"Свои и чужие", short:"мини-игра на скорость", rules:"30 секунд. Появляется имя, а ты быстро решаешь: Каллены, стая, Вольтури или кочевники. Ошибка отнимает очко.", type:"sort", time:30, mini:true},
+  {id:"tf", icon:"🌗", title:"Правда или вымысел", short:"10 секунд на решение", rules:"Утверждение про сагу. Правда или выдумка? Всего 10 секунд.", type:"tf", time:10, base:6, bonus:4},
+  {id:"emoji", icon:"🔮", title:"Сцена в эмодзи", short:"угадай момент по картинкам", rules:"Перед тобой сцена из саги, зашифрованная в эмодзи. Что это за момент?", type:"mc", time:20, base:10, bonus:5},
+  {id:"baseball", icon:"⚾", title:"Бейсбол в грозу", short:"мини-игра на реакцию", rules:"Три подачи. Бей, когда мяч в красной зоне. Точно в центр — хоум-ран и молния.", type:"baseball", mini:true},
+  {id:"order", icon:"🕰️", title:"Хронология", short:"расставь события по порядку", rules:"Нажимай на события в том порядке, в котором они случились в фильме.", type:"order", base:20},
+  {id:"tasks", icon:"🎭", title:"Задания", short:"только для компании", rules:"Выполни задание. Остальные решают, засчитать или нет.", type:"task", base:15, multi:true},
+];
+const LEN = {short:{n:2,label:"Короткая"}, normal:{n:3,label:"Обычная"}, long:{n:5,label:"Длинная"}};
+
+/* ======================= УТИЛИТЫ ======================= */
+const app = document.getElementById("app");
+const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const store = {
+  get(k, d){ try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch(e){ return d; } },
+  set(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); } catch(e){} },
+};
+let timers = [];
+const later = (fn, ms) => { const id = setTimeout(fn, ms); timers.push(id); return id; };
+const every = (fn, ms) => { const id = setInterval(fn, ms); timers.push(id); return id; };
+let raf = 0, keyHandler = null;
+function clearAll(){ timers.forEach(id => { clearTimeout(id); clearInterval(id); }); timers = []; cancelAnimationFrame(raf); keyHandler = null; }
+document.addEventListener("keydown", e => { if (keyHandler) keyHandler(e); });
+
+// без висячих предлогов и коротких слов
+const SHORT = /(^|[\s(«"„—])((?:[вксуояиаВКСУОЯИА]|во|на|по|за|из|до|не|ни|от|об|со|ко|но|же|ли|бы|то|что|как|для|при|без|над|под|про|или|его|её|их|Во|На|По|За|Из|До|Не|Ни|От|Об|Со|Но|Что|Как|Для|При|Без|Над|Под|Про|Или))\s+/g;
+function nb(root){
+  const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+  let n; while ((n = w.nextNode())) { if (n.parentNode.closest("script,style,input")) continue; const t = n.nodeValue.replace(SHORT, "$1$2 ").replace(SHORT, "$1$2 "); if (t !== n.nodeValue) n.nodeValue = t; }
+}
+function show(html, cls = ""){
+  clearAll();
+  app.innerHTML = `<section class="screen ${cls}">${html}</section>`;
+  nb(app);
+  window.scrollTo(0, 0);
+  return app.firstElementChild;
+}
+function thunder(){ const f = document.getElementById("flash"); f.classList.remove("on"); void f.offsetWidth; f.classList.add("on"); }
+const av = p => p.team === "j" ? "🐺" : "🧛";
+
+/* ======================= СОСТОЯНИЕ ======================= */
+let setup = store.get("forks-setup", null) || {count:1, names:["","","","","",""], teams:["e","j","e","j","e","j"], rounds:ROUNDS.map(r => r.id), len:"normal"};
+let G = null;
+
+/* ======================= ГЛАВНАЯ ======================= */
+const APPLE = `<svg class="apple" viewBox="0 0 120 132" aria-hidden="true"><defs><radialGradient id="ag" cx="35%" cy="35%" r="75%"><stop offset="0" stop-color="#ff4a62"/><stop offset=".55" stop-color="#c51f3a"/><stop offset="1" stop-color="#5e0a18"/></radialGradient></defs><path d="M60 36c-10-9-31-12-44 1-15 15-11 46 4 67 10 14 23 24 34 19 4-2 8-2 12 0 11 5 24-5 34-19 15-21 19-52 4-67-13-13-34-10-44-1z" fill="url(#ag)"/><path d="M60 37c0-11 3-21 11-28" stroke="#2c1f15" stroke-width="4.5" fill="none" stroke-linecap="round"/><path d="M67 21c8-11 23-13 32-8-7 11-20 15-32 8z" fill="#3e6b48"/><ellipse cx="37" cy="60" rx="7" ry="15" fill="#fff" opacity=".2" transform="rotate(22 37 60)"/></svg>`;
+
+function home(){
+  show(`
+    ${APPLE}
+    <h1><span>Форкс · всегда пасмурно</span>Вечер в&nbsp;Форксе</h1>
+    <p>Квиз, задания и мини-игры по «Сумеркам». Играть можно компанией или одному.</p>
+    <button class="btn" id="go">Начать игру</button>
+    <div class="meta"><span class="chip">🧛 1–6 игроков</span><span class="chip">🎲 8 раундов</span><span class="chip">⚾ 2 мини-игры</span></div>
+  `, "hero");
+  document.getElementById("go").onclick = setupScreen;
+}
+
+/* ======================= НАСТРОЙКА ======================= */
+function setupScreen(){
+  const s = show(`
+    <div class="top"><button class="back" id="back" aria-label="Назад">←</button><span class="eyebrow">настройка вечера</span><span style="width:44px"></span></div>
+    <h2>Кто сегодня в&nbsp;Форксе?</h2>
+    <div class="block"><span class="eyebrow">Сколько игроков</span><div class="counts" id="counts"></div></div>
+    <div class="block"><span class="eyebrow" id="namesLab">Имена и команды</span><div class="plist" id="plist"></div></div>
+    <div class="block"><span class="eyebrow">Раунды</span><div class="rounds" id="rounds"></div></div>
+    <div class="block"><span class="eyebrow">Длина игры</span><div class="seg" id="len"></div></div>
+    <div class="sticky-go"><button class="btn wide" id="start">Поехали 🍎</button></div>
+  `, "setup");
+  s.querySelector("#back").onclick = home;
+  const drawCounts = () => {
+    s.querySelector("#counts").innerHTML = [1,2,3,4,5,6].map(n => `<button class="${n === setup.count ? "on" : ""}" data-n="${n}">${n}</button>`).join("");
+    s.querySelectorAll("#counts button").forEach(b => b.onclick = () => { setup.count = +b.dataset.n; drawCounts(); drawPlayers(); drawRounds(); });
+  };
+  const drawPlayers = () => {
+    s.querySelector("#namesLab").textContent = setup.count === 1 ? "Как тебя зовут и за кого ты" : "Имена и команды";
+    s.querySelector("#plist").innerHTML = Array.from({length:setup.count}, (_, i) => `
+      <div class="prow">
+        <input data-i="${i}" maxlength="14" placeholder="Игрок ${i + 1}" value="${esc(setup.names[i] || "")}">
+        <div class="team" data-i="${i}">
+          <button class="e ${setup.teams[i] === "e" ? "on" : ""}" data-t="e" aria-label="Команда Эдварда"><b>🧛</b><span class="tx">Эдвард</span></button>
+          <button class="j ${setup.teams[i] === "j" ? "on" : ""}" data-t="j" aria-label="Команда Джейкоба"><b>🐺</b><span class="tx">Джейкоб</span></button>
+        </div>
+      </div>`).join("");
+    s.querySelectorAll(".prow input").forEach(inp => inp.oninput = () => { setup.names[+inp.dataset.i] = inp.value; });
+    s.querySelectorAll(".team button").forEach(b => b.onclick = () => {
+      const i = +b.parentNode.dataset.i; setup.teams[i] = b.dataset.t;
+      b.parentNode.querySelectorAll("button").forEach(x => x.classList.toggle("on", x === b));
+    });
+  };
+  const drawRounds = () => {
+    s.querySelector("#rounds").innerHTML = ROUNDS.map(r => {
+      const off = r.multi && setup.count === 1;
+      return `<button class="rtog ${setup.rounds.includes(r.id) && !off ? "on" : ""} ${off ? "off" : ""}" data-id="${r.id}"><span class="ic">${r.icon}</span><span><b>${r.title}</b><small>${off ? "нужно 2+ игрока" : r.short}</small></span></button>`;
+    }).join("");
+    nb(s.querySelector("#rounds"));
+    s.querySelectorAll(".rtog").forEach(b => b.onclick = () => {
+      const id = b.dataset.id;
+      setup.rounds = setup.rounds.includes(id) ? setup.rounds.filter(x => x !== id) : [...setup.rounds, id];
+      b.classList.toggle("on"); checkStart();
+    });
+    checkStart();
+  };
+  const drawLen = () => {
+    s.querySelector("#len").innerHTML = Object.entries(LEN).map(([k, v]) => `<button class="${setup.len === k ? "on" : ""}" data-k="${k}">${v.label}<small>${v.n} вопроса</small></button>`).join("").replace("5 вопроса", "5 вопросов");
+    s.querySelectorAll("#len button").forEach(b => b.onclick = () => { setup.len = b.dataset.k; drawLen(); });
+  };
+  const active = () => ROUNDS.filter(r => setup.rounds.includes(r.id) && !(r.multi && setup.count === 1));
+  const checkStart = () => { s.querySelector("#start").disabled = active().length === 0; };
+  drawCounts(); drawPlayers(); drawRounds(); drawLen();
+  s.querySelector("#start").onclick = () => { store.set("forks-setup", setup); startGame(active()); };
+}
+
+/* ======================= ПЛАН ИГРЫ ======================= */
+function startGame(rounds, players){
+  players = players || Array.from({length:setup.count}, (_, i) => ({name:(setup.names[i] || "").trim() || (setup.count === 1 ? "Ты" : `Игрок ${i + 1}`), team:setup.teams[i], score:0, max:0}));
+  players.forEach(p => { p.score = 0; p.max = 0; });
+  const n = LEN[setup.len].n, P = players.length;
+  const pools = {quiz:QUIZ, quotes:QUOTES, tf:TF, emoji:EMOJI, order:ORDER, tasks:TASKS};
+  const plan = rounds.map(r => {
+    let per = r.mini ? 1 : r.type === "order" || r.type === "task" ? (setup.len === "long" ? 2 : 1) : n;
+    let items = [];
+    if (pools[r.id]) { items = shuffle(pools[r.id]); per = Math.max(1, Math.min(per, Math.floor(items.length / P))); }
+    const turns = []; let k = 0;
+    for (let i = 0; i < per; i++) for (let p = 0; p < P; p++) turns.push({p, item:items[k++]});
+    return {r, turns};
+  });
+  G = {players, plan, ri:0, ti:0, rounds, solo:P === 1};
+  roundIntro();
+}
+
+function boardHTML(active){
+  if (G.solo) return "";
+  return `<div class="board">${G.players.map((p, i) => `<div class="pc ${p.team} ${i === active ? "act" : ""}"><span class="av">${av(p)}</span>${esc(p.name)}<span class="sc">${p.score}</span></div>`).join("")}</div>`;
+}
+function barHTML(){
+  const R = G.plan[G.ri], t = R.turns;
+  const dots = t.length <= 24 ? `<div class="prog">${t.map((_, i) => `<i class="${i < G.ti ? "done" : i === G.ti ? "now" : ""}"></i>`).join("")}</div>` : `<span class="chip">${G.ti + 1} / ${t.length}</span>`;
+  return `<div class="bar"><span class="rname">${R.r.icon} Раунд ${G.ri + 1} из ${G.plan.length} · ${R.r.title}</span>${dots}</div>${boardHTML(t[G.ti] ? t[G.ti].p : -1)}`;
+}
+function turnHTML(p){
+  if (G.solo) return "";
+  return `<div class="turn"><span class="av" style="font-size:24px">${av(p)}</span><div><div class="lab">отвечает</div><div class="who">${esc(p.name)}</div></div></div>`;
+}
+
+function roundIntro(){
+  const R = G.plan[G.ri];
+  const s = show(`
+    <div class="big">${R.r.icon}</div>
+    <div class="eyebrow">Раунд <span class="num">${G.ri + 1}</span> из ${G.plan.length}</div>
+    <h2>${R.r.title}</h2>
+    <p>${R.r.rules}</p>
+    <button class="btn" id="go">${G.ri === 0 ? "Начинаем" : "Дальше"}</button>
+  `, "intro");
+  s.querySelector("#go").onclick = () => { G.ti = 0; playTurn(); };
+  keyHandler = e => { if (e.key === "Enter") s.querySelector("#go").click(); };
+}
+
+function nextTurn(){ G.ti++; playTurn(); }
+function playTurn(){
+  const R = G.plan[G.ri];
+  if (G.ti >= R.turns.length) return roundEnd();
+  const T = R.turns[G.ti], p = G.players[T.p];
+  const go = () => ({mc:mcTurn, tf:tfTurn, order:orderTurn, task:taskTurn, sort:sortTurn, baseball:baseballTurn})[R.r.type](R.r, T, p);
+  if (!G.solo && (R.r.mini || R.r.type === "task")) readyScreen(p, R.r, go); else go();
+}
+
+function readyScreen(p, r, go){
+  const s = show(`
+    ${boardHTML(G.plan[G.ri].turns[G.ti].p)}
+    <div class="av">${av(p)}</div>
+    <div class="eyebrow">${r.icon} ${r.title}</div>
+    <h2>${esc(p.name)}, твой ход</h2>
+    <p>${r.type === "task" ? "Остальные смотрят и судят." : "Передай телефон и приготовься."}</p>
+    <button class="btn" id="go">Я готов(а)</button>
+  `, `intro ready ${p.team}`);
+  s.querySelector("#go").onclick = go;
+}
+
+/* ---------- таймер ---------- */
+function runTimer(el, sec, onEnd){
+  const start = performance.now(), i = el.querySelector("i");
+  const id = every(() => {
+    const left = Math.max(0, sec - (performance.now() - start) / 1000);
+    i.style.transform = `scaleX(${left / sec})`;
+    el.classList.toggle("low", left < 4);
+    if (left <= 0) { clearInterval(id); onEnd(); }
+  }, 100);
+  return () => { clearInterval(id); return Math.max(0, sec - (performance.now() - start) / 1000); };
+}
+
+function verdictHTML(ok, pts, title, extra){
+  return `<div class="verdict ${ok ? "good" : "bad"}"><div class="pts">${pts > 0 ? "+" + pts : "0"}</div><div><b>${title}</b>${extra ? `<p>${esc(extra)}</p>` : ""}</div></div>`;
+}
+function award(p, pts, max){ p.score += pts; p.max += max; }
+function nextBtn(s){
+  const b = document.createElement("button");
+  b.className = "btn wide next"; b.textContent = "Дальше →";
+  b.onclick = nextTurn; s.appendChild(b);
+  keyHandler = e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); nextTurn(); } };
+  later(() => b.scrollIntoView({behavior:"smooth", block:"nearest"}), 50);
+}
+
+/* ---------- раунды с вариантами ---------- */
+function mcTurn(r, T, p){
+  let q, correct, opts, film = "", cls = "";
+  if (r.id === "quiz") { q = T.item.q; correct = T.item.a[0]; opts = shuffle(T.item.a); film = T.item.f; }
+  if (r.id === "quotes") { q = T.item.q; correct = T.item.a; opts = shuffle([correct, ...shuffle(CHARS.filter(c => c !== correct)).slice(0, 3)]); cls = "quote"; }
+  if (r.id === "emoji") { q = T.item.q; correct = T.item.a; opts = shuffle([correct, ...shuffle(EMOJI.filter(e => e.a !== correct)).slice(0, 3).map(e => e.a)]); cls = "emoji"; }
+  const s = show(`
+    ${barHTML()}${turnHTML(p)}
+    <div class="timer" id="tm"><i></i></div>
+    ${film ? `<span class="film">${film}</span>` : ""}
+    <div class="q ${cls}">${esc(q)}</div>
+    <div class="opts ${r.id === "quotes" ? "two" : ""}" id="opts">${opts.map((o, i) => `<button class="opt" data-o="${esc(o)}"><span class="k">${i + 1}</span>${esc(o)}</button>`).join("")}</div>
+  `);
+  const max = r.base + r.bonus;
+  let done = false;
+  const finish = (btn) => {
+    if (done) return; done = true;
+    const left = stop();
+    const box = s.querySelector("#opts"); box.classList.add("lock");
+    box.querySelectorAll(".opt").forEach(b => { if (b.dataset.o === correct) b.classList.add("right"); });
+    const ok = btn && btn.dataset.o === correct;
+    if (btn && !ok) btn.classList.add("wrong");
+    const pts = ok ? r.base + Math.round(r.bonus * left / r.time) : 0;
+    award(p, pts, max);
+    if (ok && pts === max) thunder();
+    const title = ok ? (pts >= r.base + r.bonus - 1 ? "Вампирская скорость!" : "Верно!") : btn ? `Нет, правильно: ${correct}` : `Время вышло. Ответ: ${correct}`;
+    s.insertAdjacentHTML("beforeend", verdictHTML(ok, pts, title, T.item.x));
+    nb(s); nextBtn(s);
+  };
+  const stop = runTimer(s.querySelector("#tm"), r.time, () => finish(null));
+  s.querySelectorAll(".opt").forEach(b => b.onclick = () => finish(b));
+  keyHandler = e => { const k = +e.key; if (k >= 1 && k <= opts.length) finish(s.querySelectorAll(".opt")[k - 1]); };
+}
+
+function tfTurn(r, T, p){
+  const s = show(`
+    ${barHTML()}${turnHTML(p)}
+    <div class="timer" id="tm"><i></i></div>
+    <div class="q">${esc(T.item.q)}</div>
+    <div class="opts tf" id="opts">
+      <button class="opt" data-v="1"><span>🌕</span>Правда</button>
+      <button class="opt" data-v="0"><span>🌑</span>Вымысел</button>
+    </div>
+  `);
+  let done = false;
+  const finish = btn => {
+    if (done) return; done = true;
+    const left = stop();
+    const box = s.querySelector("#opts"); box.classList.add("lock");
+    const rightV = T.item.a ? "1" : "0";
+    box.querySelector(`[data-v="${rightV}"]`).classList.add("right");
+    const ok = btn && btn.dataset.v === rightV;
+    if (btn && !ok) btn.classList.add("wrong");
+    const pts = ok ? r.base + Math.round(r.bonus * left / r.time) : 0;
+    award(p, pts, r.base + r.bonus);
+    const title = ok ? "Точно!" : btn ? (T.item.a ? "Это правда" : "Это вымысел") : "Время вышло";
+    s.insertAdjacentHTML("beforeend", verdictHTML(ok, pts, title, T.item.x));
+    nb(s); nextBtn(s);
+  };
+  const stop = runTimer(s.querySelector("#tm"), r.time, () => finish(null));
+  s.querySelectorAll(".opt").forEach(b => b.onclick = () => finish(b));
+  keyHandler = e => { if (e.key === "1" || e.key === "ArrowLeft") finish(s.querySelector('[data-v="1"]')); if (e.key === "2" || e.key === "ArrowRight") finish(s.querySelector('[data-v="0"]')); };
+}
+
+/* ---------- хронология ---------- */
+function orderTurn(r, T, p){
+  const evs = shuffle(T.item.e);
+  const s = show(`
+    ${barHTML()}${turnHTML(p)}
+    <span class="film">${T.item.t}</span>
+    <div class="q">Что случилось раньше?</div>
+    <div class="events" id="evs">${evs.map(e => `<button class="ev" data-e="${esc(e)}"><span class="n"></span><span>${esc(e)}</span></button>`).join("")}</div>
+    <div class="row2"><button class="btn soft" id="reset">Сбросить</button><button class="btn" id="check" disabled>Проверить</button></div>
+  `);
+  let picked = [];
+  const draw = () => {
+    s.querySelectorAll(".ev").forEach(b => { const i = picked.indexOf(b.dataset.e); b.classList.toggle("picked", i >= 0); b.querySelector(".n").textContent = i >= 0 ? i + 1 : ""; });
+    s.querySelector("#check").disabled = picked.length !== evs.length;
+  };
+  s.querySelectorAll(".ev").forEach(b => b.onclick = () => {
+    const e = b.dataset.e, i = picked.indexOf(e);
+    if (i >= 0) picked.splice(i, 1); else picked.push(e);
+    draw();
+  });
+  s.querySelector("#reset").onclick = () => { picked = []; draw(); };
+  s.querySelector("#check").onclick = () => {
+    let right = 0;
+    s.querySelectorAll(".ev").forEach(b => {
+      const mine = picked.indexOf(b.dataset.e), truth = T.item.e.indexOf(b.dataset.e);
+      b.style.pointerEvents = "none";
+      if (mine === truth) { right++; b.classList.add("right"); } else { b.classList.add("wrong"); b.insertAdjacentHTML("beforeend", `<span class="fix">на самом деле ${truth + 1}</span>`); }
+      b.style.order = truth;
+    });
+    s.querySelector("#evs").style.display = "flex"; s.querySelector("#evs").style.flexDirection = "column";
+    s.querySelector(".row2").remove();
+    const pts = right === 4 ? 20 : right * 4;
+    award(p, pts, 20);
+    if (right === 4) thunder();
+    s.insertAdjacentHTML("beforeend", verdictHTML(right >= 2, pts, right === 4 ? "Идеальная хронология!" : `На своих местах: ${right} из 4`));
+    nb(s); nextBtn(s);
+  };
+}
+
+/* ---------- задания ---------- */
+function taskTurn(r, T, p){
+  const s = show(`
+    ${barHTML()}${turnHTML(p)}
+    <span class="film">🎭 задание</span>
+    <div class="task">${esc(T.item)}</div>
+    <div class="clock" id="clock">0:30</div>
+    <button class="btn soft wide" id="timer">⏱ Запустить 30 секунд</button>
+    <p class="eyebrow" style="margin:26px 0 10px;text-align:center">Засчитываем?</p>
+    <div class="vote"><button class="btn" id="yes">Да 🍎</button><button class="btn soft" id="no">Нет</button></div>
+  `);
+  s.querySelector("#timer").onclick = e => {
+    e.currentTarget.disabled = true;
+    const end = performance.now() + 30000, c = s.querySelector("#clock");
+    const id = every(() => {
+      const left = Math.max(0, Math.ceil((end - performance.now()) / 1000));
+      c.textContent = `0:${String(left).padStart(2, "0")}`;
+      if (!left) { clearInterval(id); thunder(); c.textContent = "Время!"; }
+    }, 200);
+  };
+  const vote = ok => {
+    award(p, ok ? r.base : 0, r.base);
+    s.querySelector(".vote").remove(); s.querySelector("#timer").remove(); s.querySelector(".eyebrow:last-of-type")?.remove();
+    if (ok) thunder();
+    s.insertAdjacentHTML("beforeend", verdictHTML(ok, ok ? r.base : 0, ok ? "Засчитано! Оскар твой" : "Не засчитано. В следующий раз"));
+    nb(s); nextBtn(s);
+  };
+  s.querySelector("#yes").onclick = () => vote(true);
+  s.querySelector("#no").onclick = () => vote(false);
+}
+
+/* ---------- мини-игра: свои и чужие ---------- */
+function sortTurn(r, T, p){
+  const deck = shuffle(Object.entries(SORT).flatMap(([k, arr]) => arr.map(n => ({n, k}))));
+  const s = show(`
+    ${barHTML()}${turnHTML(p)}
+    <div class="timer" id="tm"><i></i></div>
+    <div class="stat"><b id="pts">0</b><span id="cnt">верно: 0 · ошибок: 0</span></div>
+    <div class="sortname" id="nm"></div>
+    <div class="bins">${Object.entries(BINS).map(([k, [ic, l]]) => `<button class="bin ${k}" data-k="${k}"><span>${ic}</span>${l}</button>`).join("")}</div>
+  `);
+  let i = 0, score = 0, right = 0, wrong = 0, over = false;
+  const nm = s.querySelector("#nm");
+  const draw = () => { nm.innerHTML = esc(deck[i % deck.length].n); };
+  draw();
+  const pick = k => {
+    if (over) return;
+    const ok = deck[i % deck.length].k === k;
+    if (ok) { score += 2; right++; } else { score = Math.max(0, score - 1); wrong++; }
+    nm.classList.remove("ok", "no"); void nm.offsetWidth; nm.classList.add(ok ? "ok" : "no");
+    if (!ok) nm.innerHTML = `${esc(deck[i % deck.length].n)}<small>это ${BINS[deck[i % deck.length].k][1].toLowerCase()}</small>`;
+    s.querySelector("#pts").textContent = score;
+    s.querySelector("#cnt").textContent = `верно: ${right} · ошибок: ${wrong}`;
+    i++;
+    if (i % deck.length === 0) deck.splice(0, deck.length, ...shuffle(deck));
+    later(() => { if (!over) { nm.classList.remove("ok", "no"); draw(); } }, ok ? 180 : 650);
+  };
+  s.querySelectorAll(".bin").forEach(b => b.onclick = () => pick(b.dataset.k));
+  keyHandler = e => { const m = {"1":"c","2":"w","3":"v","4":"n"}[e.key]; if (m) pick(m); };
+  runTimer(s.querySelector("#tm"), r.time, () => {
+    over = true; keyHandler = null;
+    s.querySelector(".bins").style.pointerEvents = "none"; s.querySelector(".bins").style.opacity = ".3";
+    nm.classList.remove("ok", "no"); nm.innerHTML = `${score}<small>очков за 30 секунд</small>`;
+    award(p, score, 30);
+    if (score >= 30) thunder();
+    s.insertAdjacentHTML("beforeend", verdictHTML(score > 0, score, score >= 30 ? "Нюх как у Джеймса!" : score >= 16 ? "Своих узнаёшь сразу" : "Форкс полон незнакомцев", `Верно: ${right}, ошибок: ${wrong}`));
+    nb(s); nextBtn(s);
+  });
+}
+
+/* ---------- мини-игра: бейсбол в грозу ---------- */
+function baseballTurn(r, T, p){
+  const ZC = .8, PERFECT = .028, GOOD = .065, TOUCH = .11;
+  const s = show(`
+    ${barHTML()}${turnHTML(p)}
+    <div class="field" id="field">
+      <div class="storm"></div>
+      <svg class="bolt" viewBox="0 0 60 140"><path d="M34 0 8 72h18L14 140 54 56H34L46 0z" fill="#e9f0ff"/></svg>
+      <div class="callout" id="call">Готовься…</div>
+      <span class="pitcher">🧛‍♀️</span><span class="batter">🧛‍♂️</span>
+      <div class="track"><div class="zone" style="left:${(ZC - TOUCH) * 100}%;width:${TOUCH * 200}%"><i></i></div><div class="ball" id="ball">⚾</div></div>
+    </div>
+    <div class="swings" id="sw"><i></i><i></i><i></i></div>
+    <button class="btn swingbtn" id="hit">Удар!</button>
+  `);
+  const ball = s.querySelector("#ball"), call = s.querySelector("#call"), field = s.querySelector("#field");
+  let swing = 0, total = 0, pos = 0, live = false, t0 = 0, speed = 0;
+  const results = [];
+  const pitch = () => {
+    pos = 0; live = false; ball.className = "ball"; ball.style.opacity = 0; call.textContent = `Подача ${swing + 1} из 3`;
+    later(() => {
+      call.textContent = "";
+      speed = .5 + swing * .18 + Math.random() * .08; live = true; t0 = performance.now();
+      ball.style.opacity = 1;
+      const step = now => {
+        if (!live) return;
+        pos = (now - t0) / 1000 * speed;
+        ball.style.left = pos * 100 + "%";
+        ball.style.transform = `translateY(${-Math.sin(Math.min(pos, 1) * Math.PI) * 34}px) rotate(${pos * 900}deg)`;
+        if (pos > 1.05) return resolve(null);
+        raf = requestAnimationFrame(step);
+      };
+      raf = requestAnimationFrame(step);
+    }, 900 + Math.random() * 900);
+  };
+  const resolve = d => {
+    live = false; cancelAnimationFrame(raf);
+    let pts = 0, txt = "Мимо!";
+    if (d !== null) {
+      if (d <= PERFECT) { pts = 10; txt = "Хоум-ран! ⚡"; }
+      else if (d <= GOOD) { pts = 6; txt = "Отличный удар!"; }
+      else if (d <= TOUCH) { pts = 3; txt = "Задел!"; }
+      else txt = pos < ZC ? "Рано!" : "Поздно!";
+    }
+    if (pts) { ball.classList.add("fly"); } else ball.style.opacity = .25;
+    if (pts === 10) { field.classList.remove("hit"); void field.offsetWidth; field.classList.add("hit"); thunder(); }
+    total += pts; results.push(pts);
+    s.querySelectorAll("#sw i")[swing].className = "s" + pts;
+    call.textContent = txt + (pts ? ` +${pts}` : "");
+    swing++;
+    if (swing < 3) later(pitch, 1300);
+    else later(() => {
+      s.querySelector("#hit").remove();
+      award(p, total, 30);
+      call.textContent = `${total} из 30`;
+      s.insertAdjacentHTML("beforeend", verdictHTML(total > 0, total, total >= 24 ? "Эмметт аплодирует стоя" : total >= 12 ? "Хорошая игра в грозу" : "Элис забрала мяч. Не твоя погода", ""));
+      nb(s); nextBtn(s);
+    }, 1100);
+  };
+  const hit = () => { if (live) resolve(Math.abs(pos - ZC)); };
+  s.querySelector("#hit").onclick = hit;
+  s.querySelector("#hit").addEventListener("touchstart", e => { e.preventDefault(); hit(); }, {passive:false});
+  keyHandler = e => { if (e.key === " " || e.key === "Enter") { e.preventDefault(); hit(); } };
+  pitch();
+}
+
+/* ======================= ИТОГИ ======================= */
+function ranksHTML(){
+  const best = Math.max(1, ...G.players.map(p => p.score));
+  return `<div class="ranks">${G.players.map((p, i) => ({p, i})).sort((a, b) => b.p.score - a.p.score).map(({p}, k) => `
+    <div class="rk ${p.team}" style="animation-delay:${k * .08}s"><span class="fill" data-w="${p.score / best * 100}" style="width:0"></span>
+      <span class="pl">${k + 1}</span><span class="av" style="font-size:22px">${av(p)}</span>
+      <span class="nm">${esc(p.name)}<small>команда ${p.team === "j" ? "Джейкоба" : "Эдварда"}</small></span><span class="s">${p.score}</span></div>`).join("")}</div>`;
+}
+function growBars(s){ later(() => s.querySelectorAll(".fill").forEach(f => f.style.width = f.dataset.w + "%"), 80); }
+
+function roundEnd(){
+  const last = G.ri === G.plan.length - 1;
+  if (G.solo) {
+    const p = G.players[0];
+    const s = show(`
+      <div class="big">${G.plan[G.ri].r.icon}</div>
+      <div class="eyebrow">Раунд ${G.ri + 1} пройден</div>
+      <h2>${p.score} ${plural(p.score)}</h2>
+      <p>${last ? "Это был последний раунд. Посмотрим, кто ты из саги." : `Следующий: ${G.plan[G.ri + 1].r.icon} ${G.plan[G.ri + 1].r.title}`}</p>
+      <button class="btn" id="go">${last ? "Узнать результат" : "Дальше"}</button>
+    `, "intro");
+    s.querySelector("#go").onclick = () => { if (last) final(); else { G.ri++; roundIntro(); } };
+    keyHandler = e => { if (e.key === "Enter") s.querySelector("#go").click(); };
+    return;
+  }
+  const s = show(`
+    <div class="eyebrow" style="text-align:center;margin-top:10px">Раунд ${G.ri + 1} из ${G.plan.length} позади</div>
+    <h2 style="font-size:clamp(42px,10vw,68px);font-style:italic;text-align:center;margin:8px 0 22px">Счёт</h2>
+    ${ranksHTML()}
+    <button class="btn wide" id="go">${last ? "К финалу 👑" : `Дальше: ${G.plan[G.ri + 1].r.icon} ${G.plan[G.ri + 1].r.title}`}</button>
+  `);
+  growBars(s);
+  s.querySelector("#go").onclick = () => { if (last) final(); else { G.ri++; roundIntro(); } };
+  keyHandler = e => { if (e.key === "Enter") s.querySelector("#go").click(); };
+}
+function plural(n){ const a = n % 10, b = n % 100; return a === 1 && b !== 11 ? "очко" : a >= 2 && a <= 4 && (b < 12 || b > 14) ? "очка" : "очков"; }
+const persona = p => { const r = p.max ? p.score / p.max : 0; return {...PERSONAS.find(x => r >= x.min), pct:Math.round(r * 100)}; };
+
+function confetti(){
+  const box = document.createElement("div"); box.className = "confetti";
+  const set = ["🍎","🌲","⚡","🩸","🌙"];
+  for (let i = 0; i < 34; i++) { const e = document.createElement("i"); e.textContent = set[i % set.length]; e.style.left = Math.random() * 100 + "%"; e.style.animationDuration = 2.4 + Math.random() * 2.4 + "s"; e.style.animationDelay = Math.random() * 1.2 + "s"; box.appendChild(e); }
+  document.body.appendChild(box); setTimeout(() => box.remove(), 6500);
+}
+
+function final(){
+  thunder(); confetti();
+  if (G.solo) {
+    const p = G.players[0], ps = persona(p);
+    const s = show(`
+      <div class="persona">
+        <div class="pct">${p.score} ${plural(p.score)} · ${ps.pct}%</div>
+        <div class="face">${ps.face}</div>
+        <div class="eyebrow">Из саги ты</div>
+        <h2>${ps.name}</h2>
+        <p>${ps.text}</p>
+      </div>
+      <div class="row2"><button class="btn" id="again">Ещё раз</button><button class="btn soft" id="new">Настройки</button></div>
+    `, "final");
+    bindFinal(s); return;
+  }
+  const sorted = G.players.slice().sort((a, b) => b.score - a.score);
+  const top = sorted[0], tie = sorted[1] && sorted[1].score === top.score;
+  const te = G.players.filter(p => p.team === "e"), tj = G.players.filter(p => p.team === "j");
+  const avg = arr => arr.length ? Math.round(arr.reduce((s, p) => s + p.score, 0) / arr.length) : 0;
+  const both = te.length && tj.length;
+  const se = avg(te), sj = avg(tj);
+  const s = show(`
+    <div class="crown">👑</div>
+    <h2 class="title">${tie ? "Ничья!" : `Победа: ${esc(top.name)}`}</h2>
+    <p class="sub">${tie ? "Вольтури не могут выбрать. Нужен реванш." : `${top.score} ${plural(top.score)}. Из саги — ${persona(top).name} ${persona(top).face}`}</p>
+    ${both ? `<div class="teams">
+      <div class="tm e ${se > sj ? "win" : ""}"><small>🧛 команда Эдварда</small><b>${se}</b><small>в среднем на игрока</small></div>
+      <div class="tm j ${sj > se ? "win" : ""}"><small>🐺 команда Джейкоба</small><b>${sj}</b><small>в среднем на игрока</small></div>
+    </div>` : ""}
+    ${ranksHTML().replace(/<small>команда (Джейкоба|Эдварда)<\/small>/g, "")}
+    <div class="row2"><button class="btn" id="again">Реванш</button><button class="btn soft" id="new">Настройки</button></div>
+  `, "final");
+  s.querySelectorAll(".rk").forEach((el, k) => { const p = sorted[k], ps = persona(p); el.querySelector(".nm").insertAdjacentHTML("beforeend", `<small>${ps.face} ${ps.name} · ${ps.pct}%</small>`); });
+  growBars(s); bindFinal(s);
+}
+function bindFinal(s){
+  s.querySelector("#again").onclick = () => startGame(G.rounds, G.players);
+  s.querySelector("#new").onclick = setupScreen;
+}
+
+/* ======================= ДЕКОР ======================= */
+(function pines(){
+  const layer = (seed, h, color, step) => {
+    let x = -20, out = "", rnd = seed;
+    const r = () => (rnd = (rnd * 9301 + 49297) % 233280) / 233280;
+    while (x < 1460) {
+      const w = step * (.6 + r() * .7), th = h * (.55 + r() * .45), cx = x + w / 2, base = 200;
+      let d = `M${x} ${base}`;
+      const tiers = 5;
+      for (let t = 0; t < tiers; t++) { const y = base - th * (t + 1) / tiers, ww = w / 2 * (1 - t / tiers) + 2; d += ` L${cx - ww} ${y + th / tiers * .35} L${cx - ww * .45} ${y + th / tiers * .35}`; }
+      d += ` L${cx} ${base - th - 6}`;
+      for (let t = tiers - 1; t >= 0; t--) { const y = base - th * (t + 1) / tiers, ww = w / 2 * (1 - t / tiers) + 2; d += ` L${cx + ww * .45} ${y + th / tiers * .35} L${cx + ww} ${y + th / tiers * .35}`; }
+      d += ` L${x + w} ${base}Z`;
+      out += `<path d="${d}"/>`;
+      x += w * (.55 + r() * .3);
+    }
+    return `<svg viewBox="0 0 1440 200" preserveAspectRatio="xMidYMax slice"><g fill="${color}">${out}</g></svg>`;
+  };
+  document.getElementById("pines").innerHTML = layer(7, 150, "#14211c", 70) + layer(3, 110, "#0a110e", 54);
+})();
+
+(function rain(){
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const c = document.getElementById("rain"), x = c.getContext("2d");
+  let W, H, drops = [];
+  const size = () => { W = c.width = innerWidth; H = c.height = innerHeight; drops = Array.from({length:Math.round(W / 12)}, () => ({x:Math.random() * W, y:Math.random() * H, l:8 + Math.random() * 14, v:5 + Math.random() * 6})); };
+  size(); addEventListener("resize", size);
+  const tick = () => {
+    x.clearRect(0, 0, W, H); x.strokeStyle = "rgba(200,215,210,.28)"; x.lineWidth = 1; x.beginPath();
+    for (const d of drops) { x.moveTo(d.x, d.y); x.lineTo(d.x - 1.5, d.y + d.l); d.y += d.v; d.x -= .4; if (d.y > H) { d.y = -20; d.x = Math.random() * W; } }
+    x.stroke(); requestAnimationFrame(tick);
+  };
+  tick();
+})();
+
+home();
+</script>
+</body>
+</html>

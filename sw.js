@@ -19,7 +19,7 @@ self.addEventListener("fetch", e => {
   const own = url.origin === location.origin;
   const lib = url.hostname === "www.gstatic.com" || url.hostname === "fonts.googleapis.com" || url.hostname === "fonts.gstatic.com";
   if (!own && !lib) return; // база и вход Firebase идут напрямую
-  if (own && (url.pathname.startsWith("/sql/") || url.pathname.startsWith("/stikery/") || url.pathname.startsWith("/uspehi/") || url.pathname.startsWith("/hunger-games/"))) return; // курс SQL, стикеры и дневник побед живут отдельно
+  if (own && (url.pathname.startsWith("/sql/") || url.pathname.startsWith("/stikery/") || url.pathname.startsWith("/uspehi/") || url.pathname.startsWith("/hunger-games/") || url.pathname.startsWith("/twilight/"))) return; // курс SQL, стикеры и дневник побед живут отдельно
   if (own && (req.mode === "navigate" || url.pathname.endsWith(".html") || url.pathname.endsWith("/"))) {
     // страницы: сначала сеть, без сети — кэш
     // cache: "no-cache" — всегда спрашиваем сервер, нет ли новой версии страницы
