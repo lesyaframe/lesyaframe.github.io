@@ -258,10 +258,10 @@ b{letter-spacing:-.03em}
 
 
 .tabs{display:flex;flex-direction:column;padding-top:22px}
-.tab{position:relative;display:grid;grid-template-columns:1fr auto;align-items:center;column-gap:16px;margin-top:-12px;border-radius:14px 14px 0 0;padding:16px 22px 32px;text-decoration:none;color:var(--ink);box-shadow:0 -8px 16px -14px rgba(59,27,20,.45);transition:transform .25s,padding .3s}
+.tab{position:relative;display:grid;grid-template-columns:1fr auto;align-items:center;column-gap:16px;margin-top:-12px;border-radius:14px 14px 0 0;padding:13px 22px 28px;text-decoration:none;color:var(--ink);box-shadow:0 -8px 16px -14px rgba(59,27,20,.45);transition:transform .25s,padding .3s}
 .tab:first-child{margin-top:0}
 .tab:last-child{border-radius:14px;padding-bottom:16px}
-.tab::before{content:attr(data-n);position:absolute;top:-18px;right:calc(6% + (6 - var(--i))*11%);height:20px;padding:4px 11px 0;border-radius:8px 8px 0 0;background:inherit;font-size:10px;font-weight:700}
+.tab::before{content:attr(data-n);position:absolute;top:-18px;right:calc(6% + (7 - var(--i))*9.5%);height:20px;padding:4px 11px 0;border-radius:8px 8px 0 0;background:inherit;font-size:10px;font-weight:700}
 .tab b{display:block;font-size:17px;font-weight:700;letter-spacing:-.03em;line-height:1.2}
 .tab small{display:block;font-size:12.5px;opacity:.7;line-height:1.3;max-height:0;overflow:hidden;transition:max-height .3s,margin .3s}
 .tab:hover,.tab:focus-visible{transform:translateX(-6px)}
@@ -269,7 +269,7 @@ b{letter-spacing:-.03em}
 .tab .pr{font-size:15px;font-weight:700;letter-spacing:-.02em;white-space:nowrap;display:flex;align-items:center;gap:8px}
 .tab .pr i{font-style:normal;opacity:.45;transition:opacity .2s,transform .2s}
 .tab:hover .pr i{opacity:1;transform:translateX(3px)}
-.tab:nth-child(1){background:#F7F1D8}.tab:nth-child(2){background:#F2EBCB}.tab:nth-child(3){background:#EEE6BD}.tab:nth-child(4){background:#EAE1AE}.tab:nth-child(5){background:#E6DC9F}.tab:nth-child(6){background:#F1EA91}.tab:nth-child(7){background:var(--choco);color:var(--paper)}
+.tab:nth-child(1){background:#F7F1D8}.tab:nth-child(2){background:#F2EBCB}.tab:nth-child(3){background:#EEE6BD}.tab:nth-child(4){background:#EAE1AE}.tab:nth-child(5){background:#E6DC9F}.tab:nth-child(6){background:#F1EA91}.tab:nth-child(7){background:#DCD07A}.tab:nth-child(8){background:var(--choco);color:var(--paper)}
 @media (hover:none){.tab small{max-height:none;margin-top:2px}}
 @media (max-width:560px){.tab{padding:10px 16px 22px}.tab b{font-size:15px}.tab .pr{font-size:14px}}
 
@@ -369,6 +369,42 @@ html.anim.go .hstamp{animation:dropIn 1s .15s cubic-bezier(.3,1.3,.5,1) forwards
 @keyframes woof{0%{opacity:0;transform:translate(-50%,-80%) rotate(-6deg) scale(.6)}15%{opacity:1;transform:translate(-50%,-120%) rotate(-6deg) scale(1)}80%{opacity:1}100%{opacity:0;transform:translate(-50%,-170%) rotate(-6deg)}}
 .rem-egg{cursor:pointer}
 @media (prefers-reduced-motion:reduce){.pre{display:none}html.anim .hr h1,html.anim .hnote,html.anim .hr p,html.anim .hrow,html.anim .hstamp,html.anim .pills,.rv,.anim-list>*{opacity:1!important;transform:none!important;animation:none!important}.hero{position:relative}}
+
+/* ============ WORKS ============ */
+.services,.fit{overflow-x:clip}
+.works{position:relative;z-index:3;background:var(--choco);color:var(--paper);border-radius:36px 36px 0 0;margin-top:-36px;padding:clamp(54px,7vh,80px) 0 clamp(30px,4vh,46px);min-height:100svh;display:flex;flex-direction:column;justify-content:center;gap:clamp(18px,3vh,30px);overflow:hidden}
+.w-head{display:flex;flex-wrap:wrap;align-items:flex-end;gap:16px 30px;padding:0 var(--gut)}
+.w-head .eyebrow{color:var(--butter)}
+.w-head h2{font-size:clamp(44px,5.4vw,80px);margin-top:10px}
+.w-head h2 .v{color:var(--butter)}
+.w-lead{font-size:14px;opacity:.65;max-width:34em;margin-left:auto}
+.w-nav{display:flex;gap:8px}
+.w-nav button{width:48px;height:48px;border-radius:50%;border:1.5px solid rgba(251,246,230,.4);background:transparent;color:var(--paper);font-size:18px;cursor:pointer;transition:background .2s,color .2s}
+.w-nav button:hover{background:var(--butter);color:var(--ink);border-color:var(--butter)}
+.w-track{display:flex;gap:22px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding-inline:var(--gut);padding:6px var(--gut) 10px;scrollbar-width:none;cursor:grab}
+.w-track::-webkit-scrollbar{display:none}
+.w-track.drag{cursor:grabbing;scroll-snap-type:none}
+.w-track.drag a{pointer-events:none}
+.pf{flex:0 0 auto;scroll-snap-align:start;display:flex;flex-direction:column;gap:12px;width:calc(min(48vh,440px) * .78)}
+.pf-img{height:min(48vh,440px);border-radius:18px;overflow:hidden;background:var(--cream);box-shadow:0 20px 34px -22px rgba(0,0,0,.7);transition:transform .4s cubic-bezier(.2,.8,.2,1)}
+.pf-img img{width:100%;height:100%;object-fit:cover;object-position:50% 0;transition:object-position 3.2s ease-in-out;user-select:none}
+.pf:hover .pf-img{transform:translateY(-6px) rotate(-.6deg)}
+.pf:hover .pf-img img{object-position:50% 100%}
+.pf-cap{display:flex;gap:10px;align-items:flex-start}
+.pf-n{font-size:11px;font-weight:700;color:var(--butter);padding-top:4px}
+.pf-cap b{display:block;font-size:17px;letter-spacing:-.03em}
+.pf-cap small{display:block;font-size:13px;opacity:.65;line-height:1.3;margin-top:2px}
+.pf-go{align-self:flex-start;font-size:13px;font-weight:600;color:var(--butter);text-decoration:none;border-bottom:1px solid rgba(241,234,145,.4);padding-bottom:1px}
+.pf-go:hover{border-color:var(--butter)}
+.pf-go.muted{color:rgba(251,246,230,.45);border:0}
+.w-more{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;padding:0 var(--gut)}
+.hand-s{font-family:var(--script);font-size:28px;color:var(--butter)}
+.w-more a:not(.btn){display:flex;flex-direction:column;text-decoration:none;padding:8px 14px;border-radius:12px;border:1px solid rgba(251,246,230,.2);transition:border-color .2s,background .2s}
+.w-more a:not(.btn):hover{border-color:var(--butter);background:rgba(241,234,145,.08)}
+.w-more b{font-size:13px}
+.w-more a span{font-size:11.5px;opacity:.6}
+.w-more .btn{margin-left:auto;margin-right:200px}
+@media (max-width:860px){.works{min-height:0}.w-lead{display:none}.w-more{display:grid;grid-template-columns:1fr 1fr}.w-more .hand-s,.w-more .btn{grid-column:1/-1}.w-more .btn{justify-content:center}.w-more .btn{margin-right:0}.w-lead{margin-left:0}.w-nav{display:none}.pf{width:72vw}.pf-img{height:auto;aspect-ratio:3/3.8}.w-more .btn{margin-left:0}}
 /* ============ FIT ============ */
 .fit{display:flex;flex-direction:column;align-items:stretch;justify-content:center;gap:clamp(24px,4vh,40px);min-height:100svh}
 .fit-top{text-align:center;display:flex;flex-direction:column;gap:12px;align-items:center}
@@ -526,12 +562,33 @@ footer .v{color:var(--butter);font-size:26px}
 <a class="tab" style="--i:3" data-n="04" href="#zayavka" data-svc="Интернет-магазин"><span class="tt"><b>Интернет-магазин</b><small>каталог, карточки товаров, корзина и оплата</small></span><span class="pr">от 70 000 ₽<i>→</i></span></a>
 <a class="tab" style="--i:4" data-n="05" href="#zayavka" data-svc="Пакет для соцсетей"><span class="tt"><b>Пакет для соцсетей</b><small>профиль, обложки и шаблоны в едином стиле</small></span><span class="pr">от 15 000 ₽<i>→</i></span></a>
 <a class="tab" style="--i:5" data-n="06" href="#zayavka" data-svc="Поддержка после запуска"><span class="tt"><b>Поддержка после запуска</b><small>правки, новые страницы, замена текстов</small></span><span class="pr">1 год бесплатно<i>→</i></span></a>
-<a class="tab" style="--i:6" data-n="07" href="#zayavka" data-svc="Дизайнер на абонементе"><span class="tt"><b>Дизайнер на абонементе</b><small>для брендов и компаний, у которых постоянно много задач</small></span><span class="pr">от 60 000 ₽/мес<i>→</i></span></a>
+<a class="tab" style="--i:6" data-n="07" href="#zayavka" data-svc="Брендбук и фирменный стиль"><span class="tt"><b>Брендбук и фирменный стиль</b><small>логотип, цвета, шрифты, носители и правила, как всем этим пользоваться</small></span><span class="pr">по запросу<i>→</i></span></a>
+<a class="tab" style="--i:7" data-n="08" href="#zayavka" data-svc="Дизайнер на абонементе"><span class="tt"><b>Дизайнер на абонементе</b><small>для брендов и компаний, у которых постоянно много задач</small></span><span class="pr">от 60 000 ₽/мес<i>→</i></span></a>
 </div>
   </div>
   <p class="svc-note">*тексты входят в стоимость работ</p>
 </section>
 
+<section class="works" id="works">
+  <div class="w-head">
+    <div><span class="eyebrow">портфолио</span><h2>мои <span class="v">работы</span></h2></div>
+    <p class="w-lead">одни из последних проектов<br>листайте или тяните мышкой, наведите на макет, чтобы посмотреть его целиком</p>
+    <div class="w-nav"><button type="button" id="wPrev" aria-label="Назад">←</button><button type="button" id="wNext" aria-label="Вперёд">→</button></div>
+  </div>
+  <div class="w-track" id="wTrack">
+<article class="pf"><div class="pf-img"><img src="img/pf/aliart.jpg" alt="Ali Art Beauty" loading="lazy" draggable="false"></div><div class="pf-cap"><span class="pf-n">01</span><div><b>Ali Art Beauty</b><small>брендбук и сайт для студии красоты, Москва</small></div></div><a class="pf-go" href="https://aliartbeauty.ru/" target="_blank" rel="noopener">aliartbeauty.ru ↗</a></article>
+<article class="pf"><div class="pf-img"><img src="img/pf/marmelad.jpg" alt="Капитан Мармелад" loading="lazy" draggable="false"></div><div class="pf-cap"><span class="pf-n">02</span><div><b>Капитан Мармелад</b><small>сайт для франшизы сладостей</small></div></div><a class="pf-go" href="https://xn----7sbabaaiavd8aftd4bxj.xn--p1ai/" target="_blank" rel="noopener">капитан-мармелад.рф ↗</a></article>
+<article class="pf"><div class="pf-img"><img src="img/pf/marmelad-do-posle.jpg" alt="Капитан Мармелад: до и после" loading="lazy" draggable="false"></div><div class="pf-cap"><span class="pf-n">03</span><div><b>Капитан Мармелад: до и после</b><small>редизайн старого сайта франшизы</small></div></div><a class="pf-go" href="https://xn----7sbabaaiavd8aftd4bxj.xn--p1ai/" target="_blank" rel="noopener">капитан-мармелад.рф ↗</a></article>
+<article class="pf"><div class="pf-img"><img src="img/pf/symphony.jpg" alt="Symphony" loading="lazy" draggable="false"></div><div class="pf-cap"><span class="pf-n">04</span><div><b>Symphony</b><small>лендинг для вокальной студии</small></div></div><a class="pf-go" href="http://symphony-vocal.ru" target="_blank" rel="noopener">symphony-vocal.ru ↗</a></article>
+<article class="pf"><div class="pf-img"><img src="img/pf/elevate.jpg" alt="Elevate" loading="lazy" draggable="false"></div><div class="pf-cap"><span class="pf-n">05</span><div><b>Elevate</b><small>многостраничный сайт для digital-агентства</small></div></div><a class="pf-go" href="https://elevate-agency.ru/" target="_blank" rel="noopener">elevate-agency.ru ↗</a></article>
+<article class="pf"><div class="pf-img"><img src="img/pf/heyzagar.jpg" alt="Hey Zagar" loading="lazy" draggable="false"></div><div class="pf-cap"><span class="pf-n">06</span><div><b>Hey Zagar</b><small>сайт и презентация для студии загара, СПб</small></div></div><a class="pf-go" href="https://heyzagar.ru" target="_blank" rel="noopener">heyzagar.ru ↗</a></article>
+<article class="pf"><div class="pf-img"><img src="img/pf/elitshkaf.jpg" alt="elitshkaf" loading="lazy" draggable="false"></div><div class="pf-cap"><span class="pf-n">07</span><div><b>elitshkaf</b><small>сайт для производства гардеробов на заказ</small></div></div><span class="pf-go muted">концепт</span></article>
+<article class="pf"><div class="pf-img"><img src="img/pf/loveyouton.jpg" alt="Love You Ton" loading="lazy" draggable="false"></div><div class="pf-cap"><span class="pf-n">08</span><div><b>Love You Ton</b><small>сайт для бренда косметики для обуви</small></div></div><span class="pf-go muted">концепт</span></article>
+<article class="pf"><div class="pf-img"><img src="img/pf/psihosomatika.jpg" alt="Психосоматика" loading="lazy" draggable="false"></div><div class="pf-cap"><span class="pf-n">09</span><div><b>Психосоматика</b><small>презентация для психолога</small></div></div><span class="pf-go muted">концепт</span></article>
+<article class="pf"><div class="pf-img"><img src="img/pf/bebronze.jpg" alt="Be Bronze" loading="lazy" draggable="false"></div><div class="pf-cap"><span class="pf-n">10</span><div><b>Be Bronze</b><small>сертификат для студии загара</small></div></div><span class="pf-go muted">концепт</span></article>
+  </div>
+  <div class="w-more"><span class="hand-s">ещё сайты:</span><a href="https://mindalflower.ru/" target="_blank" rel="noopener"><b>mindalflower.ru</b><span>интернет-магазин цветочной студии</span></a><a href="http://honeyshine.ru" target="_blank" rel="noopener"><b>honeyshine.ru</b><span>студия загара, Москва</span></a><a href="http://mp-consulting.ru/" target="_blank" rel="noopener"><b>mp-consulting.ru</b><span>консалтинг для маркетплейсов</span></a><a href="https://buanacafe.ru/" target="_blank" rel="noopener"><b>buanacafe.ru</b><span>детское кафе, СПб</span></a><a class="btn btn-butter" href="#zayavka">хочу так же</a></div>
+</section>
 <a class="marq" href="#zayavka" aria-label="Записаться к Лесе"><div><span>оставить заявку<i>✦</i>сайты с чистого листа<i>✦</i>Tilda и Figma<i>✦</i>оставить заявку<i>✦</i>сайты с чистого листа<i>✦</i>Tilda и Figma<i>✦</i></span><span>оставить заявку<i>✦</i>сайты с чистого листа<i>✦</i>Tilda и Figma<i>✦</i>оставить заявку<i>✦</i>сайты с чистого листа<i>✦</i>Tilda и Figma<i>✦</i></span></div></a>
 
 <!-- PROCESS -->
@@ -841,6 +898,20 @@ footer .v{color:var(--butter);font-size:26px}
       drop(e.clientX,e.clientY);trail=Date.now()+3500;
     });
     var last=0;addEventListener('pointermove',function(e){if(Date.now()>trail)return;var t=Date.now();if(t-last<110)return;last=t;drop(e.clientX,e.clientY)},{passive:true});
+  })();
+
+
+  /* ===== portfolio track ===== */
+  (function(){
+    var t=document.getElementById('wTrack');if(!t)return;
+    var step=function(){var c=t.querySelector('.pf');return c?c.getBoundingClientRect().width+22:300};
+    document.getElementById('wPrev').onclick=function(){t.scrollBy({left:-step(),behavior:'smooth'})};
+    document.getElementById('wNext').onclick=function(){t.scrollBy({left:step(),behavior:'smooth'})};
+    var down=false,sx=0,sl=0,moved=false;
+    t.addEventListener('pointerdown',function(e){if(e.pointerType!=='mouse')return;down=true;moved=false;sx=e.clientX;sl=t.scrollLeft});
+    addEventListener('pointermove',function(e){if(!down)return;var dx=e.clientX-sx;if(Math.abs(dx)>5){moved=true;t.classList.add('drag')}t.scrollLeft=sl-dx});
+    addEventListener('pointerup',function(){if(!down)return;down=false;setTimeout(function(){t.classList.remove('drag')},0);if(moved){var w=step();t.scrollTo({left:Math.round(t.scrollLeft/w)*w,behavior:'smooth'})}});
+    t.addEventListener('wheel',function(e){if(Math.abs(e.deltaY)>Math.abs(e.deltaX)||e.shiftKey)return;},{passive:true});
   })();
 
   /* cookie notice */
