@@ -378,7 +378,8 @@ html.anim.go .hstamp{animation:dropIn 1s .15s cubic-bezier(.3,1.3,.5,1) forwards
 .w-head h2{font-size:clamp(44px,5.4vw,80px);margin-top:10px}
 .w-head h2 .v{color:var(--butter)}
 .w-lead{font-size:14px;opacity:.65;max-width:34em;margin-left:auto}
-.w-nav{display:flex;gap:8px}
+.w-nav{display:flex;gap:8px;align-items:center}
+.w-nav .btn{margin-right:10px}
 .w-nav button{width:48px;height:48px;border-radius:50%;border:1.5px solid rgba(251,246,230,.4);background:transparent;color:var(--paper);font-size:18px;cursor:pointer;transition:background .2s,color .2s}
 .w-nav button:hover{background:var(--butter);color:var(--ink);border-color:var(--butter)}
 .w-track{display:flex;gap:22px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding-inline:var(--gut);padding:6px var(--gut) 10px;scrollbar-width:none;cursor:grab}
@@ -404,10 +405,10 @@ html.anim.go .hstamp{animation:dropIn 1s .15s cubic-bezier(.3,1.3,.5,1) forwards
 .w-more b{font-size:13px}
 .w-more a span{font-size:11.5px;opacity:.6}
 .w-more .btn{margin-left:auto}
-@media (min-width:861px){.works .w-more{padding-right:calc(var(--gut) + 230px)}}
+
 .w-foot{display:flex;justify-content:center;padding:0 var(--gut)}
-@media (max-width:860px){.works{min-height:0}.w-lead{display:none}.w-more{display:grid;grid-template-columns:1fr 1fr}.w-more .hand-s,.w-more .btn{grid-column:1/-1}.w-more .btn{justify-content:center}.w-more .btn{margin-right:0}.w-lead{margin-left:0}.w-nav{display:none}.pf{width:72vw}.pf-img{height:auto;aspect-ratio:3/3.8}.w-more .btn{margin-left:auto}
-@media (min-width:861px){.works .w-more{padding-right:calc(var(--gut) + 230px)}}}
+@media (max-width:860px){.works{min-height:0}.w-lead{display:none}.w-more{display:grid;grid-template-columns:1fr 1fr}.w-more .hand-s,.w-more .btn{grid-column:1/-1}.w-more .btn{justify-content:center}.w-more .btn{margin-right:0}.w-lead{margin-left:0}.w-nav{display:flex}.w-nav button{display:none}.pf{width:72vw}.pf-img{height:auto;aspect-ratio:3/3.8}.w-more .btn{margin-left:auto}
+}
 
 .pf-btn{background:none;border:0;border-bottom:1px solid rgba(241,234,145,.4);font:600 13px var(--sans);cursor:pointer;padding:0 0 1px}
 .trk{position:fixed;inset:0;z-index:180;background:rgba(37,10,10,.6);backdrop-filter:blur(4px);display:grid;place-items:center;padding:24px;animation:fadeIn .25s}
@@ -590,7 +591,7 @@ footer .v{color:var(--butter);font-size:26px}
   <div class="w-head">
     <div><span class="eyebrow">портфолио</span><h2>мои <span class="v">работы</span></h2></div>
     <p class="w-lead">одни из последних проектов<br>наведите на макет, чтобы посмотреть его целиком</p>
-    <div class="w-nav"><button type="button" id="wPrev" aria-label="Назад">←</button><button type="button" id="wNext" aria-label="Вперёд">→</button></div>
+    <div class="w-nav"><a class="btn btn-butter" href="#zayavka">хочу так же →</a><button type="button" id="wPrev" aria-label="Назад">←</button><button type="button" id="wNext" aria-label="Вперёд">→</button></div>
   </div>
   <div class="w-track" id="wTrack">
 <article class="pf"><div class="pf-img"><img src="img/pf/aliart.jpg" alt="Ali Art Beauty" loading="lazy" draggable="false"></div><div class="pf-cap"><span class="pf-n">01</span><div><b>Ali Art Beauty</b><small>сайт для студии красоты, Москва</small></div></div><a class="pf-go" href="https://aliartbeauty.ru/" target="_blank" rel="noopener">aliartbeauty.ru ↗</a></article>
@@ -605,7 +606,7 @@ footer .v{color:var(--butter);font-size:26px}
 <article class="pf"><div class="pf-img"><img src="img/pf/psihosomatika.jpg" alt="Психосоматика" loading="lazy" draggable="false"></div><div class="pf-cap"><span class="pf-n">10</span><div><b>Психосоматика</b><small>презентация для психолога</small></div></div><span class="pf-go muted">не сайт, поэтому без ссылки</span></article>
 <article class="pf"><div class="pf-img"><img src="img/pf/bebronze.jpg" alt="Be Bronze" loading="lazy" draggable="false"></div><div class="pf-cap"><span class="pf-n">11</span><div><b>Be Bronze</b><small>сертификат для студии загара</small></div></div><span class="pf-go muted">не сайт, поэтому без ссылки</span></article>
   </div>
-  <div class="w-more"><span class="hand-s">ещё сайты:</span><a href="https://mindalflower.ru/" target="_blank" rel="noopener"><b>mindalflower.ru</b><span>интернет-магазин цветочной студии</span></a><a href="http://honeyshine.ru" target="_blank" rel="noopener"><b>honeyshine.ru</b><span>студия загара, Москва</span></a><a href="http://mp-consulting.ru/" target="_blank" rel="noopener"><b>mp-consulting.ru</b><span>консалтинг для маркетплейсов</span></a><a href="https://buanacafe.ru/" target="_blank" rel="noopener"><b>buanacafe.ru</b><span>детское кафе, СПб</span></a><a class="btn btn-butter" href="#zayavka">хочу так же →</a></div>
+  <div class="w-more"><span class="hand-s">ещё сайты:</span><a href="https://mindalflower.ru/" target="_blank" rel="noopener"><b>mindalflower.ru</b><span>интернет-магазин цветочной студии</span></a><a href="http://honeyshine.ru" target="_blank" rel="noopener"><b>honeyshine.ru</b><span>студия загара, Москва</span></a><a href="http://mp-consulting.ru/" target="_blank" rel="noopener"><b>mp-consulting.ru</b><span>консалтинг для маркетплейсов</span></a><a href="https://buanacafe.ru/" target="_blank" rel="noopener"><b>buanacafe.ru</b><span>детское кафе, СПб</span></a></div>
 </section>
 <a class="marq" href="#zayavka" aria-label="Записаться к Лесе"><div><span>оставить заявку<i>✦</i>сайты с чистого листа<i>✦</i>Tilda и Figma<i>✦</i>оставить заявку<i>✦</i>сайты с чистого листа<i>✦</i>Tilda и Figma<i>✦</i></span><span>оставить заявку<i>✦</i>сайты с чистого листа<i>✦</i>Tilda и Figma<i>✦</i>оставить заявку<i>✦</i>сайты с чистого листа<i>✦</i>Tilda и Figma<i>✦</i></span></div></a>
 
