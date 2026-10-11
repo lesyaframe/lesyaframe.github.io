@@ -270,8 +270,23 @@ b{letter-spacing:-.03em}
 .tab .pr i{font-style:normal;opacity:.45;transition:opacity .2s,transform .2s}
 .tab:hover .pr i{opacity:1;transform:translateX(3px)}
 .tab:nth-child(1){background:#F7F1D8}.tab:nth-child(2){background:#F2EBCB}.tab:nth-child(3){background:#EEE6BD}.tab:nth-child(4){background:#EAE1AE}.tab:nth-child(5){background:#E6DC9F}.tab:nth-child(6){background:#F1EA91}.tab:nth-child(7){background:#DCD07A}.tab:nth-child(8){background:var(--choco);color:var(--paper)}
-@media (hover:none){.tab small{max-height:none;margin-top:2px}}
-@media (max-width:560px){.tab{padding:10px 16px 22px}.tab b{font-size:15px}.tab .pr{font-size:14px}}
+.tab .more{display:none}
+@media (max-width:860px),(hover:none){
+  .tab{padding:14px 16px 32px;column-gap:12px;cursor:pointer;-webkit-tap-highlight-color:transparent}
+  .tab:last-child{padding-bottom:16px}
+  .tab:hover,.tab:focus-visible{transform:none}
+  .tab:hover small{max-height:0;margin-top:0}
+  .tab b{font-size:15.5px}
+  .tab .pr{font-size:14px}
+  .tab .pr i{transition:transform .3s;opacity:.6}
+  .tab.open .pr i{transform:rotate(90deg);opacity:1}
+  .tab.open small,.tab.open:hover small{max-height:160px;margin-top:6px;opacity:.8}
+  .tab .more{grid-column:1/-1;justify-self:start;margin-top:12px;font-size:13px;font-weight:700;padding:10px 16px;border-radius:999px;background:var(--choco);color:var(--paper)}
+  .tab:nth-child(8) .more{background:var(--butter);color:var(--ink)}
+  .tab.open .more{display:inline-flex}
+  .anim-list.on>.tab:hover{transform:none}
+  .tabs .tab:hover,.tabs .tab:focus,.tabs .tab.open{transform:none!important;outline:none}
+}
 
 
 .tgi{width:18px;height:18px;flex:none}
@@ -574,14 +589,14 @@ footer .v{color:var(--butter);font-size:26px}
       <div class="hrow"><a class="btn btn-choco" href="#zayavka" data-svc="Сайт с нуля под ключ">оставить заявку</a><a class="btn btn-tgl" href="https://t.me/LesyaLesya8" target="_blank" rel="noopener"><svg class="tgi" viewBox="0 0 24 24" aria-hidden="true"><path d="M21.5 4.3 2.9 11.5c-1.3.5-1.3 1.2-.2 1.5l4.8 1.5 1.8 5.6c.2.6.4.8.9.8.4 0 .6-.2.9-.5l2.3-2.2 4.7 3.5c.9.5 1.5.2 1.7-.8l3.1-14.6c.3-1.3-.5-1.9-1.4-1.5ZM9.6 14.7l-.4 4.1-1.6-5 9.9-6.3-7.9 7.2Z" fill="currentColor"/></svg>Telegram</a></div>
     </div>
     <div class="tabs">
-<a class="tab" style="--i:0" data-n="01" href="#zayavka" data-svc="Дизайн сайта в Figma"><span class="tt"><b>Дизайн сайта в Figma</b><small>без вёрстки, макет для вас или вашего разработчика</small></span><span class="pr">от 20 000 ₽<i>→</i></span></a>
-<a class="tab" style="--i:1" data-n="02" href="#zayavka" data-svc="Редизайн существующего сайта"><span class="tt"><b>Редизайн существующего сайта</b><small>новый дизайн и вёрстка на Tilda</small></span><span class="pr">от 30 000 ₽<i>→</i></span></a>
-<a class="tab" style="--i:2" data-n="03" href="#zayavka" data-svc="Портал, пространство, приложение"><span class="tt"><b>Портал, пространство, приложение</b><small>личный кабинет для учеников, трекер или планер, база материалов для клиентов</small></span><span class="pr">от 30 000 ₽<i>→</i></span></a>
-<a class="tab" style="--i:3" data-n="04" href="#zayavka" data-svc="Интернет-магазин"><span class="tt"><b>Интернет-магазин</b><small>каталог, карточки товаров, корзина и оплата</small></span><span class="pr">от 70 000 ₽<i>→</i></span></a>
-<a class="tab" style="--i:4" data-n="05" href="#zayavka" data-svc="Пакет для соцсетей"><span class="tt"><b>Пакет для соцсетей</b><small>профиль, обложки и шаблоны в едином стиле</small></span><span class="pr">от 15 000 ₽<i>→</i></span></a>
-<a class="tab" style="--i:5" data-n="06" href="#zayavka" data-svc="Поддержка после запуска"><span class="tt"><b>Поддержка после запуска</b><small>правки, новые страницы, замена текстов</small></span><span class="pr">1 год бесплатно<i>→</i></span></a>
-<a class="tab" style="--i:6" data-n="07" href="#zayavka" data-svc="Брендбук и фирменный стиль"><span class="tt"><b>Брендбук и фирменный стиль</b><small>логотип, цвета, шрифты, носители и правила, как всем этим пользоваться</small></span><span class="pr">по запросу<i>→</i></span></a>
-<a class="tab" style="--i:7" data-n="08" href="#zayavka" data-svc="Дизайнер на абонементе"><span class="tt"><b>Дизайнер на абонементе</b><small>для брендов и компаний, у которых постоянно много задач</small></span><span class="pr">от 60 000 ₽/мес<i>→</i></span></a>
+<a class="tab" style="--i:0" data-n="01" href="#zayavka" data-svc="Дизайн сайта в Figma"><span class="tt"><b>Дизайн сайта в Figma</b><small>без вёрстки, макет для вас или вашего разработчика</small></span><span class="pr">от 20 000 ₽<i>→</i></span><span class="more">обсудить эту услугу →</span></a>
+<a class="tab" style="--i:1" data-n="02" href="#zayavka" data-svc="Редизайн существующего сайта"><span class="tt"><b>Редизайн существующего сайта</b><small>новый дизайн и вёрстка на Tilda</small></span><span class="pr">от 30 000 ₽<i>→</i></span><span class="more">обсудить эту услугу →</span></a>
+<a class="tab" style="--i:2" data-n="03" href="#zayavka" data-svc="Портал, пространство, приложение"><span class="tt"><b>Портал, пространство, приложение</b><small>личный кабинет для учеников, трекер или планер, база материалов для клиентов</small></span><span class="pr">от 30 000 ₽<i>→</i></span><span class="more">обсудить эту услугу →</span></a>
+<a class="tab" style="--i:3" data-n="04" href="#zayavka" data-svc="Интернет-магазин"><span class="tt"><b>Интернет-магазин</b><small>каталог, карточки товаров, корзина и оплата</small></span><span class="pr">от 70 000 ₽<i>→</i></span><span class="more">обсудить эту услугу →</span></a>
+<a class="tab" style="--i:4" data-n="05" href="#zayavka" data-svc="Пакет для соцсетей"><span class="tt"><b>Пакет для соцсетей</b><small>профиль, обложки и шаблоны в едином стиле</small></span><span class="pr">от 15 000 ₽<i>→</i></span><span class="more">обсудить эту услугу →</span></a>
+<a class="tab" style="--i:5" data-n="06" href="#zayavka" data-svc="Поддержка после запуска"><span class="tt"><b>Поддержка после запуска</b><small>правки, новые страницы, замена текстов</small></span><span class="pr">1 год бесплатно<i>→</i></span><span class="more">обсудить эту услугу →</span></a>
+<a class="tab" style="--i:6" data-n="07" href="#zayavka" data-svc="Брендбук и фирменный стиль"><span class="tt"><b>Брендбук и фирменный стиль</b><small>логотип, цвета, шрифты, носители и правила, как всем этим пользоваться</small></span><span class="pr">по запросу<i>→</i></span><span class="more">обсудить эту услугу →</span></a>
+<a class="tab" style="--i:7" data-n="08" href="#zayavka" data-svc="Дизайнер на абонементе"><span class="tt"><b>Дизайнер на абонементе</b><small>для брендов и компаний, у которых постоянно много задач</small></span><span class="pr">от 60 000 ₽/мес<i>→</i></span><span class="more">обсудить эту услугу →</span></a>
 </div>
   </div>
   <p class="svc-note">*тексты входят в стоимость работ</p>
@@ -967,6 +982,22 @@ footer .v{color:var(--butter);font-size:26px}
       fetch('https://firestore.googleapis.com/v1/projects/lesya-hub/databases/(default)/documents/sitevisits',{method:'POST',headers:{'Content-Type':'application/json'},keepalive:true,
         body:JSON.stringify({fields:{day:{stringValue:day},src:{stringValue:src},dev:{stringValue:/Mobi|Android|iPhone|iPad/i.test(ua)?'m':'d'},ret:{booleanValue:ret}}})}).catch(function(){});
     }catch(e){}
+  })();
+
+
+  /* ===== услуги на телефоне: вкладка раскрывается, а не уводит в форму ===== */
+  (function(){
+    var box=document.querySelector('.tabs');if(!box)return;
+    var mq=matchMedia('(max-width:860px),(hover:none)');
+    box.addEventListener('click',function(e){
+      if(!mq.matches)return;
+      var t=e.target.closest('.tab');if(!t)return;
+      if(t.classList.contains('open')&&e.target.closest('.more'))return; /* «обсудить» ведёт в форму */
+      e.preventDefault();e.stopPropagation();
+      var was=t.classList.contains('open');
+      [].forEach.call(box.querySelectorAll('.tab.open'),function(x){x.classList.remove('open')});
+      if(!was)t.classList.add('open');
+    },true);
   })();
 
   /* cookie notice */
