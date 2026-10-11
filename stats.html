@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Заходы на сайт</title>
+<meta name="theme-color" content="#3B1B14">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Хаб">
+<style>
+html{background:#3B1B14}
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{margin:0;font:14px/1.4 system-ui,-apple-system,sans-serif;background:#F7F0DA}
+img{max-width:100%}
+[hidden]{display:none!important}
+</style>
+<script src="firebase-config.js?v=20261011180432"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+<script src="portal.js?v=20261011180432" data-app="stats"></script>
+</head>
+<body>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap">
+<style>
+@font-face{font-family:"Vasek";src:url("fonts/Vasek.ttf") format("truetype");font-display:swap;size-adjust:135%}
+:root{--choco:#3B1B14;--ink:#250A0A;--paper:#FBF6E6;--cream:#F5EDC9;--butter:#F1EA91;--olive:#737038;--muted:#6B5550;--line:rgba(59,27,20,.14);
+  --sans:"Inter","Helvetica Neue",Arial,sans-serif;--script:"Vasek","Segoe Script",cursive}
+*{box-sizing:border-box}
+body{background:var(--paper)!important;color:var(--ink);font-family:var(--sans)!important;font-size:15px;letter-spacing:-.012em}
+.wrap{max-width:1000px;margin:0 auto;padding:22px 16px 60px;display:flex;flex-direction:column;gap:18px}
+.top{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.back{font-weight:600;text-decoration:none;color:var(--olive)}
+h1{margin:0;font-size:clamp(34px,6vw,54px);font-weight:900;letter-spacing:-.06em;line-height:.9}
+h1 .v{font-family:var(--script);font-weight:400;letter-spacing:0;color:var(--olive);margin-left:.15em;font-size:1.05em}
+.site{margin-left:auto;font-size:13px;font-weight:600;color:var(--choco);background:var(--cream);padding:8px 14px;border-radius:999px;text-decoration:none}
+.nums{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.num{background:#fff;border-radius:18px;padding:16px 18px;display:flex;flex-direction:column;gap:4px;box-shadow:0 12px 26px -22px rgba(59,27,20,.6)}
+.num:first-child{background:var(--choco);color:var(--paper)}
+.num:first-child small{color:rgba(251,246,230,.7)}
+.num b{font-size:clamp(32px,5vw,46px);font-weight:900;letter-spacing:-.06em;line-height:1;font-variant-numeric:tabular-nums}
+.num small{font-size:13px;color:var(--muted)}
+.card{background:#fff;border-radius:18px;padding:18px 20px;box-shadow:0 12px 26px -22px rgba(59,27,20,.6)}
+.card h2{margin:0 0 14px;font-size:18px;font-weight:800;letter-spacing:-.04em;display:flex;justify-content:space-between;align-items:baseline}
+.card h2 small{font-size:12px;font-weight:500;color:var(--muted);letter-spacing:0}
+.chart{display:flex;align-items:flex-end;gap:4px;height:170px;padding-top:18px;border-bottom:1.5px solid var(--choco)}
+.bar{flex:1;position:relative;background:var(--butter);border-radius:5px 5px 0 0;min-height:2px;transition:background .2s}
+.bar.today{background:var(--olive)}
+.bar:hover{background:var(--choco)}
+.bar span{position:absolute;bottom:100%;left:50%;translate:-50% -2px;font-size:10px;font-weight:700;color:var(--muted);white-space:nowrap}
+.bar:hover span,.bar.today span{color:var(--ink)}
+.axis{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-top:6px;font-variant-numeric:tabular-nums}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.rows{display:flex;flex-direction:column;gap:10px}
+.row{display:grid;grid-template-columns:110px 1fr 40px;gap:10px;align-items:center;font-size:14px}
+.row i{display:block;height:10px;border-radius:6px;background:var(--cream);overflow:hidden}
+.row i b{display:block;height:100%;background:var(--olive);border-radius:6px}
+.row em{font-style:normal;font-weight:700;text-align:right;font-variant-numeric:tabular-nums}
+.note{font-size:13px;color:var(--muted);line-height:1.45}
+.note code{background:var(--cream);padding:1px 6px;border-radius:5px}
+.empty{text-align:center;padding:30px 10px;color:var(--muted)}
+.empty .v{font-family:var(--script);font-size:34px;color:var(--olive);display:block;margin-bottom:6px}
+.err{background:#F6E1D8;color:var(--choco);border-radius:14px;padding:14px 16px;font-size:14px}
+@media (max-width:700px){.nums{grid-template-columns:1fr 1fr}.two{grid-template-columns:1fr}.chart{height:130px;gap:2px}.bar span{display:none}.bar.today span{display:block}}
+</style>
+
+<div class="wrap">
+  <div class="top">
+    <a class="back" href="index.html">← в хаб</a>
+    <a class="site" href="https://lesyaframe.github.io/sait/">открыть сайт ↗</a>
+  </div>
+  <h1>заходы<span class="v">на сайт</span></h1>
+  <div id="err" class="err" hidden></div>
+  <div class="nums">
+    <div class="num"><b id="nToday">…</b><small>сегодня</small></div>
+    <div class="num"><b id="nYest">…</b><small>вчера</small></div>
+    <div class="num"><b id="n7">…</b><small>за 7 дней</small></div>
+    <div class="num"><b id="n30">…</b><small>за 30 дней</small></div>
+  </div>
+  <div class="card">
+    <h2>по дням <small>последние 30 дней</small></h2>
+    <div id="chartBox"><div class="chart" id="chart"></div><div class="axis"><span id="ax0"></span><span id="ax1"></span></div></div>
+  </div>
+  <div class="two">
+    <div class="card"><h2>откуда пришли <small>за 30 дней</small></h2><div class="rows" id="src"></div></div>
+    <div class="card"><h2>кто заходил <small>за 30 дней</small></h2><div class="rows" id="dev"></div></div>
+  </div>
+  <p class="note">Один заход = один человек открыл сайт (повторные обновления страницы в той же вкладке не считаются). Твои собственные заходы не считаются на тех устройствах, где ты один раз открыла <code>lesyaframe.github.io/sait/#me</code>.</p>
+</div>
+
+<script>
+(async function(){
+  const MSK = d => d.toLocaleDateString("sv-SE",{timeZone:"Europe/Moscow"});
+  const now = new Date(), today = MSK(now);
+  const days = []; for(let i=29;i>=0;i--) days.push(MSK(new Date(now.getTime()-i*864e5)));
+  const yest = days[28];
+  const SRC = {instagram:"Instagram",telegram:"Telegram",google:"Google",yandex:"Яндекс",vk:"ВКонтакте",direct:"напрямую"};
+  const showErr = t => { const e=document.getElementById("err"); e.textContent=t; e.hidden=false; };
+  let docs = [];
+  try{
+    await window.claude.use("db");
+    const fs = window.PORTAL && window.PORTAL.fs;
+    if(!fs) throw new Error("нет базы");
+    const snap = await fs.collection("sitevisits").where("day",">=",days[0]).get();
+    docs = snap.docs.map(d => d.data());
+  }catch(e){
+    showErr("Не получилось загрузить заходы. Скорее всего, ещё не вставлено правило в Firebase (файл «правило-счётчик-заходов.txt»). Ошибка: " + (e.message||e));
+  }
+  const by = {}; days.forEach(d => by[d]=0);
+  docs.forEach(v => { if(v.day in by) by[v.day]++; });
+  const sum = arr => arr.reduce((a,d)=>a+by[d],0);
+  document.getElementById("nToday").textContent = by[today];
+  document.getElementById("nYest").textContent = by[yest];
+  document.getElementById("n7").textContent = sum(days.slice(23));
+  document.getElementById("n30").textContent = docs.length;
+
+  const fmt = d => new Date(d+"T12:00:00").toLocaleDateString("ru-RU",{day:"numeric",month:"short"});
+  if(!docs.length){
+    document.getElementById("chartBox").innerHTML = '<div class="empty"><span class="v">пока тихо</span>как только кто-то зайдёт на сайт, здесь появится график</div>';
+  } else {
+    const max = Math.max(1,...days.map(d=>by[d]));
+    document.getElementById("chart").innerHTML = days.map(d => `<div class="bar${d===today?" today":""}" style="height:${(by[d]/max*100).toFixed(1)}%" title="${fmt(d)}: ${by[d]}"><span>${by[d]||""}</span></div>`).join("");
+    document.getElementById("ax0").textContent = fmt(days[0]);
+    document.getElementById("ax1").textContent = "сегодня";
+  }
+  function rows(el, counts, names){
+    const tot = Object.values(counts).reduce((a,b)=>a+b,0);
+    const list = Object.entries(counts).sort((a,b)=>b[1]-a[1]);
+    el.innerHTML = list.length ? list.map(([k,n]) => `<div class="row"><span>${names[k]||k}</span><i><b style="width:${(n/tot*100).toFixed(1)}%"></b></i><em>${n}</em></div>`).join("") : '<p class="note">пока нет данных</p>';
+  }
+  const src = {}, dev = {};
+  docs.forEach(v => { src[v.src]=(src[v.src]||0)+1; dev["dev_"+v.dev]=(dev["dev_"+v.dev]||0)+1; dev[v.ret?"ret":"new"]=(dev[v.ret?"ret":"new"]||0)+1; });
+  rows(document.getElementById("src"), src, SRC);
+  const devEl = document.getElementById("dev");
+  if(!docs.length) devEl.innerHTML = '<p class="note">пока нет данных</p>';
+  else { const a=document.createElement("div"),b=document.createElement("div");a.className=b.className="rows";devEl.append(a,b);devEl.style.gap="18px";
+    rows(a,{m:dev.dev_m||0,d:dev.dev_d||0},{m:"с телефона",d:"с компьютера"}); rows(b,{n:dev.new||0,r:dev.ret||0},{n:"впервые",r:"возвращались"}); }
+})();
+</script>
+</body>
+</html>

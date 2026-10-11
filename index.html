@@ -19,11 +19,11 @@ body{margin:0;font:14px/1.4 system-ui,-apple-system,sans-serif;background:#F7F0D
 img{max-width:100%}
 [hidden]{display:none!important}
 </style>
-<script src="firebase-config.js?v=20261005131727"></script>
+<script src="firebase-config.js?v=20261011180432"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
-<script src="portal.js?v=20261005131727" data-app="hub"></script>
+<script src="portal.js?v=20261011180432" data-app="hub"></script>
 </head>
 <body>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -254,7 +254,8 @@ const S = [
    subs:[{t:"Рандомайзер тем", d:"О чём снять разговорное видео.", href:RAND},
          {t:"Идеи для блога", d:"Reels, посты, карусели, сторис, статистика и сотрудничества.", href:"blog.html"}]},
   {id:"work", cls:"f-work", name:"Работа", hand:"задачи", color:"var(--olive)", dark:true,
-   subs:[{t:"Задачи по работе", d:"Задачи по проектам, сроки, статусы и напоминания.", href:"work.html"}]},
+   subs:[{t:"Задачи по работе", d:"Задачи по проектам, сроки, статусы и напоминания.", href:"work.html"},
+         {t:"Заходы на сайт", d:"Сколько людей открыли мой сайт: по дням, откуда пришли, с чего заходили.", href:"stats.html"}]},
   {id:"plan", cls:"f-plan", name:"Планирование", hand:"неделя", color:"var(--cream)",
    subs:[{t:"Цели на неделю и день", d:"Что хочу успеть на этой неделе и сегодня."}], label:"неделя и день"},
   {id:"pers", cls:"f-pers", name:"Личное", hand:"для себя", color:"var(--choco-2)", dark:true,

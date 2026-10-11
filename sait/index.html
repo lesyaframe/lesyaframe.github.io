@@ -952,6 +952,23 @@ footer .v{color:var(--butter);font-size:26px}
     addEventListener('keydown',function(e){if(e.key==='Escape'&&!m.hidden)close()});
   })();
 
+
+  /* ===== счётчик заходов (видно в хабе: lesyaframe.github.io/stats.html) ===== */
+  (function(){
+    try{
+      if(location.hash==='#me'){localStorage.setItem('lesya-me','1');history.replaceState(null,'',location.pathname);return}
+      if(localStorage.getItem('lesya-me')==='1'||navigator.webdriver||location.protocol==='file:')return;
+      if(sessionStorage.getItem('lesya-v'))return;sessionStorage.setItem('lesya-v','1');
+      var ua=navigator.userAgent,ref='';try{ref=document.referrer?new URL(document.referrer).hostname:''}catch(e){}
+      if(ref===location.hostname)ref='';
+      var src=/instagram/i.test(ua)||/instagram/.test(ref)?'instagram':/telegram/i.test(ua)||/t\.me|telegram/.test(ref)?'telegram':/google\./.test(ref)?'google':/yandex|ya\.ru/.test(ref)?'yandex':/vk\.com|vk\.ru/.test(ref)?'vk':ref?ref.replace(/^www\./,'').slice(0,19):'direct';
+      var ret=localStorage.getItem('lesya-seen')==='1';localStorage.setItem('lesya-seen','1');
+      var day=new Date().toLocaleDateString('sv-SE',{timeZone:'Europe/Moscow'});
+      fetch('https://firestore.googleapis.com/v1/projects/lesya-hub/databases/(default)/documents/sitevisits',{method:'POST',headers:{'Content-Type':'application/json'},keepalive:true,
+        body:JSON.stringify({fields:{day:{stringValue:day},src:{stringValue:src},dev:{stringValue:/Mobi|Android|iPhone|iPad/i.test(ua)?'m':'d'},ret:{booleanValue:ret}}})}).catch(function(){});
+    }catch(e){}
+  })();
+
   /* cookie notice */
   (function(){var c=document.getElementById('cookie'),k='lesya-cookie-ok',ok=false;try{ok=localStorage.getItem(k)==='1'}catch(e){}
     if(!ok)c.hidden=false;document.getElementById('cookieOk').onclick=function(){c.hidden=true;try{localStorage.setItem(k,'1')}catch(e){}}})();
