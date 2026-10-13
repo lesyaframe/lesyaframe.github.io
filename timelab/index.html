@@ -98,13 +98,13 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;paddin
 .in .pop{opacity:1;transform:none}
 
 /* ── HERO: огромное слово + книга перед ним ── */
-.hero{position:relative;height:calc(100svh - var(--sw));min-height:560px;overflow:hidden;display:grid;grid-template-rows:1fr auto;padding:calc(var(--hh) + 10px) clamp(16px,3.4vw,48px) clamp(34px,5vh,52px)}
+.hero{position:relative;height:calc(100svh - var(--sw));min-height:560px;overflow:hidden;display:grid;grid-template-rows:1fr auto;padding:calc(var(--hh) + 10px) clamp(16px,3.4vw,48px) clamp(64px,10vh,110px)}
 .hero > :not(.stripes):not(.star):not(.scal):not(.word):not(.obj){position:relative;z-index:3}
 .word{position:absolute;left:0;right:0;top:calc(var(--sw) + var(--hh) + 2vh);text-align:center;font:900 min(19.6vw,38vh)/.8 Rubik,sans-serif;letter-spacing:-.05em;color:var(--cream);user-select:none;z-index:1;white-space:nowrap}
 .word span{display:inline-block;transform:translateY(45%);opacity:0;transition:transform .9s var(--ease),opacity .5s;transition-delay:calc(var(--i)*70ms + 100ms)}
 .go .word span{transform:none;opacity:1}
 .go .word span:hover{transform:translateY(-6%) rotate(-4deg);transition-delay:0s;transition-duration:.35s}
-.obj{position:absolute;left:50%;bottom:clamp(30px,5vh,52px);transform:translateX(-50%);height:min(62vh,44vw);z-index:2;display:flex;align-items:flex-end;cursor:pointer}
+.obj{position:absolute;left:50%;bottom:clamp(30px,5vh,52px);transform:translateX(-50%);height:min(62vh,38vw);z-index:2;display:flex;align-items:flex-end;cursor:pointer}
 .obj .bk{position:relative;height:100%;width:auto;max-width:none;filter:drop-shadow(0 34px 34px rgba(80,10,10,.45)) drop-shadow(0 6px 8px rgba(80,10,10,.25));transform:translateY(40%) rotate(-14deg);opacity:0;transition:transform 1s var(--ease),opacity .5s;transition-delay:.55s}
 .obj .bk.b2{position:absolute;left:52%;bottom:4%;height:86%;z-index:-1;transform:translateY(40%) rotate(20deg);transition-delay:.7s}
 .go .obj .bk{transform:rotate(-6deg);opacity:1}
@@ -112,7 +112,10 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;paddin
 .go .obj:hover .bk{transform:rotate(-2deg) translateY(-12px);transition-delay:0s}
 .go .obj:hover .bk.b2{transform:rotate(14deg) translateX(34px);transition-delay:0s}
 .hrow{align-self:end;display:flex;justify-content:space-between;align-items:flex-end;gap:20px;grid-row:2}
-.hl-l{max-width:min(470px,36vw)}
+.hl-l{max-width:none}
+.hl-l .acts{flex-wrap:nowrap}
+@media (max-width:1200px) and (min-width:901px){.obj{height:min(62vh,33vw)}.hl-l p{font-size:13px}.hl-l .btn{height:44px;padding:0 16px;font-size:14px}}
+.hl-l p{max-width:none}
 .hl-l .h{font-size:clamp(26px,min(2.8vw,5vh),44px);text-transform:lowercase;color:var(--cream);line-height:1.04;text-shadow:0 2px 14px rgba(120,20,10,.35)}
 .hl-l p{color:var(--cream);font-weight:700;font-size:15px;white-space:nowrap;line-height:1.5;margin:12px 0 18px;text-shadow:0 1px 10px rgba(120,20,10,.4)}
 .hl-l .acts{display:flex;gap:8px;flex-wrap:wrap}
@@ -287,7 +290,7 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;paddin
 /* ── телефон ── */
 @media (max-width:900px){
   .sec{min-height:0;padding:96px 16px 64px}
-  .hero{padding:calc(var(--hh) + 10px) 16px 34px}
+  .hero{padding:calc(var(--hh) + 10px) 16px 50px}
   .word{font-size:21vw;top:calc(var(--sw) + var(--hh) + 14px)}
   .obj{height:38vh;bottom:auto;top:calc(var(--sw) + var(--hh) + 26vw)}
   .hrow{flex-direction:column;align-items:stretch;text-align:center}
@@ -348,7 +351,7 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;paddin
   <div class="word" aria-label="TIME LAB"><span style="--i:0">T</span><span style="--i:1">I</span><span style="--i:2">M</span><span style="--i:3">E</span> <span style="--i:4">L</span><span style="--i:5">A</span><span style="--i:6">B</span></div>
   <a class="obj" href="#themes" aria-label="тематики фотокниг"><img class="bk b2" src="img/album-wed.webp" alt="Фотокнига Wedding Day"><img class="bk" src="img/album-papa.webp" alt="Фотокнига «Папа»"></a>
   <div class="hrow">
-    <div class="hl-l"><h1 class="h">индивидуальные фотокниги</h1><p>путешествия, семья, любовь,<br>дети и даже питомцы<br>мы создадим фотокнигу под вашу историю</p><div class="acts"><button class="btn btn-cream" data-order>заказать фотокнигу</button><a class="btn btn-glass" href="#themes">тематики</a></div></div>
+    <div class="hl-l"><h1 class="h">индивидуальные<br>фотокниги</h1><p>путешествия, семья, любовь,<br>дети и даже питомцы<br>мы создадим фотокнигу под вашу историю</p><div class="acts"><button class="btn btn-cream" data-order>заказать фотокнигу</button><a class="btn btn-glass" href="#themes">тематики</a></div></div>
     <div class="hl-r"><div class="hand">время,<br>ставшее<br>памятью</div><div class="facts"><span>📦 доставка по РФ и в страны ЕАЭС</span><span>от <b>4 990 ₽</b></span></div></div>
   </div>
   <svg class="star hide-m" style="--s:40px;left:31%;top:44%"><use href="#star"/></svg>
