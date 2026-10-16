@@ -1,0 +1,363 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Анкета для Есении</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;600&family=Manrope:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: одна колонка-бланк, разделы как отдельные листы, номера вопросов на полях, липкая полоса прогресса сверху */
+:root{
+  --bg:#EDF0E9; --paper:#FBFCF8; --ink:#1C241F; --muted:#636D66; --line:#D6DCD1;
+  --chip:#E1E7DC; --accent:#2E6A4E; --accent-ink:#FFFFFF; --sun:#E6C243; --danger:#B4452F;
+  --display:"Unbounded","Arial Black",system-ui,sans-serif;
+  --body:"Manrope",-apple-system,"Segoe UI",Roboto,sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#131915; --paper:#1A221D; --ink:#E6ECE5; --muted:#9AA59D; --line:#2D3932;
+  --chip:#26312A; --accent:#7CC3A0; --accent-ink:#0F1A14; --sun:#D8B73D; --danger:#E58066; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#131915; --paper:#1A221D; --ink:#E6ECE5; --muted:#9AA59D; --line:#2D3932;
+  --chip:#26312A; --accent:#7CC3A0; --accent-ink:#0F1A14; --sun:#D8B73D; --danger:#E58066; color-scheme:dark}
+
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.5;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 64px}
+.wrap{max-width:760px;margin:0 auto}
+h1,h2{font-family:var(--display);font-weight:600;text-wrap:balance;margin:0;letter-spacing:-.01em}
+h1{font-size:clamp(28px,6vw,44px);line-height:1.08}
+h2{font-size:clamp(18px,3.4vw,22px);line-height:1.2}
+.eyebrow{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--accent)}
+header.top{display:grid;gap:14px;padding-block:40px 24px}
+header.top p{margin:0;max-width:60ch}
+.note{color:var(--muted);font-size:15px}
+
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);padding-block:10px;
+  display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;border-bottom:1px solid var(--line)}
+.prog{flex:1 1 220px;display:grid;gap:6px;min-width:0}
+.prog-txt{font-size:14px;font-weight:600;font-variant-numeric:tabular-nums}
+.track{height:6px;border-radius:99px;background:var(--chip);overflow:hidden}
+.fill{height:100%;width:0;background:var(--sun);border-radius:99px;transition:width .4s ease}
+.tools-top{display:flex;flex-wrap:wrap;gap:8px}
+
+.btn{font:inherit;font-size:14px;font-weight:600;border:0;border-radius:99px;padding:9px 16px;cursor:pointer;
+  background:var(--accent);color:var(--accent-ink)}
+.btn.soft{background:var(--chip);color:var(--ink)}
+.btn.small{font-size:13px;padding:6px 12px}
+.btn.danger{background:var(--chip);color:var(--danger)}
+.btn.danger.sure{background:var(--danger);color:var(--paper)}
+.btn:focus-visible,textarea:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+.banner{margin-top:16px;padding:12px 16px;border-radius:14px;background:var(--chip);font-size:15px}
+.banner[hidden]{display:none}
+
+#app{display:grid;gap:18px;margin-top:22px}
+.sheet{background:var(--paper);border:1px solid var(--line);border-radius:20px;padding:22px clamp(16px,4vw,32px) 26px;display:grid;gap:18px}
+.sheet-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.sec-count{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+ol.qs{list-style:none;margin:0;padding:0;display:grid;gap:22px}
+.q{display:grid;grid-template-columns:2.2em minmax(0,1fr);gap:4px 10px}
+.num{font-family:var(--display);font-size:14px;color:var(--muted);padding-top:2px;font-variant-numeric:tabular-nums}
+.q.done .num{color:var(--accent)}
+.qbody{display:grid;gap:8px;min-width:0}
+.qtext{font-weight:600;font-size:17px;line-height:1.4}
+.hint{margin:0;color:var(--muted);font-size:14.5px}
+textarea,input[type=text]{font:inherit;font-size:16px;color:var(--ink);background:var(--bg);border:1px solid var(--line);
+  border-radius:12px;padding:11px 13px;width:100%;box-sizing:border-box}
+textarea{resize:vertical;min-height:3.2em;overflow:hidden}
+textarea::placeholder,input::placeholder{color:var(--muted);opacity:.8}
+.st{font-size:12.5px;color:var(--muted);min-height:1.2em}
+.st.err{color:var(--danger)}
+.lbl{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+.row{display:flex;flex-wrap:wrap;gap:8px}
+.sec-edit{display:grid;gap:6px}
+.sec-name{font-family:var(--display);font-weight:600;font-size:18px}
+.newsec{border:1.5px dashed var(--line);border-radius:20px;padding:20px;display:grid;gap:10px}
+.empty{padding:40px 8px;color:var(--muted);text-align:center}
+.foot{margin-top:28px;color:var(--muted);font-size:14.5px}
+.copybox{margin-top:12px}
+.copybox textarea{min-height:200px;font-size:14px}
+@media (prefers-reduced-motion: reduce){.fill{transition:none}}
+.linkbtn{font:inherit;font-size:13px;background:none;border:0;padding:0;color:var(--muted);text-decoration:underline;cursor:pointer}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="top">
+    <span class="eyebrow">Платформа для&nbsp;подопечных</span>
+    <h1>Анкета для&nbsp;Есении</h1>
+    <p>Здесь вопросы, по&nbsp;которым мы&nbsp;соберём платформу для&nbsp;твоих подопечных. Отвечай как удобно: коротко, подробно, частями. Всё сохраняется само, можно закрыть страницу и&nbsp;вернуться позже.</p>
+    <p class="note">Примеры тренировок, меню и&nbsp;скрины присылай мне файлами в&nbsp;мессенджер, а&nbsp;здесь просто напиши, что отправила. Если вопрос непонятен, пропусти его, обсудим голосом.</p>
+  </header>
+
+  <div class="bar">
+    <div class="prog">
+      <span class="prog-txt" id="progTxt">Загружаю вопросы…</span>
+      <div class="track"><div class="fill" id="progFill"></div></div>
+    </div>
+    <div class="tools-top">
+      <button class="btn soft" id="copyBtn" type="button">Скопировать ответы</button>
+      <button class="btn" id="editBtn" type="button" hidden>Редактировать вопросы</button>
+    </div>
+  </div>
+  <div class="banner" id="banner" hidden></div>
+  <div class="copybox" id="copybox" hidden>
+    <label class="lbl" for="copyArea">Выдели текст и&nbsp;скопируй</label>
+    <textarea id="copyArea" readonly></textarea>
+  </div>
+
+  <main id="app"><div class="empty">Загружаю вопросы…</div></main>
+
+  <p class="foot">Ссылка личная, не пересылай её. Когда закончишь, просто напиши мне.</p>
+  <p class="foot"><button class="linkbtn" id="ownerLink" type="button">Вход для Леси</button></p>
+</div>
+
+<script src="../firebase-config.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+<script>
+(function(){
+const S={db:null,isOwner:false,questions:[],answers:{},editing:false,drafts:{},qdrafts:{},status:{},confirmDel:null,readOnly:false,loaded:false,focusNew:null};
+const $=s=>document.querySelector(s);
+const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+// не оставлять короткие слова в конце строки
+const nb=t=>{let s=String(t||"");const re=/(^|[\s(«"])([А-Яа-яЁёA-Za-z]{1,3})\s+/g;s=s.replace(re,(m,a,b)=>a+b+" ");return s.replace(re,(m,a,b)=>a+b+" ")};
+
+function sections(){
+  const map=new Map();
+  for(const q of S.questions){const k=q.section||"Без раздела";if(!map.has(k))map.set(k,[]);map.get(k).push(q)}
+  return [...map.entries()].map(([name,items])=>({name,items:items.sort((a,b)=>(a.order||0)-(b.order||0))}))
+    .sort((a,b)=>(a.items[0].order||0)-(b.items[0].order||0));
+}
+const ansVal=id=>id in S.drafts?S.drafts[id]:(S.answers[id]||"");
+const qVal=(q,f)=>{const d=S.qdrafts[q.id];return d&&f in d?d[f]:(q[f]||"")};
+
+function autosize(el){el.style.height="auto";el.style.height=(el.scrollHeight+2)+"px"}
+
+function render(){
+  const app=$("#app");
+  const ae=document.activeElement,fid=ae&&ae.id;let ss=null,se=null;
+  if(fid&&typeof ae.selectionStart==="number"){ss=ae.selectionStart;se=ae.selectionEnd}
+  if(!S.loaded){return}
+  const secs=sections();
+  if(!secs.length&&!S.editing){app.innerHTML=`<div class="empty">Вопросов пока нет.${S.isOwner?" Нажми «Редактировать вопросы», чтобы добавить первый.":""}</div>`;updateProgress();return}
+  let h="",n=0;
+  secs.forEach((sec,si)=>{
+    const answered=sec.items.filter(q=>ansVal(q.id).trim()).length;
+    h+=`<section class="sheet">`;
+    if(S.editing){
+      h+=`<div class="sec-edit"><label class="lbl" for="sec-${si}">Название раздела</label><input type="text" id="sec-${si}" class="sec-name" data-sec="${esc(sec.name)}" value="${esc(sec.name)}"></div>`;
+    }else{
+      h+=`<div class="sheet-head"><h2>${esc(nb(sec.name))}</h2><span class="sec-count">${answered} из ${sec.items.length}</span></div>`;
+    }
+    h+=`<ol class="qs">`;
+    sec.items.forEach((q,qi)=>{
+      n++;
+      if(S.editing){
+        const sure=S.confirmDel===q.id;
+        h+=`<li class="q"><span class="num">${n}</span><div class="qbody">
+          <label class="lbl" for="qt-${q.id}">Вопрос</label>
+          <textarea id="qt-${q.id}" data-qf="text" data-id="${q.id}" rows="2">${esc(qVal(q,"text"))}</textarea>
+          <label class="lbl" for="qh-${q.id}">Подсказка, можно оставить пустой</label>
+          <input type="text" id="qh-${q.id}" data-qf="hint" data-id="${q.id}" value="${esc(qVal(q,"hint"))}">
+          <div class="row">
+            <button class="btn soft small" type="button" data-act="up" data-id="${q.id}" ${qi===0?"disabled":""}>↑ Выше</button>
+            <button class="btn soft small" type="button" data-act="down" data-id="${q.id}" ${qi===sec.items.length-1?"disabled":""}>↓ Ниже</button>
+            <button class="btn danger small${sure?" sure":""}" type="button" data-act="del" data-id="${q.id}">${sure?"Точно удалить?":"Удалить"}</button>
+            <span class="st${S.status[q.id]==="err"?" err":""}" id="st-${q.id}">${statusText(q.id)}</span>
+          </div></div></li>`;
+      }else{
+        const v=ansVal(q.id);
+        h+=`<li class="q${v.trim()?" done":""}" id="li-${q.id}"><span class="num">${n}</span><div class="qbody">
+          <label class="qtext" for="a-${q.id}">${esc(nb(q.text))}</label>
+          ${q.hint?`<p class="hint">${esc(nb(q.hint))}</p>`:""}
+          <textarea id="a-${q.id}" data-ans="${q.id}" rows="2" placeholder="Твой ответ" ${S.readOnly?"readonly":""}>${esc(v)}</textarea>
+          <span class="st${S.status[q.id]==="err"?" err":""}" id="st-${q.id}">${statusText(q.id)}</span>
+        </div></li>`;
+      }
+    });
+    h+=`</ol>`;
+    if(S.editing)h+=`<div class="row"><button class="btn soft" type="button" data-act="add" data-sec="${esc(sec.name)}">+ Вопрос в этот раздел</button></div>`;
+    h+=`</section>`;
+  });
+  if(S.editing){
+    h+=`<div class="newsec"><label class="lbl" for="newSecName">Новый раздел</label>
+      <input type="text" id="newSecName" placeholder="Например: Мотивация и цели">
+      <div class="row"><button class="btn" type="button" data-act="addsec">Добавить раздел</button></div></div>`;
+  }
+  app.innerHTML=h;
+  app.querySelectorAll("textarea").forEach(autosize);
+  const want=S.focusNew?("qt-"+S.focusNew):fid;
+  if(want){const el=document.getElementById(want);if(el){el.focus({preventScroll:!S.focusNew});
+    if(S.focusNew){el.select();el.scrollIntoView({block:"center"});S.focusNew=null}
+    else if(ss!=null&&el.setSelectionRange){try{el.setSelectionRange(ss,se)}catch(e){}}}}
+  updateProgress();
+}
+
+function statusText(id){const s=S.status[id];return s==="saving"?"Сохраняю…":s==="saved"?"Сохранено":s==="err"?"Не сохранилось, попробуй ещё раз":s==="local"?"Сохранено только в этом браузере":""}
+function setStatus(id,s){S.status[id]=s;const el=document.getElementById("st-"+id);if(el){el.textContent=statusText(id);el.classList.toggle("err",s==="err")}}
+
+function updateProgress(){
+  const total=S.questions.length,done=S.questions.filter(q=>ansVal(q.id).trim()).length;
+  $("#progTxt").textContent=S.loaded?(total?`Отвечено ${done} из ${total}`:"Вопросов пока нет"):"Загружаю вопросы…";
+  $("#progFill").style.width=total?(done/total*100)+"%":"0";
+}
+
+/* сохранение ответов: одна запись на документ за раз, после паузы в наборе */
+const timers={},chains={};
+function chain(key,fn){chains[key]=(chains[key]||Promise.resolve()).then(fn,fn);return chains[key]}
+function queueAnswer(id,val){
+  S.drafts[id]=val;setStatus(id,"saving");
+  const li=document.getElementById("li-"+id);if(li)li.classList.toggle("done",!!val.trim());
+  updateProgress();refreshCounts();
+  clearTimeout(timers[id]);timers[id]=setTimeout(()=>saveAnswer(id),700);
+}
+function saveAnswer(id){
+  const val=S.drafts[id];
+  if(!S.db){try{localStorage.setItem("anketa-"+id,val)}catch(e){}setStatus(id,"local");return}
+  chain("a-"+id,async()=>{
+    try{await S.db.collection("answers").doc(id).set({text:val,updatedAt:new Date().toISOString()});
+      S.answers[id]=val;if(S.drafts[id]===val)delete S.drafts[id];setStatus(id,"saved")}
+    catch(e){if(e&&e.code==="permission-denied")showBanner("Ответ не сохранился: анкета закрыта для записи. Напиши Лесе.");setStatus(id,"err")}
+  });
+}
+/* сохранение вопросов (только владелица) */
+function queueQ(id,field,val){
+  S.qdrafts[id]=Object.assign({},S.qdrafts[id],{[field]:val});setStatus(id,"saving");
+  clearTimeout(timers["q"+id]);timers["q"+id]=setTimeout(()=>{
+    const patch=Object.assign({},S.qdrafts[id]);
+    chain("q-"+id,async()=>{
+      try{await S.db.collection("questions").doc(id).update(patch);
+        const d=S.qdrafts[id];if(d){for(const k in patch)if(d[k]===patch[k])delete d[k];if(!Object.keys(d).length)delete S.qdrafts[id]}
+        setStatus(id,"saved")}
+      catch(e){setStatus(id,"err")}
+    });
+  },600);
+}
+
+function showBanner(t){const b=$("#banner");b.textContent=t;b.hidden=false}
+
+/* события */
+const app=$("#app");
+app.addEventListener("input",e=>{
+  const t=e.target;
+  if(t.matches("textarea"))autosize(t);
+  if(t.dataset.ans&&!S.readOnly)queueAnswer(t.dataset.ans,t.value);
+  else if(t.dataset.qf&&S.isOwner)queueQ(t.dataset.id,t.dataset.qf,t.value);
+});
+app.addEventListener("change",async e=>{
+  const t=e.target;
+  if(t.classList.contains("sec-name")&&S.isOwner){
+    const from=t.dataset.sec,to=t.value.trim();
+    if(!to||to===from){t.value=from;return}
+    const items=S.questions.filter(q=>(q.section||"Без раздела")===from);
+    for(const q of items){try{await S.db.collection("questions").doc(q.id).update({section:to})}catch(err){showBanner("Не получилось переименовать раздел, попробуй ещё раз.");break}}
+  }
+});
+app.addEventListener("click",async e=>{
+  const b=e.target.closest("[data-act]");if(!b||!S.isOwner||!S.db)return;
+  const act=b.dataset.act,id=b.dataset.id,col=S.db.collection("questions");
+  if(act!=="del"&&S.confirmDel){S.confirmDel=null}
+  if(act==="del"){
+    if(S.confirmDel!==id){S.confirmDel=id;render();return}
+    S.confirmDel=null;
+    try{await col.doc(id).delete();await S.db.collection("answers").doc(id).delete()}catch(err){showBanner("Не получилось удалить вопрос, попробуй ещё раз.")}
+    return;
+  }
+  if(act==="up"||act==="down"){
+    const sec=sections().find(s=>s.items.some(q=>q.id===id));const i=sec.items.findIndex(q=>q.id===id);
+    const j=act==="up"?i-1:i+1;if(j<0||j>=sec.items.length)return;
+    const a=sec.items[i],c=sec.items[j];let oa=a.order||0,oc=c.order||0;if(oa===oc)oc=oa+(act==="up"?-0.5:0.5);
+    try{await col.doc(a.id).update({order:oc});await col.doc(c.id).update({order:oa})}catch(err){showBanner("Не получилось поменять порядок.")}
+    return;
+  }
+  if(act==="add"){
+    const sec=sections().find(s=>s.name===b.dataset.sec);const max=Math.max(...sec.items.map(q=>q.order||0));
+    const ref=col.doc();S.focusNew=ref.id;
+    try{await ref.set({section:b.dataset.sec,text:"Новый вопрос",hint:"",order:max+0.01})}catch(err){S.focusNew=null;showBanner("Не получилось добавить вопрос.")}
+    return;
+  }
+  if(act==="addsec"){
+    const inp=$("#newSecName");const name=inp.value.trim();if(!name){inp.focus();return}
+    const max=S.questions.reduce((m,q)=>Math.max(m,q.order||0),0);
+    const ref=col.doc();S.focusNew=ref.id;
+    try{await ref.set({section:name,text:"Новый вопрос",hint:"",order:Math.floor(max/100+1)*100+1});inp.value=""}catch(err){S.focusNew=null;showBanner("Не получилось добавить раздел.")}
+  }
+});
+
+$("#editBtn").addEventListener("click",()=>{S.editing=!S.editing;S.confirmDel=null;$("#editBtn").textContent=S.editing?"Готово":"Редактировать вопросы";render()});
+
+$("#copyBtn").addEventListener("click",()=>{
+  let out="Анкета: платформа для подопечных\n\n",n=0;
+  for(const sec of sections()){out+=sec.name.toUpperCase()+"\n\n";for(const q of sec.items){n++;out+=`${n}. ${q.text}\n${ansVal(q.id).trim()||"(без ответа)"}\n\n`}}
+  const box=$("#copybox"),area=$("#copyArea"),btn=$("#copyBtn");
+  const fallback=()=>{area.value=out;box.hidden=false;area.focus();area.select()};
+  try{navigator.clipboard.writeText(out).then(()=>{btn.textContent="Скопировано";setTimeout(()=>btn.textContent="Скопировать ответы",1800)},fallback)}catch(e){fallback()}
+});
+
+/* подключение к Firebase: анкета живёт по адресу anketa/<ключ из ссылки> */
+const K=(new URLSearchParams(location.search).get("k")||"").replace(/[^a-z0-9]/gi,"");
+const SEED=[{"id": "q01", "section": "О тебе и подопечных", "text": "С кем ты работаешь?", "hint": "Новички или продвинутые, девушки, мужчины, после родов, похудение, набор массы", "order": 101}, {"id": "q02", "section": "О тебе и подопечных", "text": "Сколько подопечных у тебя сейчас и сколько планируешь через полгода-год?", "hint": "", "order": 102}, {"id": "q05", "section": "О тебе и подопечных", "text": "Что в этом сейчас неудобно и отнимает больше всего времени?", "hint": "", "order": 105}, {"id": "q06", "section": "Разделы платформы", "text": "Какие разделы нужны?", "hint": "Например: питание, тренировки, расписание, замеры и прогресс, фото до/после, полезные статьи, рецепты, вопросы тебе. Допиши свои", "order": 201}, {"id": "q07", "section": "Разделы платформы", "text": "Что из этого самое важное, без чего запускаться нет смысла?", "hint": "", "order": 202}, {"id": "q08", "section": "Разделы платформы", "text": "Что можно добавить позже?", "hint": "", "order": 203}, {"id": "q09", "section": "Тренировки", "text": "Из чего состоит одна тренировка?", "hint": "Видео, описание упражнений, подходы, повторы, вес, отдых, комментарий", "order": 301}, {"id": "q10", "section": "Тренировки", "text": "Видео уже снято или будешь снимать? Где оно хранится сейчас?", "hint": "", "order": 302}, {"id": "q11", "section": "Тренировки", "text": "Программы одинаковые для всех или ты составляешь каждому свою?", "hint": "", "order": 303}, {"id": "q12", "section": "Тренировки", "text": "Подопечный должен отмечать, что выполнил тренировку? Тебе важно это видеть?", "hint": "", "order": 304}, {"id": "q13", "section": "Питание", "text": "Ты даёшь готовое меню или человек сам записывает, что съел?", "hint": "", "order": 401}, {"id": "q14", "section": "Питание", "text": "Нужен подсчёт калорий и БЖУ или достаточно записи с фото еды?", "hint": "", "order": 402}, {"id": "q15", "section": "Питание", "text": "Ты проверяешь дневники питания и оставляешь комментарии?", "hint": "", "order": 403}, {"id": "q16", "section": "Питание", "text": "Нужны рецепты? Они у тебя уже есть?", "hint": "", "order": 404}, {"id": "q17", "section": "Расписание", "text": "Что это за расписание?", "hint": "Групповые занятия, личные встречи, созвоны, план тренировок на неделю", "order": 501}, {"id": "q18", "section": "Расписание", "text": "Подопечные должны записываться на занятия сами?", "hint": "", "order": 502}, {"id": "q19", "section": "Расписание", "text": "Нужны напоминания?", "hint": "На почту, в Телеграм или как-то ещё", "order": 503}, {"id": "q20", "section": "Доступ и оплата", "text": "Подопечный попадает на платформу после оплаты или ты добавляешь его вручную?", "hint": "", "order": 601}, {"id": "q21", "section": "Доступ и оплата", "text": "Доступ на определённый срок (месяц, курс) или навсегда?", "hint": "", "order": 602}, {"id": "q22", "section": "Доступ и оплата", "text": "Есть разные тарифы с разным наполнением?", "hint": "", "order": 603}, {"id": "q23", "section": "Доступ и оплата", "text": "Оплата будет через платформу или отдельно, как сейчас?", "hint": "", "order": 604}, {"id": "q24", "section": "Связь с подопечными", "text": "Нужны комментарии, вопросы тебе, отчёты внутри платформы? Или общение остаётся в мессенджере?", "hint": "", "order": 701}, {"id": "q25", "section": "Связь с подопечными", "text": "Нужно, чтобы подопечные видели друг друга?", "hint": "Общий чат, рейтинг, челленджи", "order": 702}, {"id": "q26", "section": "Как пользоваться", "text": "С чего подопечные чаще будут заходить: с телефона или компьютера?", "hint": "", "order": 801}, {"id": "q27", "section": "Как пользоваться", "text": "Нужна иконка на телефоне, как у приложения?", "hint": "", "order": 802}, {"id": "q28", "section": "Как пользоваться", "text": "Кроме тебя, кто-то ещё будет работать в админке?", "hint": "Помощник, второй тренер", "order": 803}, {"id": "q29", "section": "Внешний вид", "text": "Есть ли у тебя фирменные цвета, логотип, шрифты?", "hint": "", "order": 901}, {"id": "q30", "section": "Внешний вид", "text": "Какие приложения или сайты тебе нравятся, а какие нет?", "hint": "Вставь ссылки и пару слов, чем нравятся", "order": 902}, {"id": "q31", "section": "Сроки и бюджет", "text": "К какой дате хочешь запуститься? Есть привязка к потоку или сезону?", "hint": "", "order": 1001}, {"id": "q32", "section": "Сроки и бюджет", "text": "На какой бюджет ориентируешься?", "hint": "", "order": 1002}, {"id": "q33", "section": "Сроки и бюджет", "text": "Готова запускаться по этапам: сначала основное, потом дополнения?", "hint": "", "order": 1003}, {"id": "q34", "section": "Примеры", "text": "Одна тренировка в том виде, в каком её получает подопечный", "hint": "Пришли файлом в мессенджер, а здесь напиши, что отправила", "order": 1101}, {"id": "q35", "section": "Примеры", "text": "Один день питания или меню", "hint": "Тоже можно файлом или скрином", "order": 1102}, {"id": "q36", "section": "Примеры", "text": "Кусочек расписания", "hint": "", "order": 1103}, {"id": "q37", "section": "Примеры", "text": "Что ещё ты сейчас отправляешь подопечным?", "hint": "Таблицы, PDF, скрины. Пришли всё, что есть", "order": 1104}];
+const sha256=async t=>[...new Uint8Array(await crypto.subtle.digest("SHA-256",new TextEncoder().encode(t)))].map(b=>b.toString(16).padStart(2,"0")).join("");
+(function start(){
+  if(!K||!window.firebase||!window.FIREBASE_CONFIG){
+    $("#progTxt").textContent="Анкета не открылась";
+    app.innerHTML=`<div class="empty">Ссылка неполная. Попроси Лесю прислать её ещё раз.</div>`;return;
+  }
+  firebase.initializeApp(window.FIREBASE_CONFIG);
+  const fs=firebase.firestore(),auth=firebase.auth(),base="anketa/"+K+"/";
+  const docApi=ref=>({id:ref.id,set:d=>ref.set(d),update:d=>ref.update(d),delete:()=>ref.delete()});
+  S.db={collection:p=>{const c=fs.collection(base+p);return {doc:id=>docApi(id?c.doc(id):c.doc())}}};
+  let unQ=null,unA=null;
+  function closed(){S.loaded=false;$("#progTxt").textContent="Анкета пока закрыта";app.innerHTML=`<div class="empty">Анкета пока закрыта. Напиши Лесе, она откроет доступ.</div>`}
+  function subscribe(){
+    unQ&&unQ();unA&&unA();
+    unQ=fs.collection(base+"questions").orderBy("order").onSnapshot(snap=>{
+      S.questions=snap.docs.map(d=>Object.assign({id:d.id},d.data()));S.loaded=true;render();
+    },closed);
+    unA=fs.collection(base+"answers").onSnapshot(snap=>{
+      for(const ch of snap.docChanges()){
+        const id=ch.doc.id;
+        if(ch.type==="removed"){delete S.answers[id];continue}
+        const v=(ch.doc.data()||{}).text||"";S.answers[id]=v;
+        const el=document.getElementById("a-"+id);
+        if(el&&!(id in S.drafts)&&document.activeElement!==el&&el.value!==v){el.value=v;autosize(el);
+          const li=document.getElementById("li-"+id);if(li)li.classList.toggle("done",!!v.trim())}
+      }
+      if(!S.editing&&S.loaded)refreshCounts();
+      updateProgress();
+    },()=>{});
+  }
+  const link=$("#ownerLink");
+  link.addEventListener("click",async()=>{
+    if(S.isOwner){auth.signOut();return}
+    const p=new firebase.auth.GoogleAuthProvider();p.setCustomParameters({prompt:"select_account"});
+    try{await auth.signInWithPopup(p)}catch(e){if(e.code!=="auth/popup-closed-by-user"){try{await auth.signInWithRedirect(p)}catch(e2){showBanner("Не получилось войти.")}}}
+  });
+  auth.getRedirectResult().catch(()=>{});
+  auth.onAuthStateChanged(async u=>{
+    const hash=window.PORTAL_OWNER_HASH||"";
+    S.isOwner=!!(u&&hash&&await sha256((u.email||"").toLowerCase())===hash);
+    if(u&&!S.isOwner){auth.signOut();showBanner("Этот аккаунт не подходит для редактирования.")}
+    if(!S.isOwner&&S.editing){S.editing=false;$("#editBtn").textContent="Редактировать вопросы"}
+    $("#editBtn").hidden=!S.isOwner;link.textContent=S.isOwner?"Выйти":"Вход для Леси";
+    if(S.isOwner){
+      try{const s=await fs.collection(base+"questions").limit(1).get();
+        if(s.empty){const b=fs.batch();SEED.forEach(q=>b.set(fs.doc(base+"questions/"+q.id),{section:q.section,text:q.text,hint:q.hint,order:q.order}));await b.commit()}}
+      catch(e){showBanner("Не получилось записать вопросы в базу.")}
+    }
+    subscribe();
+  });
+})();
+function refreshCounts(){
+  const secs=sections();document.querySelectorAll(".sheet .sec-count").forEach((el,i)=>{const s=secs[i];if(s)el.textContent=`${s.items.filter(q=>ansVal(q.id).trim()).length} из ${s.items.length}`});
+}
+})();
+</script>
+
+</body>
+</html>
