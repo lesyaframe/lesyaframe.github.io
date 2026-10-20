@@ -183,6 +183,21 @@ header nav a.on{background:var(--milk);color:var(--ink)}
 .ghost{height:12px;border-radius:8px;background:rgba(47,33,26,.07);margin-top:10px}
 .empty .note{font-size:14px;color:var(--ink2)}
 
+
+/* ---------- подпись создательниц и блок «о нас» ---------- */
+.credit a{text-transform:none;letter-spacing:.02em;color:var(--ink);border-bottom:1px solid var(--caramel);padding-bottom:1px;transition:color .2s}
+.credit a:hover{color:var(--caramel)}
+.us{display:grid;grid-template-columns:auto 1fr 1fr;gap:var(--gap);align-items:stretch}
+.us-h{padding:clamp(24px,3vw,40px);display:flex;flex-direction:column;justify-content:space-between;gap:16px;max-width:380px}
+.us-card{background:var(--paper);border-radius:30px;padding:clamp(20px,2.4vw,30px);display:flex;flex-direction:column;gap:10px;transition:transform .35s}
+.us-card:hover{transform:translateY(-4px)}
+.us-card .ic{width:52px;height:52px;border-radius:16px 16px 16px 26px;display:grid;place-items:center}
+.us-card .ic svg{width:26px;height:26px;fill:var(--paper)}
+.us-card h3{font:500 clamp(22px,2vw,28px)/1.1 var(--serif);margin-top:6px}
+.us-card p{color:var(--ink2);font-size:15.5px}
+.us-card .btn{align-self:flex-start;margin-top:auto}
+@media (max-width:980px){.us{grid-template-columns:1fr}.us-h{max-width:none;padding:8px 4px 4px}}
+
 /* ---------- подвал ---------- */
 footer{background:var(--caramel);color:var(--ink);border-radius:var(--r);padding:clamp(36px,6vh,70px) clamp(18px,4vw,56px) 28px;overflow:hidden;position:relative}
 .f-big{font:600 clamp(48px,12.5vw,200px)/.85 var(--serif);letter-spacing:-.05em;color:var(--paper);display:flex;align-items:baseline;white-space:nowrap}
@@ -304,7 +319,9 @@ footer{background:var(--caramel);color:var(--ink);border-radius:var(--r);padding
   .logo{font-size:17px}
   .hero{height:calc(100svh - 2*var(--gap));min-height:640px;grid-template-rows:auto 1fr auto}
   .h-top{padding:84px 18px 4px}
-  .h-top .labels span:not(:first-child),.h-top .labels i:nth-of-type(n+2){display:none}
+  .h-top .labels span:not(.credit),.h-top .labels i{display:none}
+  .h-top .labels{justify-content:flex-start}
+  .credit{font-size:11px;letter-spacing:.08em}
   .title{font-size:14.4vw}
   .h-bot{display:contents}
   .h-right{order:0;position:relative;justify-content:flex-end;align-items:flex-end;min-height:0;overflow:hidden;padding:16px}
@@ -520,7 +537,7 @@ function home(){
   return `
   <section class="hero" id="top">
     <div class="pan h-top">
-      <div class="labels lbl"><span>Бесплатно</span><i></i><span>От реальных специалистов</span><i></i><span>Обо всём, что важно владельцу</span></div>
+      <div class="labels lbl"><span>Бесплатно</span><i></i><span>От реальных специалистов</span><i></i><span class="credit">придумали и&nbsp;собрали <a href="https://instagram.com/mom_chiwawa" target="_blank" rel="noopener">@mom_chiwawa</a> и&nbsp;<a href="https://instagram.com/lesya.frame" target="_blank" rel="noopener">@lesya.frame</a></span></div>
       <h1 class="title">${WORD}</h1>
     </div>
     <div class="h-bot">
@@ -558,6 +575,14 @@ function home(){
   <section class="pan blk" id="avtory">
     <div class="blk-head rv"><div><div class="lbl" style="color:var(--caramel);margin-bottom:14px">Наши авторы</div><h2 class="h2">Кто стоит<br>за&nbsp;<span class="pill">материалами</span></h2></div><p>Если вам откликнулся подход специалиста, переходите к&nbsp;нему: курсы, консультации и&nbsp;соцсети в&nbsp;карточке</p></div>
     <div class="authors">${Object.keys(AUTHORS).map(id=>authorCard(id)).join('')}</div>
+  </section>
+
+  <section class="pan blk" style="background:var(--blush);padding-top:clamp(22px,3vw,40px);padding-bottom:clamp(22px,3vw,40px)">
+    <div class="us">
+      <div class="us-h rv"><div class="lbl" style="color:var(--caramel)">О&nbsp;нас</div><h2 class="h2" style="font-size:clamp(30px,3.4vw,48px)">Хвостопедию придумали и&nbsp;собрали</h2></div>
+      <div class="us-card rv"><span class="ic" style="background:var(--caramel)">${PAW}</span><h3>Мира</h3><p>Мама двух чихуахуа, Чарли и&nbsp;Ричи. Создала сообщество «ЧИХУАХУА РФ»</p><a class="btn sm" href="https://instagram.com/mom_chiwawa" target="_blank" rel="noopener">@mom_chiwawa <span class="ar">${ARR}</span></a></div>
+      <div class="us-card rv"><span class="ic" style="background:var(--sage)">${PAW}</span><h3>Леся</h3><p>Веб-дизайнер, сделала этот сайт. Хозяйка Рэма, учится на&nbsp;зоопсихолога</p><a class="btn sm soft" href="https://instagram.com/lesya.frame" target="_blank" rel="noopener">@lesya.frame <span class="ar">${ARR}</span></a></div>
+    </div>
   </section>
   ${footer()}`;
 }
