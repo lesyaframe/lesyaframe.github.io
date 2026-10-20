@@ -1,0 +1,957 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Вдвоём</title>
+<meta name="description" content="Игры, вопросы и идеи на вечер для двоих">
+<meta name="theme-color" content="#FBF6E6">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Вдвоём">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='38' cy='50' r='30' fill='%23F1EA91'/><circle cx='62' cy='50' r='30' fill='%233B1B14' fill-opacity='.85'/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+@font-face{font-family:"Vasek";src:url("/fonts/Vasek.ttf") format("truetype");font-display:swap}
+:root{
+  --choco:#3B1B14; --choco2:#5a2f24; --cream:#F5EDC9; --paper:#FBF6E6; --butter:#F1EA91; --olive:#737038;
+  --peach:#E9A57D; --sage:#C3C79A; --rose:#EDCDC2; --mute:#7d6a5f; --line:rgba(59,27,20,.12);
+  --pa:#3B1B14; --pb:#D9875A;
+  --script:"Vasek","Segoe Script","Brush Script MT",cursive;
+  --sans:"Inter",system-ui,-apple-system,sans-serif;
+  --r:28px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%;overflow-x:clip}
+body{background:var(--paper);color:var(--choco);font-family:var(--sans);font-size:16px;line-height:1.45;overflow-x:hidden;-webkit-tap-highlight-color:transparent;min-height:100svh}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
+input,textarea{font:inherit;color:inherit}
+p,h1,h2,h3{text-wrap:pretty}
+.wrap{max-width:640px;margin:0 auto;padding:0 16px calc(28px + env(safe-area-inset-bottom))}
+
+/* кнопки */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:52px;padding:0 24px;border-radius:999px;background:var(--choco);color:var(--paper);font-weight:600;font-size:16px;transition:transform .18s ease,background .18s ease,box-shadow .18s ease}
+.btn:hover{transform:translateY(-2px);background:var(--choco2);box-shadow:0 10px 24px -12px rgba(59,27,20,.55)}
+.btn:active{transform:translateY(0) scale(.97)}
+.btn.soft{background:rgba(59,27,20,.08);color:var(--choco)}
+.btn.soft:hover{background:rgba(59,27,20,.14);box-shadow:none}
+.btn.butter{background:var(--butter);color:var(--choco)}
+.btn.butter:hover{background:#ebe27a}
+.btn.peach{background:var(--pb);color:#fff}
+.btn.peach:hover{background:#c97549}
+.btn[disabled]{opacity:.35;pointer-events:none}
+.btn.wide{width:100%}
+.row{display:flex;gap:10px;flex-wrap:wrap}
+.row>.btn{flex:1 1 140px}
+
+.chip{min-height:40px;padding:0 16px;border-radius:999px;background:rgba(59,27,20,.07);font-weight:500;font-size:15px;white-space:nowrap;transition:background .18s,transform .18s,color .18s}
+.chip:hover{background:rgba(59,27,20,.13);transform:translateY(-1px)}
+.chip.on{background:var(--choco);color:var(--paper)}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chips.scroll{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;margin:0 -16px;padding:2px 16px 4px}
+.chips.scroll::-webkit-scrollbar{display:none}
+
+/* шапка */
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;height:60px}
+.logo{font-family:var(--script);font-size:30px;line-height:1;display:flex;align-items:center;gap:8px}
+.logo i{display:inline-block;width:26px;height:18px;position:relative}
+.logo i:before,.logo i:after{content:"";position:absolute;top:0;width:18px;height:18px;border-radius:50%}
+.logo i:before{left:0;background:var(--butter)}
+.logo i:after{left:8px;background:var(--choco);opacity:.85}
+.score{display:flex;align-items:center;gap:8px;min-height:38px;padding:0 14px;border-radius:999px;background:rgba(59,27,20,.07);font-size:14px;font-weight:600}
+.score b{font-variant-numeric:tabular-nums}
+.dot{width:10px;height:10px;border-radius:50%;display:inline-block;flex:none}
+.dot.a{background:var(--pa)} .dot.b{background:var(--pb)}
+
+/* главная */
+.hero{min-height:calc(100svh - 60px);max-height:900px;display:flex;flex-direction:column;justify-content:center;gap:clamp(14px,2.6vh,26px);padding:8px 0 28px;position:relative}
+.hero .names{font-size:15px;color:var(--mute);display:flex;align-items:center;gap:8px}
+.hero .names button{text-decoration:underline;text-decoration-color:rgba(59,27,20,.25);text-underline-offset:3px}
+.hero h1{font-family:var(--script);font-weight:400;font-size:clamp(58px,min(17vw,11vh),110px);line-height:.62;padding:.12em 0;letter-spacing:-.01em}
+.hero h1 span{position:relative;white-space:nowrap}
+.hero h1 span:after{content:"";position:absolute;left:-4%;right:-4%;bottom:.08em;height:.32em;background:var(--butter);z-index:-1;border-radius:30px;transform:rotate(-1.5deg)}
+.hero .lead{color:var(--mute);max-width:420px}
+.moods{display:flex;flex-wrap:wrap;gap:8px}
+.mood{min-height:46px;padding:0 18px;border-radius:999px;font-weight:600;font-size:15px;transition:transform .2s,box-shadow .2s,background .2s,color .2s}
+.mood:hover{transform:translateY(-2px) rotate(-1deg)}
+.mood.on{background:var(--choco)!important;color:var(--paper)}
+.hero .go{display:flex;gap:10px;flex-wrap:wrap}
+.blob{position:absolute;z-index:-1;border-radius:50%;filter:blur(2px)}
+.scrollhint{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--mute)}
+.scrollhint span{animation:bob 1.6s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(4px)}}
+
+.list-title{font-family:var(--script);font-size:40px;line-height:1;margin:8px 0 18px}
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.tile{position:relative;overflow:hidden;text-align:left;border-radius:var(--r);padding:20px 18px 18px;min-height:190px;display:flex;flex-direction:column;justify-content:space-between;gap:12px;transition:transform .25s cubic-bezier(.2,.8,.2,1),opacity .3s,box-shadow .25s;animation:up .5s both}
+.tile:nth-child(odd){border-radius:var(--r) var(--r) var(--r) 10px}
+.tile:nth-child(even){border-radius:var(--r) 10px var(--r) var(--r)}
+.tile.wide{grid-column:span 2;min-height:160px}
+.tile:hover{transform:translateY(-4px) rotate(-.6deg);box-shadow:0 18px 30px -20px rgba(59,27,20,.6)}
+.tile:active{transform:scale(.98)}
+.tile h3{font-family:var(--script);font-weight:400;font-size:clamp(30px,8vw,40px);line-height:.95;position:relative}
+.tile p{font-size:14px;line-height:1.35;opacity:.8;position:relative;max-width:300px}
+.tile .meta{position:relative;font-size:13px;font-weight:600;line-height:1.3}
+.tile h3{padding-right:42px}
+.tile .arrow{position:absolute;top:16px;right:16px;width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.45);transition:transform .25s}
+.tile:hover .arrow{transform:translateX(3px) rotate(-12deg)}
+.tile .big{position:absolute;right:-6px;bottom:-34px;font-family:var(--script);font-size:150px;line-height:1;opacity:.13;pointer-events:none}
+.tile.hidden{display:none}
+.c-butter{background:var(--butter)} .c-peach{background:var(--peach)} .c-sage{background:var(--sage)} .c-rose{background:var(--rose)} .c-cream{background:var(--cream)}
+.c-choco{background:var(--choco);color:var(--paper)} .c-olive{background:var(--olive);color:var(--paper)}
+.c-choco .arrow,.c-olive .arrow{background:rgba(255,255,255,.14)}
+.c-choco .dot.a,.c-olive .dot.a{background:var(--paper)}
+@keyframes up{from{opacity:0;transform:translateY(18px)}}
+.foot{margin:34px 0 0;text-align:center;color:var(--mute);font-size:13px}
+
+/* экран игры */
+.gtop{display:flex;align-items:center;justify-content:space-between;gap:10px;height:60px}
+.back{display:flex;align-items:center;gap:6px;min-height:40px;padding:0 14px 0 10px;border-radius:999px;background:rgba(59,27,20,.07);font-weight:600;font-size:14px;transition:background .18s}
+.back:hover{background:rgba(59,27,20,.13)}
+.help{width:40px;height:40px;border-radius:50%;background:rgba(59,27,20,.07);font-weight:700;transition:background .18s}
+.help:hover{background:rgba(59,27,20,.13)}
+.gtitle{font-family:var(--script);font-size:clamp(40px,11vw,58px);line-height:.95;margin:6px 0 14px}
+.rules{background:var(--cream);border-radius:20px;padding:16px 18px;font-size:15px;margin-bottom:14px;display:none}
+.rules.open{display:block;animation:up .3s both}
+.rules p+p{margin-top:8px}
+.stage{display:flex;flex-direction:column;gap:14px}
+.turn{display:inline-flex;align-items:center;gap:8px;font-weight:600;padding:8px 14px;border-radius:999px;background:rgba(59,27,20,.06);align-self:flex-start}
+.board-score{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.pl{border-radius:20px;padding:10px 14px;background:rgba(59,27,20,.05);display:flex;align-items:center;justify-content:space-between;gap:8px;transition:background .25s,box-shadow .25s}
+.pl .n{display:flex;align-items:center;gap:8px;font-weight:600;min-width:0}
+.pl .n span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pl .s{font-size:24px;font-weight:800;font-variant-numeric:tabular-nums}
+.pl.now{background:var(--butter);box-shadow:0 8px 20px -14px rgba(59,27,20,.6)}
+.status{font-size:15px;color:var(--mute);min-height:22px}
+.status b{color:var(--choco)}
+
+/* карточки вопросов */
+.card{border-radius:var(--r);padding:26px 22px 22px;min-height:min(46svh,360px);display:flex;flex-direction:column;justify-content:space-between;gap:18px;position:relative;overflow:hidden;animation:flip .45s cubic-bezier(.2,.8,.2,1) both}
+@keyframes flip{from{opacity:0;transform:translateY(16px) rotate(-2deg) scale(.97)}}
+.card .meta{display:flex;justify-content:space-between;font-size:13px;font-weight:600;opacity:.7}
+.card .txt{font-size:clamp(22px,6vw,30px);line-height:1.2;font-weight:600;letter-spacing:-.01em}
+.card .who{display:flex;align-items:center;gap:8px;font-size:15px}
+.card.c-choco .meta,.card.c-olive .meta{opacity:.75}
+
+/* поля ввода */
+.field{width:100%;min-height:54px;border-radius:18px;border:0;background:rgba(59,27,20,.07);padding:14px 16px;font-size:17px;outline:none;transition:background .2s,box-shadow .2s}
+.field:focus{background:#fff;box-shadow:0 0 0 2px var(--choco)}
+textarea.field{min-height:96px;resize:vertical}
+label.lbl{display:block;font-size:14px;font-weight:600;margin:0 0 6px}
+
+/* клавиатура */
+.kb{display:grid;grid-template-columns:repeat(8,1fr);gap:6px}
+.key{height:46px;border-radius:12px;background:rgba(59,27,20,.07);font-weight:700;font-size:17px;transition:background .15s,transform .15s,opacity .2s}
+.key:hover{background:rgba(59,27,20,.14)}
+.key:active{transform:scale(.92)}
+.key.ok{background:var(--sage)} .key.no{background:transparent;opacity:.28;pointer-events:none}
+.key.ok{pointer-events:none}
+
+/* балда */
+.balda{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;width:min(100%,430px,calc(100svh - 360px));align-self:center}
+.bc{aspect-ratio:1;border-radius:14px;background:rgba(59,27,20,.05);display:grid;place-items:center;font-weight:800;font-size:clamp(20px,6vw,30px);position:relative;transition:background .18s,transform .18s,color .18s}
+.bc.l{background:var(--cream)}
+.bc.can{background:rgba(241,234,145,.45)}
+.bc.can:hover{background:var(--butter)}
+.bc.new{background:var(--butter);box-shadow:inset 0 0 0 3px var(--choco)}
+.bc.on{background:var(--choco);color:var(--paper);transform:scale(.94)}
+.bc .k{position:absolute;top:4px;left:7px;font-size:11px;font-weight:700;opacity:.7}
+.word{font-size:24px;font-weight:800;letter-spacing:.06em;min-height:34px}
+.used{display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:14px}
+.used div{background:rgba(59,27,20,.04);border-radius:16px;padding:10px 12px;min-height:60px}
+.used b{display:flex;align-items:center;gap:6px;margin-bottom:4px}
+
+/* четыре в ряд */
+.four{background:var(--olive);border-radius:24px;padding:10px;display:grid;grid-template-columns:repeat(7,1fr);gap:6px;width:min(100%,460px,calc((100svh - 300px)*7/6));align-self:center}
+.fc{aspect-ratio:1;border-radius:50%;background:var(--paper);position:relative;cursor:pointer}
+.fc i{position:absolute;inset:0;border-radius:50%;animation:drop .4s cubic-bezier(.3,1.4,.6,1) both}
+.fc i.a{background:var(--pa)} .fc i.b{background:var(--pb)}
+.fc.win i{box-shadow:0 0 0 4px var(--butter)}
+@keyframes drop{from{transform:translateY(-260%)}}
+
+/* точки */
+.dots{width:min(100%,440px,calc(100svh - 300px));align-self:center;touch-action:manipulation}
+.dots .hit{stroke:transparent;stroke-width:34;cursor:pointer;stroke-linecap:round}
+.dots .ln{stroke:rgba(59,27,20,.13);stroke-width:7;stroke-linecap:round;transition:stroke .2s}
+.dots .hit:hover+.ln{stroke:rgba(59,27,20,.35)}
+.dots .ln.a{stroke:var(--pa)} .dots .ln.b{stroke:var(--pb)}
+.dots .bx{transition:opacity .3s}
+.dots text{font-family:var(--sans);font-weight:800;font-size:40px;text-anchor:middle;dominant-baseline:central}
+
+/* ромашка */
+.daisy{width:min(56vw,230px,30svh);align-self:center}
+.daisy .pt{transition:transform .6s cubic-bezier(.5,0,.7,.4),opacity .6s;transform-box:fill-box}
+.daisy .pt.off{opacity:0;transform:translateY(60px) rotate(40deg)}
+.slots{display:flex;flex-wrap:wrap;justify-content:center;gap:6px}
+.slot{width:34px;height:44px;border-bottom:3px solid var(--choco);display:grid;place-items:end center;padding-bottom:4px;font-size:24px;font-weight:800}
+.slot.gap{border:0;width:14px}
+.slot.miss{color:var(--pb)}
+
+/* крокодил */
+.timer{font-size:46px;font-weight:800;font-variant-numeric:tabular-nums;text-align:center;line-height:1}
+.timer.low{color:var(--pb);animation:pulse .5s ease-in-out infinite alternate}
+@keyframes pulse{to{transform:scale(1.08)}}
+.bar{height:8px;border-radius:9px;background:rgba(59,27,20,.08);overflow:hidden}
+.bar i{display:block;height:100%;background:var(--choco);transition:width 1s linear}
+.taglist{display:flex;flex-wrap:wrap;gap:6px}
+.taglist span{padding:6px 12px;border-radius:999px;background:var(--sage);font-size:14px;font-weight:600}
+.taglist span.sk{background:rgba(59,27,20,.07);text-decoration:line-through;opacity:.6}
+
+/* или-или */
+.vs{display:grid;grid-template-rows:1fr auto 1fr;gap:10px;min-height:min(46svh,380px)}
+.vs .opt{border-radius:var(--r);display:grid;place-items:center;text-align:center;padding:18px;font-size:clamp(24px,7vw,34px);font-weight:700;letter-spacing:-.01em;animation:flip .45s both}
+.vs .or{font-family:var(--script);font-size:34px;text-align:center;line-height:1}
+.count{font-family:var(--script);font-size:120px;line-height:1;text-align:center;animation:pop .9s ease both}
+@keyframes pop{0%{transform:scale(.4);opacity:0}30%{transform:scale(1.1);opacity:1}100%{transform:scale(1)}}
+
+/* итог */
+.result{border-radius:var(--r);background:var(--butter);padding:26px 22px;text-align:center;display:flex;flex-direction:column;gap:10px;align-items:center;animation:flip .5s both}
+.result h2{font-family:var(--script);font-weight:400;font-size:clamp(40px,11vw,56px);line-height:1}
+.result p{max-width:380px}
+.result.choco{background:var(--choco);color:var(--paper)}
+
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom));transform:translateX(-50%);background:var(--choco);color:var(--paper);padding:12px 18px;border-radius:16px;font-weight:600;font-size:15px;z-index:20;max-width:calc(100% - 32px);text-align:center;animation:toast 2.4s ease both;pointer-events:none}
+@keyframes toast{0%{opacity:0;transform:translate(-50%,12px)}10%,85%{opacity:1;transform:translate(-50%,0)}100%{opacity:0}}
+
+.names-form{min-height:calc(100svh - 60px);display:flex;flex-direction:column;justify-content:center;gap:16px;max-width:440px;margin:0 auto}
+.names-form h1{font-family:var(--script);font-weight:400;font-size:clamp(50px,13vw,76px);line-height:.95}
+.names-form .pair{display:grid;gap:12px}
+
+@media (min-width:700px){
+  .tiles{grid-template-columns:repeat(3,1fr);grid-auto-flow:dense}
+  .tile.wide{grid-column:span 2}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+
+<script>
+/* ---------- данные ---------- */
+const DECKS = {
+  warm:{title:'Разогрев', color:'butter', q:[
+    'Какой момент этой недели хочется повторить?',
+    'Какую еду можно есть каждый день и не устать?',
+    'Какая песня у тебя сейчас на повторе?',
+    'Какой самый странный сон ты помнишь?',
+    'На какой сериал не жалко потратить все выходные?',
+    'Что тебя в последнее время по-настоящему рассмешило?',
+    'Какая у тебя есть бесполезная, но смешная суперспособность?',
+    'Куда в нашем городе стоит отвести гостя в первую очередь?',
+    'Какая вещь в твоём шкафу самая любимая и почему?',
+    'Какая мелочь в людях тебя раздражает?',
+    'Какой запах сразу возвращает тебя в детство?',
+    'Какое приложение ты открываешь чаще всего, кроме мессенджеров?',
+    'О чём ты можешь рассказывать часами?',
+    'Какой подарок тебе запомнился больше всего?',
+    'Как выглядит твоё идеальное воскресное утро?',
+    'Есть ли еда, которую ты до сих пор не понимаешь?',
+    'Какое слово или фразу ты говоришь слишком часто?',
+    'Какой фильм ты можешь пересматривать бесконечно?'
+  ]},
+  deep:{title:'Поглубже', color:'olive', q:[
+    'Какой детский страх остался с тобой до сих пор?',
+    'За что ты себя уважаешь?',
+    'Что может растрогать тебя до слёз?',
+    'Какое решение в жизни ты считаешь самым смелым?',
+    'Что стоило бы сказать тебе в десять лет?',
+    'В какие моменты тебе по-настоящему спокойно?',
+    'Чему тебя научили родители, хотя совсем этого не планировали?',
+    'Что для тебя значит быть взрослым?',
+    'Какое мнение у тебя сильно изменилось за последние годы?',
+    'О чём ты жалеешь, но уже без грусти?',
+    'Как понять, что день был хорошим?',
+    'Кто из людей сильнее всего на тебя повлиял?',
+    'Чего тебе сейчас не хватает в жизни?',
+    'О чём тебе трудно просить других?',
+    'Что на самом деле помогает, когда тебе плохо?',
+    'Каким человеком хочется быть через десять лет?',
+    'Что для тебя дом: место, люди или ощущение?',
+    'Какой комплимент ты помнишь годами?'
+  ]},
+  us:{title:'Про нас', color:'rose', q:[
+    'Какое у тебя было первое впечатление обо мне?',
+    'Какой наш общий день хочется прожить ещё раз?',
+    'Что во мне тебя до сих пор удивляет?',
+    'В какой момент стало понятно, что у нас всё серьёзно?',
+    'Какая моя привычка тебя умиляет?',
+    'Что я делаю такого, от чего тебе становится спокойнее?',
+    'Какая наша маленькая традиция самая важная?',
+    'Что нам стоит делать чаще?',
+    'А что нам стоит делать реже?',
+    'Какая песня у тебя ассоциируется с нами?',
+    'В чём мы с тобой очень похожи?',
+    'А в чём совсем разные?',
+    'Какой момент со мной был самым смешным?',
+    'Как тебе приятнее получать заботу: словами, делами, подарками, временем или объятиями?',
+    'Чему тебя научили наши отношения?',
+    'Что тебе хочется слышать от меня чаще?',
+    'Если бы про нас сняли фильм, какой у него был бы жанр?',
+    'Какое наше общее воспоминание самое тёплое?'
+  ]},
+  dream:{title:'Мечтать', color:'sage', q:[
+    'В какую страну хочется уехать прямо завтра, если бы ничего не мешало?',
+    'Каким ты видишь наш дом через пять лет?',
+    'Чему хочется научиться в ближайший год?',
+    'Какое путешествие обязательно должно с нами случиться?',
+    'Чем заполнить целый год, если работать не нужно?',
+    'Какое приключение тебя пугает, но манит?',
+    'Какую вещь хочется купить, когда появятся лишние деньги?',
+    'Какой праздник хочется устроить так, чтобы его запомнили все?',
+    'В каком месте хочется жить в старости?',
+    'Какую привычку хочется завести в этом году?',
+    'Что мы могли бы сделать вместе своими руками?',
+    'Какой концерт или событие хочется увидеть вживую?',
+    'Если бы мы открыли общее дело, что это было бы?',
+    'Каким будет идеальное утро через десять лет?',
+    'Какую мечту из детства ещё не поздно исполнить?',
+    'Какой вопрос хочется задать себе в 2030 году?'
+  ]},
+  if:{title:'Если бы…', color:'peach', q:[
+    'В каком фильме хочется оказаться на один день?',
+    'Какое животное больше всего похоже на тебя характером?',
+    'Машина времени сработает только один раз. Куда отправляемся?',
+    'Чьей жизнью хочется пожить одну неделю?',
+    'Можно узнать ответ на один любой вопрос. Какой вопрос задашь?',
+    'Если бы мы попали на необитаемый остров, кто из нас продержался бы дольше и почему?',
+    'С какими животными хочется уметь разговаривать?',
+    'Если бы пришлось выбрать одну еду на всю жизнь, что бы это было?',
+    'Какую суперсилу взять, если она работает только по вторникам?',
+    'Если бы наш дом был персонажем, какой у него был бы характер?',
+    'Какую бытовую обязанность стоит отменить навсегда?',
+    'Какой новый праздник стоит придумать и как его отмечать?',
+    'Как называлась бы глава про этот год в книге о твоей жизни?',
+    'Какой талант хочется получить прямо сейчас по щелчку пальцев?',
+    'В какую эпоху было бы интересно пожить месяц?',
+    'Если бы мы поменялись телами на день, что ты сделаешь первым делом?'
+  ]},
+  fun:{title:'Посмеяться', color:'cream', q:[
+    'Какой самый неловкий момент случился с тобой на людях?',
+    'Какая детская идея казалась гениальной, а была так себе?',
+    'Какое у тебя самое странное сочетание еды?',
+    'Что ты делаешь, когда никто не видит?',
+    'Как бы меня звали, будь я котом?',
+    'Изобрази, как я выгляжу утром до кофе',
+    'Какую песню ты знаешь наизусть, но стесняешься в этом признаться?',
+    'Какое самое нелепое прозвище у тебя было?',
+    'Какой фильм все любят, а тебе он не нравится?',
+    'Завтра ты внезапно становишься знаменитостью. За что?',
+    'Покажи пятую с конца фотографию в галерее и расскажи её историю',
+    'Повтори мою коронную фразу моим голосом',
+    'Какой спор в твоей жизни был самым глупым?',
+    'Какая вещь куплена зря, но выбросить жалко?',
+    'Какой самый странный подарок тебе дарили?',
+    'Какую мою фразу стоит напечатать на футболке?'
+  ]}
+};
+
+const GUESS_Q = [
+  'Что я выберу на завтрак в выходной?','Какое у меня любимое время года?','Какой фильм я могу пересматривать бесконечно?',
+  'Что быстрее всего выводит меня из себя?','Какую страну я назову первой, если спросить, куда поехать?','Какой у меня любимый цвет?',
+  'Что я закажу в кафе, если не буду долго думать?','Какую суперсилу я выберу?','Что я делаю первым делом, когда прихожу домой?',
+  'Какой овощ я терпеть не могу?','Сколько будильников я ставлю утром?','Какой школьный предмет был моим любимым?',
+  'Какое животное мне нравится больше всего?','Какие три вещи я возьму на необитаемый остров?','Чего я боюсь больше: пауков, высоты или темноты?',
+  'Какую песню я спою в караоке?','Каким будет мой идеальный вечер пятницы?','Какое блюдо у меня получается лучше всего?',
+  'О чём я мечтаю в ближайший год?','Какой подарок обрадует меня больше всего?','На что я трачу деньги и ни капли не жалею?',
+  'Какой запах мне нравится больше всего?','Какая профессия была моей детской мечтой?','Что я выберу: сладкое или солёное?',
+  'Какой сериал я сейчас смотрю?','Как я обычно сплю: на боку, на спине или звёздочкой?','Какое у меня любимое место в нашем городе?',
+  'Какое домашнее дело я ненавижу больше всего?','Какое у меня было прозвище в детстве?','Какой мой любимый десерт?',
+  'Какую книгу или фильм я посоветую другу первым делом?','Сколько минут я собираюсь, если надо выйти срочно?','Какой у меня любимый праздник?',
+  'Чем я занимаюсь, когда дома никого нет?','Какой мой самый любимый напиток?','Какую вещь я бы спас при пожаре первой, кроме живых?'
+];
+
+const PAIRS = [
+  ['кофе','чай'],['горы','море'],['утро','вечер'],['кошки','собаки'],['книга','фильм'],['пицца','суши'],['лето','зима'],
+  ['город','деревня'],['позвонить','написать'],['сладкое','солёное'],['дома','в гостях'],['всё спланировать','всё по ходу'],
+  ['рассвет','закат'],['кино дома','кинотеатр'],['душ','ванна'],['сериал','фильм'],['самолёт','поезд'],['палатка','отель'],
+  ['рано встать','поздно лечь'],['подарок','впечатление'],['дождь','снег'],['танцевать','петь'],['комедия','ужасы'],
+  ['пельмени','вареники'],['яичница','омлет'],['шоколад','мороженое'],['знать будущее','изменить прошлое'],['летать','телепортироваться'],
+  ['никогда не мёрзнуть','никогда не уставать'],['жить без музыки','жить без кино'],['говорить с животными','знать все языки'],
+  ['вечная весна','вечная осень'],['тишина','музыка фоном'],['кофейня','ресторан'],['пешком','на велосипеде'],
+  ['настолка','видеоигра'],['бег','йога'],['острое','нежное'],['фотографировать','просто запомнить'],
+  ['квартира в центре','дом за городом'],['торт','пирог'],['апельсин','яблоко'],['бумажная книга','электронная'],
+  ['большой праздник','праздник вдвоём'],['юг','север'],['пляж','экскурсии'],['мёд','варенье'],['сырники','блины'],
+  ['пижама','большая футболка'],['пазл','рисование'],['звёзды','огни города'],['помидоры','огурцы'],['гречка','рис'],
+  ['шаурма','бургер'],['сова','жаворонок'],['подушка мягкая','подушка жёсткая'],['какао','глинтвейн'],['завтрак в постель','ужин при свечах'],
+  ['машина','мотоцикл'],['старые песни','новые песни'],['уютный свитер','лёгкая рубашка'],['мультики','документалки']
+];
+
+const TRUTH = {
+  cute:{
+    t:['Какой была твоя первая мысль обо мне?','Какая моя фотография тебе нравится больше всего?','Что в нашей жизни сейчас тебе нравится больше всего?',
+       'О чём ты мечтаешь, но редко говоришь вслух?','Какой мой поступок тебе запомнился надолго?','Что во мне тебя чуть-чуть раздражает?',
+       'Был ли у тебя повод ревновать в последнее время?','Кому из друзей ты больше всего рассказываешь про нас?','Какая моя черта тебе передалась?',
+       'Какую песню хочется посвятить мне?','Тебе когда-нибудь снился сон про меня? Какой?','Какой мой образ тебе нравится больше всего?',
+       'За что хочется сказать мне спасибо прямо сейчас?','Что ты обо мне знаешь, а я думаю, что не знаешь?','Когда тебе в последний раз очень меня не хватало?'],
+    d:['Сделай мне массаж плеч одну минуту','Расскажи, как мы познакомились, голосом диктора новостей','Нарисуй мой портрет за 30 секунд',
+       'Приготовь мне чай или кофе так, как я люблю','Станцуй под первую песню, которая включится в случайном порядке','Скажи три комплимента подряд без повторов',
+       'Изобрази меня, когда я хочу есть','Обними меня и не отпускай, пока я не скажу «хватит»','Спой припев любой песни, заменив слова на моё имя',
+       'Поставь мою смешную фотку на заставку телефона до утра','Придумай мне новое ласковое прозвище','Покажи последние пять фотографий в галерее',
+       'Расскажи стих со школы с выражением','Сделай комплимент моим носкам, как будто ты модный критик','Покажи свой танец со школьной дискотеки']
+  },
+  hot:{
+    t:['Что во мне кажется тебе самым привлекательным?','Какой наш поцелуй ты помнишь лучше всего?','Где тебе хотелось бы оказаться со мной наедине?',
+       'В каком моём образе я тебя больше всего свожу с ума?','Чего тебе хочется от меня чаще?','Каким был бы твой идеальный романтический вечер?',
+       'Когда тебе очень хотелось меня поцеловать, но было нельзя?','Какое наше свидание было самым романтичным?','Что тебе нравится в моём голосе?',
+       'Какой мой взгляд ты узнаешь из тысячи?','О чём ты думаешь, когда смотришь на меня издалека?','Что в первые недели знакомства так и осталось несказанным?'],
+    d:['Поцелуй меня туда, куда я покажу','Шепни мне на ухо то, что не скажешь вслух','Медленный танец под песню, которую выберу я',
+       '30 секунд смотрим друг другу в глаза и молчим','Сделай мне массаж ладоней две минуты','Поцелуй так, как в первый раз',
+       'Опиши наше идеальное свидание шёпотом','Выбери, во что мне переодеться до конца вечера','Сделай мне комплимент, от которого я покраснею',
+       'Придумай, как мы проведём следующие 15 минут, а я соглашусь','Нарисуй пальцем у меня на спине слово, а я угадаю','Поцелуй меня 10 раз в разные места на лице']
+  }
+};
+
+const WORDS = [...new Set(('кофеварка свидание пингвин отпуск будильник снеговик самокат селфи пельмени радуга телескоп бабушка пирожок рюкзак жираф вертолёт '+
+ 'маникюр фейерверк гамак пылесос кактус космонавт вампир библиотека караоке пицца поезд морковь фонарик ёлка дворник балерина сосиска светофор пират '+
+ 'подушка батут кенгуру лифт зонт шашлык сугроб панда бургер микроволновка носок торт медуза хоккей такси кетчуп спортзал дракон улитка барабан '+
+ 'роза рыбалка гитара маяк пижама автобус дельфин ведьма пожарный шахматы слон мороженое свадьба сериал лопата компас акула вулкан клубника парашют '+
+ 'бинокль тапочки пазл бутерброд сосулька мельница пляж ракета хомяк учитель утюг крокодил расчёска качели вилка кроссовки палатка детектив '+
+ 'рецепт снежинка черепаха ресница клоун борщ сапоги пианино комар троллейбус павлин магнит ноутбук супергерой глобус сказка лягушка корона '+
+ 'марафон водопад табуретка шпион блогер лабиринт тыква кукушка градусник скакалка сырники викинг гном фламинго подкаст сауна аквариум '+
+ 'бассейн ёжик фотограф холодильник почтальон чемодан аэропорт зеркало мармелад одуванчик принцесса стоматолог йога театр пончик кораблик '+
+ 'гусеница рыцарь будка самурай метро кондитер шарф варежки колыбельная салют огурец арбуз пчела лупа пульт дирижёр жвачка ковбой экзамен').split(' '))];
+
+const BALDA_START = ['книга','лампа','кошка','город','ветер','вечер','сахар','песок','повар','мороз','берег','туман','финик','пирог','сосна',
+  'ягода','лодка','сумка','плита','свеча','трава','тесто','шапка','кефир','вафля','бочка','ручей','совок','гроза','весна','осень','кукла',
+  'малыш','полка','ложка','глина','чашка','шторм','тапок'].filter(w=>w.length===5);
+
+const IDEAS = [
+  'Кинопоказ вслепую: каждый выбирает фильм для другого и не говорит название до старта',
+  'Приготовить блюдо из кухни страны, куда хочется поехать',
+  'Собрать пазл под подкаст или любимый альбом',
+  'Домашняя фотосессия с настольной лампой вместо студийного света',
+  'Вечерняя прогулка по улицам, где вы ещё ни разу не были',
+  'Написать друг другу письма в будущее и спрятать их до следующего года',
+  'Пикник на полу в гостиной с пледом и закусками',
+  'Испечь что-нибудь по первому рецепту из поиска',
+  'Турнир из трёх игр отсюда, проигравший моет посуду',
+  'Вечер без телефонов: убрать их в ящик до утра',
+  'Пересмотреть фото за прошлый год и выбрать десять лучших',
+  'Слепая дегустация: шоколад, сыр, чай или чипсы',
+  'Нарисовать портреты друг друга, а потом повесить на холодильник',
+  'Составить общий список мест, куда хочется поехать',
+  'Караоке на кухне, пока готовится ужин',
+  'Сходить в кафе, где вы ещё ни разу не были',
+  'Домашняя пицца: каждый украшает свою половину',
+  'Посмотреть первую серию нового сериала и решить, смотрите ли дальше',
+  'Спа-вечер: маски, массаж, спокойная музыка',
+  'Поймать закат с самой красивой точки в городе',
+  'Собрать общий плейлист на этот сезон',
+  'Построить шалаш из пледов и посмотреть мультики',
+  'Каждый показывает фильм из своего детства',
+  'Прогулка с термосом горячего чая',
+  'Сыграть в «Вопросы» с колодой «Про нас» и никуда не торопиться',
+  'Завтрак на ужин: блины, сырники или омлет',
+  'Разобрать один шкаф под хорошую музыку, а потом заказать вкусное',
+  'Сходить на квиз или в антикафе с настолками',
+  'Медленный вечер: свечи, книги, никаких дел',
+  'Составить список «100 дел вместе» и сделать первое',
+  'Испечь печенье и отнести друзьям',
+  'Уехать за город посмотреть на звёзды',
+  'Сварить какао с зефиром и посмотреть старые видео с телефона',
+  'Распечатать любимые фото и сделать коллаж на стену',
+  'Поужинать в другой комнате, как будто это новый ресторан',
+  'Устроить вечер одного исполнителя: слушать и рассказывать, что с ним связано'
+];
+
+/* ---------- утилиты ---------- */
+const $ = (s,r=document)=>r.querySelector(s);
+const app = $('#app');
+const store = {
+  get(k,d){try{const v=localStorage.getItem('vd_'+k);return v===null?d:JSON.parse(v)}catch(e){return d}},
+  set(k,v){try{localStorage.setItem('vd_'+k,JSON.stringify(v))}catch(e){}}
+};
+let names = store.get('names', null);
+let wins = store.get('wins', [0,0]);
+const nm = i => esc(names ? names[i] : (i ? 'Второй' : 'Первый'));
+const esc = s => String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const shuffle = a => {for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
+const pick = a => a[Math.random()*a.length|0];
+const dot = i => `<span class="dot ${i?'b':'a'}"></span>`;
+let cleanup = [];
+
+const SHORT = 'в|во|на|с|со|к|ко|и|а|о|об|обо|у|по|за|из|до|не|ни|но|от|для|без|под|над|при|про|что|как|где|если|это|или|чтобы|когда|я|ты|мы|вы|он|она|мне|тебе|мой|моя|моё|мою|твой|твоя|твоё|свою|все|всё|так|уже|ещё|чем|кто|раз|ваш|наш|их|его|её|один|одну|три|две|два|пять|10|30|15';
+const reShort = new RegExp('(^|[\\s«(„"])('+SHORT+') (?=\\S)','gi');
+function typo(root){
+  const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {acceptNode:n=>/^(SCRIPT|STYLE|TEXTAREA)$/.test(n.parentNode.nodeName)?2:1});
+  let n; while(n=w.nextNode()){
+    let t=n.nodeValue; if(!/\S/.test(t)) continue;
+    const o=t; t=t.replace(reShort,'$1$2 ').replace(reShort,'$1$2 ');
+    t=t.replace(/ ([^\s]{1,3}[.?!…»)]*)$/,' $1'); // короткое последнее слово не остаётся одно
+    if(t!==o) n.nodeValue=t;
+  }
+}
+function render(html, keep){
+  const y = window.scrollY;
+  app.innerHTML = html; typo(app);
+  window.scrollTo(0, keep ? y : 0);
+}
+function toast(msg){
+  const t=document.createElement('div'); t.className='toast'; t.textContent=msg; typo(t);
+  document.body.appendChild(t); setTimeout(()=>t.remove(),2500);
+}
+function addWin(i){ wins[i]++; store.set('wins',wins); }
+
+/* ---------- игры ---------- */
+const MOODS = [['all','всё подряд','rgba(59,27,20,.07)'],['talk','поговорить','var(--rose)'],['fun','посмеяться','var(--peach)'],
+  ['words','поиграть в слова','var(--sage)'],['compete','посоревноваться','var(--butter)'],['lazy','лень думать','var(--cream)']];
+
+const GAMES = [
+  {id:'questions',title:'Вопросы',sub:'Шесть колод для разговоров: от лёгких до тех, что про вас двоих',big:'?',moods:['talk','lazy'],color:'butter',wide:1,run:gQuestions,
+   rules:['Выберите колоду. Отвечает тот, чьё имя на карточке, потом ход переходит ко второму.','Можно отвечать обоим на каждый вопрос, так даже интереснее. «Другой вопрос» меняет карточку без смены очереди.']},
+  {id:'guess',title:'Угадай меня',sub:'Один отвечает тайком, второй пытается угадать',big:'≈',moods:['talk','fun'],color:'rose',run:gGuess,
+   rules:['Один игрок пишет свой честный ответ и прячет его. Второй называет свою версию вслух.','Потом открываете ответ, и загадавший решает: в точку, почти или мимо. 10 вопросов, роли меняются.']},
+  {id:'oror',title:'Или-или',sub:'Выбираете хором на счёт три',big:'⇄',moods:['talk','fun','lazy'],color:'sage',run:gOrOr,
+   rules:['Читаете пару, жмёте «на счёт три» и на «говорите!» одновременно называете свой вариант.','Отмечаете, совпало или нет. В конце смотрите процент совпадений.']},
+  {id:'truth',title:'Правда или действие',sub:'Мило или погорячее, решаете сами',big:'!',moods:['talk','fun'],color:'peach',run:gTruth,
+   rules:['По очереди выбираете: честно ответить на вопрос или выполнить задание.','Режим «мило» для любого вечера, «погорячее» для вечера вдвоём.']},
+  {id:'croc',title:'Объясни слово',sub:'Крокодил на время: объясняешь, не называя',big:'⏱',moods:['words','fun'],color:'olive',run:gCroc,
+   rules:['Один объясняет слова с экрана: словами, жестами, звуками. Однокоренные называть нельзя.','Второй угадывает. За минуту набираете как можно больше, потом меняетесь.']},
+  {id:'balda',title:'Балда',sub:'Ставишь одну букву и собираешь из неё слово',big:'Б',moods:['words','compete'],color:'choco',wide:1,run:gBalda,
+   rules:['В середине поля стоит слово. За ход ставите одну букву в клетку рядом с другими буквами и проводите слово по соседним клеткам (вверх, вниз, вбок, без диагоналей). Новая буква обязательно входит в слово.',
+          'Слова: нарицательные существительные в начальной форме, без повторов. Очки равны длине слова. Второй игрок подтверждает, что слово существует. Если ходов нет, жмите «пропустить», после двух пропусков подряд игра заканчивается.']},
+  {id:'daisy',title:'Ромашка',sub:'Виселица, только с лепестками',big:'✿',moods:['words','fun'],color:'cream',run:gDaisy,
+   rules:['Один тайком вписывает слово и передаёт телефон. Второй угадывает буквы.','За каждую ошибку ромашка теряет лепесток. Семь ошибок и слово не отгадано.']},
+  {id:'four',title:'Четыре в ряд',sub:'Собери четыре фишки раньше другого',big:'●',moods:['compete'],color:'peach',run:gFour,
+   rules:['По очереди бросаете фишки в столбцы, они падают вниз.','Кто первым соберёт четыре подряд по горизонтали, вертикали или диагонали, тот и победил.']},
+  {id:'dots',title:'Точки и квадраты',sub:'Та самая игра с последней страницы тетради',big:'⁘',moods:['compete','lazy'],color:'sage',run:gDots,
+   rules:['По очереди проводите одну линию между соседними точками.','Кто замкнул квадрат, забирает его и ходит ещё раз. Побеждает тот, у кого больше квадратов.']},
+  {id:'ideas',title:'Чем заняться вечером',sub:'Когда играть не хочется, а провести время вместе хочется',big:'☾',moods:['lazy'],color:'rose',run:gIdeas,
+   rules:['Листайте идеи, пока какая-нибудь не откликнется обоим.']}
+];
+
+function shell(g, inner){
+  return `<div class="gtop"><button class="back" data-go="#/">← все игры</button><button class="help" data-help aria-label="Правила">?</button></div>
+  <h1 class="gtitle">${g.title}</h1>
+  <div class="rules">${g.rules.map(r=>`<p>${r}</p>`).join('')}</div>
+  <div class="stage">${inner}</div>`;
+}
+function scoreBoard(sc, turn, fmt=x=>x){
+  return `<div class="board-score">${[0,1].map(i=>`<div class="pl ${turn===i?'now':''}"><div class="n">${dot(i)}<span>${nm(i)}</span></div><div class="s">${fmt(sc[i])}</div></div>`).join('')}</div>`;
+}
+
+/* --- главная --- */
+function home(){
+  let mood = store.get('mood','all');
+  const tiles = GAMES.map((g,i)=>`<button class="tile c-${g.color} ${g.wide?'wide':''}" data-go="#/${g.id}" data-moods="${g.moods.join(' ')}" style="animation-delay:${i*40}ms">
+      <span class="big">${g.big}</span><h3>${g.title}</h3><p>${g.sub}</p><span class="meta">${g.moods.map(m=>MOODS.find(x=>x[0]===m)[1]).join(' · ')}</span><span class="arrow">→</span></button>`).join('');
+  render(`<header class="top"><div class="logo"><i></i>вдвоём</div>
+      <button class="score" data-reset title="Счёт побед в соревновательных играх">${dot(0)}<b>${wins[0]}</b>:<b>${wins[1]}</b>${dot(1)}</button></header>
+    <section class="hero">
+      <div class="blob" style="width:240px;height:240px;background:var(--butter);opacity:.5;right:-90px;top:6%"></div>
+      <div class="blob" style="width:160px;height:160px;background:var(--rose);opacity:.55;left:-70px;bottom:14%"></div>
+      <div class="names">${dot(0)}${nm(0)} <span>и</span> ${dot(1)}${nm(1)} <button data-go="#/names">изменить</button></div>
+      <h1>во что<br>играем <span>сегодня?</span></h1>
+      <p class="lead">Выберите настроение, и я оставлю только подходящие игры.</p>
+      <div class="moods">${MOODS.map(m=>`<button class="mood ${m[0]===mood?'on':''}" data-mood="${m[0]}" style="background:${m[2]}">${m[1]}</button>`).join('')}</div>
+      <div class="go"><button class="btn" data-random>выбрать наугад</button><button class="btn soft" data-down>показать игры ↓</button></div>
+    </section>
+    <h2 class="list-title" id="list">игры</h2>
+    <div class="tiles">${tiles}</div>
+    <p class="foot">Счёт сверху считает победы в балде, «Четырёх в ряд» и «Точках». Нажмите на него, чтобы обнулить.</p>`);
+  const filter = ()=>{ document.querySelectorAll('.tile').forEach(t=>t.classList.toggle('hidden', mood!=='all' && !t.dataset.moods.split(' ').includes(mood))) };
+  filter();
+  app.onclick = e=>{
+    const m = e.target.closest('[data-mood]');
+    if(m){ mood=m.dataset.mood; store.set('mood',mood); document.querySelectorAll('.mood').forEach(b=>b.classList.toggle('on',b===m)); filter();
+      if(mood!=='all') $('#list').scrollIntoView({behavior:'smooth'}); return; }
+    if(e.target.closest('[data-down]')) $('#list').scrollIntoView({behavior:'smooth'});
+    if(e.target.closest('[data-random]')){ const pool=GAMES.filter(g=>mood==='all'||g.moods.includes(mood)); location.hash='#/'+pick(pool).id; }
+    if(e.target.closest('[data-reset]') && (wins[0]||wins[1]) && confirm('Обнулить общий счёт побед?')){ wins=[0,0]; store.set('wins',wins); home(); }
+  };
+}
+
+/* --- имена --- */
+function namesScreen(){
+  const n = names || ['Леся',''];
+  render(`<div class="gtop">${names?'<button class="back" data-go="#/">← назад</button>':'<div class="logo"><i></i>вдвоём</div>'}<span></span></div>
+   <form class="names-form" id="nf">
+     <h1>как вас зовут?</h1>
+     <p style="color:var(--mute)">Имена будут на карточках и в счёте. Цвет фишек: ${dot(0)} у первого, ${dot(1)} у второго.</p>
+     <div class="pair">
+       <div><label class="lbl" for="n0">Первый игрок</label><input class="field" id="n0" maxlength="16" value="${esc(n[0])}" required></div>
+       <div><label class="lbl" for="n1">Второй игрок</label><input class="field" id="n1" maxlength="16" value="${esc(n[1])}" placeholder="имя" required></div>
+     </div>
+     <button class="btn wide" type="submit">готово</button>
+   </form>`);
+  app.onclick = null;
+  $('#nf').onsubmit = e=>{ e.preventDefault(); names=[$('#n0').value.trim()||'Я', $('#n1').value.trim()||'Ты']; store.set('names',names); location.hash='#/'; };
+  if(!names) setTimeout(()=>$('#n1').focus(),300);
+}
+
+/* --- вопросы --- */
+function gQuestions(g){
+  let deck = store.get('qdeck','all'); let order=[], i=0, turn=0;
+  const build=()=>{ order = shuffle((deck==='all'?Object.values(DECKS).flatMap(d=>d.q):DECKS[deck].q).slice()); i=0; };
+  build();
+  const draw=()=>{
+    if(i>=order.length) build();
+    const color = deck==='all' ? DECKS[Object.keys(DECKS).find(k=>DECKS[k].q.includes(order[i]))].color : DECKS[deck].color;
+    const dk = Object.values(DECKS).find(d=>d.q.includes(order[i]));
+    render(shell(g, `<div class="chips scroll"><button class="chip ${deck==='all'?'on':''}" data-deck="all">все вперемешку</button>${Object.entries(DECKS).map(([k,d])=>`<button class="chip ${deck===k?'on':''}" data-deck="${k}">${d.title}</button>`).join('')}</div>
+      <div class="card c-${color}"><div class="meta"><span>${dk.title}</span><span>${i+1} / ${order.length}</span></div><p class="txt">${order[i]}</p><div class="who">${dot(turn)} отвечает <b>${nm(turn)}</b></div></div>
+      <div class="row"><button class="btn" data-act="next">следующий</button><button class="btn soft" data-act="skip">другой вопрос</button></div>`), true);
+  };
+  app.onclick = e=>{
+    const d=e.target.closest('[data-deck]'); if(d){ deck=d.dataset.deck; store.set('qdeck',deck); build(); draw(); return; }
+    const a=e.target.closest('[data-act]'); if(!a) return;
+    if(a.dataset.act==='next'){ i++; turn=1-turn; draw(); }
+    if(a.dataset.act==='skip'){ i++; draw(); }
+  };
+  draw();
+}
+
+/* --- угадай меня --- */
+function gGuess(g){
+  const ROUNDS=10; let qs=shuffle(GUESS_Q.slice()), r=0, step='write', ans='', guess='', sc=[0,0];
+  const fmt=x=>String(x).replace('.',',');
+  const draw=()=>{
+    if(r>=ROUNDS){
+      const w = sc[0]===sc[1] ? 'Ничья! Вы одинаково хорошо друг друга знаете' : `Лучше знает другого: ${nm(sc[0]>sc[1]?0:1)}`;
+      render(shell(g, `${scoreBoard(sc,-1,fmt)}<div class="result"><h2>итог</h2><p>${w}</p><button class="btn" data-act="again">ещё 10 вопросов</button></div>`)); return;
+    }
+    const a=r%2, b=1-a, q=qs[r];
+    let body='';
+    if(step==='write') body=`<div class="card c-rose"><div class="meta"><span>вопрос ${r+1} из ${ROUNDS}</span><span>${dot(a)} ${nm(a)}</span></div><p class="txt">${q}</p>
+        <div><label class="lbl" for="ans">${nm(a)}, напиши честный ответ. ${nm(b)}, не подглядывай!</label><input class="field" id="ans" autocomplete="off" type="password" placeholder="ответ спрячется"></div></div>
+        <button class="btn" data-act="hide">спрятать ответ</button>`;
+    if(step==='guess') body=`<div class="card c-cream"><div class="meta"><span>вопрос ${r+1} из ${ROUNDS}</span><span>отвечает ${nm(a)}</span></div><p class="txt">${q}</p>
+        <div><label class="lbl" for="gs">${dot(b)} ${nm(b)}, твоя версия?</label><input class="field" id="gs" autocomplete="off" placeholder="можно просто сказать вслух"></div></div>
+        <button class="btn" data-act="show">открыть ответ</button>`;
+    if(step==='reveal') body=`<div class="card c-butter"><div class="meta"><span>вопрос ${r+1} из ${ROUNDS}</span></div><p class="txt" style="font-size:20px">${q}</p>
+        <div style="display:grid;gap:10px"><div>${dot(a)} <b>${nm(a)}:</b> ${esc(ans)||'<i>ответ не написан</i>'}</div>${guess?`<div>${dot(b)} <b>${nm(b)}:</b> ${esc(guess)}</div>`:''}</div></div>
+        <p class="status">${nm(a)}, засчитываем?</p>
+        <div class="row"><button class="btn" data-pt="1">в точку</button><button class="btn butter" data-pt="0.5">почти</button><button class="btn soft" data-pt="0">мимо</button></div>`;
+    render(shell(g, scoreBoard(sc, b, fmt)+body), true);
+    const inp=$('#ans')||$('#gs'); if(inp){ inp.onkeydown=e=>{ if(e.key==='Enter') (step==='write'?$('[data-act=hide]'):$('[data-act=show]')).click(); }; }
+  };
+  app.onclick = e=>{
+    const t=e.target.closest('[data-act],[data-pt]'); if(!t) return;
+    if(t.dataset.act==='hide'){ ans=$('#ans').value.trim(); step='guess'; draw(); }
+    else if(t.dataset.act==='show'){ guess=$('#gs').value.trim(); step='reveal'; draw(); }
+    else if(t.dataset.act==='again'){ qs=shuffle(GUESS_Q.slice()); r=0; sc=[0,0]; step='write'; draw(); }
+    else if(t.dataset.pt!==undefined){ sc[1-r%2]+=+t.dataset.pt; r++; step='write'; ans=''; guess=''; draw(); }
+  };
+  draw();
+}
+
+/* --- или-или --- */
+function gOrOr(g){
+  let order=shuffle(PAIRS.slice()), i=0, same=0, total=0, phase='show', timers=[];
+  cleanup.push(()=>timers.forEach(clearTimeout));
+  const pct=()=>total?Math.round(same/total*100):0;
+  const draw=()=>{
+    if(i>=order.length){ order=shuffle(PAIRS.slice()); i=0; }
+    const [a,b]=order[i];
+    const head=`<div class="status">совпадений: <b>${same} из ${total}</b>${total?` · ${pct()}%`:''}</div>`;
+    let body='';
+    if(phase==='show') body=`<div class="vs"><div class="opt c-sage">${a}</div><div class="or">или</div><div class="opt c-butter" style="animation-delay:.08s">${b}</div></div>
+       <button class="btn" data-act="count">на счёт три!</button>${total>=5?'<button class="btn soft" data-act="end">хватит, итог</button>':''}`;
+    if(phase==='count') body=`<div class="vs" style="grid-template-rows:1fr"><div style="display:grid;place-items:center"><div class="count" id="cnt">3</div></div></div>`;
+    if(phase==='mark') body=`<div class="vs"><div class="opt c-sage">${a}</div><div class="or">или</div><div class="opt c-butter">${b}</div></div>
+       <div class="row"><button class="btn" data-m="1">совпало</button><button class="btn soft" data-m="0">разное</button></div>`;
+    if(phase==='end'){
+      const p=pct(); const txt = p>=80?'Вы как будто один человек на двоих':p>=60?'Совпадаете в главном, спорите в мелочах':p>=40?'Ровно настолько разные, чтобы не было скучно':'Противоположности притягиваются, это точно про вас';
+      body=`<div class="result"><h2>${p}%</h2><p>${same} совпадений из ${total}. ${txt}.</p><button class="btn" data-act="again">играть ещё</button></div>`;
+    }
+    render(shell(g, head+body), true);
+    if(phase==='count'){
+      let n=3; const tick=()=>{ n--; const c=$('#cnt'); if(!c) return;
+        c.textContent = n>0 ? n : 'говорите!'; c.style.fontSize = n>0?'':'64px'; c.style.animation='none'; void c.offsetWidth; c.style.animation='';
+        if(n>0) timers.push(setTimeout(tick,800)); else timers.push(setTimeout(()=>{phase='mark';draw()},1100)); };
+      timers.push(setTimeout(tick,800));
+    }
+  };
+  app.onclick = e=>{
+    const t=e.target.closest('[data-act],[data-m]'); if(!t) return;
+    if(t.dataset.act==='count'){ phase='count'; draw(); }
+    else if(t.dataset.act==='end'){ phase='end'; draw(); }
+    else if(t.dataset.act==='again'){ same=0; total=0; i++; phase='show'; draw(); }
+    else if(t.dataset.m!==undefined){ total++; same+=+t.dataset.m; i++; phase='show'; draw(); }
+  };
+  draw();
+}
+
+/* --- правда или действие --- */
+function gTruth(g){
+  let lvl=store.get('tlvl','cute'), turn=0, card=null, pools={};
+  const take=(k)=>{ const key=lvl+k; if(!pools[key]||!pools[key].length) pools[key]=shuffle(TRUTH[lvl][k].slice()); return pools[key].pop(); };
+  const draw=()=>{
+    const chips=`<div class="chips"><button class="chip ${lvl==='cute'?'on':''}" data-l="cute">мило</button><button class="chip ${lvl==='hot'?'on':''}" data-l="hot">погорячее</button></div>`;
+    let body;
+    if(!card) body=`<div class="card c-peach"><div class="meta"><span>${lvl==='cute'?'мило':'погорячее'}</span></div><p class="txt">${dot(turn)} ${nm(turn)}, правда или действие?</p><span></span></div>
+      <div class="row"><button class="btn" data-k="t">правда</button><button class="btn peach" data-k="d">действие</button></div>`;
+    else body=`<div class="card ${card.k==='t'?'c-rose':'c-choco'}"><div class="meta"><span>${card.k==='t'?'правда':'действие'}</span><span>${lvl==='cute'?'мило':'погорячее'}</span></div><p class="txt">${card.text}</p><div class="who">${dot(turn)} ${nm(turn)}</div></div>
+      <div class="row"><button class="btn" data-act="done">готово</button><button class="btn soft" data-k="${card.k}">заменить</button></div>`;
+    render(shell(g, chips+body), true);
+  };
+  app.onclick=e=>{
+    const t=e.target.closest('[data-l],[data-k],[data-act]'); if(!t) return;
+    if(t.dataset.l){ lvl=t.dataset.l; store.set('tlvl',lvl); card=null; draw(); }
+    else if(t.dataset.k){ card={k:t.dataset.k,text:take(t.dataset.k)}; draw(); }
+    else if(t.dataset.act==='done'){ card=null; turn=1-turn; draw(); }
+  };
+  draw();
+}
+
+/* --- балда --- */
+const ABC='АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ'.split('');
+function gBalda(g){
+  const N=5; let s;
+  const fresh=()=>{ const w=pick(BALDA_START).toUpperCase(); const grid=Array(N*N).fill(''); w.split('').forEach((ch,c)=>grid[2*N+c]=ch);
+    s={grid,start:w,used:[],words:[[],[]],sc:[0,0],turn:store.get('baldaFirst',0),phase:'place',cell:-1,letter:'',path:[],skips:0,over:false};
+    store.set('baldaFirst',1-s.turn); };
+  fresh();
+  const nb=i=>{const r=i/N|0,c=i%N;return [r>0?i-N:-1,r<N-1?i+N:-1,c>0?i-1:-1,c<N-1?i+1:-1].filter(x=>x>=0)};
+  const L=i=>i===s.cell?s.letter:s.grid[i];
+  const word=()=>s.path.map(L).join('');
+  const draw=()=>{
+    const cells=s.grid.map((ch,i)=>{
+      const l=L(i); let cls='bc';
+      if(l) cls+=' l';
+      if(s.phase==='place' && !l && nb(i).some(j=>s.grid[j])) cls+=' can';
+      if(i===s.cell) cls+=' new';
+      const k=s.path.indexOf(i); if(k>=0) cls+=' on';
+      return `<button class="${cls}" data-c="${i}">${k>=0?`<span class="k">${k+1}</span>`:''}${l}</button>`;
+    }).join('');
+    const other=nm(1-s.turn);
+    let ctrl='';
+    if(s.over){
+      const w=s.sc[0]===s.sc[1]?'Ничья!':`Победа: ${nm(s.sc[0]>s.sc[1]?0:1)}`;
+      ctrl=`<div class="result"><h2>${w}</h2><p>${s.sc[0]} : ${s.sc[1]}</p><button class="btn" data-act="new">новая партия</button></div>`;
+    } else if(s.phase==='place') ctrl=`<p class="status">${dot(s.turn)} <b>${nm(s.turn)}</b>, выбери пустую клетку рядом с буквами</p><div class="row"><button class="btn soft" data-act="skip">пропустить ход</button></div>`;
+    else if(s.phase==='letter') ctrl=`<p class="status">Какую букву ставим?</p><div class="kb">${ABC.map(a=>`<button class="key" data-k="${a}">${a}</button>`).join('')}</div><button class="btn soft" data-act="cancel">другая клетка</button>`;
+    else if(s.phase==='trace') ctrl=`<p class="status">Нажимай буквы слова по порядку. Новая буква обязательно в слове</p><div class="word">${word()||'&nbsp;'}</div>
+      <div class="row"><button class="btn" data-act="ok" ${s.path.length>=2&&s.path.includes(s.cell)?'':'disabled'}>слово готово</button><button class="btn soft" data-act="clear">сбросить</button><button class="btn soft" data-act="letter">другая буква</button></div>`;
+    else if(s.phase==='confirm') ctrl=`<p class="status">${dot(1-s.turn)} <b>${other}</b>, есть такое слово?</p><div class="word">${word()}</div>
+      <div class="row"><button class="btn" data-act="yes">есть, засчитать</button><button class="btn soft" data-act="no">нет такого</button></div>`;
+    const used=`<div class="used">${[0,1].map(i=>`<div><b>${dot(i)}${nm(i)}</b>${s.words[i].map(w=>w.toLowerCase()).join(', ')||'<span style="opacity:.5">пока пусто</span>'}</div>`).join('')}</div>`;
+    render(shell(g, scoreBoard(s.sc, s.over?-1:s.turn)+`<div class="balda">${cells}</div>`+ctrl+used), true);
+  };
+  const end=()=>{ s.over=true; if(s.sc[0]!==s.sc[1]) addWin(s.sc[0]>s.sc[1]?0:1); };
+  app.onclick=e=>{
+    const c=e.target.closest('[data-c]'), k=e.target.closest('[data-k]'), a=e.target.closest('[data-act]');
+    if(c && !s.over){
+      const i=+c.dataset.c;
+      if(s.phase==='place'){
+        if(s.grid[i]) return toast('Сначала выбери пустую клетку для новой буквы');
+        if(!nb(i).some(j=>s.grid[j])) return toast('Букву ставят рядом с другими буквами');
+        s.cell=i; s.phase='letter'; draw();
+      } else if(s.phase==='trace'){
+        if(!L(i)) return;
+        const last=s.path[s.path.length-1];
+        if(i===last) s.path.pop();
+        else if(s.path.includes(i)) return toast('Одну клетку можно взять только один раз');
+        else if(s.path.length && !nb(last).includes(i)) { s.path=[i]; }
+        else s.path.push(i);
+        draw();
+      }
+      return;
+    }
+    if(k && s.phase==='letter'){ s.letter=k.dataset.k; s.phase='trace'; s.path=[]; draw(); return; }
+    if(!a) return;
+    const act=a.dataset.act;
+    if(act==='new'){ fresh(); draw(); }
+    if(act==='cancel'){ s.cell=-1; s.phase='place'; draw(); }
+    if(act==='letter'){ s.letter=''; s.path=[]; s.phase='letter'; draw(); }
+    if(act==='clear'){ s.path=[]; draw(); }
+    if(act==='ok'){
+      const w=word();
+      if(w===s.start||s.used.includes(w)) return toast('Это слово уже было');
+      s.phase='confirm'; draw();
+    }
+    if(act==='no'){ toast('Не засчитано, попробуй другое слово'); s.path=[]; s.phase='trace'; draw(); }
+    if(act==='yes'){
+      const w=word(); s.grid[s.cell]=s.letter; s.used.push(w); s.words[s.turn].push(w); s.sc[s.turn]+=w.length;
+      s.cell=-1; s.letter=''; s.path=[]; s.phase='place'; s.skips=0; s.turn=1-s.turn;
+      if(s.grid.every(Boolean)) end();
+      draw();
+    }
+    if(act==='skip'){ s.skips++; s.turn=1-s.turn; if(s.skips>=2) end(); draw(); }
+  };
+  draw();
+}
+
+/* --- объясни слово --- */
+function gCroc(g){
+  let dur=store.get('crocDur',60), exp=0, sc=[0,0], phase='ready', left=0, deck=shuffle(WORDS.slice()), cur='', got=[], iv=null;
+  const stop=()=>{ if(iv){clearInterval(iv); iv=null;} };
+  cleanup.push(stop);
+  const next=()=>{ if(!deck.length) deck=shuffle(WORDS.slice()); cur=deck.pop(); };
+  const draw=()=>{
+    let body='';
+    if(phase==='ready') body=`<div class="card c-olive"><div class="meta"><span>раунд</span><span>${dur} секунд</span></div>
+        <p class="txt">${dot(exp)} ${nm(exp)} объясняет,<br>${dot(1-exp)} ${nm(1-exp)} угадывает</p><span style="font-size:14px;opacity:.75">Телефон держит тот, кто объясняет</span></div>
+        <div class="chips">${[30,60,90].map(t=>`<button class="chip ${t===dur?'on':''}" data-t="${t}">${t} сек</button>`).join('')}</div>
+        <button class="btn" data-act="go">старт</button>`;
+    if(phase==='play') body=`<div class="timer ${left<=10?'low':''}">${left}</div><div class="bar"><i style="width:${left/dur*100}%"></i></div>
+        <div class="card c-cream" style="min-height:min(30svh,240px);justify-content:center;text-align:center"><p class="txt" style="font-size:clamp(32px,9vw,46px)">${cur}</p></div>
+        <div class="row"><button class="btn" data-act="yes">угадано</button><button class="btn soft" data-act="pass">пропустить</button></div>
+        <p class="status">в этом раунде: <b>${got.filter(x=>x.ok).length}</b></p>`;
+    if(phase==='end'){ const n=got.filter(x=>x.ok).length;
+      body=`<div class="result"><h2>${n} ${plural(n,'слово','слова','слов')}</h2><p>Объяснение: ${nm(exp)}</p>
+        <div class="taglist" style="justify-content:center">${got.map(x=>`<span class="${x.ok?'':'sk'}">${x.w}</span>`).join('')}</div>
+        <button class="btn" data-act="swap">теперь объясняет ${nm(1-exp)}</button></div>`; }
+    render(shell(g, `<div class="status">общий счёт угаданных слов</div>`+scoreBoard(sc, phase==='play'?exp:-1)+body), true);
+  };
+  const tick=()=>{ left--; if(left<=0){ stop(); phase='end'; got.push({w:cur,ok:false}); draw(); return; }
+    const t=$('.timer'), b=$('.bar i'); if(t){ t.textContent=left; t.classList.toggle('low',left<=10); } if(b) b.style.width=(left/dur*100)+'%'; };
+  app.onclick=e=>{
+    const t=e.target.closest('[data-t],[data-act]'); if(!t) return;
+    if(t.dataset.t){ dur=+t.dataset.t; store.set('crocDur',dur); draw(); return; }
+    const a=t.dataset.act;
+    if(a==='go'){ phase='play'; left=dur; got=[]; next(); draw(); iv=setInterval(tick,1000); }
+    if(a==='yes'){ got.push({w:cur,ok:true}); sc[exp]++; next(); draw(); }
+    if(a==='pass'){ got.push({w:cur,ok:false}); next(); draw(); }
+    if(a==='swap'){ exp=1-exp; phase='ready'; draw(); }
+  };
+  draw();
+}
+function plural(n,a,b,c){n=Math.abs(n)%100;const m=n%10;if(n>10&&n<20)return c;if(m>1&&m<5)return b;if(m===1)return a;return c}
+
+/* --- ромашка --- */
+function gDaisy(g){
+  const MAX=7; let setter=0, sc=[0,0], phase='secret', word='', tried=[], miss=0;
+  const petals=()=>{ let p=''; for(let k=0;k<MAX;k++){ const ang=k*360/MAX;
+      p+=`<g transform="rotate(${ang} 100 100)"><ellipse class="pt ${k<miss?'off':''}" cx="100" cy="48" rx="21" ry="42" fill="#fff" stroke="#3B1B14" stroke-opacity=".18" stroke-width="2"/></g>`; }
+    return `<svg class="daisy" viewBox="0 0 200 200"><path d="M100 120 C 96 160, 104 180, 100 200" stroke="#737038" stroke-width="6" fill="none"/>${p}<circle cx="100" cy="100" r="27" fill="#F1EA91" stroke="#d9cf6a" stroke-width="3"/></svg>`; };
+  const solved=()=>word.split('').every(ch=>ch==='-'||ch===' '||tried.includes(ch));
+  const draw=()=>{
+    const guesser=1-setter; let body='';
+    if(phase==='secret') body=`<div class="card c-cream" style="min-height:0"><p class="txt">${dot(setter)} ${nm(setter)} загадывает слово</p>
+        <div><label class="lbl" for="sw">${nm(guesser)}, отвернись! Слово увидит только ${nm(setter)}</label><input class="field" id="sw" type="password" autocomplete="off" placeholder="например, тыква"></div></div>
+        <button class="btn" data-act="set">загадать и передать телефон</button>`;
+    else {
+      const slots=word.split('').map(ch=>ch===' '||ch==='-'?`<span class="slot gap">${ch==='-'?'-':''}</span>`:`<span class="slot ${phase==='end'&&!tried.includes(ch)?'miss':''}">${tried.includes(ch)||phase==='end'?ch:''}</span>`).join('');
+      body=petals()+`<div class="slots">${slots}</div>`;
+      if(phase==='play') body+=`<p class="status" style="text-align:center">${dot(guesser)} угадывает <b>${nm(guesser)}</b> · лепестков: <b>${MAX-miss}</b></p>
+        <div class="kb">${ABC.map(a=>`<button class="key ${tried.includes(a)?(word.includes(a)?'ok':'no'):''}" data-k="${a}">${a}</button>`).join('')}</div>`;
+      else { const win=solved();
+        body+=`<div class="result ${win?'':'choco'}"><h2>${win?'отгадано!':'не вышло'}</h2><p>${win?`${nm(guesser)} отгадывает слово`:`Лепестки кончились. ${nm(setter)} забирает очко`}</p><button class="btn ${win?'':'butter'}" data-act="next">теперь загадывает ${nm(guesser)}</button></div>`; }
+    }
+    render(shell(g, scoreBoard(sc, phase==='end'?-1:(phase==='secret'?setter:guesser))+body), true);
+    const sw=$('#sw'); if(sw) sw.onkeydown=e=>{ if(e.key==='Enter') $('[data-act=set]').click(); };
+  };
+  app.onclick=e=>{
+    const k=e.target.closest('[data-k]'), a=e.target.closest('[data-act]');
+    if(k && phase==='play'){ const ch=k.dataset.k; if(tried.includes(ch)) return; tried.push(ch);
+      if(!word.includes(ch)) miss++;
+      if(solved()){ phase='end'; sc[1-setter]++; } else if(miss>=MAX){ phase='end'; sc[setter]++; }
+      draw(); return; }
+    if(!a) return;
+    if(a.dataset.act==='set'){
+      const w=$('#sw').value.trim().toUpperCase().replace(/Ё/g,'Е').replace(/\s+/g,' ');
+      if(!/^[А-Я][А-Я -]*[А-Я]$/.test(w)) return toast('Нужно слово русскими буквами, хотя бы две буквы');
+      word=w; tried=[]; miss=0; phase='play'; draw();
+    }
+    if(a.dataset.act==='next'){ setter=1-setter; phase='secret'; draw(); }
+  };
+  draw();
+}
+
+/* --- четыре в ряд --- */
+function gFour(g){
+  const R=6,C=7; let b, turn=store.get('fourFirst',0), over=null, winCells=[], sc=store.get('fourSc',[0,0]);
+  const fresh=()=>{ b=Array(R*C).fill(-1); over=null; winCells=[]; turn=store.get('fourFirst',0); store.set('fourFirst',1-turn); };
+  fresh();
+  const at=(r,c)=>r>=0&&r<R&&c>=0&&c<C?b[r*C+c]:-2;
+  const check=(r,c)=>{ const p=b[r*C+c];
+    for(const [dr,dc] of [[0,1],[1,0],[1,1],[1,-1]]){ let cells=[[r,c]];
+      for(const s of [1,-1]){ let k=1; while(at(r+dr*k*s,c+dc*k*s)===p){ cells.push([r+dr*k*s,c+dc*k*s]); k++; } }
+      if(cells.length>=4) return cells.map(([y,x])=>y*C+x); }
+    return null; };
+  const draw=(last)=>{
+    const cells=b.map((v,i)=>`<div class="fc ${winCells.includes(i)?'win':''}" data-col="${i%C}">${v>=0?`<i class="${v?'b':'a'}" ${i===last?'':'style="animation:none"'}></i>`:''}</div>`).join('');
+    let ctrl = over===null ? `<p class="status">${dot(turn)} ход: <b>${nm(turn)}</b>. Нажми на столбец</p>`
+      : `<div class="result"><h2>${over===2?'ничья':'победа!'}</h2><p>${over===2?'Поле заполнено':`${nm(over)} собирает четыре в ряд`}</p><button class="btn" data-act="new">ещё партию</button></div>`;
+    render(shell(g, `<div class="status">партии в этой игре</div>`+scoreBoard(sc, over===null?turn:-1)+`<div class="four">${cells}</div>`+ctrl), true);
+  };
+  app.onclick=e=>{
+    const a=e.target.closest('[data-act]'); if(a){ fresh(); draw(); return; }
+    const f=e.target.closest('[data-col]'); if(!f||over!==null) return;
+    const c=+f.dataset.col; let r=R-1; while(r>=0&&b[r*C+c]>=0) r--; if(r<0) return toast('Этот столбец уже полный');
+    b[r*C+c]=turn; const w=check(r,c);
+    if(w){ over=turn; winCells=w; sc[turn]++; store.set('fourSc',sc); addWin(turn); }
+    else if(b.every(v=>v>=0)) over=2;
+    else turn=1-turn;
+    draw(r*C+c);
+  };
+  draw();
+}
+
+/* --- точки и квадраты --- */
+function gDots(g){
+  let n=store.get('dotsN',4), h, v, box, turn, last, over;
+  const fresh=()=>{ h=Array.from({length:n+1},()=>Array(n).fill(-1)); v=Array.from({length:n},()=>Array(n+1).fill(-1));
+    box=Array.from({length:n},()=>Array(n).fill(-1)); turn=store.get('dotsFirst',0); store.set('dotsFirst',1-turn); last=''; over=false; };
+  fresh();
+  const S=100, col=['#3B1B14','#D9875A'];
+  const count=()=>{ const c=[0,0]; box.flat().forEach(x=>{if(x>=0)c[x]++}); return c; };
+  const draw=()=>{
+    let svg=`<svg class="dots" viewBox="-24 -24 ${n*S+48} ${n*S+48}">`;
+    for(let r=0;r<n;r++)for(let c=0;c<n;c++) if(box[r][c]>=0){ const o=box[r][c];
+      svg+=`<rect class="bx" x="${c*S+8}" y="${r*S+8}" width="${S-16}" height="${S-16}" rx="16" fill="${o?'#E9A57D':'#F1EA91'}"/><text x="${c*S+S/2}" y="${r*S+S/2+4}" fill="${col[o]}">${esc((names?names[o]:'')[0]||'')}</text>`; }
+    for(let r=0;r<=n;r++)for(let c=0;c<n;c++){ const o=h[r][c];
+      svg+=`<line class="hit" data-e="h-${r}-${c}" x1="${c*S}" y1="${r*S}" x2="${c*S+S}" y2="${r*S}"/><line class="ln ${o<0?'':o?'b':'a'}" x1="${c*S+10}" y1="${r*S}" x2="${c*S+S-10}" y2="${r*S}" ${last===`h-${r}-${c}`?'stroke-width="10"':''}/>`; }
+    for(let r=0;r<n;r++)for(let c=0;c<=n;c++){ const o=v[r][c];
+      svg+=`<line class="hit" data-e="v-${r}-${c}" x1="${c*S}" y1="${r*S}" x2="${c*S}" y2="${r*S+S}"/><line class="ln ${o<0?'':o?'b':'a'}" x1="${c*S}" y1="${r*S+10}" x2="${c*S}" y2="${r*S+S-10}" ${last===`v-${r}-${c}`?'stroke-width="10"':''}/>`; }
+    for(let r=0;r<=n;r++)for(let c=0;c<=n;c++) svg+=`<circle cx="${c*S}" cy="${r*S}" r="9" fill="#3B1B14"/>`;
+    svg+='</svg>';
+    const sc=count();
+    let ctrl = !over ? `<p class="status">${dot(turn)} ход: <b>${nm(turn)}</b>. Проведи линию между точками</p>`
+      : `<div class="result"><h2>${sc[0]===sc[1]?'ничья':'победа!'}</h2><p>${sc[0]===sc[1]?'Квадратов поровну':`${nm(sc[0]>sc[1]?0:1)} забирает больше квадратов`}</p><button class="btn" data-act="new">ещё раз</button></div>`;
+    render(shell(g, `<div class="chips">${[3,4,5].map(k=>`<button class="chip ${k===n?'on':''}" data-n="${k}">поле ${k}×${k}</button>`).join('')}</div>`+scoreBoard(sc, over?-1:turn)+svg+ctrl), true);
+  };
+  app.onclick=e=>{
+    const k=e.target.closest('[data-n]'); if(k){ n=+k.dataset.n; store.set('dotsN',n); fresh(); draw(); return; }
+    if(e.target.closest('[data-act]')){ fresh(); draw(); return; }
+    const el=e.target.closest('[data-e]'); if(!el||over) return;
+    const [t,rs,cs]=el.dataset.e.split('-'); const r=+rs,c=+cs;
+    if(t==='h'){ if(h[r][c]>=0) return; h[r][c]=turn; } else { if(v[r][c]>=0) return; v[r][c]=turn; }
+    last=el.dataset.e;
+    const cand = t==='h' ? [[r-1,c],[r,c]] : [[r,c-1],[r,c]];
+    let made=false;
+    for(const [y,x] of cand){ if(y<0||x<0||y>=n||x>=n||box[y][x]>=0) continue;
+      if(h[y][x]>=0&&h[y+1][x]>=0&&v[y][x]>=0&&v[y][x+1]>=0){ box[y][x]=turn; made=true; } }
+    if(box.flat().every(x=>x>=0)){ over=true; const sc=count(); if(sc[0]!==sc[1]) addWin(sc[0]>sc[1]?0:1); }
+    else if(!made) turn=1-turn;
+    draw();
+  };
+  draw();
+}
+
+/* --- идеи --- */
+function gIdeas(g){
+  let order=shuffle(IDEAS.slice()), i=0;
+  const colors=['butter','sage','rose','peach','cream'];
+  const draw=(ok)=>{
+    if(i>=order.length){ order=shuffle(IDEAS.slice()); i=0; }
+    render(shell(g, `<div class="card c-${colors[i%colors.length]}"><div class="meta"><span>идея ${i+1} из ${order.length}</span></div><p class="txt">${order[i]}</p><span></span></div>
+      ${ok?`<div class="result choco"><h2>договорились!</h2><p>Сегодня так и делаем</p></div>`:''}
+      <div class="row"><button class="btn" data-act="more">другая идея</button>${ok?'':'<button class="btn butter" data-act="ok">берём!</button>'}</div>`), true);
+  };
+  app.onclick=e=>{ const a=e.target.closest('[data-act]'); if(!a) return; if(a.dataset.act==='more'){ i++; draw(); } else draw(true); };
+  draw();
+}
+
+/* ---------- маршруты ---------- */
+document.addEventListener('click', e=>{
+  const go=e.target.closest('[data-go]'); if(go){ e.preventDefault(); location.hash=go.dataset.go; return; }
+  if(e.target.closest('[data-help]')) $('.rules').classList.toggle('open');
+}, true);
+function route(){
+  cleanup.forEach(f=>f()); cleanup=[];
+  const id=location.hash.replace(/^#\/?/,'');
+  if(!names && id!=='names'){ location.replace('#/names'); return namesScreen(); }
+  if(id==='names') return namesScreen();
+  const g=GAMES.find(x=>x.id===id);
+  if(g){ document.title=g.title+' · вдвоём'; window.scrollTo(0,0); return g.run(g); }
+  document.title='Вдвоём'; home();
+}
+window.addEventListener('hashchange', route);
+route();
+</script>
+</body>
+</html>
