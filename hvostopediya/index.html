@@ -92,10 +92,10 @@ header nav a.on{background:var(--milk);color:var(--ink)}
 .stats{display:grid;grid-template-columns:1fr 1fr;gap:clamp(12px,2vh,20px) 28px;width:min(330px,42%)}
 .stats b{display:block;font:500 clamp(30px,3.2vw,46px)/1 var(--serif);letter-spacing:-.02em}
 .stats span{display:block;font-size:13.5px;line-height:1.3;margin-top:4px;opacity:.9}
-.dogbox{position:absolute;left:47%;bottom:0;height:min(84%,660px);aspect-ratio:674/954;z-index:3;pointer-events:none}
+.dogbox{position:absolute;left:51%;bottom:0;height:min(70%,560px);aspect-ratio:728/966;z-index:3;pointer-events:none}
 .dogbox img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 24px 30px rgba(43,30,23,.25));transform-origin:50% 100%;animation:breathe 5s ease-in-out infinite}
 @keyframes breathe{0%,100%{transform:rotate(0)}50%{transform:rotate(-1.6deg) translateY(-3px)}}
-.bubble{position:absolute;top:8%;left:80%;background:var(--paper);color:var(--ink);font:500 15px/1.25 var(--sans);padding:12px 18px;border-radius:22px 22px 22px 6px;white-space:nowrap;box-shadow:0 14px 30px -14px rgba(43,30,23,.5);animation:bob 3.4s ease-in-out infinite}
+.bubble{position:absolute;top:22%;left:74%;background:var(--paper);color:var(--ink);font:500 15px/1.25 var(--sans);padding:12px 18px;border-radius:22px 22px 22px 6px;white-space:nowrap;box-shadow:0 14px 30px -14px rgba(43,30,23,.5);animation:bob 3.4s ease-in-out infinite}
 @keyframes bob{50%{transform:translateY(-6px)}}
 .search{position:relative;width:min(560px,100%)}
 .search input{width:100%;height:60px;border-radius:99px;background:var(--paper);padding:0 64px 0 24px;font-size:16.5px;outline:none;transition:box-shadow .25s}
@@ -118,11 +118,8 @@ header nav a.on{background:var(--milk);color:var(--ink)}
 /* ---------- разделы: карточки с иллюстрациями ---------- */
 .bento{display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:clamp(200px,24vh,260px);gap:var(--gap);grid-auto-flow:dense}
 .card{position:relative;border-radius:28px;overflow:hidden;isolation:isolate;background:var(--sage2)}
-.card img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 40%;transition:transform .8s cubic-bezier(.2,.8,.2,1)}
-.card:hover img{transform:scale(1.06)}
 .card.big{grid-column:span 2;grid-row:span 2}
 .card.wide{grid-column:span 2}
-.card.wide img{object-position:50% 55%}
 .card:nth-child(3n+2){border-radius:28px 76px 28px 28px}
 .card:nth-child(3n+2) .round{top:18px;right:18px}
 .card:nth-child(4n+3){border-radius:76px 28px 28px 28px}
@@ -137,13 +134,33 @@ header nav a.on{background:var(--milk);color:var(--ink)}
 .card.big .cap b{font-size:clamp(26px,2.6vw,40px);padding:14px 22px;border-radius:24px}
 .card.big .cap small{font-size:14.5px;padding:9px 14px}
 
+
+/* ---------- три вида картинок раздела ---------- */
+.med{position:absolute;inset:0;display:block;overflow:hidden}
+.med img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .8s cubic-bezier(.2,.8,.2,1)}
+.cutm img{object-fit:contain;object-position:50% 100%;top:auto;bottom:0;height:92%;filter:drop-shadow(0 18px 18px rgba(43,30,23,.22))}
+.card .cutm img{height:96%;left:auto;right:4%;width:78%;object-position:100% 100%}
+.card.k-cut:hover .cutm img{transform:translateY(-6px) scale(1.03)}
+.textm i{position:absolute;right:6%;bottom:-.12em;font:600 clamp(110px,12vw,190px)/1 var(--serif);font-style:normal;letter-spacing:-.05em;color:rgba(47,33,26,.14)}
+.textm.dk i{color:rgba(255,250,242,.12)}
+.textm .pw{position:absolute;right:10%;top:20%;width:24%;aspect-ratio:1;transform:rotate(-16deg);transition:transform .6s}
+.textm .pw svg{width:100%;height:100%;fill:rgba(47,33,26,.18)}
+.textm.dk .pw svg{fill:rgba(255,250,242,.2)}
+.card.k-text:hover .pw{transform:rotate(8deg) scale(1.08)}
+.card.k-text .cap{top:58px;bottom:12px;flex-direction:column;align-items:flex-start;justify-content:space-between}
+.card.k-text .cap b{background:none;padding:0;font-size:clamp(22px,2vw,30px);line-height:1.08;max-width:90%}
+.card.k-text .textm.dk~.cap b{color:var(--paper)}
+.card.k-photo:hover .med img{transform:scale(1.06)}
+.mat .thumb{position:relative}
+.sec-img .med,.art-img .med{border-radius:inherit}
+.sec-img .cutm img,.art-img .cutm img{height:90%}
+
 /* ---------- материалы ---------- */
 .mat-list{display:flex;flex-direction:column;gap:var(--gap)}
 .mat{display:grid;grid-template-columns:clamp(110px,13vw,170px) 1fr auto;gap:clamp(16px,3vw,40px);align-items:center;padding:clamp(14px,2vw,20px);padding-right:clamp(18px,3vw,36px);border-radius:32px;background:var(--paper);transition:transform .35s,background .35s}
 .mat:hover{transform:translateY(-4px);background:#fff}
 .mat .thumb{aspect-ratio:1;border-radius:24px 24px 60px 24px;overflow:hidden}
-.mat .thumb img{width:100%;height:100%;object-fit:cover;transition:transform .6s}
-.mat:hover .thumb img{transform:scale(1.07)}
+.mat:hover .thumb .med img{transform:scale(1.07)}
 .mat .tag{display:inline-block;padding:6px 12px;border-radius:99px;background:var(--sage2);font-size:13px;margin-bottom:10px}
 .mat h3{font:500 clamp(24px,2.8vw,40px)/1.08 var(--serif);letter-spacing:-.02em}
 .mat .sub{color:var(--ink2);margin-top:8px;font-size:15.5px;max-width:620px}
@@ -183,7 +200,6 @@ footer{background:var(--caramel);color:var(--ink);border-radius:var(--r);padding
 .sec-top{display:grid;grid-template-columns:1.2fr 1fr;gap:var(--gap);min-height:calc(78svh)}
 .sec-top .pan:first-child{padding:110px clamp(20px,4vw,56px) clamp(28px,4vw,48px);display:flex;flex-direction:column;justify-content:flex-end}
 .sec-img{border-radius:var(--r) var(--r) var(--r) 140px;overflow:hidden;position:relative}
-.sec-img img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0}
 .crumbs{font-size:14px;color:var(--ink2);display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}
 .crumbs a{border-bottom:1px solid var(--line);transition:color .2s,border-color .2s}
 .crumbs a:hover{color:var(--caramel);border-color:var(--caramel)}
@@ -198,7 +214,6 @@ footer{background:var(--caramel);color:var(--ink);border-radius:var(--r);padding
 .art-top>.pan:first-child{padding:110px clamp(20px,4vw,56px) clamp(28px,4vw,48px);display:flex;flex-direction:column;justify-content:center}
 .art-top .art-right{display:grid;grid-template-rows:1fr auto;gap:var(--gap)}
 .art-top .art-img{border-radius:var(--r) var(--r) var(--r) 120px;overflow:hidden;position:relative;min-height:180px}
-.art-top .art-img img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .art-top h1{font:500 clamp(40px,5.4vw,82px)/1 var(--serif);letter-spacing:-.03em}
 .art-top .lead{font:400 clamp(17px,1.5vw,21px)/1.45 var(--serif);color:var(--ink2);margin-top:20px;max-width:620px}
 .art-top .lead em{color:var(--ink)}
@@ -312,6 +327,9 @@ footer{background:var(--caramel);color:var(--ink);border-radius:var(--r);padding
   .card .cap small{font-size:12px;padding:5px 9px}
   .card .num{font-size:12px;padding:6px 10px}
   .card .round{width:36px;height:36px}
+  .card.k-cut .cap{top:50px;bottom:auto}
+  .card.k-cut .cap small{display:none}
+  .card .cutm img{height:64%;width:92%;right:4%}
   .mat{grid-template-columns:90px 1fr;gap:14px;align-items:start}
   .mat .btn{grid-column:1/-1;justify-self:start}
   .acard{grid-template-columns:1fr}
@@ -353,25 +371,33 @@ const ARR2='<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="
 const WORD='Хв<span class="paw">'+PAW+'</span>стопедия';
 
 const SECTIONS=[
- ['chto-takoe-sobaka','Что такое собака'],
- ['rol-v-seme','Роль собаки в семье','wide'],
- ['kak-vybrat','Как выбрать собаку в семью?'],
- ['adaptaciya','Адаптация','big'],
- ['amuniciya','Амуниция'],
- ['vospitanie','Воспитание'],
- ['pervaya-pomosh','Первая помощь'],
- ['aptechka','Аптечка'],
- ['povedenie','Поведение'],
- ['separaciya','Сепарация'],
- ['dve-sobaki','Две собаки в доме'],
- ['sobaka-i-kot','Собака и кот'],
- ['sobaka-i-rebenok','Собака и ребёнок','wide'],
- ['obrabotki','Обработки'],
- ['privivki','Календарь прививок'],
+ ['chto-takoe-sobaka','Что такое собака','','cut','var(--blush)'],
+ ['rol-v-seme','Роль собаки в семье','wide','photo'],
+ ['kak-vybrat','Как выбрать собаку в семью?','','cut','var(--sage2)'],
+ ['adaptaciya','Адаптация','big','photo'],
+ ['amuniciya','Амуниция','','cut','var(--caramel2)'],
+ ['vospitanie','Воспитание','','photo'],
+ ['pervaya-pomosh','Первая помощь','','text','var(--caramel)'],
+ ['aptechka','Аптечка','','text','#4A3328'],
+ ['povedenie','Поведение','','cut','var(--sage)'],
+ ['separaciya','Сепарация','','photo'],
+ ['dve-sobaki','Две собаки в доме','','cut','var(--blush)'],
+ ['sobaka-i-kot','Собака и кот','','cut','var(--caramel2)'],
+ ['sobaka-i-rebenok','Собака и ребёнок','wide','photo'],
+ ['obrabotki','Обработки','','photo'],
+ ['privivki','Календарь прививок','','text','var(--sage)'],
 ];
 const SEC=Object.fromEntries(SECTIONS.map(s=>[s[0],s[1]]));
-const POS={"adaptaciya": "50% 62%", "sobaka-i-rebenok": "50% 78%", "pervaya-pomosh": "50% 75%", "separaciya": "50% 90%", "kak-vybrat": "50% 80%", "sobaka-i-kot": "50% 60%", "dve-sobaki": "50% 55%", "privivki": "50% 70%", "povedenie": "50% 45%"};
-const IMG=id=>'img/r/'+id+'.webp';
+const POS={"adaptaciya":"50% 60%","rol-v-seme":"50% 35%","vospitanie":"50% 45%","sobaka-i-rebenok":"50% 50%","obrabotki":"50% 40%","separaciya":"50% 70%"};
+const KIND=Object.fromEntries(SECTIONS.map(s=>[s[0],{k:s[3],bg:s[4]}]));
+const DARKBG=['#4A3328','var(--sage)','var(--caramel)'];
+/* картинка раздела: фото целиком, вырезанная собака на цветном фоне или только цвет с лапкой */
+function media(id,cls=''){
+  const v=KIND[id], i=SECTIONS.findIndex(s=>s[0]===id);
+  if(v.k==='photo') return `<span class="med ${cls}"><img src="img/r/${id}.webp" alt="" loading="lazy" style="object-position:${POS[id]||'50% 50%'}"></span>`;
+  if(v.k==='cut') return `<span class="med cutm ${cls}" style="background:${v.bg}"><img src="img/c/${id}.webp" alt="" loading="lazy"></span>`;
+  return `<span class="med textm ${DARKBG.includes(v.bg)?'dk':''} ${cls}" style="background:${v.bg}"><i>${String(i+1).padStart(2,'0')}</i><span class="pw">${PAW}</span></span>`;
+}
 
 const AUTHORS={
  antipina:{
@@ -478,10 +504,10 @@ function authorCard(id,mode){
 function matRow(m){
   const a=AUTHORS[m.author];
   const ava=a.photo?`<img class="ava" src="${a.photo}" alt="">`:`<span class="ava">${a.name[0]}</span>`;
-  return `<a class="mat rv" href="#/m/${m.id}"><span class="thumb"><img src="${IMG(m.sec)}" alt="" loading="lazy"></span><div><span class="tag">${SEC[m.sec]} · ${m.type.toLowerCase()}</span><h3>${m.title}</h3><div class="sub">${m.lead}</div><div class="who">${ava}<span>${a.short} · ${minutes(m)} мин</span></div></div><span class="btn">Читать <span class="ar">${ARR}</span></span></a>`;
+  return `<a class="mat rv" href="#/m/${m.id}"><span class="thumb">${media(m.sec)}</span><div><span class="tag">${SEC[m.sec]} · ${m.type.toLowerCase()}</span><h3>${m.title}</h3><div class="sub">${m.lead}</div><div class="who">${ava}<span>${a.short} · ${minutes(m)} мин</span></div></div><span class="btn">Читать <span class="ar">${ARR}</span></span></a>`;
 }
 function cards(){
-  return SECTIONS.map(([id,t,size],i)=>{const n=bySec(id).length;return `<a class="card rv ${size||''}" href="#/r/${id}" style="transition-delay:${(i%4)*60}ms"><img src="${IMG(id)}" alt="" loading="lazy" style="object-position:${POS[id]||'50% 40%'}"><span class="num">${String(i+1).padStart(2,'0')}/</span><span class="round">${ARR2}</span><span class="cap"><b>${t}</b><small class="${n?'has':''}">${cnt(n)}</small></span></a>`}).join('');
+  return SECTIONS.map(([id,t,size,kind],i)=>{const n=bySec(id).length;return `<a class="card rv ${size||''} k-${kind}" href="#/r/${id}" style="transition-delay:${(i%4)*60}ms">${media(id)}<span class="num">${String(i+1).padStart(2,'0')}/</span><span class="round">${ARR2}</span><span class="cap"><b>${t}</b><small class="${n?'has':''}">${cnt(n)}</small></span></a>`}).join('');
 }
 function footer(){
   const cols=[SECTIONS.slice(0,5),SECTIONS.slice(5,10),SECTIONS.slice(10)];
@@ -540,7 +566,7 @@ function sectionPage(id){
   const t=SEC[id]; if(!t) return notFound();
   const list=bySec(id), i=SECTIONS.findIndex(s=>s[0]===id);
   const others=SECTIONS.filter(s=>s[0]!==id&&bySec(s[0]).length).concat(SECTIONS.filter(s=>s[0]!==id&&!bySec(s[0]).length)).slice(0,7);
-  return `<section class="sec-top"><div class="pan"><div class="crumbs"><a href="#/">Хвостопедия</a><span>/</span><a href="#/razdely">Разделы</a></div><div class="lbl" style="color:var(--caramel);margin-bottom:14px">Раздел ${String(i+1).padStart(2,'0')}/</div><h1 class="page-title">${t}</h1><div class="facts"><span>${cnt(list.length)}</span></div></div><div class="sec-img"><img src="${IMG(id)}" alt=""></div></section>
+  return `<section class="sec-top"><div class="pan"><div class="crumbs"><a href="#/">Хвостопедия</a><span>/</span><a href="#/razdely">Разделы</a></div><div class="lbl" style="color:var(--caramel);margin-bottom:14px">Раздел ${String(i+1).padStart(2,'0')}/</div><h1 class="page-title">${t}</h1><div class="facts"><span>${cnt(list.length)}</span></div></div><div class="sec-img">${media(id)}</div></section>
   <section class="pan blk">${list.length?`<div class="mat-list">${list.map(matRow).join('')}</div>`:`<div class="soon rv"><div><h3>Материалы скоро появятся</h3><p>Мы собираем статьи специалистов для этого раздела</p></div><a class="btn" href="#/razdely">Все разделы <span class="ar">${ARR}</span></a></div>`}
   <div class="next-secs rv">${others.map(([sid,st])=>`<a class="chip" href="#/r/${sid}">${st}</a>`).join('')}</div></section>${footer()}`;
 }
@@ -585,7 +611,7 @@ function articlePage(id){
       <h1>${m.title}</h1><p class="lead">${m.lead}</p>
       <div class="facts"><span>${m.type}</span><span>${minutes(m)} мин чтения</span><span>${SEC[m.sec]}</span></div>
       <div class="btns" style="margin-top:26px"><a class="btn car" href="#read" data-to="read">Читать <span class="ar">${ARR}</span></a><a class="btn soft" href="${m.pdf}" download>Скачать PDF</a></div></div>
-    <div class="art-right"><div class="art-img"><img src="${IMG(m.sec)}" alt=""></div>${authorCard(m.author,'byline')}</div>
+    <div class="art-right"><div class="art-img">${media(m.sec)}</div>${authorCard(m.author,'byline')}</div>
   </section>
   <section class="pan paper art-wrap" id="read">
     <aside class="toc" id="toc"><b class="lbl">Содержание</b>${toc}</aside>
