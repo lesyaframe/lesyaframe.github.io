@@ -70,6 +70,7 @@ header nav a.on{background:var(--milk);color:var(--ink)}
 .h2{font:500 clamp(34px,4.6vw,66px)/1.04 var(--serif);letter-spacing:-.025em}
 .pill{display:inline-block;padding:0 .32em .06em;border-radius:99px;background:var(--blush);line-height:1.1}
 .pill.sg{background:var(--sage2)}
+.nw{white-space:nowrap}
 .pill.cr{background:var(--caramel);color:var(--paper)}
 .rv{opacity:0;transform:translateY(36px);transition:opacity .9s cubic-bezier(.2,.8,.2,1),transform .9s cubic-bezier(.2,.8,.2,1)}
 .rv.in{opacity:1;transform:none}
@@ -87,11 +88,11 @@ header nav a.on{background:var(--milk);color:var(--ink)}
 .h-bot{display:grid;grid-template-columns:1fr 1fr;gap:var(--gap)}
 .h-left{padding:clamp(20px,3vw,36px);display:flex;flex-direction:column;justify-content:flex-end}
 .h-lead{font:400 clamp(17px,1.5vw,21px)/1.4 var(--serif);max-width:520px;margin-bottom:clamp(14px,2.4vh,24px)}
-.h-right{position:static;padding:clamp(20px,3vw,36px);display:flex;justify-content:flex-end;align-items:flex-end;background:var(--caramel);color:var(--paper)}
+.h-right{position:static;padding:clamp(20px,3vw,36px);display:flex;justify-content:flex-end;align-items:flex-end;background:var(--sage);color:var(--paper)}
 .stats{display:grid;grid-template-columns:1fr 1fr;gap:clamp(12px,2vh,20px) 28px;width:min(330px,42%)}
 .stats b{display:block;font:500 clamp(30px,3.2vw,46px)/1 var(--serif);letter-spacing:-.02em}
 .stats span{display:block;font-size:13.5px;line-height:1.3;margin-top:4px;opacity:.9}
-.dogbox{position:absolute;left:47%;bottom:0;height:min(84%,660px);aspect-ratio:518/836;z-index:3;pointer-events:none}
+.dogbox{position:absolute;left:47%;bottom:0;height:min(84%,660px);aspect-ratio:674/954;z-index:3;pointer-events:none}
 .dogbox img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 24px 30px rgba(43,30,23,.25));transform-origin:50% 100%;animation:breathe 5s ease-in-out infinite}
 @keyframes breathe{0%,100%{transform:rotate(0)}50%{transform:rotate(-1.6deg) translateY(-3px)}}
 .bubble{position:absolute;top:8%;left:80%;background:var(--paper);color:var(--ink);font:500 15px/1.25 var(--sans);padding:12px 18px;border-radius:22px 22px 22px 6px;white-space:nowrap;box-shadow:0 14px 30px -14px rgba(43,30,23,.5);animation:bob 3.4s ease-in-out infinite}
@@ -369,6 +370,7 @@ const SECTIONS=[
  ['privivki','Календарь прививок'],
 ];
 const SEC=Object.fromEntries(SECTIONS.map(s=>[s[0],s[1]]));
+const POS={"adaptaciya": "50% 62%", "sobaka-i-rebenok": "50% 78%", "pervaya-pomosh": "50% 75%", "separaciya": "50% 90%", "kak-vybrat": "50% 80%", "sobaka-i-kot": "50% 60%", "dve-sobaki": "50% 55%", "privivki": "50% 70%", "povedenie": "50% 45%"};
 const IMG=id=>'img/r/'+id+'.webp';
 
 const AUTHORS={
@@ -479,7 +481,7 @@ function matRow(m){
   return `<a class="mat rv" href="#/m/${m.id}"><span class="thumb"><img src="${IMG(m.sec)}" alt="" loading="lazy"></span><div><span class="tag">${SEC[m.sec]} · ${m.type.toLowerCase()}</span><h3>${m.title}</h3><div class="sub">${m.lead}</div><div class="who">${ava}<span>${a.short} · ${minutes(m)} мин</span></div></div><span class="btn">Читать <span class="ar">${ARR}</span></span></a>`;
 }
 function cards(){
-  return SECTIONS.map(([id,t,size],i)=>{const n=bySec(id).length;return `<a class="card rv ${size||''}" href="#/r/${id}" style="transition-delay:${(i%4)*60}ms"><img src="${IMG(id)}" alt="" loading="lazy"><span class="num">${String(i+1).padStart(2,'0')}/</span><span class="round">${ARR2}</span><span class="cap"><b>${t}</b><small class="${n?'has':''}">${cnt(n)}</small></span></a>`}).join('');
+  return SECTIONS.map(([id,t,size],i)=>{const n=bySec(id).length;return `<a class="card rv ${size||''}" href="#/r/${id}" style="transition-delay:${(i%4)*60}ms"><img src="${IMG(id)}" alt="" loading="lazy" style="object-position:${POS[id]||'50% 40%'}"><span class="num">${String(i+1).padStart(2,'0')}/</span><span class="round">${ARR2}</span><span class="cap"><b>${t}</b><small class="${n?'has':''}">${cnt(n)}</small></span></a>`}).join('');
 }
 function footer(){
   const cols=[SECTIONS.slice(0,5),SECTIONS.slice(5,10),SECTIONS.slice(10)];
@@ -497,7 +499,7 @@ function home(){
     </div>
     <div class="h-bot">
       <div class="pan h-left">
-        <p class="h-lead">База знаний о&nbsp;жизни с&nbsp;собакой. Статьи <span class="pill">кинологов</span>, <span class="pill sg">зоопсихологов</span> и&nbsp;других специалистов в&nbsp;одном месте</p>
+        <p class="h-lead">База знаний о&nbsp;жизни с&nbsp;собакой. Статьи <span class="nw"><span class="pill">кинологов</span>,</span> <span class="pill sg">зоопсихологов</span> и&nbsp;других специалистов в&nbsp;одном месте</p>
         <div class="search" id="search">
           <input id="q" type="search" placeholder="Найдите ответ на свой вопрос" autocomplete="off">
           <button class="go" id="qgo" aria-label="Искать">${ARR}</button>
