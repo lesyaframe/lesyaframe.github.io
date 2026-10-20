@@ -10,21 +10,24 @@
 <link href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,400..700;1,7..72,400..600&family=Onest:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
-  --milk:#F6EFE3; --paper:#FFFAF2; --ink:#2F211A; --ink2:#6B5A4E; --line:#E4D8C6;
+  --dark:#2B1E17; --milk:#F6EFE3; --paper:#FFFAF2; --ink:#2F211A; --ink2:#6B5A4E; --line:#E4D8C6;
   --caramel:#C2763D; --caramel2:#E7B48A; --sage:#7E8762; --sage2:#DDE0CC; --blush:#F0D7C3;
   --serif:"Literata",Georgia,serif; --sans:"Onest",system-ui,sans-serif;
-  --hh:64px;
+  --gap:12px; --r:36px;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
-body{background:var(--milk);color:var(--ink);font:400 17px/1.55 var(--sans);overflow-x:hidden}
+body{background:var(--dark);color:var(--ink);font:400 17px/1.55 var(--sans);overflow-x:hidden}
 a{color:inherit;text-decoration:none}
 button,input{font:inherit;color:inherit;border:0;background:none}
 p,li,h1,h2,h3,h4,blockquote{text-wrap:pretty}
 ::selection{background:var(--caramel2)}
+#app{padding:var(--gap);display:flex;flex-direction:column;gap:var(--gap)}
+.pan{background:var(--milk);border-radius:var(--r);position:relative}
+.pan.paper{background:var(--paper)}
 
 /* ---------- прелоадер ---------- */
-#pre{position:fixed;inset:0;z-index:100;background:var(--milk);display:grid;place-items:center;transition:opacity .6s,visibility .6s}
+#pre{position:fixed;inset:0;z-index:100;background:var(--dark);color:var(--milk);display:grid;place-items:center;transition:opacity .6s,visibility .6s}
 #pre.out{opacity:0;visibility:hidden}
 .pre-in{display:flex;flex-direction:column;align-items:center;gap:22px}
 .pre-word{font:600 clamp(34px,7vw,64px)/1 var(--serif);letter-spacing:-.02em;display:flex;align-items:flex-end}
@@ -36,60 +39,70 @@ p,li,h1,h2,h3,h4,blockquote{text-wrap:pretty}
 @keyframes step{0%{opacity:0}20%,60%{opacity:1}100%{opacity:0}}
 @keyframes up{to{opacity:1;transform:none}}
 
-/* ---------- шапка ---------- */
-header{position:fixed;top:0;left:0;right:0;z-index:50;height:var(--hh);display:flex;align-items:center;justify-content:space-between;padding:0 clamp(16px,4vw,48px);transition:height .35s,background .35s,box-shadow .35s}
-header.small{--hh:50px;height:50px;background:rgba(246,239,227,.86);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);box-shadow:0 1px 0 var(--line)}
-.logo{font:600 21px/1 var(--serif);letter-spacing:-.01em;display:flex;align-items:flex-end;gap:2px}
-.logo .tail{width:24px;height:24px;margin:0 0 -1px -3px}
-nav{display:flex;gap:6px;align-items:center}
-nav a{padding:9px 16px;border-radius:99px;font-weight:500;font-size:15px;transition:background .25s,color .25s}
-nav a:hover{background:var(--blush)}
-nav a.on{background:var(--ink);color:var(--paper)}
-.nav-search{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;cursor:pointer;transition:background .25s}
-.nav-search:hover{background:var(--blush)}
+/* ---------- шапка: плавающая плашка ---------- */
+header{position:fixed;top:22px;left:50%;transform:translateX(-50%);z-index:50;display:flex;align-items:center;gap:6px;padding:6px 6px 6px 20px;background:var(--dark);color:var(--milk);border-radius:99px;transition:padding .35s,top .35s,box-shadow .35s;box-shadow:0 10px 30px -12px rgba(0,0,0,.5)}
+header.small{top:18px;padding:4px 4px 4px 16px}
+.logo{font:600 18px/1 var(--serif);letter-spacing:-.01em;display:flex;align-items:center;gap:6px;margin-right:10px;white-space:nowrap}
+.logo svg{width:18px;height:18px;fill:var(--caramel)}
+header nav{display:flex;gap:4px;align-items:center}
+header nav a{padding:9px 16px;border-radius:99px;font-weight:500;font-size:14.5px;transition:background .25s,color .25s;white-space:nowrap}
+header nav a:hover{background:rgba(246,239,227,.12)}
+header nav a.on{background:var(--milk);color:var(--ink)}
+.nav-search{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;cursor:pointer;background:var(--caramel);color:var(--paper);transition:transform .25s,background .25s}
+.nav-search:hover{transform:scale(1.08);background:var(--milk);color:var(--ink)}
 
 /* ---------- кнопки ---------- */
-.btn{display:inline-flex;align-items:center;gap:10px;padding:15px 26px;border-radius:99px;font-weight:500;font-size:16px;cursor:pointer;background:var(--ink);color:var(--paper);transition:transform .25s,background .25s,box-shadow .25s;white-space:nowrap}
+.btn{display:inline-flex;align-items:center;gap:10px;padding:15px 26px;border-radius:99px;font-weight:500;font-size:16px;cursor:pointer;background:var(--ink);color:var(--paper);transition:transform .25s,background .25s,box-shadow .25s,color .25s;white-space:nowrap}
 .btn:hover{background:var(--caramel);transform:translateY(-2px);box-shadow:0 10px 24px -10px rgba(194,118,61,.7)}
-.btn .ar{transition:transform .25s}
+.btn .ar{transition:transform .25s;display:inline-flex}
 .btn:hover .ar{transform:translateX(4px)}
-.btn.soft{background:rgba(47,33,26,.07);color:var(--ink)}
+.btn.soft{background:rgba(47,33,26,.08);color:var(--ink)}
 .btn.soft:hover{background:var(--ink);color:var(--paper);box-shadow:none}
 .btn.car{background:var(--caramel)}
 .btn.car:hover{background:var(--ink)}
 .btn.sm{padding:11px 18px;font-size:14.5px}
+.round{width:46px;height:46px;border-radius:50%;display:grid;place-items:center;background:var(--paper);color:var(--ink);flex:none;transition:transform .35s,background .35s,color .35s}
 
-/* ---------- общие блоки ---------- */
-.screen{min-height:100svh;padding:calc(var(--hh) + 32px) clamp(16px,5vw,72px) 56px;position:relative;display:flex;flex-direction:column;justify-content:center}
-.kicker{font:500 13px/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--caramel);margin-bottom:18px;display:flex;align-items:center;gap:10px}
-.kicker:before{content:"";width:26px;height:2px;background:currentColor;border-radius:2px}
-.h2{font:500 clamp(36px,5.2vw,72px)/1.02 var(--serif);letter-spacing:-.025em}
-.h2 i{color:var(--caramel)}
+/* ---------- общие ---------- */
+.lbl{font:500 12px/1.2 var(--sans);letter-spacing:.14em;text-transform:uppercase}
+.labels{display:flex;align-items:center;gap:16px;color:var(--ink2)}
+.labels i{flex:1;height:1px;background:currentColor;opacity:.45}
+.h2{font:500 clamp(34px,4.6vw,66px)/1.04 var(--serif);letter-spacing:-.025em}
+.pill{display:inline-block;padding:0 .32em .06em;border-radius:99px;background:var(--blush);line-height:1.1}
+.pill.sg{background:var(--sage2)}
+.pill.cr{background:var(--caramel);color:var(--paper)}
 .rv{opacity:0;transform:translateY(36px);transition:opacity .9s cubic-bezier(.2,.8,.2,1),transform .9s cubic-bezier(.2,.8,.2,1)}
 .rv.in{opacity:1;transform:none}
+.blk{padding:clamp(28px,5vw,64px) clamp(18px,4vw,56px)}
+.blk-head{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap;margin-bottom:clamp(22px,4vh,40px)}
+.blk-head p{max-width:360px;color:var(--ink2)}
 
 /* ---------- hero ---------- */
-.hero{height:100svh;min-height:520px;padding:var(--hh) clamp(16px,5vw,72px) 28px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;position:relative;overflow:hidden}
-.trail{position:absolute;inset:0;pointer-events:none}
-.trail svg{position:absolute;width:clamp(22px,2.4vw,34px);fill:var(--caramel);opacity:0;animation:paw 9s infinite}
-@keyframes paw{0%{opacity:0}6%,40%{opacity:.16}55%,100%{opacity:0}}
-.blob{position:absolute;width:min(70vw,780px);aspect-ratio:1.4;border-radius:50%;background:radial-gradient(closest-side,var(--blush),transparent);top:50%;left:50%;transform:translate(-50%,-56%);opacity:.9}
-.hero-tag{position:relative;font:500 15px/1.3 var(--sans);background:var(--paper);padding:9px 16px;border-radius:99px;margin-bottom:clamp(16px,3vh,30px);display:inline-flex;gap:8px;align-items:center}
-.hero-tag b{width:8px;height:8px;border-radius:50%;background:var(--sage);display:inline-block}
-.title{position:relative;font:600 min(13.4vw,21vh)/.9 var(--serif);letter-spacing:-.045em;display:inline-flex;align-items:flex-end;white-space:nowrap}
-.title .tail{position:absolute;right:-.5em;bottom:.04em;width:.52em;height:.52em}
-.tail path{fill:none;stroke:var(--caramel);stroke-width:9;stroke-linecap:round}
-.tail g{transform-origin:5% 92%;animation:wag 1.1s ease-in-out infinite}
-@keyframes wag{0%,100%{transform:rotate(-16deg)}50%{transform:rotate(14deg)}}
-.hero-sub{position:relative;font:400 clamp(17px,1.6vw,22px)/1.45 var(--serif);max-width:640px;margin:clamp(16px,3vh,30px) auto clamp(18px,3.4vh,34px);color:var(--ink2)}
-.hero-sub em{color:var(--ink);font-style:italic}
-.search{position:relative;width:min(620px,100%);margin:0 auto}
-.search input{width:100%;height:62px;border-radius:99px;background:var(--paper);padding:0 64px 0 26px;font-size:17px;box-shadow:0 18px 40px -24px rgba(47,33,26,.35);outline:none;transition:box-shadow .25s}
-.search input:focus{box-shadow:0 0 0 3px var(--caramel2),0 18px 40px -24px rgba(47,33,26,.35)}
+.hero{height:calc(100svh - 2*var(--gap));min-height:560px;display:grid;grid-template-rows:auto 1fr;gap:var(--gap);position:relative}
+.h-top{padding:96px clamp(20px,3vw,44px) 0;overflow:hidden}
+.h-top .labels{margin-bottom:clamp(6px,1.4vh,16px)}
+.title{font:600 min(15.4vw,23vh)/.84 var(--serif);letter-spacing:-.05em;white-space:nowrap;margin-left:-.04em;padding-bottom:.2em;margin-bottom:-.14em;display:flex;align-items:baseline}
+.title .paw{display:inline-block;width:.62em;height:.62em;margin:0 .02em;transform:translateY(.02em) rotate(-14deg)}
+.title .paw svg{width:100%;height:100%;fill:var(--caramel)}
+.h-bot{display:grid;grid-template-columns:1fr 1fr;gap:var(--gap)}
+.h-left{padding:clamp(20px,3vw,36px);display:flex;flex-direction:column;justify-content:flex-end}
+.h-lead{font:400 clamp(17px,1.5vw,21px)/1.4 var(--serif);max-width:520px;margin-bottom:clamp(14px,2.4vh,24px)}
+.h-right{position:static;padding:clamp(20px,3vw,36px);display:flex;justify-content:flex-end;align-items:flex-end;background:var(--caramel);color:var(--paper)}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:clamp(12px,2vh,20px) 28px;width:min(330px,42%)}
+.stats b{display:block;font:500 clamp(30px,3.2vw,46px)/1 var(--serif);letter-spacing:-.02em}
+.stats span{display:block;font-size:13.5px;line-height:1.3;margin-top:4px;opacity:.9}
+.dogbox{position:absolute;left:47%;bottom:0;height:min(84%,660px);aspect-ratio:518/836;z-index:3;pointer-events:none}
+.dogbox img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 24px 30px rgba(43,30,23,.25));transform-origin:50% 100%;animation:breathe 5s ease-in-out infinite}
+@keyframes breathe{0%,100%{transform:rotate(0)}50%{transform:rotate(-1.6deg) translateY(-3px)}}
+.bubble{position:absolute;top:8%;left:80%;background:var(--paper);color:var(--ink);font:500 15px/1.25 var(--sans);padding:12px 18px;border-radius:22px 22px 22px 6px;white-space:nowrap;box-shadow:0 14px 30px -14px rgba(43,30,23,.5);animation:bob 3.4s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(-6px)}}
+.search{position:relative;width:min(560px,100%)}
+.search input{width:100%;height:60px;border-radius:99px;background:var(--paper);padding:0 64px 0 24px;font-size:16.5px;outline:none;transition:box-shadow .25s}
+.search input:focus{box-shadow:0 0 0 3px var(--caramel2)}
 .search input::placeholder{color:#9C8B7E}
-.search .go{position:absolute;right:7px;top:7px;width:48px;height:48px;border-radius:50%;background:var(--ink);color:var(--paper);display:grid;place-items:center;cursor:pointer;transition:background .25s,transform .25s}
+.search .go{position:absolute;right:6px;top:6px;width:48px;height:48px;border-radius:50%;background:var(--ink);color:var(--paper);display:grid;place-items:center;cursor:pointer;transition:background .25s,transform .25s}
 .search .go:hover{background:var(--caramel);transform:scale(1.06)}
-.results{position:absolute;left:0;right:0;top:70px;background:var(--paper);border-radius:24px;box-shadow:0 30px 60px -30px rgba(47,33,26,.45);padding:8px;text-align:left;z-index:5;display:none;max-height:min(52vh,420px);overflow:auto}
+.results{position:absolute;left:0;right:0;bottom:68px;background:var(--paper);border-radius:24px;box-shadow:0 30px 60px -20px rgba(47,33,26,.5);padding:8px;text-align:left;z-index:8;display:none;max-height:min(50vh,400px);overflow:auto}
 .results.open{display:block}
 .results a{display:block;padding:14px 16px;border-radius:16px;transition:background .2s}
 .results a:hover,.results a.act{background:var(--milk)}
@@ -97,108 +110,113 @@ nav a.on{background:var(--ink);color:var(--paper)}
 .results small{color:var(--ink2);font-size:13.5px;display:block;margin-top:4px}
 .results mark{background:var(--caramel2);border-radius:3px;padding:0 2px}
 .results .none{padding:14px 16px;color:var(--ink2);font-size:15px}
-.hero-chips{position:relative;display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:18px}
-.chip{padding:8px 14px;border-radius:99px;background:rgba(47,33,26,.06);font-size:14px;cursor:pointer;transition:background .2s,color .2s}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}
+.chip{padding:8px 14px;border-radius:99px;background:rgba(47,33,26,.07);font-size:14px;cursor:pointer;transition:background .2s,color .2s}
 .chip:hover{background:var(--ink);color:var(--paper)}
-.hero-down{position:absolute;bottom:22px;left:50%;transform:translateX(-50%);font-size:13px;color:var(--ink2);display:flex;flex-direction:column;align-items:center;gap:6px}
-.hero-down i{width:2px;height:28px;background:linear-gradient(var(--ink2),transparent);animation:dn 1.6s infinite}
-@keyframes dn{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
 
-/* ---------- оглавление разделов ---------- */
-.idx-head{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;margin-bottom:clamp(20px,4vh,40px);flex-wrap:wrap}
-.idx-head p{max-width:360px;color:var(--ink2)}
-.idx{display:grid;grid-template-columns:1fr 1fr;column-gap:clamp(24px,4vw,64px);counter-reset:n}
-.row{position:relative;display:flex;align-items:center;gap:18px;padding:clamp(9px,1.45vh,15px) 14px;border-top:1px solid var(--line);overflow:hidden;border-radius:4px;isolation:isolate}
-.row:before{content:"";position:absolute;inset:0;background:var(--ink);transform:scaleX(0);transform-origin:left;transition:transform .45s cubic-bezier(.7,0,.2,1);z-index:-1;border-radius:14px}
-.row:hover:before{transform:scaleX(1)}
-.row:hover{color:var(--paper);border-color:transparent}
-.row:hover+.row{border-color:transparent}
-.row .n{font:500 13px/1 var(--sans);color:var(--caramel);width:22px;flex:none}
-.row .t{font:500 clamp(19px,1.9vw,27px)/1.15 var(--serif);letter-spacing:-.01em;flex:1}
-.row .c{font-size:13.5px;color:var(--ink2);white-space:nowrap;transition:color .3s}
-.row:hover .c{color:var(--caramel2)}
-.row .c.has{background:var(--sage2);color:var(--ink);padding:5px 11px;border-radius:99px}
-.row:hover .c.has{background:var(--caramel);color:var(--paper)}
-.row .ar{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;transform:translateX(-10px);opacity:0;transition:.35s;flex:none;background:var(--caramel);color:var(--paper)}
-.row:hover .ar{opacity:1;transform:none}
+/* ---------- разделы: карточки с иллюстрациями ---------- */
+.bento{display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:clamp(200px,24vh,260px);gap:var(--gap);grid-auto-flow:dense}
+.card{position:relative;border-radius:28px;overflow:hidden;isolation:isolate;background:var(--sage2)}
+.card img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 40%;transition:transform .8s cubic-bezier(.2,.8,.2,1)}
+.card:hover img{transform:scale(1.06)}
+.card.big{grid-column:span 2;grid-row:span 2}
+.card.wide{grid-column:span 2}
+.card.wide img{object-position:50% 55%}
+.card:nth-child(3n+2){border-radius:28px 76px 28px 28px}
+.card:nth-child(3n+2) .round{top:18px;right:18px}
+.card:nth-child(4n+3){border-radius:76px 28px 28px 28px}
+.card:nth-child(4n+3) .num{top:22px;left:26px}
+.card .num{position:absolute;top:14px;left:14px;padding:7px 12px;border-radius:99px;background:var(--paper);font:500 13px/1 var(--sans)}
+.card .round{position:absolute;top:10px;right:10px;width:42px;height:42px}
+.card:hover .round{background:var(--caramel);color:var(--paper);transform:rotate(-45deg)}
+.card .cap{position:absolute;left:12px;bottom:12px;right:12px;display:flex;align-items:flex-end;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.card .cap b{background:var(--paper);padding:10px 16px;border-radius:18px;font:500 clamp(16px,1.35vw,20px)/1.15 var(--serif);max-width:100%}
+.card .cap small{padding:7px 12px;border-radius:99px;background:rgba(255,250,242,.85);font-size:13px;white-space:nowrap}
+.card .cap small.has{background:var(--caramel);color:var(--paper)}
+.card.big .cap b{font-size:clamp(26px,2.6vw,40px);padding:14px 22px;border-radius:24px}
+.card.big .cap small{font-size:14.5px;padding:9px 14px}
 
-/* ---------- свежее ---------- */
-.fresh{background:var(--paper)}
-.mat-list{display:flex;flex-direction:column;gap:clamp(14px,2.4vh,22px);margin-top:clamp(22px,4vh,40px)}
-.mat{display:grid;grid-template-columns:auto 1fr auto;gap:clamp(16px,3vw,40px);align-items:center;padding:clamp(18px,3vh,30px) clamp(18px,3vw,36px);border-radius:32px;background:var(--milk);position:relative;overflow:hidden;transition:transform .35s,background .35s}
-.mat:hover{transform:translateY(-4px);background:var(--blush)}
-.mat .sec{writing-mode:vertical-rl;transform:rotate(180deg);font:500 12px/1 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--caramel)}
-.mat h3{font:500 clamp(24px,3vw,42px)/1.08 var(--serif);letter-spacing:-.02em}
+/* ---------- материалы ---------- */
+.mat-list{display:flex;flex-direction:column;gap:var(--gap)}
+.mat{display:grid;grid-template-columns:clamp(110px,13vw,170px) 1fr auto;gap:clamp(16px,3vw,40px);align-items:center;padding:clamp(14px,2vw,20px);padding-right:clamp(18px,3vw,36px);border-radius:32px;background:var(--paper);transition:transform .35s,background .35s}
+.mat:hover{transform:translateY(-4px);background:#fff}
+.mat .thumb{aspect-ratio:1;border-radius:24px 24px 60px 24px;overflow:hidden}
+.mat .thumb img{width:100%;height:100%;object-fit:cover;transition:transform .6s}
+.mat:hover .thumb img{transform:scale(1.07)}
+.mat .tag{display:inline-block;padding:6px 12px;border-radius:99px;background:var(--sage2);font-size:13px;margin-bottom:10px}
+.mat h3{font:500 clamp(24px,2.8vw,40px)/1.08 var(--serif);letter-spacing:-.02em}
 .mat .sub{color:var(--ink2);margin-top:8px;font-size:15.5px;max-width:620px}
-.mat .who{display:flex;align-items:center;gap:10px;margin-top:16px;font-size:14.5px}
-.ava{width:38px;height:38px;border-radius:50%;object-fit:cover;flex:none;background:var(--sage2);display:grid;place-items:center;font:600 15px/1 var(--serif);color:var(--sage)}
-.mat .big{position:absolute;right:-.06em;bottom:-.3em;font:600 clamp(120px,16vw,230px)/1 var(--serif);color:rgba(194,118,61,.08);pointer-events:none}
+.mat .who{display:flex;align-items:center;gap:10px;margin-top:14px;font-size:14.5px}
+.ava{width:34px;height:34px;border-radius:50%;object-fit:cover;flex:none;background:var(--sage2);display:grid;place-items:center;font:600 14px/1 var(--serif);color:var(--sage)}
 
 /* ---------- авторы ---------- */
-.authors{display:grid;grid-template-columns:1.25fr 1fr;gap:clamp(18px,3vw,36px);margin-top:clamp(22px,4vh,40px);align-items:stretch}
-.acard{border-radius:36px;background:var(--paper);padding:clamp(20px,2.6vw,34px);display:grid;grid-template-columns:minmax(150px,240px) 1fr;gap:clamp(18px,2.6vw,34px);align-items:center}
-.acard .ph{width:100%;aspect-ratio:3/4;border-radius:26px;object-fit:cover;max-height:52vh}
-.acard h3{font:500 clamp(24px,2.4vw,34px)/1.08 var(--serif);letter-spacing:-.015em}
-.acard .role{color:var(--caramel);font-weight:500;margin-top:8px;font-size:15px}
-.acard .meta{display:flex;flex-direction:column;gap:6px;margin-top:14px;font-size:15px;color:var(--ink2)}
-.acard q{display:block;font:italic 400 clamp(17px,1.45vw,20px)/1.4 var(--serif);margin-top:18px;quotes:"«" "»"}
+.authors{display:grid;grid-template-columns:1.3fr 1fr;gap:var(--gap)}
+.acard{border-radius:30px;background:var(--paper);padding:clamp(16px,2vw,24px);display:grid;grid-template-columns:minmax(150px,230px) 1fr;gap:clamp(18px,2.6vw,32px);align-items:center}
+.acard .ph{width:100%;aspect-ratio:3/4;border-radius:24px 24px 24px 80px;object-fit:cover;max-height:50vh}
+.acard h3{font:500 clamp(24px,2.3vw,32px)/1.08 var(--serif);letter-spacing:-.015em}
+.acard .role{display:inline-block;margin-top:10px;padding:6px 12px;border-radius:99px;background:var(--caramel);color:var(--paper);font-size:13.5px;font-weight:500}
+.acard .meta{display:flex;flex-direction:column;gap:4px;margin-top:12px;font-size:15px;color:var(--ink2)}
+.acard q{display:block;font:italic 400 clamp(17px,1.4vw,20px)/1.4 var(--serif);margin-top:16px;quotes:"«" "»"}
 .acard q+span{display:block;font-size:13.5px;color:var(--ink2);margin-top:6px}
-.acard .btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
-.empty{border-radius:36px;background:rgba(255,250,242,.55);padding:clamp(20px,2.6vw,34px);display:flex;flex-direction:column;justify-content:space-between;gap:20px}
-.empty .ph0{width:96px;height:96px;border-radius:50%;background:var(--sage2);display:grid;place-items:center;font:600 38px/1 var(--serif);color:var(--sage)}
-.empty h3{font:500 clamp(22px,2.2vw,30px)/1.1 var(--serif)}
+.btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.empty{border-radius:30px;background:rgba(255,250,242,.6);padding:clamp(20px,2.6vw,30px);display:flex;flex-direction:column;justify-content:space-between;gap:20px}
+.empty .ph0{width:90px;height:90px;border-radius:24px 24px 24px 40px;background:var(--sage2);display:grid;place-items:center;font:600 36px/1 var(--serif);color:var(--sage)}
+.empty h3{font:500 clamp(22px,2.1vw,30px)/1.1 var(--serif)}
 .ghost{height:12px;border-radius:8px;background:rgba(47,33,26,.07);margin-top:10px}
 .empty .note{font-size:14px;color:var(--ink2)}
 
 /* ---------- подвал ---------- */
-footer{background:var(--ink);color:var(--paper);padding:clamp(48px,8vh,90px) clamp(16px,5vw,72px) 32px;border-radius:40px 40px 0 0}
-.f-big{font:600 clamp(48px,11vw,170px)/.9 var(--serif);letter-spacing:-.045em;display:flex;align-items:flex-end}
-.f-big .tail{width:.5em;height:.5em;margin:0 0 .02em -.04em}
-.f-grid{display:flex;justify-content:space-between;gap:32px;flex-wrap:wrap;margin-top:40px;font-size:15px;color:#CDBFB2}
+footer{background:var(--caramel);color:var(--ink);border-radius:var(--r);padding:clamp(36px,6vh,70px) clamp(18px,4vw,56px) 28px;overflow:hidden;position:relative}
+.f-big{font:600 clamp(48px,12.5vw,200px)/.85 var(--serif);letter-spacing:-.05em;color:var(--paper);display:flex;align-items:baseline;white-space:nowrap}
+.f-big .paw{display:inline-block;width:.6em;height:.6em;transform:rotate(-14deg)}
+.f-big .paw svg{width:100%;height:100%;fill:var(--ink)}
+.f-grid{display:flex;justify-content:space-between;gap:32px;flex-wrap:wrap;margin-top:40px;font-size:15px}
 .f-grid a{display:block;padding:4px 0;transition:color .2s}
-.f-grid a:hover{color:var(--caramel2)}
+.f-grid a:hover{color:var(--paper)}
+.f-grid a.btn{display:inline-flex;padding:11px 18px}
+.f-grid a.btn:hover{color:var(--paper)}
 .f-cols{display:grid;grid-template-columns:repeat(3,auto);gap:0 40px}
-.f-low{margin-top:40px;padding-top:20px;border-top:1px solid rgba(255,250,242,.14);font-size:13px;color:#A9998C}
+.f-low{margin-top:36px;padding-top:18px;border-top:1px solid rgba(47,33,26,.2);font-size:13px}
 
-/* ---------- страница раздела ---------- */
-.page-top{padding:calc(var(--hh) + clamp(36px,8vh,90px)) clamp(16px,5vw,72px) clamp(28px,5vh,50px)}
-.crumbs{font-size:14px;color:var(--ink2);display:flex;gap:8px;flex-wrap:wrap;margin-bottom:22px}
+/* ---------- раздел ---------- */
+.sec-top{display:grid;grid-template-columns:1.2fr 1fr;gap:var(--gap);min-height:calc(78svh)}
+.sec-top .pan:first-child{padding:110px clamp(20px,4vw,56px) clamp(28px,4vw,48px);display:flex;flex-direction:column;justify-content:flex-end}
+.sec-img{border-radius:var(--r) var(--r) var(--r) 140px;overflow:hidden;position:relative}
+.sec-img img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0}
+.crumbs{font-size:14px;color:var(--ink2);display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}
 .crumbs a{border-bottom:1px solid var(--line);transition:color .2s,border-color .2s}
 .crumbs a:hover{color:var(--caramel);border-color:var(--caramel)}
-.page-title{font:500 clamp(46px,8vw,120px)/.95 var(--serif);letter-spacing:-.035em}
-.page-title i{color:var(--caramel)}
-.sec-body{padding:0 clamp(16px,5vw,72px) 90px;min-height:50vh}
-.soon{border-radius:36px;background:var(--paper);padding:clamp(28px,5vw,60px);display:flex;justify-content:space-between;align-items:center;gap:24px;flex-wrap:wrap}
+.page-title{font:500 clamp(46px,7.4vw,112px)/.95 var(--serif);letter-spacing:-.035em}
+.soon{border-radius:30px;background:var(--paper);padding:clamp(24px,4vw,48px);display:flex;justify-content:space-between;align-items:center;gap:24px;flex-wrap:wrap}
 .soon h3{font:500 clamp(24px,2.6vw,36px)/1.1 var(--serif)}
 .soon p{color:var(--ink2);margin-top:8px}
-.next-secs{display:flex;flex-wrap:wrap;gap:8px;margin-top:28px}
+.next-secs{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
 
 /* ---------- статья ---------- */
-.art-top{min-height:100svh;padding:calc(var(--hh) + 28px) clamp(16px,5vw,72px) 36px;display:grid;grid-template-columns:1.35fr 1fr;gap:clamp(24px,4vw,64px);align-items:center}
-.art-top h1{font:500 clamp(40px,5.6vw,84px)/1 var(--serif);letter-spacing:-.03em}
+.art-top{display:grid;grid-template-columns:1.35fr 1fr;gap:var(--gap);min-height:calc(100svh - 2*var(--gap))}
+.art-top>.pan:first-child{padding:110px clamp(20px,4vw,56px) clamp(28px,4vw,48px);display:flex;flex-direction:column;justify-content:center}
+.art-top .art-right{display:grid;grid-template-rows:1fr auto;gap:var(--gap)}
+.art-top .art-img{border-radius:var(--r) var(--r) var(--r) 120px;overflow:hidden;position:relative;min-height:180px}
+.art-top .art-img img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.art-top h1{font:500 clamp(40px,5.4vw,82px)/1 var(--serif);letter-spacing:-.03em}
 .art-top .lead{font:400 clamp(17px,1.5vw,21px)/1.45 var(--serif);color:var(--ink2);margin-top:20px;max-width:620px}
 .art-top .lead em{color:var(--ink)}
-.art-facts{display:flex;gap:8px;flex-wrap:wrap;margin-top:24px}
-.art-facts span{padding:8px 14px;border-radius:99px;background:rgba(47,33,26,.06);font-size:14px}
-.art-top .btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:28px}
-.byline{border-radius:32px;background:var(--paper);padding:clamp(18px,2.4vw,30px);box-shadow:0 30px 60px -40px rgba(47,33,26,.4)}
-.byline .lbl{font:500 12px/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--ink2);margin-bottom:16px}
-.byline .top{display:flex;gap:16px;align-items:center}
-.byline img,.byline .ph0{width:clamp(84px,9vw,120px);height:clamp(84px,9vw,120px);border-radius:24px;object-fit:cover;flex:none}
-.byline .ph0{background:var(--sage2);display:grid;place-items:center;font:600 40px/1 var(--serif);color:var(--sage)}
-.byline h3{font:500 clamp(20px,1.8vw,26px)/1.12 var(--serif)}
-.byline .role{color:var(--caramel);font-size:14.5px;font-weight:500;margin-top:6px}
-.byline ul{list-style:none;margin-top:16px;display:flex;flex-direction:column;gap:7px;font-size:15px;color:var(--ink2)}
-.byline ul li{display:flex;gap:10px}
-.byline ul li:before{content:"";width:6px;height:6px;border-radius:50%;background:var(--caramel2);margin-top:9px;flex:none}
-.byline q{display:block;font:italic 400 17px/1.4 var(--serif);margin-top:16px;padding-top:16px;border-top:1px solid var(--line)}
+.facts{display:flex;gap:8px;flex-wrap:wrap;margin-top:22px}
+.facts span{padding:8px 14px;border-radius:99px;background:rgba(47,33,26,.07);font-size:14px}
+.byline{border-radius:var(--r);background:var(--paper);padding:clamp(18px,2.2vw,28px)}
+.byline .top{display:flex;gap:16px;align-items:center;margin-top:14px}
+.byline img,.byline .ph0{width:clamp(80px,7vw,104px);height:clamp(80px,7vw,104px);border-radius:22px 22px 22px 44px;object-fit:cover;flex:none}
+.byline .ph0{background:var(--sage2);display:grid;place-items:center;font:600 38px/1 var(--serif);color:var(--sage)}
+.byline h3{font:500 clamp(20px,1.7vw,25px)/1.12 var(--serif)}
+.byline .role{display:inline-block;margin-top:8px;padding:5px 11px;border-radius:99px;background:var(--caramel);color:var(--paper);font-size:13px;font-weight:500}
+.byline ul{list-style:none;margin-top:14px;display:flex;flex-direction:column;gap:5px;font-size:15px;color:var(--ink2)}
+.byline q{display:block;font:italic 400 16.5px/1.4 var(--serif);margin-top:14px;padding-top:14px;border-top:1px solid var(--line)}
 .byline q+span{display:block;font-size:13px;color:var(--ink2);margin-top:4px}
-.byline .btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
-.byline .ghost:first-of-type{margin-top:18px}
-
-.art-wrap{display:grid;grid-template-columns:260px minmax(0,700px);gap:clamp(24px,5vw,80px);padding:clamp(30px,6vh,70px) clamp(16px,5vw,72px) 90px;background:var(--paper);border-radius:40px 40px 0 0;justify-content:center}
-.toc{position:sticky;top:76px;align-self:start;max-height:calc(100vh - 96px);overflow:auto;font-size:14.5px}
-.toc b{display:block;font:500 12px/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--ink2);margin-bottom:12px}
+.byline .btns{margin-top:14px}
+.byline .ghost:first-of-type{margin-top:16px}
+.art-wrap{display:grid;grid-template-columns:260px minmax(0,700px);gap:clamp(24px,5vw,80px);padding:clamp(30px,6vh,70px) clamp(18px,4vw,56px) 80px;justify-content:center}
+.toc{position:sticky;top:90px;align-self:start;max-height:calc(100vh - 110px);overflow:auto;font-size:14.5px}
+.toc b{display:block;margin-bottom:12px;color:var(--ink2)}
 .toc a{display:block;padding:7px 12px;border-radius:12px;color:var(--ink2);line-height:1.3;transition:background .2s,color .2s}
 .toc a.h2l{color:var(--ink);font-weight:500;margin-top:8px}
 .toc a.h3l{padding-left:22px}
@@ -206,15 +224,15 @@ footer{background:var(--ink);color:var(--paper);padding:clamp(48px,8vh,90px) cla
 .toc a.on{background:var(--ink);color:var(--paper)}
 .text{font:400 19px/1.68 var(--serif)}
 .text>*+*{margin-top:1em}
-.text h2{font:500 clamp(28px,3vw,40px)/1.1 var(--serif);letter-spacing:-.02em;margin-top:2.2em;scroll-margin-top:80px}
+.text h2{font:500 clamp(28px,3vw,40px)/1.1 var(--serif);letter-spacing:-.02em;margin-top:2.2em;scroll-margin-top:90px}
 .text h2:first-child{margin-top:0}
-.text h3{font:500 clamp(22px,2.1vw,28px)/1.18 var(--serif);margin-top:1.8em;scroll-margin-top:80px}
+.text h3{font:500 clamp(22px,2.1vw,28px)/1.18 var(--serif);margin-top:1.8em;scroll-margin-top:90px}
 .text h4{font:600 17px/1.3 var(--sans);margin-top:1.6em;color:var(--caramel)}
-.text blockquote{background:var(--sage2);border-radius:24px;padding:22px 26px;font-style:italic;font-size:19.5px}
+.text blockquote{background:var(--sage2);border-radius:24px 24px 24px 6px;padding:22px 26px;font-style:italic;font-size:19.5px}
 .text .note{font:400 14.5px/1.5 var(--sans);color:var(--ink2);border-left:3px solid var(--caramel2);padding-left:14px}
 .text ul{list-style:none;display:flex;flex-direction:column;gap:.6em}
-.text ul li{position:relative;padding-left:26px}
-.text ul li:before{content:"";position:absolute;left:4px;top:.62em;width:9px;height:9px;border-radius:50%;background:var(--caramel)}
+.text ul li{position:relative;padding-left:28px}
+.text ul li:before{content:"";position:absolute;left:2px;top:.42em;width:15px;height:15px;background:var(--caramel);-webkit-mask:var(--pawm) center/contain no-repeat;mask:var(--pawm) center/contain no-repeat}
 .text ul.names{display:grid;grid-template-columns:1fr 1fr;gap:.35em 24px;font-size:17px}
 .text .arrows{display:flex;flex-direction:column;gap:8px}
 .text .arrows div{display:flex;gap:12px;align-items:baseline;background:var(--milk);border-radius:18px;padding:12px 18px;font-size:17px}
@@ -224,9 +242,8 @@ footer{background:var(--ink);color:var(--paper);padding:clamp(48px,8vh,90px) cla
 .steps3>div>small{grid-column:1}
 .steps3>div>b{grid-column:1;grid-row:2}
 .steps3>div>span{grid-column:2;grid-row:1/4}
-  @media (max-width:640px){.steps3>div>span{grid-column:1;grid-row:auto}}
-.steps3 b{display:block;font:600 30px/1 var(--serif);white-space:nowrap;color:var(--caramel);margin-bottom:4px}
-.steps3 small{display:block;font:500 12px/1.2 var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--ink2);margin-bottom:10px}
+.steps3 b{display:block;font:600 30px/1 var(--serif);white-space:nowrap;color:var(--caramel)}
+.steps3 small{display:block;font:500 12px/1.2 var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--ink2)}
 .sleep{display:grid;gap:10px;margin-top:1em}
 .sleep div{display:grid;grid-template-columns:110px 1fr;align-items:center;gap:12px;font:500 15px/1.2 var(--sans)}
 .sleep i{display:block;height:34px;border-radius:12px;background:var(--sage2);position:relative}
@@ -236,23 +253,25 @@ footer{background:var(--ink);color:var(--paper);padding:clamp(48px,8vh,90px) cla
 .sleep i:before{content:"24 ч";position:absolute;right:8px;top:9px;font:400 12px/1 var(--sans);color:var(--ink2)}
 .sign{font:italic 400 22px/1.3 var(--serif);color:var(--caramel)}
 .src{font:400 14px/1.5 var(--sans);color:var(--ink2);margin-top:2.4em!important;padding-top:18px;border-top:1px solid var(--line)}
-.after{margin-top:3em!important;border-radius:32px;background:var(--ink);color:var(--paper);padding:clamp(22px,3vw,36px);font-family:var(--sans)}
-.after h3{font:500 clamp(22px,2.2vw,30px)/1.15 var(--serif);margin:0;color:var(--paper)}
-.after p{font-size:16px;color:#D9CBBE;margin-top:8px;line-height:1.5}
-.after .btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.after{margin-top:3em!important;border-radius:30px;background:var(--dark);color:var(--paper);padding:clamp(22px,3vw,36px);font-family:var(--sans);position:relative;overflow:hidden}
+.after h3{font:500 clamp(22px,2.2vw,30px)/1.15 var(--serif);margin:0;color:var(--paper);max-width:70%}
+.after p{font-size:16px;color:#D9CBBE;margin-top:8px;line-height:1.5;max-width:70%}
 .after .btn{background:var(--paper);color:var(--ink)}
 .after .btn:hover{background:var(--caramel);color:var(--paper)}
 .after .btn.soft{background:rgba(255,250,242,.12);color:var(--paper)}
+.after img{position:absolute;right:-10px;bottom:-30px;height:150%;max-height:240px;opacity:.95;transform:rotate(-6deg)}
 #bar{position:fixed;top:0;left:0;height:3px;background:var(--caramel);z-index:60;width:0}
 
-/* ---------- авторы: страница ---------- */
-.authors.page{margin-top:0}
-
 /* ---------- адаптив ---------- */
+@media (max-width:1100px){
+  .bento{grid-template-columns:repeat(3,1fr)}
+  .card.wide{grid-column:span 1}
+}
 @media (max-width:980px){
-  .idx{grid-template-columns:1fr}
   .authors{grid-template-columns:1fr}
-  .art-top{grid-template-columns:1fr;min-height:auto;padding-top:calc(var(--hh) + 40px)}
+  .art-top,.sec-top{grid-template-columns:1fr;min-height:auto}
+  .art-top .art-right{grid-template-rows:auto auto}
+  .art-top .art-img,.sec-img{height:240px}
   .art-wrap{grid-template-columns:1fr}
   .toc{position:relative;top:0;max-height:none;background:var(--milk);border-radius:24px;padding:16px}
   .toc:not(.open) a{display:none}
@@ -260,30 +279,50 @@ footer{background:var(--ink);color:var(--paper);padding:clamp(48px,8vh,90px) cla
   .toc b:after{content:"+";font-size:18px}
   .toc.open b{margin-bottom:10px}.toc.open b:after{content:"−"}
 }
-@media (max-width:640px){
-  :root{--hh:56px}
+@media (max-width:760px){
+  :root{--gap:8px;--r:28px}
   body{font-size:16px}
-  nav a{padding:8px 12px;font-size:14px}
-  nav a.hide-m{display:none}
-  .logo{font-size:19px}
-  .hero-tag{font-size:13px}
-  .search input{height:56px;font-size:16px;padding-left:20px}
+  header{top:14px;width:calc(100% - 28px);justify-content:space-between;padding:5px 5px 5px 16px}
+  header.small{top:12px}
+  header nav a{padding:8px 12px;font-size:14px}
+  .logo{font-size:17px}
+  .hero{height:calc(100svh - 2*var(--gap));min-height:640px;grid-template-rows:auto 1fr auto}
+  .h-top{padding:84px 18px 4px}
+  .h-top .labels span:not(:first-child),.h-top .labels i:nth-of-type(n+2){display:none}
+  .title{font-size:14.4vw}
+  .h-bot{display:contents}
+  .h-right{order:0;position:relative;justify-content:flex-end;align-items:flex-end;min-height:0;overflow:hidden;padding:16px}
+  .h-left{order:1;padding:18px}
+  .stats{grid-template-columns:1fr;gap:10px}
+  .stats b{font-size:26px}
+  .stats span{font-size:12.5px;margin-top:2px}
+  .dogbox{left:0;height:86%;bottom:0;z-index:1}
+  .stats{position:relative;z-index:2;width:40%}
+  .bubble{left:62%;top:-6%;font-size:13px;padding:9px 13px;white-space:normal;width:150px}
+  .h-lead{font-size:16px;margin-bottom:12px}
+  .search input{height:54px;font-size:16px;padding-left:18px}
   .search .go{width:42px;height:42px}
-  .results{top:64px}
-  .hero-chips .chip:nth-child(n+4){display:none}
-  .row .t{font-size:20px}
-  .row .ar{display:none}
-  .mat{grid-template-columns:1fr;gap:10px}
-  .mat .sec{writing-mode:horizontal-tb;transform:none}
-  .mat .btn{justify-self:start}
+  .results{bottom:62px}
+  .chips .chip:nth-child(n+4){display:none}
+  .bento{grid-template-columns:1fr 1fr;grid-auto-rows:190px}
+  .card.big{grid-column:span 2;grid-row:span 2}
+  .card.wide{grid-column:span 2}
+  .card .cap b{font-size:15px;padding:8px 12px;border-radius:14px}
+  .card .cap small{font-size:12px;padding:5px 9px}
+  .card .num{font-size:12px;padding:6px 10px}
+  .card .round{width:36px;height:36px}
+  .mat{grid-template-columns:90px 1fr;gap:14px;align-items:start}
+  .mat .btn{grid-column:1/-1;justify-self:start}
   .acard{grid-template-columns:1fr}
-  .acard .ph{aspect-ratio:4/3;max-height:none;object-position:50% 30%}
+  .acard .ph{aspect-ratio:4/3;max-height:none;object-position:50% 25%}
   .text{font-size:17.5px}
+  .text blockquote{font-size:17px;padding:18px 20px}
   .text ul.names{grid-template-columns:1fr}
   .steps3>div{grid-template-columns:1fr}
-  .text blockquote{font-size:17px;padding:18px 20px}
+  .steps3>div>span{grid-column:1;grid-row:auto}
   .f-cols{grid-template-columns:1fr 1fr}
-  .screen{padding-top:calc(var(--hh) + 24px)}
+  .after h3,.after p{max-width:none}
+  .after img{display:none}
 }
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.rv{opacity:1;transform:none}}
 </style>
@@ -293,11 +332,11 @@ footer{background:var(--ink);color:var(--paper);padding:clamp(48px,8vh,90px) cla
 <div id="pre"><div class="pre-in"><div class="pre-word" id="preWord"></div><div class="pre-trail" id="preTrail"></div></div></div>
 
 <header id="hdr">
-  <a class="logo" href="#/">Хвостопедия<svg class="tail" viewBox="0 0 80 80"><g><path d="M4 74 C 30 76, 56 64, 62 38 C 66 18, 50 10, 42 22"/></g></svg></a>
+  <a class="logo" href="#/"><span id="logoPaw"></span>Хвостопедия</a>
   <nav>
     <a href="#/razdely" data-nav="razdely">Разделы</a>
     <a href="#/avtory" data-nav="avtory">Авторы</a>
-    <button class="nav-search" id="navSearch" aria-label="Поиск"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></button>
+    <button class="nav-search" id="navSearch" aria-label="Поиск"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></button>
   </nav>
 </header>
 
@@ -307,14 +346,16 @@ footer{background:var(--ink);color:var(--paper);padding:clamp(48px,8vh,90px) cla
 const SHMAKOVA=[{"k": "h2", "x": "Введение"}, {"k": "p", "x": "Вы взяли собаку, и вроде бы все сделали правильно: выбрали породу или просто сердцем потянулись к тому самому щенку или взрослому псу из приюта, купили миски, лежанку, игрушки, возможно, даже прочитали статьи в интернете, но уже на вторые-третьи сутки внутри поселилась какая-то странная тяжесть, потому что реальность оказалась совсем не похожа на ту уютную картинку, которую вы рисовали в голове. Вместо радости и умиления вы вдруг чувствуете усталость, раздражение, страх, а иногда и острое желание закрыться в ванной и просто посидеть в тишине. И самое страшное в этом состоянии — даже не сам стресс, а чувство вины, которое приходит следом, потому что вам кажется, что вы единственный, кто не справляется, что все вокруг гуляют с идеально воспитанными собаками, а у вас дома хаос, покусанные руки и лужицы в самых неожиданных местах. Но вот что важно знать: тысячи людей проходят через это состояние, которое называют щенячьей депрессией, и это совершенно нормальная реакция психики на резкое изменение жизни. Именно поэтому я написала это пособие — не как сухую инструкцию по дрессировке и не как сборник советов из разряда «возьмите себя в руки», а как честный и поддерживающий разговор с тем, кто прямо сейчас смотрит на свою собаку и думает: «а то ли я вообще делаю?». Мне очень хочется, чтобы при прочтении, у вас возникло чувство живого диалога!"}, {"k": "p", "x": "Это пособие не сделает вашу собаку идеальной за три дня и не даст волшебную таблетку, но оно даст вам гораздо более важные вещи: понимание того, что происходит с вами на каждом этапе, практические инструменты, которые работают в реальной жизни, а главное — разрешение чувствовать все, что вы чувствуете, без осуждения и без этой навязчивой мысли, что вы обязаны справляться только с улыбкой."}, {"k": "p", "x": "Здесь вы найдете ответы на самые острые вопросы, которые волнуют вас прямо сейчас: почему вам так тяжело и что с этим делать; как пережить тотальную усталость, когда встаешь по ночам, убираешь, гуляешь и забываешь, когда в последний раз спокойно пил(а) чай; что делать, если мысли об «отдать обратно» приходят все чаще, и не стыдно ли вообще об этом думать. Кроме того, я коротко расскажу о том, что происходит с собакой в первые недели: почему в первые дни она кажется идеальной, а потом словно подменяется, как устроена адаптация. Мы поговорим о вашей психологической безопасности: о том, как дышать, когда внутри все кипит, как брать паузы без чувства вины, как просить помощь и как принимать решения, если сил больше нет, — потому что спокойный и уверенный хозяин — это лучшее, что может случиться с любой собакой, независимо от ее возраста и прошлого. И если вы дочитали это введение до конца, значит, вы уже сделали первый и самый важный шаг — вы признали, что вам трудно, и вы ищете помощь, а это, поверьте, признак огромной зрелости и любви к вашей собаке, даже если сейчас вам кажется, что вы все делаете неправильно. Так что заварите себе вкусный чай или кофе, выдохните и просто начните читать — дальше будет понятнее, теплее и (надеюсь) чуточку спокойнее."}, {"k": "h2", "x": "Часть 1. Что происходит с вами: психологическая поддержка"}, {"k": "h3", "x": "Глава 1. Почему вам так тяжело? Разбираем механизмы стресса"}, {"k": "p", "x": "Вы взяли собаку, и внутри, казалось бы, должна бушевать только радость, но вместо этого вы чувствуете тяжесть, раздражение или вообще опустошение, и первая мысль, которая приходит в голову, — «со мной что-то не так». Вы ожидали от себя эмоцию восторга, а теперь лежите ночью с открытыми глазами и думаете, как же так вышло, что долгожданное событие превратилось в испытание, и откуда взялось это ощущение, будто вы попали в невидимую ловушку."}, {"k": "p", "x": "На самом деле с вами все в полном порядке, и то, что вы испытываете, — это классический кризис адаптации, который в психологии ещё называют puppy blues, или щенячья депрессия*."}, {"k": "note", "x": "*Щенячья депрессия - психологическое состояние, характеризующееся комплексом негативных эмоций — тревогой, раздражительностью, чувством вины и эмоциональным истощением, — возникающее у владельца в первые недели после появления собаки в доме. В основе лежит рассогласование между ожиданиями и реальностью, а также резкое изменение привычного уклада жизни. Состояние является вариантом нормативной стрессовой реакции на повышенную ответственность и не свидетельствует о недостатке любви к животному или несостоятельности владельца"}, {"k": "p", "x": "Только дело здесь совсем не в щенке, а в глобальной перестройке вашей жизни, которую вы, скорее всего, сильно недооценили, потому что даже самое тщательное планирование не может подготовить вас к круглосуточной ответственности за живое существо."}, {"k": "p", "x": "Я предлагаю честно посмотреть на те механизмы, которые запускают этот стресс, потому что, когда мы понимаем природу своих эмоций, они перестают быть такими пугающими и неуправляемыми:"}, {"k": "p", "x": "Первое и самое главное — это когнитивный диссонанс или иначе разрыв между ожиданием и реальностью, и это касается абсолютно всех, кто берет собаку, потому что в наших головах всегда живет идеальная картинка: вы идете по парку, собака послушно идет рядом, вы останавливаетесь, она садится рядышком, вы смотрите друг на друга с безграничной любовью, а дома она аккуратно лежит на своей лежанке и ждет, когда вы обратите на нее внимание, — но реальность выглядит совсем иначе, потому что на деле это лужицы на ковре, покусанные руки, разодранные обои, ночные подъемы каждый час и полное отсутствие той самой идиллии. И этот контраст настолько сильный, что психика просто не успевает перестроиться и включает защитную реакцию в виде раздражения, тревоги и даже отвращения к собственному выбору, и это абсолютно нормально, потому что так работает наш мозг: он сопротивляется любой неожиданной и чрезмерной нагрузке, особенно если она пришла туда, где ожидалось только счастье. К тому же часто нас посещают «мысли из будущего», впечатление, что собака останется такой навсегда, но поверьте, это не так!"}, {"k": "p", "x": "Второй механизм, который высасывает из вас силы, — это тотальная потеря контроля над собственной жизнью, потому что собака, особенно в первые недели, диктует свой распорядок: она решает, когда вставать, когда есть, когда гулять, и вы вдруг понимаете, что больше не можете просто взять и уйти из дома на пару часов, не можете спонтанно остаться на работе подольше, не можете поспать в выходной, и даже простая поездка в магазин превращается в логистическую операцию с таймингом и тревогой, а уж если собака боится оставаться одна или не приучена к туалету, то вы вообще привязаны к дому, как к якорю. Это ощущение клетки, из которой нет выхода, постепенно накапливается и превращается в глухое раздражение на весь мир, хотя виновата в этом не собака, а просто отсутствие привычной свободы, к которой вы были так привязаны и которая была привычной «роскошью»."}, {"k": "p", "x": "Третий механизм, и он, пожалуй, самый разрушительный для вашей самооценки — это чувство вины, которое возникает на пустом месте, потому что вы злитесь на собаку за лужу, а потом тут же начинаете злиться на себя за то, что осмелились злиться, потому что «она же маленькая», или «она же столько пережила», или «я же сам этого хотел», и этот внутренний диалог превращается в замкнутый круг, где вы постоянно оказываетесь плохим в любой роли: плохим хозяином, если наказываете, плохим человеком, если думаете об «отдать обратно», и невыносимо уставшим просто от того, что вы каждую минуту оцениваете себя по какой-то несуществующей шкале идеального владельца, которой, на самом деле, не существует в природе"}, {"k": "p", "x": "И если все это накладывается на объективную физическую усталость — недосып, постоянное мытье полов, частые прогулки, которые забирают последние силы, — то получается тот самый коктейль, который я ласково назвала «я не думал(а), что это будет так сложно», и это честное признание, которое мы часто прячем от друзей, от соцсетей, от самих себя, потому что страшно услышать в ответ «ну ты же сам хотел» или «что ты ноешь, это же всего лишь собака, а не ребенок»"}, {"k": "quote", "x": "Но вот что важно понять, и я говорю это вам и как психолог, и как специалист по поведению: все эти чувства — и злость, и усталость, и раздражение, и даже мысли об отказе — это не признаки того, что вы плохой человек или что вы не любите свою собаку"}, {"k": "p", "x": "Это признаки того, что ваша нервная система перегружена, что вы находитесь в состоянии острого стресса, что ваша жизнь кардинально изменилась за несколько дней, и вам нужно время, чтобы привыкнуть к этим изменениям, точно так же, как и собаке нужно время, чтобы привыкнуть к вам. Вы не обязаны испытывать только любовь и умиление — вы имеете полное право злиться, плакать, жалеть себя и даже ненавидеть тот факт, что все пошло не по плану, потому что эмоции не делятся на правильные и неправильные, они просто есть! И если вы разрешите себе их чувствовать, не добавляя сверху еще и чувство вины за них, станет значительно легче, потому что основная тяжесть щенячьей депрессии — это не сам стресс, а борьба с ним, попытка сделать вид, что вы справляетесь, когда внутри все разваливается на части."}, {"k": "p", "x": "И если вы сейчас узнали себя в этих строчках, значит, вы уже на полпути к облегчению, потому что осознание проблемы — это всегда первый и самый важный шаг к ее решению, и я приглашаю вас в следующей главе разобрать конкретные техники, которые помогут вам облегчить свое состояние."}, {"k": "h3", "x": "Глава 2. Что можно сделать с этим прямо сейчас: техники самопомощи"}, {"k": "p", "x": "Во-первых, важно понять: ВЫ НЕ ОДИНОКИ."}, {"k": "p", "x": "Крайне рекомендую вступать в породные сообщества, сидеть в чатах и обсуждать свои проблемы! Вы увидите, что таких людей много, более того, поймете, что все это временно."}, {"k": "p", "x": "Во-вторых, научиться делать остановку. Когда вы чувствуете, что вот-вот сорветесь, когда внутри все кипит, когда щенок только что нагадил на свежевымытый пол или взрослая собака в очередной раз сгрызла тапок, а вы стоите посреди комнаты и не знаете, что делать — то ли кричать, то ли плакать, то ли уйти и хлопнуть дверью..в этот момент самое сложное не найти правильное решение, а просто остановиться и сделать паузу. Наш мозг в состоянии стресса работает по принципу «бей или беги», и любая реакция, которая следует за этим, почти никогда не бывает конструктивной, особенно если она рождается из чистого бессилия и раздражения."}, {"k": "p", "x": "И вот здесь я хочу дать вам простую, но очень действенную технику, которую я называю «стоп-кран», и работает она так:"}, {"k": "quote", "x": "Как только вы чувствуете, что эмоции зашкаливают, вы физически останавливаетесь — не делаете ничего, не говорите ни слова, не двигаетесь в сторону собаки, а просто замираете на месте, кладете руки на живот или на грудь и делаете три очень медленных, очень глубоких вдоха и выдоха"}, {"k": "p", "x": "Причем выдох должен быть длиннее вдоха, потому что именно длинный выдох активирует парасимпатическую нервную систему, которая отвечает за успокоение. Такие моменты осознанной остановки могут спасти вас от большого количества сожалений, потому что множество наших ошибок в воспитании собаки — это не результат неправильных знаний, а результат импульсивных реакций, которые мы выдаем на пике усталости, когда у нас просто не остается ресурса на то, чтобы подумать."}, {"k": "p", "x": "И только после того, как вы сделали эту паузу и немного пришли в себя, вы можете задать себе вопрос, который я называю главным вопросом уставшего владельца: «если бы у меня сейчас были силы, что бы я сделала? Какое действие было бы правильным и полезным для моей собаки в этой ситуации?» — и ответ на этот вопрос почти всегда оказывается простым и очевидным, просто до него нужно добраться, убрав слой паники, и этот прием помогает вам отделить себя как человека, который устал и зол, от себя как хозяина, который действительно любит свою собаку и хочет ей помочь."}, {"k": "p", "x": "Еще одна техника, которая прекрасно работает именно в контексте собачьей адаптации, — это смена фокуса, потому что, когда мы перегружены, наш мозг зацикливается на проблеме и начинает пережевывать ее снова и снова: «почему она снова это сделала», «за что мне это», «что я делаю не так», и эти мысли как пластинка, которая заела, высасывают последние крохи энергии, а между тем достаточно просто переключить внимание на что-то конкретное и телесное:"}, {"k": "p", "x": "Например, задать себе вопрос: «а что прямо сейчас происходит с моей собакой?» — и этот простой перевод фокуса с «меня и моей усталости» на «нее и ее состояние» мгновенно снижает градус внутреннего напряжения, потому что вы перестаете быть в позиции жертвы обстоятельств и становитесь исследователем, которому интересно понять это существо, и в этом исследовательском интересе есть удивительная сила, которая возвращает вам контроль и при этом не требует дополнительных усилий."}, {"k": "p", "x": "И если вы чувствуете, что усталость настолько велика, что вы не можете даже собраться с мыслями, есть еще одна техника, которую я даю всем своим клиентам в самые тяжелые моменты, и она звучит как «ритуал пяти минут»:"}, {"k": "quote", "x": "Вы находите возможность оставить собаку в безопасном месте —в закрытой комнате с игрушкой/лизательным ковриком/конгом или просто на лежанке, если она уже умеет там спокойно лежать, — и вы берете себе ровно пять минут, которые посвящаете только себе, не собаке, не уборке, не обдумыванию планов, а себе"}, {"k": "p", "x": "Вы наливаете чай, выходите на балкон, ложитесь на диван с закрытыми глазами или просто смотрите в одну точку, и вы разрешаете себе в эти пять минут ничего не чувствовать, ничего не решать, ни о чем не беспокоиться, потому что это время не украдено у собаки, это время вложено в вас. Вы — главный ресурс, который есть у вашей собаки, и если вы не будете наполнять себя хотя бы такими маленькими паузами, то очень скоро у вас не останется ничего, что можно было бы ей дать, кроме раздражения и пустоты."}, {"k": "p", "x": "И здесь же, в этой главе, я хочу сказать вам одну важную вещь, которая часто ускользает от владельцев в первые недели:"}, {"k": "quote", "x": "Вы не обязаны все делать идеально, и та собака, которую вы видите сейчас, — не окончательный вариант, это только начало большого пути"}, {"k": "p", "x": "И если сегодня вы не успели ее выгулять столько, сколько нужно, или не позанимались с ней, или она снова написала в прихожей, мир не рухнул, и вы не провалили экзамен на звание «хороший хозяин», потому что настоящее воспитание собаки строится не на одной идеальной неделе, а на тысяче повторяющихся дней, где главное — это не отсутствие ошибок, а ваша способность возвращаться после них, делать выводы и продолжать идти дальше. Разрешить себе быть неидеальным — это, пожалуй, самый сильный инструмент сохранения психики, который только существует в этой сфере."}, {"k": "p", "x": "Больше техник ищите в Приложении."}, {"k": "h3", "x": "Глава 3. Что делать, если совсем нет сил: право на паузу и делегирование"}, {"k": "p", "x": "Бывают моменты, и я знаю это не понаслышке, когда техники дыхания и смена фокуса уже не работают, потому что вы настолько истощены, что любое дополнительное усилие, даже самое маленькое, кажется неподъемным, и единственное, чего вам хочется, — это чтобы все закончилось, чтобы собака исчезла, чтобы вы снова могли жить своей прежней спокойной жизнью, и эти мысли пугают вас до дрожи. Вы начинаете думать: «раз я хочу от нее избавиться, значит, я ее не люблю, значит, я чудовище», и этот внутренний голос звучит так громко и так убедительно, что вы почти готовы с ним согласиться. Но я остановлю вас здесь и скажу: мысли о том, чтобы «отдать собаку» не делают вас монстром, они делают вас человеком, который находится на пределе своих возможностей и которому нужен отдых, а не осуждение, потому что, когда у вас нет ресурса, вы не можете принимать решения, и это абсолютно нормальная физиологическая реакция, а не моральный провал."}, {"k": "p", "x": "И первое, что вы должны сделать в такой ситуации, — это дать себе разрешение на паузу, причем уже не на пять минут, а на полноценный перерыв, который может длиться час или даже несколько часов, и для этого вам нужно найти способ временно снять с себя ответственность за собаку, как бы сложно это ни звучало. Если у вас есть партнер, вы имеете полное право сказать ему: «я сейчас не могу, забери ее на час, я просто хочу полежать в тишине», а если вы живете одни, вы можете попросить друга, соседа, родственника или даже нанять ситтера, чтобы у вас было окно, в которое вы не должны ни о ком заботиться."}, {"k": "p", "x": "Хочется отдельно сказать про ту самую мысль, которая приходит почти ко всем в самые тяжелые дни: «может, отдать собаку обратно — это единственное правильное решение?», и я не буду вам говорить, что это плохое решение или что вы не имеете права так думать, потому что я работаю с людьми и знаю, что иногда возврат действительно становится лучшим выходом, если вы понимаете, что не можете дать собаке то, что ей нужно, и что ваша жизнь превращается в постоянную борьбу, которая не приносит радости ни вам, ни ей. Но я прошу вас об одном: не принимать это решение на пике усталости, не делать это в тот момент, когда вы не спали третьи сутки, а дать себе время, отдохнуть, восстановиться, поспать хотя бы одну ночь, сдать заботы кому-то еще и уже в относительно спокойном состоянии задать себе вопрос: «это действительно то, что я хочу, или это просто мое истощение говорит за меня?»."}, {"k": "p", "x": "Большинство людей, которые пережили этот кризис и оставили собаку, через несколько месяцев говорят: «я не представляю, как я могла думать о том, чтобы отдать ее», но были бы эти слова правдой, если бы они приняли решение в самом низу эмоциональной ямы? Скорее всего, нет."}, {"k": "p", "x": "И еще один важный аспект, который я хочу затронуть в этой главе: вы имеете право просить помощи и не чувствовать себя виноватым(ой) за это, потому что у нас в головах часто сидит установка «я взял(а) собаку — я должен(а) справляться сама», и мы воспринимаем любую просьбу о помощи как признак нашей несостоятельности, но давайте посмотрим правде в глаза: воспитание собаки — это командная работа, особенно если вы живете с кем-то, и если вы пытаетесь тащить все на себе, вы очень быстро выдохнетесь и начнете злиться на близких за то, что они не помогают, хотя они, возможно, просто не знают, как именно вам помочь, потому что вы не просили. Поэтому очень важно прямо говорить о своих потребностях: «я устал(а), я хочу поспать, я хочу два часа побыть один(а), я хочу, чтобы кто-то погулял с собакой сегодня вечером, я хочу, чтобы кто-то убрал за ней, пока я буду лежать» — и в этих просьбах нет ничего постыдного, потому что вы живой человек с ограниченным ресурсом, и чем честнее вы будете говорить о своем состоянии, тем больше шансов, что люди вокруг вас помогут и поддержат, вместо того чтобы наблюдать за тем, как вы угасаете в одиночестве."}, {"k": "p", "x": "И в завершение этой главы я хочу дать вам один простой, но очень важный совет, который я повторяю всем своим клиентам, особенно в самые тяжелые периоды:"}, {"k": "quote", "x": "Помните, что собака не нуждается в идеальном хозяине 24/7, она нуждается в стабильном, предсказуемом и спокойном человеке рядом, а для того чтобы сохранить эту стабильность, вам нужно иногда быть «эгоистом», иногда брать паузу, иногда говорить «нет» даже своим обязательствам перед ней"}, {"k": "p", "x": "Это не делает вас плохим хозяином, это делает вас устойчивым хозяином, который понимает, что его собственная психика — это фундамент, на котором строится все остальное, и если этот фундамент трещит, то ни любовь, ни старания, ни самые лучшие намерения не помогут вам построить здоровые отношения с вашей собакой, потому что вы просто не сможете находиться рядом с ней в ресурсном состоянии, а значит, и она не сможет чувствовать себя в безопасности и в итоге не сможет расти и развиваться так, как она могла бы."}, {"k": "h3", "x": "Глава 4. Когда обращаться к специалисту по поведению собак"}, {"k": "p", "x": "Вы пробовали техники самопомощи, брали паузы, просили помощи, но внутри все равно остается тревога, потому что поведение собаки не становится понятнее, а вы продолжаете сомневаться: правильно ли я делаю? Что я упускаю? И многие владельцы в этот момент продолжают терпеть, пробовать новые методы из интернета, убеждая себя, что «нужно просто подождать», но иногда ожидание затягивается, проблемы усугубляются, и вы оказываетесь в точке, где уже не знаете, куда бежать и кому доверять."}, {"k": "p", "x": "На самом деле решение проще, чем кажется. Есть специалисты по поведению собак — это не просто дрессировщики, которые учат командам, а профессионалы, которые смотрят на причины, эмоции и мотивацию, стоящие за каждым действием вашей собаки. И именно это знание дает вам облегчение, потому что вы перестаете гадать и начинаете понимать."}, {"k": "p", "x": "И вот что важно: обращение к такому специалисту — это не признак вашей несостоятельности, а наоборот, признак зрелости и ответственности. Вы не закрываете глаза на проблему, а идете к тому, кто знает больше, чтобы получить инструменты и поддержку. Это как сходить к терапевту при наличии боли — вы же не считаете себя слабым из-за этого."}, {"k": "p", "x": "И здесь я хочу сказать самое главное:"}, {"k": "quote", "x": "Поводом для обращения может быть просто ваше ощущение, что вам тяжело"}, {"k": "p", "x": "Если вы устали, если вы чувствуете тревогу, если вы делаете все по книжкам, а результата нет, — это уже достаточный повод прийти на консультацию. Не бывает глупых запросов, потому что любой запрос — это сигнал о том, что вы хотите помочь себе и своей собаке."}, {"k": "p", "x": "Профессионал не будет вас судить, он не скажет, что вы все делали неправильно, потому что мы понимаем: каждый владелец действует из лучших побуждений и из тех знаний, которые у него есть. Наша задача — не критиковать, а добавлять, расширять вашу картину мира и поддерживать вас на этом пути."}, {"k": "p", "x": "И самая большая ценность такой консультации — в том, что вы перестаете нести ответственность в одиночку. Вы получаете пошаговый план, составленный под вашу ситуацию, под вашу квартиру, под вашу собаку, и вместе с планом приходит спокойствие, потому что самое страшное в хаосе — это его непредсказуемость, а как только появляется структура, хаос становится просто задачей, которую можно решать шаг за шагом. И если вы сейчас чувствуете, что вам бы пригодилась такая поддержка, не откладывайте, потому что иногда одна консультация может сэкономить вам месяцы стресса и слез."}, {"k": "h2", "x": "Часть 2. Что происходит с собакой: краткий навигатор по адаптации"}, {"k": "h3", "x": "Глава 1. Стадия замирания: почему в первые дни собака кажется идеальной"}, {"k": "p", "x": "Вы привели собаку домой, и она ведет себя тихо, спокойно, почти незаметно — лежит в углу, не лает, не просится, не трогает вещи, и вы думаете: «какой чудесный пес, нам просто повезло!». Но на самом деле это стадия замирания, или, как ее еще называют, «медовый месяц» (на самом деле в большинстве случаев медовые только несколько дней-неделя), и происходит она потому, что собака находится в состоянии острого стресса от смены обстановки, она не понимает, где оказалась, кто эти люди и что от нее хотят, и ее единственная стратегия выживания в этой ситуации — замереть, не привлекать внимания, не создавать проблем. Длится это состояние от нескольких дней до двух-трех недель, в зависимости от возраста, темперамента и прошлого опыта. В первые дни ваша задача — дать питомцу минимум нагрузки, минимум новых впечатлений, сохранять привычные для собаки ритуалы, и помнить: то, что вы видите сейчас, — это не настоящая собака, это только ее защитная реакция, и настоящая «личность» проявится позже, когда она почувствует себя в безопасности, будьте к этому готовы и не пугайтесь «резких» изменений в поведении."}, {"k": "h3", "x": "Глава 2. Когда замирание заканчивается: что появляется после?"}, {"k": "p", "x": "И вот наступает момент, когда собака просыпается — в прямом и переносном смысле. Она начинает исследовать территорию, проверять, что можно грызть, можно ли лаять, куда можно залезть, и если это щенок, он начинает кусать руки, грызть обувь, бегать по квартире как ураган и не слышать ваши «нельзя», а если это взрослая собака из приюта, она может начать охранять миску, метить углы, игнорировать команды, на которые откликалась в первые дни, или внезапно проявлять агрессию к другим животным и даже к людям."}, {"k": "p", "x": "И это не значит, что собака испортилась, что вы сделали что-то не так или что она злая по натуре, — это значит, что адаптация перешла в новую фазу, собака почувствовала себя в достаточной безопасности, чтобы начать исследовать мир и проверять, как он устроен, и ваша задача сейчас — не впадать в панику и не подавлять ее жесткими методами, а понять, что это нормальный этап, который проходит каждая собака, и именно на этом этапе закладывается основа ваших будущих отношений. То, как вы отреагируете на такие жизненные «проверки», определит, будет ли она вам доверять или начнет бояться и защищаться. Здесь очень важно сохранять спокойствие, быть последовательным и не ждать, что собака сразу поймет все правила, — она только начинает их узнавать, и ей нужно время и ваше терпение."}, {"k": "h3", "x": "Глава 3. Правило трех этапов"}, {"k": "p", "x": "Хочу дать вам некий ориентир, который работает для большинства случаев — это правило трех этапов, которые помогают понять, где вы находитесь и что можно ожидать дальше. Сроки могут варьироваться от собаки к собаке и не обязательно представляют собой именно три дня, три недели и три месяца. Однако мы можем говорить о том, что это усредненные показатели, которые могут работать на достаточно большом количестве пар."}, {"k": "p", "x": "Первые три дня — это фаза острого стресса, когда собака замирает и ничего не требует, кроме покоя и безопасности, и ваша задача в эти дни — дать ей минимум нагрузки."}, {"k": "p", "x": "Первые три недели — это фаза привыкания, когда собака начинает осваиваться, изучать среду вокруг и именно в этот период вы начинаете вводить режим, правила, знакомить ее с вашим распорядком, и если первые три дня можно просто «пережить», то эти три недели — время вашего активного, но бережного участия."}, {"k": "p", "x": "И наконец, три месяца — это точка, когда собака понимает, что это ее дом, что вы ее люди, что здесь безопасно и предсказуемо, если вы вместе дожили до этого срока, значит, основная адаптация позади, дальше будет скорее всего легче, потому что вы уже знаете друг друга, вы научились читать ее сигналы и теперь вы можете строить настоящую жизнь вместе, без первого шока и хаоса."}, {"k": "h3", "x": "Глава 4. Базовые ориентиры: режим и рутина"}, {"k": "p", "x": "Хотя это пособие и не претендует на энциклопедию ухода за собакой, есть принцип, без которого жизнь превратится в хаос и я не могу не поделиться им здесь. Это РЕЖИМ и РУТИНА."}, {"k": "h4", "x": "Что такое рутина и зачем она нужна?"}, {"k": "p", "x": "Рутина — это не скучное повторение одного и того же, а предсказуемый порядок действий, который повторяется день за днём. Кормление, прогулки, игры, сон — всё происходит примерно в одно и то же время и по одному алгоритму."}, {"k": "p", "x": "Собаки — существа, которые строят свою безопасность на предсказуемости. Когда они понимают, что и когда произойдёт, их тревожность снижается. Новый дом — это уже стресс: незнакомые запахи, звуки, люди. Режим становится тем якорем безопасности, который говорит собаке: «здесь можно расслабиться, здесь всё понятно»."}, {"k": "p", "x": "Вы удивитесь, но именно рутина спасёт от выгорания и вас. В хаосе первых дней чёткий алгоритм действий снимает необходимость постоянно принимать решения «на лету»."}, {"k": "p", "x": "Помимо этого, частью рутины становится ваша задача изучить основные волнующие вопросы в поведении питомца и выписать себе «шпаргалки». Соблюдая один и тот же алгоритм приучения по «шпаргалке» вам будет гораздо вытраивать взаимоотношения с собакой."}, {"k": "p", "x": "Разберем основные запросы и примеры «шпаргалок»:"}, {"k": "h4", "x": "Пример 1: Прогулки Если питомец уже может гулять, изучите тему прогулок:"}, {"k": "p", "x": "В начале выгул должен быть коротким (10–15 минут) и спокойным, без перегрузок. Первые прогулки — в тихих местах, без встреч с другими собаками. Постепенно увеличивайте время и расстояние, когда увидите, что собака расслабляется"}, {"k": "h4", "x": "Пример 2: Туалет"}, {"k": "p", "x": "Для щенка классно использовать пелёнки по всему жилищу для минимизации промахов, которые постепенно убираются, если щенок ими не пользуется."}, {"k": "p", "x": "Определитесь, что для вас важно прямо сейчас и выпишите шаги к решению:"}, {"k": "arrow", "x": "Чистота в доме? → углубитесь в тему туалета"}, {"k": "arrow", "x": "Спокойное поведение? → изучите режим сна и отдыха"}, {"k": "arrow", "x": "Социализация? → найдите информацию о правильных прогулках"}, {"k": "arrow", "x": "Отсутствие деструктивного поведения? → исследуйте тему когнитивной нагрузки"}, {"k": "p", "x": "Именно рутина (как и для человека, так и для собаки) становится тем фундаментом, на котором строится всё остальное. Не пренебрегайте им."}, {"k": "h3", "x": "Глава 5. Где искать подробную информацию"}, {"k": "p", "x": "Я всегда рекомендую первично остановиться на одной модели взаимоотношения с собакой и следовать ей: противоречивых рекомендаций в интернете очень много, поэтому важно критическое мышление и умение остановиться на чем-то одном (чтобы не сойти с ума в избытке информации)."}, {"k": "p", "x": "А если вам нужны детали — как именно подбирать корм, какие игрушки безопасны для щенка, как отучить грызть обувь, как выстроить социализацию с другими собаками, — я рекомендую обращаться к проверенным источникам: книги по поведению (см.Приложения), специалист по поведению, который подскажет именно под вашу ситуацию, потому что каждая собака уникальна, и то, что подходит одному щенку, может не подойти другому. В своем ТГК я также делюсь полезностями."}, {"k": "p", "x": "Данное пособие — не энциклопедия собаководства, этот материал совсем про другое: про то, что вы не одни, про то, что ваши чувства нормальны, и про то, что вы имеете право просить помощи."}, {"k": "p", "x": "А все конкретные инструкции по уходу вы всегда найдете у профессионалов, которые работают с этим каждый день, и помните: нет глупых вопросов, есть только те, кто боится их задавать, а смелость спросить — это уже половина успеха."}, {"k": "h2", "x": "Заключение"}, {"k": "p", "x": "Самое сложное — это первые недели, когда всё ново, когда не спится, когда кажется, что ничего не получается и вы всё делаете не так. Но это время пройдёт, собака привыкнет, вы привыкнете, и однажды вы поймёте, что уже не представляете своей жизни без этого лохматого существа, которое спит у ваших ног или приносит вам мяч, и те первые трудности покажутся просто этапом, который вы прошли вместе."}, {"k": "p", "x": "Это пособие, как я и завещала, вероятно не дало вам волшебной таблетки и не превратило вашу собаку в идеальную за три дня, потому что такой таблетки не существует, и идеальных собак тоже не бывает, как и идеальных хозяев. Но я надеюсь, что он дал вам нечто более важное — разрешение чувствовать всё, что вы чувствуете, понимание того, почему вам тяжело, и практические инструменты, которые можно применять прямо сейчас, в самый сложный момент, когда кажется, что сил больше нет."}, {"k": "p", "x": "Если вы запомните только одну вещь из этого пособия, пусть она будет такой: вы не обязаны быть идеальным хозяином. Настоящие отношения строятся на способности проходить через трудности и оставаться при этом в контакте друг с другом. Если вам было трудно, значит, вы вкладывались, значит, вам не всё равно, а это уже больше, чем у многих."}, {"k": "p", "x": "И пожалуйста, помните: вы имеете право уставать, вы имеете право злиться, вы имеете право плакать и даже думать об отдаче, потому что вы живой человек, а не робот, и все эти чувства не отменяют вашей любви к собаке и вашей ответственности. Позволяя себе быть несовершенным, вы даёте собаке гораздо больше, чем пытаясь быть идеальным, — вы даёте ей право тоже быть собой, право ошибаться и право учиться рядом с вами."}, {"k": "p", "x": "Пускай это пособие всегда будет рядом, как карта, к которой можно возвращаться в любой момент, когда что-то идёт не так или когда вам просто нужно услышать: «вы справитесь». Потому что вы действительно справитесь. БЕРЕГИТЕ СЕБЯ!"}, {"k": "p", "x": "С заботой о вас и ваших питомцах, Шмакова Екатерина"}, {"k": "h2", "x": "ПРИЛОЖЕНИЯ"}, {"k": "h3", "x": "Как найти хорошего специалиста?"}, {"k": "p", "x": "Дополнительные рекомендации специалистов:"}, {"k": "li", "x": "Виктория Платонова"}, {"k": "li", "x": "Алла Уханова"}, {"k": "li", "x": "Анна Кутилина"}, {"k": "li", "x": "Екатерина Бондаренко"}, {"k": "li", "x": "Анна Долматова"}, {"k": "li", "x": "Ольга Гусарова"}, {"k": "li", "x": "Антон Волков"}, {"k": "li", "x": "Специалисты центра VetPetCare"}, {"k": "li", "x": "Марина Суяркова"}, {"k": "li", "x": "Юлия Горн"}, {"k": "li", "x": "Юлия Розова"}, {"k": "li", "x": "Елизавета Тятова"}, {"k": "h3", "x": "Какую литературу стоит прочесть?"}, {"k": "li", "x": "Собака. Иллюстрированное руководство по общению (Лили Чин)"}, {"k": "li", "x": "Контроль без поводка. Программа для щенков (Лесли МакДевитт)"}, {"k": "li", "x": "Лай – о чём говорят собаки? (Тюрид Ругос)"}, {"k": "li", "x": "Эмоции людей и собак (Патриция МакКоннелл)"}, {"k": "h3", "x": "Какие ещё методы можно применить, чтобы облегчить себе жизнь?"}, {"k": "li", "x": "Выпишите 10 дел, которые вы сможете сделать БЕЗ собаки и 10 дел с собакой. Осуществите их на неделе. Пример: попить вкусный чай в одиночестве, просмотреть лекцию по психологии; изучить новый трюк, попробовать игру в перетяжки"}, {"k": "li", "x": "Попробуйте посмотреть на собаку с точки зрения специалиста: как вы думаете, почему она ведет себя тем или иным образом? Иногда понимание оппонента уже является ключом к успеху."}, {"k": "li", "x": "Запишите голосовое сообщение себе в чат о том, что именно взбесило сегодня. Выскажите всё, что накипело, выплеск эмоций полезен. На следующий день просмотрите и проанализируйте."}, {"k": "li", "x": "Проанализируйте, какое состояние(!) питомца беспокоит вас больше всего: это может быть, например, перевозбуждение. Изучите вопрос того как именно оно возникает и какие существуют методы релаксации (ароматерапия, музыка для собак, релакс протоколы, баланс нагрузки и отдыха)"}, {"k": "li", "x": "Попробуйте представить сложившуюся ситуацию от 3го лица. Посмотрите объективно на то, с чем вы столкнулись, попробуйте дать совет так, если бы вы были просто сторонним наблюдателем"}, {"k": "li", "x": "Выпишите волнующее вас поведение собаки на бумагу (пример: писает мимо пеленки, рвет обувь, кусает мои руки, не дает себя погладить). Отделите, как вам кажется, те пункты, которые соответствуют возрастной категории. Отсмотрите, что получилось в остатке и сделайте «шпаргалки» по решению этих вопросов."}, {"k": "li", "x": "Вспомните о своей прошлой рутине и внедрите те аспекты, что выпали сейчас. Пример: раньше вы каждый вечер делали маску для лица и смотрели сериал. Повторите данный ритуал."}, {"k": "li", "x": "Посмотрите фильмы о собаках. Серьезно. Порой злость охватывает разум и это нормально. Пересмотрите Хатико, фильм Собачья жизнь (обе части очень рекомендую). Дайте себе возможность увидеть хорошие качества собак."}, {"k": "li", "x": "Выпишите основные КАЧЕСТВА вашего питомца (активный, жизнерадостный, веселый, смышленый) и ВАШИ качества. Посмотрите, как их можно сопоставить и объединить в общее дело? Пример: активный щенок и владелец авантюрист, вместе устроить исследовательскую прогулку и идти туда, куда ведет собака."}, {"k": "li", "x": "Изучите историю породы, выпишите основные нюансы, которые как вам кажется, могут влиять на то поведение, что вы видите у собаки сейчас. Понимание происхождения часто дает ответы на многие вопросы: «вот оно что! оказывается ты за пятки меня кусаешь не потому что злой, а потому что пастух!»"}, {"k": "li", "x": "Ведите дневничок успехов, каждый день записывая успехи вас и вашей собаки, даже незначительные"}, {"k": "li", "x": "Делайте акцент на получении опыта. Щенок снова перевозбудился? Проанализируйте ситуацию и сделайте из этого опыт: не стоило играть так долго в перетяжки/апортировку"}, {"k": "li", "x": "Используйте конг и дайте себя время выдохнуть"}, {"k": "li", "x": "Выпишите проблемное поведение. Попробуйте встать на место своего питомца. На 15 минут представьте себя собакой, попавшей в эти условия. Какой мотив у каждого поведения? (пример: рвет кроссовки, мотив: чешутся зубы, страшно было остаться одному в чужой квартире; писает на диван, мотив: хотел в туалет, спутал мягкую пеленку с обивкой дивана). Важно: помните, что собаки не делают ничего на зло."}, {"k": "li", "x": "Попробуйте совместный сон. Это может казаться смешным, но совместный сон с собакой укрепляет контакт и доверие."}, {"k": "li", "x": "Договоритесь с собой, что этот этап подобен детективному «квесту», который важно пройти. Цель – обрести гармоничные отношения и найти все препятствующие этому аспекты. На что вы бы обратили первым делом в расследовании?"}, {"k": "li", "x": "Сместите фокус на привычку видеть хорошее. Это прекрасно способствует обучению щенка/взрослой собаки новому, хорошему поведению. Подробнее об этой методике ищите в моём ТГК"}, {"k": "li", "x": "Методика благодарности. Каждый день находите что-то, за что вы сможете поблагодарить прошедшие сутки с собакой. Пример: «я благодарна тому, что сегодня мой щенок обучился команде сидеть»"}, {"k": "li", "x": "Методика «табличка спокойствия». Подробная инструкция в ТГК"}, {"k": "li", "x": "Методика «фокус на объект». Подробная инструкция в ТГК"}];
 
 const PAW='<svg viewBox="0 0 40 40"><ellipse cx="20" cy="27" rx="9.5" ry="8"/><ellipse cx="9" cy="16" rx="4" ry="5.2" transform="rotate(-18 9 16)"/><ellipse cx="16.5" cy="9.5" rx="4" ry="5.4"/><ellipse cx="24.5" cy="9.5" rx="4" ry="5.4"/><ellipse cx="31.5" cy="16" rx="4" ry="5.2" transform="rotate(18 31.5 16)"/></svg>';
-const TAIL='<svg class="tail" viewBox="0 0 80 80"><g><path d="M4 74 C 30 76, 56 64, 62 38 C 66 18, 50 10, 42 22"/></g></svg>';
-const ARR='<svg class="arw" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
+document.documentElement.style.setProperty('--pawm',`url("data:image/svg+xml,${encodeURIComponent(PAW.replace('<svg','<svg xmlns="http://www.w3.org/2000/svg"'))}")`);
+const ARR='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
+const ARR2='<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg>';
+const WORD='Хв<span class="paw">'+PAW+'</span>стопедия';
 
 const SECTIONS=[
  ['chto-takoe-sobaka','Что такое собака'],
- ['rol-v-seme','Роль собаки в семье'],
+ ['rol-v-seme','Роль собаки в семье','wide'],
  ['kak-vybrat','Как выбрать собаку в семью?'],
- ['adaptaciya','Адаптация'],
+ ['adaptaciya','Адаптация','big'],
  ['amuniciya','Амуниция'],
  ['vospitanie','Воспитание'],
  ['pervaya-pomosh','Первая помощь'],
@@ -323,11 +364,12 @@ const SECTIONS=[
  ['separaciya','Сепарация'],
  ['dve-sobaki','Две собаки в доме'],
  ['sobaka-i-kot','Собака и кот'],
- ['sobaka-i-rebenok','Собака и ребёнок'],
+ ['sobaka-i-rebenok','Собака и ребёнок','wide'],
  ['obrabotki','Обработки'],
  ['privivki','Календарь прививок'],
 ];
-const SEC=Object.fromEntries(SECTIONS);
+const SEC=Object.fromEntries(SECTIONS.map(s=>[s[0],s[1]]));
+const IMG=id=>'img/r/'+id+'.webp';
 
 const AUTHORS={
  antipina:{
@@ -347,7 +389,7 @@ const MATERIALS=[
  {id:'pamyatka-priemnoy-semi',sec:'adaptaciya',author:'antipina',type:'Памятка',
   title:'Памятка приёмной семьи',
   lead:'Если вы планируете подарить собаке новый дом, эта памятка для вас: как помочь собаке пережить время адаптации как можно легче.',
-  pdf:'pdf/pamyatka-priemnoy-semi.pdf',html:'PAMYATKA'},
+  pdf:'pdf/pamyatka-priemnoy-semi.pdf',html:''},
  {id:'pervoe-vremya-s-sobakoy',sec:'adaptaciya',author:'shmakova',type:'Пособие',
   title:'Первое время с собакой',
   lead:'<em>«Я не думал(а), что это будет так сложно!»</em> Руководство по восстановлению психоэмоционального состояния владельца.',
@@ -416,64 +458,77 @@ function matText(m){return m.blocks?m.blocks.map(b=>b.x).join(' '):strip(m.html)
 function minutes(m){return Math.max(1,Math.round(matText(m).split(/\s+/).length/170))}
 const SHORT='в|во|на|с|со|к|ко|и|а|о|об|у|по|за|из|до|не|ни|от|для|без|при|про|над|под|что|если|чтобы|как|где|когда|это|или|но|же|ее|её|их|вы|мы|я|он|она|то|бы|ли|уже|все|всё|так';
 const RX=new RegExp('(^|[\\s«(„"])('+SHORT+')\\s','gi');
-function nb(s){return s.replace(RX,'$1$2 ').replace(RX,'$1$2 ').replace(/(\d)\s(часов|минут|недел|дн|мин)/g,'$1 $2').replace(/\s—\s/g,' — ').replace(/\s(\S{1,3})([.!?…»]*)$/,' $1$2')}
-function fixText(root){const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);let n;while(n=w.nextNode()){if(n.parentNode.closest('script,style,input,textarea'))continue;if(/\s/.test(n.nodeValue))n.nodeValue=nb(n.nodeValue)}}
+function nb(s){return s.replace(RX,'$1$2 ').replace(RX,'$1$2 ').replace(/(\d)\s(часов|минут|недел|дн|мин|материал|раздел|автор)/g,'$1 $2').replace(/\s—\s/g,' — ').replace(/\s(\S{1,3})([.!?…»]*)$/,' $1$2')}
+function fixText(root){const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);let n;while(n=w.nextNode()){if(n.parentNode.closest('script,style,input,textarea,.title,.f-big'))continue;if(/\s/.test(n.nodeValue))n.nodeValue=nb(n.nodeValue)}}
+const cnt=n=>n?plural(n,'материал','материала','материалов'):'скоро';
 
 /* ---------- кусочки ---------- */
 function authorCard(id,mode){
   const a=AUTHORS[id];
   if(a.empty){
-    if(mode==='byline') return `<div class="byline"><div class="lbl">Автор материала</div><div class="top"><div class="ph0">${a.name[0]}</div><div><h3>${a.name}</h3><div class="ghost" style="width:120px"></div></div></div><div class="ghost"></div><div class="ghost" style="width:70%"></div><div class="ghost" style="width:45%"></div></div>`;
+    if(mode==='byline') return `<div class="byline"><div class="lbl" style="color:var(--ink2)">Автор материала</div><div class="top"><div class="ph0">${a.name[0]}</div><div><h3>${a.name}</h3><div class="ghost" style="width:120px"></div></div></div><div class="ghost"></div><div class="ghost" style="width:70%"></div><div class="ghost" style="width:45%"></div></div>`;
     return `<div class="empty rv"><div class="ph0">${a.name[0]}</div><div><h3>${a.name}</h3><div class="ghost"></div><div class="ghost" style="width:72%"></div><div class="ghost" style="width:48%"></div></div><div class="note">Карточка автора заполняется</div></div>`;
   }
   const btns=a.links.map(([t,u,c])=>`<a class="btn sm ${c}" href="${u}" target="_blank" rel="noopener">${t}</a>`).join('');
-  if(mode==='byline') return `<div class="byline"><div class="lbl">Автор материала</div><div class="top"><img src="${a.photo}" alt="${a.name}"><div><h3>${a.name}</h3><div class="role">${a.role}</div></div></div><ul>${a.facts.map(f=>`<li>${f}</li>`).join('')}</ul><q>${a.quote}</q><span>${a.quoteBy}</span><div class="btns">${btns}</div></div>`;
-  return `<div class="acard rv"><img class="ph" src="${a.photo}" alt="${a.name}"><div><h3>${a.name}</h3><div class="role">${a.role}</div><div class="meta">${a.facts.map(f=>`<span>${f}</span>`).join('')}</div><q>${a.quote}</q><span>${a.quoteBy}</span><div class="btns">${btns}</div></div></div>`;
+  if(mode==='byline') return `<div class="byline"><div class="lbl" style="color:var(--ink2)">Автор материала</div><div class="top"><img src="${a.photo}" alt="${a.name}"><div><h3>${a.name}</h3><span class="role">${a.role}</span></div></div><ul>${a.facts.map(f=>`<li>${f}</li>`).join('')}</ul><q>${a.quote}</q><span>${a.quoteBy}</span><div class="btns">${btns}</div></div>`;
+  return `<div class="acard rv"><img class="ph" src="${a.photo}" alt="${a.name}"><div><h3>${a.name}</h3><span class="role">${a.role}</span><div class="meta">${a.facts.map(f=>`<span>${f}</span>`).join('')}</div><q>${a.quote}</q><span>${a.quoteBy}</span><div class="btns">${btns}</div></div></div>`;
 }
-function matRow(m,i){
+function matRow(m){
   const a=AUTHORS[m.author];
   const ava=a.photo?`<img class="ava" src="${a.photo}" alt="">`:`<span class="ava">${a.name[0]}</span>`;
-  return `<a class="mat rv" href="#/m/${m.id}"><span class="sec">${SEC[m.sec]}</span><div><h3>${m.title}</h3><div class="sub">${m.lead}</div><div class="who">${ava}<span>${a.short} · ${m.type.toLowerCase()} · ${minutes(m)} мин</span></div></div><span class="btn">Читать <span class="ar">${ARR}</span></span><span class="big">${String(i+1).padStart(2,'0')}</span></a>`;
+  return `<a class="mat rv" href="#/m/${m.id}"><span class="thumb"><img src="${IMG(m.sec)}" alt="" loading="lazy"></span><div><span class="tag">${SEC[m.sec]} · ${m.type.toLowerCase()}</span><h3>${m.title}</h3><div class="sub">${m.lead}</div><div class="who">${ava}<span>${a.short} · ${minutes(m)} мин</span></div></div><span class="btn">Читать <span class="ar">${ARR}</span></span></a>`;
 }
-function indexRows(){
-  return SECTIONS.map(([id,t],i)=>{const n=bySec(id).length;return `<a class="row rv" href="#/r/${id}" style="transition-delay:${(i%8)*40}ms"><span class="n">${String(i+1).padStart(2,'0')}</span><span class="t">${t}</span><span class="c ${n?'has':''}">${n?plural(n,'материал','материала','материалов'):'скоро'}</span><span class="ar">${ARR}</span></a>`}).join('');
+function cards(){
+  return SECTIONS.map(([id,t,size],i)=>{const n=bySec(id).length;return `<a class="card rv ${size||''}" href="#/r/${id}" style="transition-delay:${(i%4)*60}ms"><img src="${IMG(id)}" alt="" loading="lazy"><span class="num">${String(i+1).padStart(2,'0')}/</span><span class="round">${ARR2}</span><span class="cap"><b>${t}</b><small class="${n?'has':''}">${cnt(n)}</small></span></a>`}).join('');
 }
 function footer(){
   const cols=[SECTIONS.slice(0,5),SECTIONS.slice(5,10),SECTIONS.slice(10)];
-  return `<footer><div class="f-big">Хвостопедия${TAIL}</div><div class="f-grid"><div style="max-width:340px">Бесплатная база знаний о жизни с собакой. За каждым материалом стоит реальный специалист.<div style="margin-top:18px"><a class="btn car sm" href="#/avtory" style="display:inline-flex">Наши авторы <span class="ar">${ARR}</span></a></div></div><div class="f-cols">${cols.map(c=>`<div>${c.map(([id,t])=>`<a href="#/r/${id}">${t}</a>`).join('')}</div>`).join('')}</div></div><div class="f-low">Материалы публикуются с разрешения авторов</div></footer>`;
+  return `<footer><div class="f-big">${WORD}</div><div class="f-grid"><div style="max-width:340px">Бесплатная база знаний о жизни с собакой. За каждым материалом стоит реальный специалист.<div style="margin-top:18px"><a class="btn sm" href="#/avtory">Наши авторы <span class="ar">${ARR}</span></a></div></div><div class="f-cols">${cols.map(c=>`<div>${c.map(([id,t])=>`<a href="#/r/${id}">${t}</a>`).join('')}</div>`).join('')}</div></div><div class="f-low">Материалы публикуются с разрешения авторов</div></footer>`;
 }
 
 /* ---------- страницы ---------- */
 function home(){
   const chips=['адаптация','первое время','стресс','прогулки','сон'];
-  const authorsN=Object.keys(AUTHORS).length;
   return `
   <section class="hero" id="top">
-    <div class="blob"></div><div class="trail" id="trail"></div>
-    <span class="hero-tag"><b></b>${plural(SECTIONS.length,'раздел','раздела','разделов')} · ${plural(MATERIALS.length,'материал','материала','материалов')} · ${plural(authorsN,'автор','автора','авторов')}</span>
-    <h1 class="title">Хвостопедия${TAIL}</h1>
-    <p class="hero-sub">Бесплатная база знаний о&nbsp;жизни с&nbsp;собакой. Статьи <em>кинологов, зоопсихологов</em> и&nbsp;других специалистов в&nbsp;одном месте</p>
-    <div class="search" id="search">
-      <input id="q" type="search" placeholder="Найдите ответ на свой вопрос" autocomplete="off">
-      <button class="go" id="qgo" aria-label="Искать">${ARR}</button>
-      <div class="results" id="res"></div>
+    <div class="pan h-top">
+      <div class="labels lbl"><span>Бесплатно</span><i></i><span>От реальных специалистов</span><i></i><span>Обо всём, что важно владельцу</span></div>
+      <h1 class="title">${WORD}</h1>
     </div>
-    <div class="hero-chips">${chips.map(c=>`<span class="chip" data-q="${c}">${c}</span>`).join('')}</div>
-    <div class="hero-down"><span>разделы</span><i></i></div>
+    <div class="h-bot">
+      <div class="pan h-left">
+        <p class="h-lead">База знаний о&nbsp;жизни с&nbsp;собакой. Статьи <span class="pill">кинологов</span>, <span class="pill sg">зоопсихологов</span> и&nbsp;других специалистов в&nbsp;одном месте</p>
+        <div class="search" id="search">
+          <input id="q" type="search" placeholder="Найдите ответ на свой вопрос" autocomplete="off">
+          <button class="go" id="qgo" aria-label="Искать">${ARR}</button>
+          <div class="results" id="res"></div>
+        </div>
+        <div class="chips">${chips.map(c=>`<span class="chip" data-q="${c}">${c}</span>`).join('')}</div>
+      </div>
+      <div class="pan h-right">
+        <div class="dogbox"><img src="img/dog.webp" alt=""><span class="bubble">а почему он так делает?</span></div>
+        <div class="stats">
+          <div><b>${SECTIONS.length}</b><span>разделов о&nbsp;жизни с&nbsp;собакой</span></div>
+          <div><b>${MATERIALS.length}</b><span>${MATERIALS.length<5?'материала':'материалов'} уже в&nbsp;базе</span></div>
+          <div><b>${Object.keys(AUTHORS).length}</b><span>автора-специалиста</span></div>
+          <div><b>0&nbsp;₽</b><span>за&nbsp;доступ к&nbsp;статьям</span></div>
+        </div>
+      </div>
+    </div>
   </section>
 
-  <section class="screen" id="razdely">
-    <div class="idx-head rv"><div><div class="kicker">Оглавление</div><h2 class="h2">О&nbsp;чём <i>Хвостопедия</i></h2></div><p>Выберите тему и&nbsp;найдите материал по&nbsp;своему вопросу. Разделы постепенно наполняются</p></div>
-    <div class="idx">${indexRows()}</div>
+  <section class="pan blk" id="razdely">
+    <div class="blk-head rv"><div><div class="lbl" style="color:var(--caramel);margin-bottom:14px">Разделы</div><h2 class="h2">Всё о&nbsp;жизни <span class="pill">с&nbsp;собакой</span><br>по&nbsp;<span class="pill sg">полочкам</span></h2></div><p>Выберите тему и&nbsp;найдите материал по&nbsp;своему вопросу. Разделы постепенно наполняются</p></div>
+    <div class="bento">${cards()}</div>
   </section>
 
-  <section class="screen fresh">
-    <div class="rv"><div class="kicker">Свежее в базе</div><h2 class="h2">Начните с&nbsp;<i>адаптации</i></h2></div>
+  <section class="pan blk" style="background:var(--sage2)">
+    <div class="blk-head rv"><div><div class="lbl" style="color:var(--sage);margin-bottom:14px">Свежее в базе</div><h2 class="h2">Начните <span class="pill cr">с&nbsp;адаптации</span></h2></div><a class="btn soft" href="#/r/adaptaciya">Весь раздел <span class="ar">${ARR}</span></a></div>
     <div class="mat-list">${MATERIALS.map(matRow).join('')}</div>
   </section>
 
-  <section class="screen" id="avtory">
-    <div class="idx-head rv" style="margin-bottom:0"><div><div class="kicker">Наши авторы</div><h2 class="h2">Кто стоит<br>за&nbsp;<i>материалами</i></h2></div><p>Если вам откликнулся подход специалиста, переходите к&nbsp;нему: курсы, консультации и&nbsp;соцсети в&nbsp;карточке</p></div>
+  <section class="pan blk" id="avtory">
+    <div class="blk-head rv"><div><div class="lbl" style="color:var(--caramel);margin-bottom:14px">Наши авторы</div><h2 class="h2">Кто стоит<br>за&nbsp;<span class="pill">материалами</span></h2></div><p>Если вам откликнулся подход специалиста, переходите к&nbsp;нему: курсы, консультации и&nbsp;соцсети в&nbsp;карточке</p></div>
     <div class="authors">${Object.keys(AUTHORS).map(id=>authorCard(id)).join('')}</div>
   </section>
   ${footer()}`;
@@ -482,9 +537,9 @@ function home(){
 function sectionPage(id){
   const t=SEC[id]; if(!t) return notFound();
   const list=bySec(id), i=SECTIONS.findIndex(s=>s[0]===id);
-  const others=SECTIONS.filter(s=>s[0]!==id&&bySec(s[0]).length).concat(SECTIONS.filter(s=>s[0]!==id&&!bySec(s[0]).length)).slice(0,6);
-  return `<section class="page-top"><div class="crumbs"><a href="#/">Хвостопедия</a><span>/</span><a href="#/razdely">Разделы</a></div><div class="kicker">Раздел ${String(i+1).padStart(2,'0')}</div><h1 class="page-title">${t}</h1></section>
-  <section class="sec-body">${list.length?`<div class="mat-list" style="margin-top:0">${list.map(matRow).join('')}</div>`:`<div class="soon rv"><div><h3>Материалы скоро появятся</h3><p>Мы собираем статьи специалистов для этого раздела</p></div><a class="btn" href="#/razdely">Все разделы <span class="ar">${ARR}</span></a></div>`}
+  const others=SECTIONS.filter(s=>s[0]!==id&&bySec(s[0]).length).concat(SECTIONS.filter(s=>s[0]!==id&&!bySec(s[0]).length)).slice(0,7);
+  return `<section class="sec-top"><div class="pan"><div class="crumbs"><a href="#/">Хвостопедия</a><span>/</span><a href="#/razdely">Разделы</a></div><div class="lbl" style="color:var(--caramel);margin-bottom:14px">Раздел ${String(i+1).padStart(2,'0')}/</div><h1 class="page-title">${t}</h1><div class="facts"><span>${cnt(list.length)}</span></div></div><div class="sec-img"><img src="${IMG(id)}" alt=""></div></section>
+  <section class="pan blk">${list.length?`<div class="mat-list">${list.map(matRow).join('')}</div>`:`<div class="soon rv"><div><h3>Материалы скоро появятся</h3><p>Мы собираем статьи специалистов для этого раздела</p></div><a class="btn" href="#/razdely">Все разделы <span class="ar">${ARR}</span></a></div>`}
   <div class="next-secs rv">${others.map(([sid,st])=>`<a class="chip" href="#/r/${sid}">${st}</a>`).join('')}</div></section>${footer()}`;
 }
 
@@ -515,6 +570,8 @@ function articleBody(m){
   return {html,toc};
 }
 
+
+
 function articlePage(id){
   const m=MATERIALS.find(x=>x.id===id); if(!m) return notFound();
   const a=AUTHORS[m.author], body=articleBody(m);
@@ -522,25 +579,25 @@ function articlePage(id){
   const more=MATERIALS.filter(x=>x.id!==m.id&&x.sec===m.sec);
   const contact=a.empty?'':`<a class="btn" href="${a.links[0][1]}" target="_blank" rel="noopener">${a.links[0][0]} автора</a><a class="btn soft" href="${a.links[1][1]}" target="_blank" rel="noopener">${a.links[1][0]}</a>`;
   return `<section class="art-top">
-    <div class="rv"><div class="crumbs"><a href="#/">Хвостопедия</a><span>/</span><a href="#/r/${m.sec}">${SEC[m.sec]}</a></div>
+    <div class="pan"><div class="crumbs"><a href="#/">Хвостопедия</a><span>/</span><a href="#/r/${m.sec}">${SEC[m.sec]}</a></div>
       <h1>${m.title}</h1><p class="lead">${m.lead}</p>
-      <div class="art-facts"><span>${m.type}</span><span>${minutes(m)} мин чтения</span><span>${SEC[m.sec]}</span></div>
-      <div class="btns"><a class="btn car" href="#read" data-to="read">Читать <span class="ar">${ARR}</span></a><a class="btn soft" href="${m.pdf}" download>Скачать PDF</a></div></div>
-    <div class="rv">${authorCard(m.author,'byline')}</div>
+      <div class="facts"><span>${m.type}</span><span>${minutes(m)} мин чтения</span><span>${SEC[m.sec]}</span></div>
+      <div class="btns" style="margin-top:26px"><a class="btn car" href="#read" data-to="read">Читать <span class="ar">${ARR}</span></a><a class="btn soft" href="${m.pdf}" download>Скачать PDF</a></div></div>
+    <div class="art-right"><div class="art-img"><img src="${IMG(m.sec)}" alt=""></div>${authorCard(m.author,'byline')}</div>
   </section>
-  <section class="art-wrap" id="read">
-    <aside class="toc" id="toc"><b>Содержание</b>${toc}</aside>
+  <section class="pan paper art-wrap" id="read">
+    <aside class="toc" id="toc"><b class="lbl">Содержание</b>${toc}</aside>
     <article class="text">${body.html}
-      <div class="after"><h3>${a.empty?'Понравился материал?':'Хотите разобраться глубже?'}</h3><p>${a.empty?'Скачайте его целиком, чтобы вернуться в трудный момент':'Переходите к автору: консультации, курсы и полезное в канале'}</p><div class="btns">${contact}<a class="btn ${a.empty?'':'soft'}" href="${m.pdf}" download>Скачать PDF</a>${more.map(x=>`<a class="btn soft" href="#/m/${x.id}">${x.title} ${ARR}</a>`).join('')}</div></div>
+      <div class="after"><img src="img/dog.webp" alt=""><h3>${a.empty?'Понравился материал?':'Хотите разобраться глубже?'}</h3><p>${a.empty?'Скачайте его целиком, чтобы вернуться в трудный момент':'Переходите к автору: консультации, курсы и полезное в канале'}</p><div class="btns">${contact}<a class="btn ${a.empty?'':'soft'}" href="${m.pdf}" download>Скачать PDF</a>${more.map(x=>`<a class="btn soft" href="#/m/${x.id}">${x.title} ${ARR}</a>`).join('')}</div></div>
     </article>
   </section>${footer()}`;
 }
 
 function authorsPage(){
-  return `<section class="page-top"><div class="crumbs"><a href="#/">Хвостопедия</a><span>/</span><span>Авторы</span></div><div class="kicker">Наши авторы</div><h1 class="page-title">Специалисты <i>Хвостопедии</i></h1></section>
-  <section class="sec-body"><div class="authors page">${Object.keys(AUTHORS).map(id=>authorCard(id)).join('')}</div></section>${footer()}`;
+  return `<section class="pan blk" style="padding-top:120px"><div class="crumbs"><a href="#/">Хвостопедия</a><span>/</span><span>Авторы</span></div><h1 class="page-title" style="margin-bottom:clamp(24px,4vh,44px)">Специалисты <span class="pill">Хвостопедии</span></h1>
+  <div class="authors">${Object.keys(AUTHORS).map(id=>authorCard(id)).join('')}</div></section>${footer()}`;
 }
-function notFound(){return `<section class="screen" style="align-items:flex-start"><div class="kicker">Ой</div><h1 class="page-title">Такой страницы нет</h1><div style="margin-top:28px"><a class="btn" href="#/">На главную ${ARR}</a></div></section>`}
+function notFound(){return `<section class="pan blk" style="min-height:80svh;display:flex;flex-direction:column;justify-content:center"><div class="lbl" style="color:var(--caramel)">Ой</div><h1 class="page-title">Такой страницы нет</h1><div style="margin-top:28px"><a class="btn" href="#/">На главную ${ARR}</a></div></section>`}
 
 /* ---------- поиск ---------- */
 function search(q){
@@ -567,23 +624,7 @@ function bindSearch(){
   document.addEventListener('click',e=>{if(!e.target.closest('#search'))box.classList.remove('open')});
 }
 
-/* ---------- следы лап в hero ---------- */
-function trail(){
-  const t=$('#trail'); if(!t) return;
-  const W=innerWidth,H=t.offsetHeight,mob=W<640;
-  const paths=mob?[[[-.05,.95],[.35,.78]],[[.7,.12],[1.05,-.02]]]:[[[-.03,.92],[.3,.66]],[[.72,.3],[1.02,.06]]];
-  let k=0;
-  paths.forEach(([[x1,y1],[x2,y2]],pi)=>{
-    const ang=Math.atan2((y2-y1)*H,(x2-x1)*W)*180/Math.PI+90, steps=mob?5:7;
-    for(let s=0;s<steps;s++){
-      const f=s/(steps-1),side=s%2?1:-1,px=(x1+(x2-x1)*f)*W,py=(y1+(y2-y1)*f)*H;
-      const ox=Math.cos((ang)*Math.PI/180)*14*side,oy=Math.sin(ang*Math.PI/180)*14*side;
-      const d=document.createElement('span');d.innerHTML=PAW;const sv=d.firstChild;
-      sv.style.cssText=`left:${px+ox}px;top:${py+oy}px;transform:rotate(${ang}deg);animation-delay:${(pi*steps+s)*0.32}s`;
-      t.appendChild(sv);k++;
-    }
-  });
-}
+
 
 /* ---------- роутер ---------- */
 let io,tocIO;
@@ -601,13 +642,13 @@ function render(){
   const app=$('#app'); app.innerHTML=html; fixText(app);
   $$('[data-nav]').forEach(a=>a.classList.toggle('on',a.dataset.nav===nav));
   window.scrollTo(0,0);
-  if(nav==='razdely') requestAnimationFrame(()=>$('#razdely').scrollIntoView());
+  if(nav==='razdely') requestAnimationFrame(()=>window.scrollTo(0,$('#razdely').offsetTop-12));
   document.title=p==='m'?(MATERIALS.find(x=>x.id===arg)||{}).title+' · Хвостопедия':p==='r'&&SEC[arg]?SEC[arg]+' · Хвостопедия':'Хвостопедия';
-  bindSearch(); trail();
+  bindSearch();
   io&&io.disconnect();
   io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.12,rootMargin:'0px 0px -6% 0px'});
   $$('.rv').forEach(el=>io.observe(el));
-  $$('[data-to]').forEach(a=>a.onclick=e=>{e.preventDefault();const el=document.getElementById(a.dataset.to);el&&window.scrollTo({top:el.getBoundingClientRect().top+scrollY-(a.dataset.to==='read'?0:70),behavior:'smooth'});if(innerWidth<980&&a.closest('.toc'))$('#toc').classList.remove('open')});
+  $$('[data-to]').forEach(a=>a.onclick=e=>{e.preventDefault();const el=document.getElementById(a.dataset.to);el&&window.scrollTo({top:el.getBoundingClientRect().top+scrollY-(a.dataset.to==='read'?12:90),behavior:'smooth'});if(innerWidth<980&&a.closest('.toc'))$('#toc').classList.remove('open')});
   const toc=$('#toc');
   if(toc){ $('b',toc).onclick=()=>toc.classList.toggle('open');
     tocIO&&tocIO.disconnect();
@@ -622,6 +663,7 @@ addEventListener('scroll',()=>{
   if(r){const t=r.offsetTop,hgt=r.offsetHeight-innerHeight;bar.style.width=Math.min(100,Math.max(0,(scrollY-t)/hgt*100))+'%'}else bar.style.width=0;
 },{passive:true});
 $('#navSearch').onclick=()=>{if(location.hash.replace(/^#\/?/,'')){location.hash='#/';setTimeout(()=>{$('#q')&&$('#q').focus()},80)}else{window.scrollTo({top:0,behavior:'smooth'});$('#q').focus()}};
+$('#logoPaw').innerHTML=PAW;
 
 /* прелоадер */
 $('#preWord').innerHTML=[...'Хвостопедия'].map((c,i)=>`<span style="animation-delay:${i*45}ms">${c}</span>`).join('');
