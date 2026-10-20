@@ -486,7 +486,7 @@ const IDEAS = [
 ];
 
 const CHOICE = {
-  hard:{title:'Жёсткий выбор', color:'choco', ask:'Что выбираешь?', items:[
+  hard:{title:'Жёсткий выбор', color:'choco', ask:'Что выбираем?', items:[
     ['Я сяду в тюрьму на 3 года','Ты сядешь на 5 лет'],
     ['Ты изменишь 3 раза','Я изменю 1 раз'],
     ['Ни одного ребёнка','Пятеро детей'],
@@ -521,7 +521,7 @@ const CHOICE = {
     ['Никогда больше не путешествовать','Никогда больше не праздновать дни рождения'],
     ['Каждый твой лайк я вижу в уведомлениях','Каждый мой лайк ты видишь в уведомлениях']
   ]},
-  funny:{title:'Смешной выбор', color:'peach', ask:'Что выбираешь?', items:[
+  funny:{title:'Смешной выбор', color:'peach', ask:'Что выбираем?', items:[
     ['5 миллионов, но каждые 5 минут ты пукаешь','Остаться как есть, без денег'],
     ['Всю жизнь говорить в рифму','Всю жизнь петь вместо разговора'],
     ['Вместо рук щупальца','Вместо ног колёса'],
@@ -679,7 +679,7 @@ const GAMES = [
   {id:'oror',title:'Или-или',sub:'Выбираете хором на счёт три',big:'⇄',moods:['talk','fun','lazy'],color:'sage',run:gOrOr,
    rules:['Читаете пару, жмёте «на счёт три» и на «говорите!» одновременно называете свой вариант.','Отмечаете, совпало или нет. В конце смотрите процент совпадений.']},
   {id:'choice',title:'Сложный выбор',sub:'Тюрьма на 3 года или на 5? Миллионы, но пукать? Выбирайте и спорьте',big:'⚖',moods:['talk','fun'],color:'butter',run:gChoice,
-   rules:['Пять колод: жёсткий выбор, смешной выбор, «фу или норм», «кто из нас» и «красный флаг?».','По очереди нажимаете на свой вариант. Ответ первого прячется, пока не выберет второй. Потом видно, кто что выбрал и совпали ли вы.']},
+   rules:['Пять колод: жёсткий выбор, смешной выбор, «фу или норм», «кто из нас» и «красный флаг?».','Читаете вопрос, обсуждаете и вместе выбираете один общий ответ нажатием.']},
   {id:'truth',title:'Правда или действие',sub:'Мило или погорячее, решаете сами',big:'!',moods:['talk','fun'],color:'peach',run:gTruth,
    rules:['По очереди выбираете: честно ответить на вопрос или выполнить задание.','Режим «мило» для любого вечера, «погорячее» для вечера вдвоём.']},
   {id:'hundred',title:'100 к 1',sub:'Угадайте самые популярные ответы на тему',big:'%',moods:['fun','words','compete'],color:'olive',run:gHundred,
@@ -1101,8 +1101,8 @@ function gDots(g){
 
 /* --- сложный выбор --- */
 function gChoice(g){
-  let deck=store.get('chDeck','hard'), order=[], i=0, same=0, total=0, first=0, picks=[null,null];
-  const build=()=>{ order=shuffle(CHOICE[deck].items.slice()); i=0; same=0; total=0; picks=[null,null]; };
+  let deck=store.get('chDeck','hard'), order=[], i=0, pick=null, count=0;
+  const build=()=>{ order=shuffle(CHOICE[deck].items.slice()); i=0; pick=null; count=0; };
   build();
   const draw=()=>{
     if(i>=order.length){ order=shuffle(order); i=0; }
@@ -1111,31 +1111,25 @@ function gChoice(g){
                 isWho ? `<span>${dot(1)} ${nm(1)}</span>` : it.length===3 ? it[2] : it[1] ];
     const title = it.length===3 ? it[0] : '';
     const ask = isWho ? `${D.ask.replace('…','')} ${it[0]}?` : D.ask;
-    const done = picks[0]!==null && picks[1]!==null;
-    const now = done ? -1 : (picks[first]===null ? first : 1-first);
+    const done = pick!==null;
     const chips=`<div class="chips scroll">${Object.entries(CHOICE).map(([k,d])=>`<button class="chip ${deck===k?'on':''}" data-deck="${k}">${d.title}</button>`).join('')}</div>`;
-    const head=`<div class="status">совпадений: <b>${same} из ${total}</b>${total?` · ${Math.round(same/total*100)}%`:''}</div>`;
+    const head=`<div class="status">обсудили: <b>${count}</b></div>`;
     const q = `<div class="card c-${D.color}" style="min-height:0"><div class="meta"><span>${D.title}</span><span>${i+1} / ${order.length}</span></div>`+
       (isWho ? `<p class="txt">${ask}</p>` : title ? `<p class="txt">${title}</p><span style="font-size:15px;opacity:.75">${ask}</span>` : `<p class="txt" style="font-size:20px">${ask}</p>`)+`</div>`;
-    const marks=k=> done ? [0,1].filter(p=>picks[p]===k).map(p=>`<span class="who-pick">${dot(p)} ${nm(p)}</span>`).join('') : '';
-    const opts=`<div class="choice2">${[0,1].map(k=>`${k?'<div class="or">или</div>':''}<button class="opt ${done?(picks.includes(k)?'picked':'faded'):''}" data-pick="${k}" ${done?'disabled':''}><span>${opt[k]}</span>${marks(k)}</button>`).join('')}</div>`;
-    let foot;
-    if(!done) foot=`<p class="status">${dot(now)} выбирает <b>${nm(now)}</b>${picks[1-now]!==null?` · первый ответ спрятан`:''}</p>
-      <div class="row"><button class="btn soft" data-act="skip">другой вопрос</button></div>`;
-    else { const m=picks[0]===picks[1];
-      foot=`<p class="status"><b>${m?'Совпали!':'Не совпали.'}</b> ${m?'Вы на одной волне':'Самое время поспорить 🙂'}</p>
-      <div class="row"><button class="btn" data-act="next">следующий</button></div>`; }
+    const opts=`<div class="choice2">${[0,1].map(k=>`${k?'<div class="or">или</div>':''}<button class="opt ${done?(pick===k?'picked':'faded'):''}" data-pick="${k}" ${done?'disabled':''}><span>${opt[k]}</span>${done&&pick===k?'<span class="who-pick">наш выбор</span>':''}</button>`).join('')}</div>`;
+    const foot = !done
+      ? `<p class="status">Обсудите и нажмите на общий ответ</p><div class="row"><button class="btn soft" data-act="skip">другой вопрос</button></div>`
+      : `<div class="row"><button class="btn" data-act="next">следующий</button><button class="btn soft" data-act="undo">передумали</button></div>`;
     render(shell(g, chips+head+q+opts+foot), true);
   };
   app.onclick=e=>{
     const d=e.target.closest('[data-deck]'); if(d){ deck=d.dataset.deck; store.set('chDeck',deck); build(); draw(); return; }
     const p=e.target.closest('[data-pick]');
-    if(p && !p.disabled){ const who = picks[first]===null ? first : 1-first; picks[who]=+p.dataset.pick;
-      if(picks[0]!==null && picks[1]!==null){ total++; if(picks[0]===picks[1]) same++; }
-      draw(); return; }
+    if(p && !p.disabled){ pick=+p.dataset.pick; count++; draw(); return; }
     const a=e.target.closest('[data-act]'); if(!a) return;
-    if(a.dataset.act==='next'){ i++; first=1-first; picks=[null,null]; draw(); }
-    if(a.dataset.act==='skip'){ i++; picks=[null,null]; draw(); }
+    if(a.dataset.act==='next'){ i++; pick=null; draw(); }
+    if(a.dataset.act==='skip'){ i++; pick=null; draw(); }
+    if(a.dataset.act==='undo'){ pick=null; count--; draw(); }
   };
   draw();
 }
