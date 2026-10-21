@@ -281,6 +281,7 @@ header nav a.on{background:var(--milk);color:var(--ink)}
 
 
 /* ---------- плашка создательниц у названия ---------- */
+.dog-m,.made-m{display:none}
 .t-row{display:flex;align-items:center;justify-content:space-between;gap:clamp(12px,2vw,28px)}
 .made{flex:none;margin-right:6px;background:var(--paper);border-radius:22px 22px 22px 6px;padding:14px 16px 16px;display:flex;flex-direction:column;gap:8px;transform:rotate(-4deg) translateY(-6%);box-shadow:0 16px 30px -18px rgba(43,30,23,.45);transition:transform .35s;position:relative;z-index:4}
 .made:hover{transform:rotate(0) translateY(-8%)}
@@ -297,6 +298,7 @@ header nav a.on{background:var(--milk);color:var(--ink)}
 .us-h{padding:clamp(24px,3vw,40px);display:flex;flex-direction:column;justify-content:space-between;gap:16px;max-width:380px}
 .us-card{background:var(--paper);border-radius:30px;padding:clamp(20px,2.4vw,30px);display:flex;flex-direction:column;gap:10px;transition:transform .35s}
 .us-card:hover{transform:translateY(-4px)}
+.us-card .usph{width:84px;height:84px;border-radius:22px 22px 22px 40px;object-fit:cover}
 .us-card .ic{width:52px;height:52px;border-radius:16px 16px 16px 26px;display:grid;place-items:center}
 .us-card .ic svg{width:26px;height:26px;fill:var(--paper)}
 .us-card h3{font:500 clamp(22px,2vw,28px)/1.1 var(--serif);margin-top:6px}
@@ -494,6 +496,25 @@ footer{background:var(--caramel);color:var(--ink);border-radius:var(--r);padding
   .after h3,.after p{max-width:none}
   .after img{display:none}
 }
+
+@media (max-width:760px){
+  .h-top .made{display:none}
+  .h-top{padding-bottom:0}
+  .h-right{overflow:hidden!important;padding:16px!important;display:flex!important;align-items:flex-end!important;justify-content:flex-start!important;min-height:200px}
+  .h-right .dogbox{display:none}
+  .dog-m{display:block;position:absolute;right:0;top:0;bottom:0;width:84%;overflow:hidden;border-radius:0 0 var(--r) 0;pointer-events:none}
+  .dog-m img{position:absolute;top:0;left:0;width:100%;filter:drop-shadow(0 16px 20px rgba(43,30,23,.25))}
+  .made-m{display:flex;flex-direction:column;align-items:flex-start;transform:rotate(-3deg);position:relative;z-index:3;padding:12px 14px 14px;gap:7px;border-radius:20px 20px 20px 6px}
+  .made-m .lbl{width:auto;font-size:10.5px}
+  .made-m a{font-size:14px;color:var(--ink)}
+  .made-m a i{width:24px;height:24px}
+}
+@media (max-width:760px) and (max-height:720px){
+  .dog-m{width:60%}
+  .chips{display:none}
+  .stats span{font-size:10.5px}
+}
+@media (max-width:400px){header nav a{padding:8px 9px}.logo{font-size:16px;margin-right:4px}.nav-search{width:34px;height:34px}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.rv{opacity:1;transform:none}}
 </style>
 </head>
@@ -542,7 +563,7 @@ const GRID=SECTIONS.filter(s=>s[0]!=='vstuplenie');
 const ICON=Object.fromEntries(SECTIONS.map(s=>[s[0],s[2]]));
 const ICBG=['var(--blush)','var(--sage2)','var(--caramel2)'];
 const SEC=Object.fromEntries(SECTIONS.map(s=>[s[0],s[1]]));
-const POS={"adaptaciya":"50% 60%","rol-v-seme":"50% 35%","vospitanie":"50% 45%","sobaka-i-rebenok":"50% 50%","obrabotki":"50% 40%","separaciya":"50% 70%"};
+const POS={"adaptaciya":"50% 22%","rol-v-seme":"50% 35%","vospitanie":"50% 45%","sobaka-i-rebenok":"50% 50%","obrabotki":"50% 40%","separaciya":"50% 70%"};
 const KIND=Object.fromEntries(SECTIONS.map(s=>[s[0],{k:s[3],bg:s[4],img:s[5]||s[0]}]));
 const DARKBG=['#4A3328','var(--sage)','var(--caramel)'];
 /* картинка раздела: фото целиком, вырезанная собака на цветном фоне или только цвет с лапкой */
@@ -576,7 +597,7 @@ const AUTHORS={
 };
 
 const MATERIALS=[
- {id:'chto-takoe-sobaka',sec:'vstuplenie',author:'noskova',type:'Статья',
+ {id:'chto-takoe-sobaka',sec:'vstuplenie',author:'noskova',type:'Статья',img:'img/m/evolyuciya.webp',
   title:'Что такое собака с точки зрения эволюции?',
   lead:'Мы привыкли воспринимать собаку как домашнего питомца, но с биологической точки зрения всё гораздо интереснее.',
   html:`<p>Собака (<i>Canis lupus familiaris</i>) — одомашненный представитель семейства псовых, прошедший длительный эволюционный путь рядом с человеком.</p>
@@ -590,7 +611,7 @@ const MATERIALS=[
 <p>Поэтому собака — не просто прирученный волк и не животное, поведение которого полностью определяется воспитанием.</p>
 <p>Это результат длительной эволюции, в которой взаимодействовали естественный отбор, адаптация к жизни рядом с человеком и искусственная селекция.</p>
 <p>И понимание этой эволюционной истории — одна из основ грамотной работы с поведением и благополучием собак.</p>`},
- {id:'rol-sobaki-v-seme',sec:'vstuplenie',author:'noskova',type:'Статья',
+ {id:'rol-sobaki-v-seme',sec:'vstuplenie',author:'noskova',type:'Статья',img:'img/m/rol.webp',
   title:'Роль собаки в семье человека',
   lead:'Сегодня собака для многих из нас — полноценный член семьи. Но какую роль она играет с точки зрения психологии и науки?',
   html:`<p>Отношения между человеком и собакой давно вышли за рамки исключительно практического взаимодействия. Сегодня мы говорим о межвидовой привязанности, эмоциональной поддержке и социальной связи.</p>
@@ -603,11 +624,11 @@ const MATERIALS=[
 <p>И здесь мне хочется подчеркнуть одну мысль.</p>
 <blockquote>Собака — не инструмент для удовлетворения эмоциональных потребностей человека. Это живое существо с собственными потребностями, эмоциями и границами.</blockquote>
 <p>Поэтому здоровые отношения между человеком и собакой — это не только про то, сколько радости собака приносит нам, но и про то, насколько благополучно она чувствует себя рядом с нами. 🤎</p>`},
- {id:'pamyatka-priemnoy-semi',sec:'adaptaciya',author:'antipina',type:'Памятка',
+ {id:'pamyatka-priemnoy-semi',sec:'adaptaciya',author:'antipina',type:'Памятка',img:'img/m/pamyatka.webp',
   title:'Памятка приёмной семьи',
   lead:'Если вы планируете подарить собаке новый дом, эта памятка для вас: как помочь собаке пережить время адаптации как можно легче.',
   pdf:'pdf/pamyatka-priemnoy-semi.pdf',html:''},
- {id:'pervoe-vremya-s-sobakoy',sec:'adaptaciya',author:'shmakova',type:'Пособие',
+ {id:'pervoe-vremya-s-sobakoy',sec:'adaptaciya',author:'shmakova',type:'Пособие',img:'img/m/pervoe-vremya.webp',
   title:'Первое время с собакой',
   lead:'<em>«Я не думал(а), что это будет так сложно!»</em> Руководство по восстановлению психоэмоционального состояния владельца.',
   pdf:'pdf/shmakova-pervoe-vremya.pdf',blocks:SHMAKOVA},
@@ -696,7 +717,7 @@ function authorCard(id,mode){
 function matRow(m){
   const a=AUTHORS[m.author];
   const ava=a.photo?`<img class="ava" src="${a.photo}" alt="">`:`<span class="ava">${a.name[0]}</span>`;
-  return `<a class="mat rv" href="#/m/${m.id}"><span class="thumb">${media(m.sec)}</span><div><span class="tag">${SEC[m.sec]} · ${m.type.toLowerCase()}</span><h3>${m.title}</h3><div class="sub">${m.lead}</div><div class="who">${ava}<span>${a.short} · ${minutes(m)} мин</span></div></div><span class="btn">Читать <span class="ar">${ARR}</span></span></a>`;
+  return `<a class="mat rv" href="#/m/${m.id}"><span class="thumb"><span class="med"><img src="${m.img}" alt="" loading="lazy"></span></span><div><span class="tag">${SEC[m.sec]} · ${m.type.toLowerCase()}</span><h3>${m.title}</h3><div class="sub">${m.lead}</div><div class="who">${ava}<span>${a.short} · ${minutes(m)} мин</span></div></div><span class="btn">Читать <span class="ar">${ARR}</span></span></a>`;
 }
 function cards(){
   return GRID.map(([id,t,ic,kind],i)=>{const n=bySec(id).length,num=String(i+1).padStart(2,'0');
@@ -748,6 +769,11 @@ function home(){
       </div>
       <div class="pan h-right">
         <div class="dogbox"><img src="img/dog.webp" alt=""><span class="bubble">а почему он так делает?</span></div>
+        <div class="dog-m"><img src="img/dog.webp" alt=""></div>
+        <div class="made made-m"><span class="lbl">придумали и&nbsp;собрали</span>
+          <a href="https://instagram.com/mom_chiwawa" target="_blank" rel="noopener"><i style="background:var(--caramel)">${PAW}</i>@mom_chiwawa</a>
+          <a href="https://instagram.com/lesya.frame" target="_blank" rel="noopener"><i style="background:var(--sage)">${PAW}</i>@lesya.frame</a>
+        </div>
       </div>
     </div>
   </section>
@@ -782,8 +808,8 @@ function home(){
   <section class="pan blk" style="background:var(--blush);padding-top:clamp(22px,3vw,40px);padding-bottom:clamp(22px,3vw,40px)">
     <div class="us">
       <div class="us-h rv"><div class="lbl" style="color:var(--caramel)">О&nbsp;нас</div><h2 class="h2" style="font-size:clamp(30px,3.4vw,48px)">Хвостопедию придумали и&nbsp;собрали</h2></div>
-      <div class="us-card rv"><span class="ic" style="background:var(--caramel)">${PAW}</span><h3>Мира</h3><p>Мама двух чихуахуа, Чарли и&nbsp;Ричи. Создала сообщество «ЧИХУАХУА РФ»</p><a class="btn sm" href="https://instagram.com/mom_chiwawa" target="_blank" rel="noopener">@mom_chiwawa <span class="ar">${ARR}</span></a></div>
-      <div class="us-card rv"><span class="ic" style="background:var(--sage)">${PAW}</span><h3>Леся</h3><p>Веб-дизайнер, сделала этот сайт. Хозяйка Рэма, учится на&nbsp;зоопсихолога</p><a class="btn sm soft" href="https://instagram.com/lesya.frame" target="_blank" rel="noopener">@lesya.frame <span class="ar">${ARR}</span></a></div>
+      <div class="us-card rv"><img class="usph" src="img/mira.jpg" alt="Мира"><h3>Мира</h3><p>Мама двух чихуахуа, Чарли и&nbsp;Ричи. Создала сообщество «ЧИХУАХУА РФ»</p><a class="btn sm" href="https://instagram.com/mom_chiwawa" target="_blank" rel="noopener">@mom_chiwawa <span class="ar">${ARR}</span></a></div>
+      <div class="us-card rv"><img class="usph" src="img/lesya.jpg" alt="Леся"><h3>Леся</h3><p>Дизайнер-разработчик, сделала этот сайт. Хозяйка Рэма, учится на&nbsp;зоопсихолога</p><a class="btn sm soft" href="https://instagram.com/lesya.frame" target="_blank" rel="noopener">@lesya.frame <span class="ar">${ARR}</span></a></div>
     </div>
   </section>
   ${footer()}`;
@@ -838,12 +864,12 @@ function articlePage(id){
       <h1>${m.title}</h1><p class="lead">${m.lead}</p>
       <div class="facts"><span>${m.type}</span><span>${minutes(m)} мин чтения</span><span>${SEC[m.sec]}</span></div>
       <div class="btns" style="margin-top:26px"><a class="btn car" href="#read" data-to="read">Читать <span class="ar">${ARR}</span></a>${m.pdf?`<a class="btn soft" href="${m.pdf}" download>Скачать PDF</a>`:''}</div></div>
-    <div class="art-right"><div class="art-img">${media(m.sec)}</div>${authorCard(m.author,'byline')}</div>
+    <div class="art-right"><div class="art-img"><span class="med"><img src="${m.img}" alt=""></span></div>${authorCard(m.author,'byline')}</div>
   </section>
   <section class="pan paper art-wrap ${body.toc.length<2?'notoc':''}" id="read">
     ${body.toc.length<2?'':`<aside class="toc" id="toc"><b class="lbl">Содержание</b>${toc}</aside>`}
     <article class="text">${body.html}
-      <div class="after"><img src="img/dog.webp" alt=""><h3>${a.empty?'Понравился материал?':'Хотите разобраться глубже?'}</h3><p>${a.empty?'Скачайте его целиком, чтобы вернуться в трудный момент':'Переходите к автору: консультации и полезное в соцсетях'}</p><div class="btns">${contact}${m.pdf?`<a class="btn ${a.empty?'':'soft'}" href="${m.pdf}" download>Скачать PDF</a>`:''}${more.map(x=>`<a class="btn soft" href="#/m/${x.id}">${x.title} ${ARR}</a>`).join('')}</div></div>
+      <div class="after"><h3>${a.empty?'Понравился материал?':'Хотите разобраться глубже?'}</h3><p>${a.empty?'Скачайте его целиком, чтобы вернуться в трудный момент':'Переходите к автору: консультации и полезное в соцсетях'}</p><div class="btns">${contact}${m.pdf?`<a class="btn ${a.empty?'':'soft'}" href="${m.pdf}" download>Скачать PDF</a>`:''}${more.map(x=>`<a class="btn soft" href="#/m/${x.id}">${x.title} ${ARR}</a>`).join('')}</div></div>
     </article>
   </section>${footer()}`;
 }
