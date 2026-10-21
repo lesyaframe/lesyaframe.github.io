@@ -1,0 +1,320 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Хвостопедия: план продвижения</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,400..700;1,7..72,400..600&family=Onest:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* Layout: тёмная рамка, на ней скруглённые панели, как на сайте Хвостопедии. Один осознанный вид, без тёмной темы */
+:root{
+  --frame:#2B1E17; --milk:#F6EFE3; --paper:#FFFAF2; --ink:#2F211A; --ink2:#6B5A4E; --line:#E4D8C6;
+  --caramel:#C2763D; --caramel2:#E7B48A; --sage:#7E8762; --sage2:#DDE0CC; --blush:#F0D7C3;
+  --serif:"Literata",Georgia,"Times New Roman",serif; --sans:"Onest",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --r:30px; --gap:10px;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+body{background:var(--frame);color:var(--ink);font:400 16.5px/1.6 var(--sans);margin:0}
+.wrap{max-width:1180px;margin:0 auto;padding-block:var(--gap) 40px;padding-left:max(10px,env(safe-area-inset-left,0px));padding-right:max(10px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:var(--gap)}
+.pan{background:var(--milk);border-radius:var(--r);padding:clamp(22px,4vw,52px) clamp(18px,4vw,52px)}
+.pan.paper{background:var(--paper)}
+.pan.sage{background:var(--sage2)}
+.pan.blush{background:var(--blush)}
+.pan.car{background:var(--caramel);color:var(--paper)}
+h1,h2,h3{font-family:var(--serif);font-weight:500;letter-spacing:-.02em;text-wrap:balance;margin:0}
+h1{font-size:clamp(40px,7vw,92px);line-height:.98;letter-spacing:-.035em}
+h2{font-size:clamp(30px,4vw,52px);line-height:1.05}
+h3{font-size:clamp(20px,2vw,25px);line-height:1.2}
+p{margin:0;text-wrap:pretty}
+.lbl{font:500 12px/1.2 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--caramel)}
+.car .lbl{color:var(--paper);opacity:.85}
+.pill{display:inline-block;padding:0 .3em .05em;border-radius:99px;background:var(--blush);line-height:1.1}
+.pill.sg{background:var(--sage2)}
+.pill.cr{background:var(--caramel);color:var(--paper)}
+.muted{color:var(--ink2)}
+.stack{display:flex;flex-direction:column;gap:14px}
+.head{display:flex;flex-direction:column;gap:14px;margin-bottom:clamp(20px,3vw,34px);max-width:820px}
+.head p{font-size:17.5px;color:var(--ink2)}
+.car .head p{color:var(--paper);opacity:.9}
+
+/* hero */
+.hero{display:grid;grid-template-columns:1.4fr 1fr;gap:clamp(20px,4vw,48px);align-items:end}
+.hero .lead{font:400 clamp(18px,1.7vw,22px)/1.45 var(--serif);margin-top:20px;color:var(--ink2)}
+.rule{background:var(--paper);border-radius:24px 24px 24px 6px;padding:22px 24px;transform:rotate(-1.5deg);box-shadow:0 18px 34px -22px rgba(43,30,23,.55)}
+.rule b{display:block;font:500 20px/1.25 var(--serif);margin:8px 0 8px}
+.rule p{font-size:15px;color:var(--ink2)}
+
+/* сетки */
+.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--gap)}
+.g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--gap)}
+.card{background:var(--paper);border-radius:24px;padding:22px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.milk .card,.pan:not(.paper) .card{background:var(--paper)}
+.paper .card{background:var(--milk)}
+.card .tag{align-self:flex-start;font-size:12.5px;padding:5px 11px;border-radius:99px;background:var(--sage2)}
+.card .tag.c{background:var(--caramel);color:var(--paper)}
+.card .tag.b{background:var(--blush)}
+.card p{font-size:15.5px;color:var(--ink2)}
+.card ul{margin:0;padding-left:18px;font-size:15.5px;color:var(--ink2);display:flex;flex-direction:column;gap:6px}
+.card li::marker{color:var(--caramel)}
+
+/* этапы */
+.phase{display:grid;grid-template-columns:220px minmax(0,1fr);gap:clamp(16px,3vw,40px);padding:clamp(20px,3vw,32px) 0;border-top:1px solid var(--line)}
+.phase:first-of-type{border-top:0;padding-top:0}
+.ph-when{display:flex;flex-direction:column;gap:8px}
+.ph-when .big{font:500 clamp(34px,4vw,50px)/1 var(--serif);color:var(--caramel);letter-spacing:-.03em}
+.ph-when .goal{font-size:15px;color:var(--ink2)}
+.ph-body{display:flex;flex-direction:column;gap:var(--gap);min-width:0}
+.reel{background:var(--paper);border-radius:22px;padding:18px 20px;display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 14px;align-items:start}
+.reel .who{grid-row:span 3;width:42px;height:42px;border-radius:13px 13px 13px 22px;display:grid;place-items:center;font:600 15px/1 var(--serif);color:var(--paper)}
+.who.m{background:var(--caramel)} .who.l{background:var(--sage)} .who.x{background:var(--ink)}
+.reel b{font:500 18px/1.3 var(--serif)}
+.reel .hook{font-size:15px;color:var(--ink)}
+.reel .hook i{color:var(--caramel);font-style:normal;font-weight:500}
+.reel .why{font-size:14px;color:var(--ink2)}
+.tg{background:var(--sage2);border-radius:22px;padding:16px 20px;font-size:15px}
+.tg strong{font-weight:600}
+.legend{display:flex;flex-wrap:wrap;gap:8px 18px;font-size:14px;color:var(--ink2);margin-top:-10px;margin-bottom:24px}
+.legend span{display:inline-flex;align-items:center;gap:8px}
+.legend i{width:18px;height:18px;border-radius:6px 6px 6px 9px;display:inline-block}
+
+/* схема пути */
+.path{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:var(--gap);counter-reset:s}
+.step{background:var(--paper);border-radius:22px;padding:20px;position:relative;min-width:0}
+.step .n{font:500 13px/1 var(--sans);color:var(--caramel);margin-bottom:10px;display:block}
+.step b{display:block;font:500 18px/1.25 var(--serif);margin-bottom:6px}
+.step p{font-size:14.5px;color:var(--ink2)}
+
+/* таблица */
+.tbl-wrap{overflow-x:auto;border-radius:22px;background:var(--paper)}
+table{border-collapse:collapse;width:100%;min-width:720px;font-size:14.5px}
+th,td{text-align:left;padding:13px 16px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font:500 12px/1.2 var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--ink2);background:var(--milk)}
+tr:last-child td{border-bottom:0}
+td:first-child{font-weight:600;white-space:nowrap;color:var(--caramel)}
+
+/* не делаем */
+.dont{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 28px;margin:0;padding:0;list-style:none}
+.dont li{display:flex;gap:12px;font-size:16px}
+.dont li::before{content:"×";flex:none;width:26px;height:26px;border-radius:50%;background:rgba(255,250,242,.2);display:grid;place-items:center;font-weight:600}
+
+.note{font-size:14px;color:var(--ink2);border-left:3px solid var(--caramel2);padding-left:14px}
+footer{color:#BFAE9F;font-size:13.5px;text-align:center;padding:14px}
+
+@media (max-width:900px){
+  .hero,.g2,.g3,.path{grid-template-columns:1fr}
+  .phase{grid-template-columns:1fr}
+  .dont{grid-template-columns:1fr}
+}
+@media (max-width:600px){
+  :root{--r:24px}
+  .reel{grid-template-columns:1fr}
+  .reel .who{grid-row:auto}
+}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <section class="pan">
+    <div class="hero">
+      <div>
+        <div class="lbl">Хвостопедия · план продвижения</div>
+        <h1 style="margin-top:16px">Как рассказать о&nbsp;<span class="pill">Хвостопедии</span> вдвоём</h1>
+        <p class="lead">Стратегия для телеграм-канала и&nbsp;двух личных инстаграмов: что снимать до&nbsp;запуска, в&nbsp;день запуска и&nbsp;после, чтобы люди приходили на&nbsp;сайт и&nbsp;оставались.</p>
+      </div>
+      <div class="rule">
+        <span class="lbl">Главное правило</span>
+        <b>Никаких условий «подпишись на&nbsp;нас обеих».</b>
+        <p>Ссылку на&nbsp;сайт получает любой, кто попросил. Мы растим не&nbsp;друг друга, а&nbsp;общий проект. Личные инстаграмы растут сами, потому что людям интересны те, кто это сделал.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="pan paper">
+    <div class="head">
+      <div class="lbl">Как быть, если нас двое</div>
+      <h2>Одна точка входа <span class="pill sg">для всех</span></h2>
+      <p>Каждая из&nbsp;нас ведёт людей не&nbsp;к&nbsp;себе и&nbsp;не&nbsp;к&nbsp;подруге, а&nbsp;в&nbsp;Хвостопедию. Сайт и&nbsp;общий телеграм-канал становятся «домом», а&nbsp;наши аккаунты дверьми в&nbsp;него.</p>
+    </div>
+    <div class="path">
+      <div class="step"><span class="n">шаг 1</span><b>Рилс у&nbsp;Миры или у&nbsp;Леси</b><p>Или совместный, через функцию «соавторство»: один ролик сразу в&nbsp;двух лентах.</p></div>
+      <div class="step"><span class="n">шаг 2</span><b>Комментарий со&nbsp;словом</b><p>«Напишите ХВОСТ, пришлю ссылку». Без проверки подписки.</p></div>
+      <div class="step"><span class="n">шаг 3</span><b>В&nbsp;директ: сайт и&nbsp;подарок</b><p>Ссылка на&nbsp;Хвостопедию и&nbsp;чек-лист. Отвечает та, у&nbsp;кого оставили комментарий.</p></div>
+      <div class="step"><span class="n">шаг 4</span><b>Телеграм-канал как бонус</b><p>«Новые статьи сначала появляются тут». Приглашение, не&nbsp;условие.</p></div>
+    </div>
+    <div class="g3" style="margin-top:var(--gap)">
+      <div class="card"><span class="tag c">соавторство</span><h3>Общие рилсы через коллаб</h3><p>Инстаграм показывает ролик подписчикам обеих, просмотры и&nbsp;лайки общие. Это и&nbsp;есть честное «знакомство аудиторий» без принуждения.</p></div>
+      <div class="card"><span class="tag">роли</span><h3>У&nbsp;каждой свой голос</h3><p><b>Мира</b>: владелица двух чихуахуа и&nbsp;создательница сообщества «ЧИХУАХУА РФ», голос хозяйки, которой нужны ответы.<br><b>Леся</b>: как собирается сайт, дизайн, Рэм и&nbsp;учёба на&nbsp;зоопсихолога.</p></div>
+      <div class="card"><span class="tag b">везде</span><h3>Сайт в&nbsp;шапке у&nbsp;обеих</h3><p>Ссылка на&nbsp;Хвостопедию в&nbsp;профиле и&nbsp;в&nbsp;закреплённых сторис «Хвостопедия». Кто не&nbsp;любит писать комментарии, найдёт сам.</p></div>
+    </div>
+  </section>
+
+  <section class="pan">
+    <div class="head">
+      <div class="lbl">Подарок за&nbsp;комментарий</div>
+      <h2>Лид-магниты <span class="pill">из&nbsp;того, что уже есть</span></h2>
+      <p>Короткая полезная вещь, которую хочется сохранить. Делаем на&nbsp;основе материалов авторов и&nbsp;только с&nbsp;их&nbsp;согласия, с&nbsp;подписью и&nbsp;ссылкой на&nbsp;автора. Оформляем в&nbsp;стиле сайта.</p>
+    </div>
+    <div class="g2">
+      <div class="card"><span class="tag c">к&nbsp;запуску</span><h3>Чек-лист «Первая неделя с&nbsp;собакой дома»</h3><p>По&nbsp;памятке приёмной семьи: место для отдыха, режим, без принуждения к&nbsp;контакту, нормы сна, признаки стресса. Одна страница, удобно держать в&nbsp;телефоне.</p></div>
+      <div class="card"><span class="tag c">к&nbsp;запуску</span><h3>«Мне тяжело с&nbsp;собакой, и&nbsp;это нормально»</h3><p>Карточка-поддержка по&nbsp;пособию Екатерины Шмаковой: техника «стоп-кран», ритуал пяти минут, правило трёх этапов. Для тех, кто в&nbsp;щенячьей депрессии.</p></div>
+      <div class="card"><span class="tag">позже</span><h3>Шпаргалка «Сигналы стресса у&nbsp;собаки»</h3><p>Зевание, облизывание носа, натянутые уголки губ, частое дыхание. С&nbsp;фото или иллюстрациями.</p></div>
+      <div class="card"><span class="tag">когда появятся разделы</span><h3>Список «Аптечка для собаки»</h3><p>Как только в&nbsp;разделе «Аптечка» появится материал специалиста. Такие списки сохраняют лучше всего.</p></div>
+    </div>
+    <p class="note" style="margin-top:20px">Слово для комментариев одно на&nbsp;всё: <b>ХВОСТ</b>. Его легко запомнить, и&nbsp;оно не&nbsp;путается между аккаунтами. Отвечать в&nbsp;директ можно вручную, а&nbsp;когда комментариев станет много, подключить сервис автоответов.</p>
+  </section>
+
+  <section class="pan paper">
+    <div class="head">
+      <div class="lbl">По&nbsp;этапам</div>
+      <h2>Что снимать <span class="pill">до, во&nbsp;время</span> и&nbsp;после запуска</h2>
+    </div>
+    <div class="legend">
+      <span><i style="background:var(--caramel)"></i>Мира</span>
+      <span><i style="background:var(--sage)"></i>Леся</span>
+      <span><i style="background:var(--ink)"></i>вместе, коллаб</span>
+      <span><i style="background:var(--sage2)"></i>телеграм-канал</span>
+    </div>
+
+    <div class="phase">
+      <div class="ph-when"><span class="lbl">за&nbsp;2–3 недели</span><span class="big">Готовимся</span><p class="goal">Цель: чтобы в&nbsp;день запуска всё уже работало и&nbsp;было куда вести людей.</p></div>
+      <div class="ph-body">
+        <div class="tg"><strong>Телеграм:</strong> создаём канал «Хвостопедия», ставим аватар и&nbsp;описание, публикуем 3–4 поста заранее (о&nbsp;проекте, о&nbsp;нас, первый автор, анонс). Пустой канал не&nbsp;вызывает доверия.</div>
+        <div class="card" style="background:var(--milk)"><ul>
+          <li>Согласовать с&nbsp;авторами чек-листы и&nbsp;то, что мы&nbsp;упоминаем их&nbsp;в&nbsp;соцсетях.</li>
+          <li>Сделать закреплённые сторис «Хвостопедия» у&nbsp;обеих.</li>
+          <li>Подготовить шаблон сторис для авторов «Мой материал теперь в&nbsp;Хвостопедии».</li>
+          <li>Договориться о&nbsp;дате запуска и&nbsp;снять 2–3 рилса впрок.</li>
+        </ul></div>
+      </div>
+    </div>
+
+    <div class="phase">
+      <div class="ph-when"><span class="lbl">за&nbsp;2 недели до&nbsp;дня&nbsp;0</span><span class="big">Прогрев</span><p class="goal">Цель: люди узнают, что скоро появится что-то полезное, и&nbsp;ждут. Ссылки ещё нет, поэтому зовём в&nbsp;телеграм-канал.</p></div>
+      <div class="ph-body">
+        <div class="reel"><span class="who m">М</span><b>«Сколько раз я&nbsp;гуглила про своих чихуахуа»</b><span class="hook">Хук: <i>«Сколько я&nbsp;перечитала противоречивых советов про своих собак. Поэтому мы&nbsp;делаем Хвостопедию»</i></span><span class="why">Личная боль, из&nbsp;которой родился проект. Призыв: «Кто тоже путается в&nbsp;советах, ставьте 🐾, расскажу первой, когда откроемся».</span></div>
+        <div class="reel"><span class="who l">Л</span><b>Закулисье: собираю сайт для собачников</b><span class="hook">Хук: <i>«Мне написали: давай сделаем сайт, где ответы на&nbsp;все вопросы о&nbsp;собаках. Показываю, что получается»</i></span><span class="why">Экран ноутбука, первый экран сайта, пёс с&nbsp;пузырём «а почему он&nbsp;так делает?». Процесс смотрят до&nbsp;конца.</span></div>
+        <div class="reel"><span class="who m">М</span><b>Опрос-рилс «Какой вопрос о&nbsp;собаке вас мучает?»</b><span class="hook">Хук: <i>«Напишите в&nbsp;комментариях один вопрос, на&nbsp;который вы&nbsp;так и&nbsp;не&nbsp;нашли ответ»</i></span><span class="why">Собираем темы для разделов и&nbsp;вовлечённость. Ответы потом превращаем в&nbsp;контент.</span></div>
+        <div class="reel"><span class="who l">Л</span><b>Рэм как подопытный зритель</b><span class="hook">Хук: <i>«Показываю Рэму сайт про собак. Реакция: …»</i></span><span class="why">Лёгкий смешной ролик, растит охват. В&nbsp;конце: «Запуск скоро, подробности в&nbsp;телеграме Хвостопедии».</span></div>
+        <div class="reel"><span class="who x">♥</span><b>Коллаб «Знакомьтесь: кто за&nbsp;этим стоит»</b><span class="hook">Хук: <i>«Владелица двух чихуахуа и&nbsp;дизайнер с&nbsp;псом Рэмом решили сделать бесплатную базу знаний о&nbsp;собаках»</i></span><span class="why">Знакомит аудитории без условий. Выкладываем в&nbsp;соавторстве за&nbsp;3–5 дней до&nbsp;запуска.</span></div>
+        <div class="tg"><strong>Телеграм:</strong> посты «знакомьтесь, первый автор» (по&nbsp;одному на&nbsp;специалиста), голосование «какой раздел ждёте больше всего», кусочек цитаты из&nbsp;статьи Дарьи Носковой, обратный отсчёт.</div>
+      </div>
+    </div>
+
+    <div class="phase">
+      <div class="ph-when"><span class="lbl">день 0 — день 3</span><span class="big">Запуск</span><p class="goal">Цель: максимум переходов на&nbsp;сайт за&nbsp;первые дни. Тут работает лид-магнит.</p></div>
+      <div class="ph-body">
+        <div class="reel"><span class="who x">♥</span><b>Коллаб «Хвостопедия открылась»</b><span class="hook">Хук: <i>«Мы&nbsp;собрали в&nbsp;одном месте статьи кинологов и&nbsp;зоопсихологов. Бесплатно. Напишите ХВОСТ, пришлём ссылку и&nbsp;чек-лист первой недели с&nbsp;собакой»</i></span><span class="why">Главный ролик запуска. Быстрый показ сайта на&nbsp;телефоне: разделы, статья, карточка автора.</span></div>
+        <div class="reel"><span class="who m">М</span><b>«Вопрос, который я&nbsp;задавала себе с&nbsp;первой собакой»</b><span class="hook">Хук: <i>«Почему собака из&nbsp;приюта первые дни идеальная, а&nbsp;потом её&nbsp;как подменили?»</i></span><span class="why">Ответ коротко по&nbsp;материалам об&nbsp;адаптации и&nbsp;«подробнее в&nbsp;Хвостопедии, пишите ХВОСТ».</span></div>
+        <div class="reel"><span class="who l">Л</span><b>«Я&nbsp;сделала этот сайт. Вот что внутри»</b><span class="hook">Хук: <i>«Пролистайте со&nbsp;мной сайт, который я&nbsp;собирала сама»</i></span><span class="why">Запись экрана телефона под голос. Работает и&nbsp;как кейс для твоего портфолио.</span></div>
+        <div class="tg"><strong>Телеграм:</strong> пост-открытие со&nbsp;ссылкой, закреп; на&nbsp;следующий день «с&nbsp;чего начать», через день первая рубрика. <strong>Авторы</strong> выкладывают сторис по&nbsp;шаблону с&nbsp;отметкой Хвостопедии.</div>
+      </div>
+    </div>
+
+    <div class="phase">
+      <div class="ph-when"><span class="lbl">недели 1–6</span><span class="big">После</span><p class="goal">Цель: чтобы к&nbsp;сайту возвращались, а&nbsp;канал рос сам за&nbsp;счёт авторов.</p></div>
+      <div class="ph-body">
+        <div class="reel"><span class="who m">М</span><b>Рубрика «Мои чихуахуа и&nbsp;одна статья»</b><span class="hook">Хук: <i>«Прочитала в&nbsp;Хвостопедии про … и&nbsp;проверила на&nbsp;Чарли и&nbsp;Ричи»</i></span><span class="why">Раз в&nbsp;неделю. Живой опыт хозяйки + ссылка на&nbsp;материал. Самый «продающий» формат для базы знаний.</span></div>
+        <div class="reel"><span class="who l">Л</span><b>Рубрика «Учусь на&nbsp;зоопсихолога: разбираю статью»</b><span class="hook">Хук: <i>«На&nbsp;курсе нам сказали…, а&nbsp;в&nbsp;Хвостопедии эксперт пишет…»</i></span><span class="why">Твоя экспертность растёт, проект получает трафик. Раз в&nbsp;1–2 недели.</span></div>
+        <div class="reel"><span class="who x">♥</span><b>Коллаб «Миф или правда»</b><span class="hook">Хук: <i>«Собака делает это назло. Миф или правда?»</i></span><span class="why">Короткие ответы с&nbsp;опорой на&nbsp;статьи авторов. Хорошо собирает комментарии и&nbsp;сохранения.</span></div>
+        <div class="reel"><span class="who x">♥</span><b>Эксперт в&nbsp;гостях</b><span class="hook">Хук: <i>«Задали специалисту по&nbsp;поведению 3&nbsp;вопроса, которые вы&nbsp;присылали»</i></span><span class="why">Коллаб с&nbsp;автором: его аудитория узнаёт о&nbsp;Хвостопедии, наша о&nbsp;нём. Так проект выполняет обещание экспертам.</span></div>
+        <div class="tg"><strong>Телеграм:</strong> 3–4 поста в&nbsp;неделю по&nbsp;сетке ниже. Каждый новый материал на&nbsp;сайте появляется в&nbsp;канале первым.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="pan sage">
+    <div class="head">
+      <div class="lbl" style="color:var(--sage)">Телеграм-канал</div>
+      <h2>Канал как <span class="pill" style="background:var(--paper)">новости базы знаний</span></h2>
+      <p>Не&nbsp;блог одной из&nbsp;нас, а&nbsp;голос проекта. Коротко, по&nbsp;делу, с&nbsp;ссылкой на&nbsp;сайт почти в&nbsp;каждом посте. Пишем от&nbsp;«мы».</p>
+    </div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>День</th><th>Рубрика</th><th>Что внутри</th><th>Зачем</th></tr></thead>
+        <tbody>
+          <tr><td>Пн</td><td>Новое в&nbsp;Хвостопедии</td><td>Свежий материал: 3–4 строки сути, кто автор, ссылка</td><td>Переходы на&nbsp;сайт</td></tr>
+          <tr><td>Ср</td><td>Вопрос читателя</td><td>Вопрос из&nbsp;комментариев или директа + короткий ответ по&nbsp;статье</td><td>Люди видят, что их&nbsp;слышат</td></tr>
+          <tr><td>Пт</td><td>Эксперт недели</td><td>Знакомство с&nbsp;автором: подход, цитата, где найти</td><td>Обещание авторам, их&nbsp;репосты</td></tr>
+          <tr><td>Вс</td><td>Собака выходного дня</td><td>Фото собак подписчиков с&nbsp;маленькой историей, опрос или «миф или правда»</td><td>Тёплая вовлечённость</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="g3" style="margin-top:var(--gap)">
+      <div class="card"><h3>Название и&nbsp;описание</h3><p>«Хвостопедия: бесплатная база знаний о&nbsp;жизни с&nbsp;собакой. Статьи кинологов и&nbsp;зоопсихологов. Новые материалы сначала здесь».</p></div>
+      <div class="card"><h3>Закреп</h3><p>Ссылка на&nbsp;сайт, раздел «С&nbsp;чего начать», чек-лист первой недели и&nbsp;кто мы.</p></div>
+      <div class="card"><h3>Комментарии открыты</h3><p>Там рождаются темы для рубрики «Вопрос читателя» и&nbsp;для будущих разделов.</p></div>
+    </div>
+  </section>
+
+  <section class="pan">
+    <div class="head">
+      <div class="lbl">Неделя запуска по&nbsp;дням</div>
+      <h2>Календарь <span class="pill">±7 дней</span></h2>
+    </div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>День</th><th>Инстаграм Миры</th><th>Инстаграм Леси</th><th>Телеграм</th></tr></thead>
+        <tbody>
+          <tr><td>−7</td><td>Рилс «сколько раз я&nbsp;гуглила»</td><td>Сторис: процесс сборки сайта</td><td>Пост «кто мы и&nbsp;что делаем»</td></tr>
+          <tr><td>−5</td><td>Опрос-рилс «какой вопрос мучает»</td><td>Рилс-закулисье сайта</td><td>Знакомство с&nbsp;первым автором</td></tr>
+          <tr><td>−3</td><td colspan="2">Коллаб «знакомьтесь, кто за&nbsp;этим стоит»</td><td>Голосование «какой раздел ждёте»</td></tr>
+          <tr><td>−1</td><td>Сторис «завтра»</td><td>Рилс «Рэм смотрит сайт»</td><td>Обратный отсчёт + цитата Дарьи</td></tr>
+          <tr><td>0</td><td colspan="2">Коллаб «Хвостопедия открылась», слово ХВОСТ</td><td>Пост-открытие, закреп</td></tr>
+          <tr><td>+1</td><td>Рилс «почему собака из&nbsp;приюта подменилась»</td><td>Сторис: ответы на&nbsp;вопросы о&nbsp;сайте</td><td>«С&nbsp;чего начать»</td></tr>
+          <tr><td>+2</td><td>Сторис авторов репостом</td><td>Рилс «пролистайте со&nbsp;мной сайт»</td><td>Первый «Вопрос читателя»</td></tr>
+          <tr><td>+5</td><td colspan="2">Коллаб с&nbsp;автором «эксперт в&nbsp;гостях»</td><td>Эксперт недели</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="pan paper">
+    <div class="head">
+      <div class="lbl">Авторы помогают расти</div>
+      <h2>Эксперты как <span class="pill sg">второй двигатель</span></h2>
+      <p>Мы&nbsp;обещали специалистам узнаваемость. Чем удобнее им&nbsp;рассказать о&nbsp;Хвостопедии, тем чаще они это делают, и&nbsp;к&nbsp;нам приходят их&nbsp;читатели.</p>
+    </div>
+    <div class="g3">
+      <div class="card"><span class="tag c">шаблон</span><h3>Готовая сторис</h3><p>Картинка в&nbsp;стиле сайта: «Мой материал в&nbsp;Хвостопедии» + ссылка на&nbsp;страницу статьи. Автору остаётся только выложить.</p></div>
+      <div class="card"><span class="tag">отметки</span><h3>Отмечаем всегда</h3><p>В&nbsp;каждом рилсе и&nbsp;посте про материал отмечаем автора. Ему приятно, и&nbsp;он&nbsp;охотнее делает репост.</p></div>
+      <div class="card"><span class="tag b">отчёт</span><h3>Раз в&nbsp;месяц цифры</h3><p>Сколько людей открыли статью и&nbsp;перешли по&nbsp;ссылкам автора. Для этого стоит подключить на&nbsp;сайт счётчик посещений.</p></div>
+    </div>
+  </section>
+
+  <section class="pan blush">
+    <div class="head">
+      <div class="lbl">Что считаем</div>
+      <h2>Понять, <span class="pill" style="background:var(--paper)">что работает</span></h2>
+    </div>
+    <div class="g2">
+      <div class="card"><h3>Каждую неделю</h3><ul><li>Сколько комментариев со&nbsp;словом ХВОСТ под каждым рилсом.</li><li>Прирост телеграм-канала.</li><li>Сохранения и&nbsp;пересылки рилсов: это лучший знак полезности.</li></ul></div>
+      <div class="card"><h3>Раз в&nbsp;месяц</h3><ul><li>Посещения сайта и&nbsp;какие разделы открывают чаще (после подключения счётчика).</li><li>Какие темы спрашивают в&nbsp;комментариях: из&nbsp;них план новых материалов.</li><li>Какой формат рилсов сработал лучше, его повторяем.</li></ul></div>
+    </div>
+  </section>
+
+  <section class="pan car">
+    <div class="head">
+      <div class="lbl">Чего не&nbsp;делаем</div>
+      <h2>Правила, которые бережём</h2>
+    </div>
+    <ul class="dont">
+      <li>Не&nbsp;ставим условие подписки ради ссылки или чек-листа.</li>
+      <li>Не&nbsp;публикуем материалы и&nbsp;выдержки без согласия авторов.</li>
+      <li>Не&nbsp;обещаем «вылечим поведение за&nbsp;3&nbsp;дня»: мы&nbsp;база знаний, а&nbsp;не&nbsp;консультация.</li>
+      <li>Не&nbsp;спорим с&nbsp;методами в&nbsp;комментариях, отсылаем к&nbsp;специалистам.</li>
+      <li>Не&nbsp;дублируем один и&nbsp;тот же рилс у&nbsp;обеих отдельно, для этого есть соавторство.</li>
+      <li>Не&nbsp;бросаем канал после запуска: лучше 3 поста в&nbsp;неделю стабильно, чем 10 и&nbsp;тишина.</li>
+    </ul>
+  </section>
+
+  <footer>Хвостопедия · @mom_chiwawa и&nbsp;@lesya.frame</footer>
+</div>
+</body>
+</html>
