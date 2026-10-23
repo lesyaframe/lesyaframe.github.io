@@ -126,6 +126,27 @@ select.f{cursor:pointer;appearance:none;-webkit-appearance:none}
 .gate{background:var(--milk);border-radius:var(--r);padding:40px 24px;text-align:center}
 .gate h1{font-size:36px;margin-bottom:10px}
 
+
+/* попап добавления */
+.modal{position:fixed;inset:0;z-index:55;background:rgba(43,30,23,.55);display:grid;place-items:center;padding:16px;opacity:0;transition:opacity .2s}
+.modal.on{opacity:1}
+.modal[hidden]{display:none}
+.mbox{background:var(--milk);border-radius:28px;width:min(560px,100%);max-height:calc(100dvh - 32px);overflow:auto;padding:26px;transform:translateY(16px) scale(.98);transition:transform .25s}
+.modal.on .mbox{transform:none}
+.mbox h2{font-size:30px;margin:6px 0 18px}
+.mgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.mf{display:flex;flex-direction:column;gap:5px;min-width:0}
+.mf.wide{grid-column:1/-1}
+.mf label{font:500 11px/1.2 var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--ink2)}
+.mf .f{background:var(--paper);min-height:46px;padding:11px 14px;border-radius:14px}
+.mf .f:focus{box-shadow:0 0 0 2px var(--caramel2)}
+.mf textarea.f{min-height:46px}
+.mf select.f{background:var(--paper) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%236B5A4E' stroke-width='1.6'/%3E%3C/svg%3E") no-repeat right 14px center}
+.mact{display:flex;gap:8px;justify-content:flex-end;margin-top:20px;flex-wrap:wrap}
+.mx{position:sticky;top:0;float:right;width:38px;height:38px;border-radius:50%;border:0;background:rgba(47,33,26,.08);cursor:pointer;font-size:18px}
+.mx:hover{background:var(--ink);color:var(--paper)}
+@media (max-width:520px){.mgrid{grid-template-columns:1fr}.mbox{padding:20px}}
+
 @media (max-width:900px){
   .hdr{display:none}
   .row{grid-template-columns:1fr 1fr;padding:12px}
@@ -144,6 +165,7 @@ select.f{cursor:pointer;appearance:none;-webkit-appearance:none}
   <div class="gate">Загружаю…</div>
 </div>
 <div class="who-dlg" id="whoDlg" hidden><div class="who-box"><div class="lbl">Штаб Хвостопедии</div><h2>Кто сейчас за&nbsp;компьютером?</h2><p style="color:var(--ink2);margin:0 0 16px">Так мы&nbsp;видим, кто что добавил, и&nbsp;показываем твои задачи первыми</p><button class="btn" data-me="Мира">Я&nbsp;Мира</button><button class="btn" data-me="Леся" style="background:var(--sage)">Я&nbsp;Леся</button></div></div>
+<div class="modal" id="modal" hidden role="dialog" aria-modal="true"><form class="mbox" id="mform" autocomplete="off"></form></div>
 <div class="toast" id="toast"></div>
 
 <script src="../../firebase-config.js"></script>
@@ -254,7 +276,7 @@ function save(sec,id,patch){
     catch(e){setSync(false);toast('Не сохранилось, проверь интернет')}
   },350);
 }
-async function addItem(sec,data={}){
+async function addItem(sec,data={},noFocus){
   const ref=db.collection(base+sec).doc();
   const d={...data,created:Date.now(),by:ME||''};
   if(sec==='tasks'&&!d.who)d.who=ME||'Обе';
@@ -262,7 +284,7 @@ async function addItem(sec,data={}){
   if(sec==='plan'&&!d.date)d.date=todayISO();
   if(sec==='authors'&&!d.status)d.status='Пишем';
   if(sec==='reports'){const[a,b]=weekRange();d.from=d.from||a;d.to=d.to||b}
-  window._focusNew=ref.id;
+  if(!noFocus)window._focusNew=ref.id;
   try{await ref.set(d)}catch(e){toast('Не получилось добавить')}
 }
 async function delItem(sec,id){try{await db.collection(base+sec).doc(id).delete();toast('Удалено')}catch(e){toast('Не получилось удалить')}}
@@ -331,7 +353,7 @@ function drawSec(){
     ${top}
     ${S.filters?`<div class="chips">${S.filters.map(([k,t])=>`<button class="chip ${(FILTER[TAB]||'all')===k?'on':''}" data-f="${k}">${t}</button>`).join('')}</div>`:''}
     <div class="list" style="--cols:${S.cols}"><div class="hdr">${S.fields.map(f=>`<span>${f.t}</span>`).join('')}<span></span></div><div id="rows" class="list"></div></div>`;
-  $('#addBtn').onclick=()=>addItem(TAB);
+  $('#addBtn').onclick=()=>openAdd(TAB);
   $$('[data-f]').forEach(b=>b.onclick=()=>{FILTER[TAB]=b.dataset.f;drawSec()});
   bindRows();renderRows(true);
 }
@@ -384,6 +406,40 @@ function drawKpis(){
   k.innerHTML=[['tg','подписчиков в телеграме'],['hv','комментариев «ХВОСТ»'],['visits','заходов на сайт'],['reach','охват рилсов']].map(([key,t])=>{const x=n(a[key]),y=n(b[key]);const d=x!=null&&y!=null?x-y:null;return `<div class="kpi"><b>${x==null?'—':x.toLocaleString('ru-RU')}${d?`<em class="${d>0?'up':'dn'}">${d>0?'+':''}${d.toLocaleString('ru-RU')}</em>`:''}</b><span>${t}${a.from?`, ${fmtDate(a.from)}–${fmtDate(a.to)}`:''}</span></div>`}).join('');
 }
 function setMe(n){ME=n;store.set('hvshtab.me',n);$('#whoDlg').hidden=true;$$('.me [data-me]').forEach(b=>b.classList.toggle('on',b.dataset.me===n));drawTabs();drawMine()}
+
+
+/* ---------- попап «добавить» ---------- */
+function defaults(sec){
+  const d={};
+  if(sec==='tasks')d.who=ME||'Обе';
+  if(sec==='plan'){d.status='Идея';d.date=todayISO();d.who=ME||'Обе'}
+  if(sec==='authors')d.status='Пишем';
+  if(sec==='rubrics')d.who='Обе';
+  if(sec==='reports'){const[a,b]=weekRange();d.from=a;d.to=b}
+  return d;
+}
+function openAdd(sec){
+  const S=SECS[sec],d=defaults(sec),m=$('#modal'),f=$('#mform');
+  const flds=S.fields.filter(x=>x.type!=='check').concat(S.extra||[]);
+  f.innerHTML=`<button type="button" class="mx" data-close aria-label="Закрыть">×</button><div class="lbl">${S.title}</div><h2>${S.add}</h2><div class="mgrid">${flds.map(x=>{
+    const v=d[x.k]??'',id='m-'+x.k;let el;
+    if(x.type==='sel')el=`<select class="f" id="${id}" name="${x.k}">${x.opts.map(o=>`<option ${o===v?'selected':''}>${o}</option>`).join('')}</select>`;
+    else if(x.type==='area')el=`<textarea class="f" id="${id}" name="${x.k}" rows="${x.cls==='title'?2:3}" placeholder="${x.ph||''}"></textarea>`;
+    else el=`<input class="f" id="${id}" name="${x.k}" type="${x.type==='num'?'number':x.type==='date'?'date':'text'}" ${x.type==='num'?'inputmode="numeric" min="0"':''} value="${esc(v)}" placeholder="${x.ph||''}" ${x.list?`list="${x.list}"`:''}>`;
+    return `<div class="mf ${x.type==='area'||!x.type?'wide':''}"><label for="${id}">${x.t}</label>${el}</div>`}).join('')}</div>
+    <div class="mact"><button type="button" class="btn soft" data-close>Отмена</button><button type="submit" class="btn">Добавить</button></div>`;
+  m.hidden=false;requestAnimationFrame(()=>m.classList.add('on'));
+  const first=f.querySelector('textarea,input');first&&first.focus();
+  f.onsubmit=async e=>{e.preventDefault();const data={};
+    flds.forEach(x=>{const el=f.elements[x.k];if(!el)return;let v=el.value.trim();if(x.type==='num')v=v===''?'':Number(v);if(v!=='')data[x.k]=v});
+    const main=S.fields.find(x=>x.cls==='title');
+    if(main&&!data[main.k]){const el=f.elements[main.k];el.focus();el.placeholder='Заполни это поле';return}
+    closeAdd();await addItem(sec,data,true);toast('Добавлено')};
+  $$('[data-close]',f).forEach(b=>b.onclick=closeAdd);
+}
+function closeAdd(){const m=$('#modal');m.classList.remove('on');setTimeout(()=>m.hidden=true,200)}
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('#modal').hidden)closeAdd()});
+document.addEventListener('click',e=>{if(e.target.id==='modal')closeAdd()});
 
 /* ---------- старт ---------- */
 async function start(){
