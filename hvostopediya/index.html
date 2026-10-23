@@ -270,6 +270,36 @@ header nav a.on{background:var(--milk);color:var(--ink)}
   .in-list{padding-top:0}
 }
 
+
+/* ---------- новые элементы статей ---------- */
+.text ol.steps{list-style:none;counter-reset:st;display:flex;flex-direction:column;gap:10px;padding:0}
+.text ol.steps li{counter-increment:st;position:relative;background:var(--milk);border-radius:20px;padding:16px 18px 16px 62px;font-size:17px;line-height:1.5;color:var(--ink2)}
+.text ol.steps li::before{content:counter(st);position:absolute;left:16px;top:14px;width:32px;height:32px;border-radius:50%;background:var(--sage);color:var(--paper);display:grid;place-items:center;font:600 15px/1 var(--sans)}
+.text ol.steps li b{display:block;color:var(--ink);font:500 19px/1.3 var(--serif);margin-bottom:3px}
+.gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px}
+.gallery a{display:block;border-radius:18px;overflow:hidden;background:var(--milk);transition:transform .3s}
+.gallery a:hover{transform:translateY(-3px)}
+.gallery img{display:block;width:100%;height:auto}
+.linkset{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px;font-family:var(--sans)}
+.linkset a{position:relative;display:block;background:var(--milk);border-radius:18px;padding:14px 44px 14px 16px;text-decoration:none;transition:background .2s,color .2s}
+.linkset a b{display:block;font-weight:600;font-size:15.5px;line-height:1.3}
+.linkset a span{display:block;font-size:13px;color:var(--ink2);margin-top:3px;line-height:1.35}
+.linkset a i{position:absolute;right:14px;top:14px;font-style:normal;width:24px;height:24px;border-radius:50%;background:var(--paper);display:grid;place-items:center;font-size:13px}
+.linkset a:hover{background:var(--ink);color:var(--paper)}
+.linkset a:hover span{color:#D9CBBE}
+.vid{margin:0}
+.vid video{width:100%;border-radius:22px;background:#000;display:block}
+.vid figcaption{font:400 13px/1.4 var(--sans);color:var(--ink2);margin-top:8px}
+.tree{background:var(--sage2);border-radius:24px;padding:20px 24px}
+.tree b{display:block;font:600 22px/1.2 var(--serif);margin-bottom:10px}
+.tblw{overflow-x:auto;border-radius:18px;background:var(--milk)}
+.tblw table{border-collapse:collapse;min-width:640px;width:100%;font:400 14px/1.45 var(--sans)}
+.tblw th,.tblw td{text-align:left;vertical-align:top;padding:11px 13px;border-bottom:1px solid var(--line)}
+.tblw th{font:500 11px/1.2 var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--ink2);background:var(--paper)}
+.tblw tr:last-child td{border-bottom:0}
+.text a{color:var(--caramel)}
+.text .linkset a,.text .gallery a{color:inherit}
+
 /* ---------- материалы ---------- */
 .mat-list{display:flex;flex-direction:column;gap:var(--gap)}
 .mat{display:grid;grid-template-columns:clamp(110px,13vw,170px) 1fr auto;gap:clamp(16px,3vw,40px);align-items:center;padding:clamp(14px,2vw,20px);padding-right:clamp(18px,3vw,36px);border-radius:32px;background:var(--paper);transition:transform .35s,background .35s}
@@ -580,12 +610,13 @@ const SECTIONS=[
  ['sobaka-i-rebenok','Собака и ребёнок','baby','photo'],
  ['obrabotki','Обработки','bug','photo'],
  ['privivki','Календарь прививок','syringe','text','var(--sage)'],
+ ['diabet','Диабет у собак','drop','photo'],
 ];
 const GRID=SECTIONS.filter(s=>s[0]!=='vstuplenie');
 const ICON=Object.fromEntries(SECTIONS.map(s=>[s[0],s[2]]));
 const ICBG=['var(--blush)','var(--sage2)','var(--caramel2)'];
 const SEC=Object.fromEntries(SECTIONS.map(s=>[s[0],s[1]]));
-const POS={"adaptaciya":"50% 22%","rol-v-seme":"50% 35%","vospitanie":"50% 45%","sobaka-i-rebenok":"50% 50%","obrabotki":"50% 40%","separaciya":"50% 70%"};
+const POS={"diabet":"50% 45%","adaptaciya":"50% 22%","rol-v-seme":"50% 35%","vospitanie":"50% 45%","sobaka-i-rebenok":"50% 50%","obrabotki":"50% 40%","separaciya":"50% 70%"};
 const KIND=Object.fromEntries(SECTIONS.map(s=>[s[0],{k:s[3],bg:s[4],img:s[5]||s[0]}]));
 const DARKBG=['#4A3328','var(--sage)','var(--caramel)'];
 /* картинка раздела: фото целиком, вырезанная собака на цветном фоне или только цвет с лапкой */
@@ -615,9 +646,22 @@ const AUTHORS={
      ['Telegram','https://t.me/bogrii_studio','car'],
      ['Instagram','https://instagram.com/bogrii_studio',''],
    ]},
- shmakova:{name:'Шмакова Екатерина',short:'Екатерина Шмакова',empty:true},
+ shmakova:{name:'Шмакова Екатерина Григорьевна',short:'Екатерина Шмакова',role:'Психолог, специалист по поведению собак',
+   facts:['Автор канала «Пёсика: заметки зоопсихолога»'],
+   links:[['Telegram-канал','https://t.me/psypesika','car']]},
+ lychko:{name:'Софья Лычко',short:'Софья Лычко',role:'Doggy Brain',
+   facts:['Автор проекта Doggy Brain'],
+   links:[['Telegram','https://t.me/doggybrain','car'],['ВКонтакте','https://vk.com/doggybrain','']]},
+ baranovskaya:{name:'Тамара Барановская',short:'Тамара Барановская',role:'«В партнёрстве с собакой»',
+   facts:['Автор канала «В партнёрстве с собакой»'],
+   links:[['Telegram-канал','https://t.me/withadog','car']]},
+ diabet:{name:'Диабет Хвостики',short:'Диабет Хвостики',role:'Проект о диабете у собак и кошек',
+   facts:['Бесплатный благотворительный проект для владельцев питомцев с сахарным диабетом','Почти 4,5 года опыта с сенсорами глюкозы'],
+   links:[['Сайт проекта','https://diabethvostiki.com/','car'],['Telegram','https://t.me/diabethvostiki','']]},
+ hvost:{name:'Хвостопедия',short:'Хвостопедия',role:'Редакция',facts:['Короткие шпаргалки и подборки от команды проекта'],links:[]},
 };
 
+const AKEYS=Object.keys(AUTHORS).filter(k=>k!=='hvost');
 const MATERIALS=[
  {id:'chto-takoe-sobaka',sec:'vstuplenie',author:'noskova',type:'Статья',img:'img/m/evolyuciya.webp',
   title:'Что такое собака с точки зрения эволюции?',
@@ -707,6 +751,219 @@ const PAMYATKA=`
 <p class="sign">С пожеланиями успехов, Софья Лычко</p>
 <p class="src">Памятка Doggy Brain © Софья Лычко @doggybrain</p>`;
 MATERIALS.find(m=>m.id==='pamyatka-priemnoy-semi').html=PAMYATKA;
+/* Материалы 23.10: амуниция, собака и ребёнок, диабет. Вставляется в шаблон сборкой */
+const G=(arr)=>`<div class="gallery">${arr.map(([src,cap])=>`<a href="${src}" target="_blank" rel="noopener"><img src="${src}" alt="${cap||''}" loading="lazy"></a>`).join('')}</div>`;
+const LINKS=(arr)=>`<div class="linkset">${arr.map(([t,u,d])=>`<a href="${u}" target="_blank" rel="noopener"><b>${t}</b>${d?`<span>${d}</span>`:''}<i>↗</i></a>`).join('')}</div>`;
+
+const MORE=[
+ {id:'kak-vybrat-shleyku',sec:'amuniciya',author:'hvost',type:'Шпаргалка',img:'img/m/shleyka-card.webp',
+  title:'Как выбрать шлейку',
+  lead:'Анатомическая посадка важна не меньше размера: шлейка должна держаться устойчиво и не мешать собаке двигаться.',
+  html:`<h2 id="a1">Проверьте посадку</h2>
+<ol class="steps">
+<li><b>Y-образная форма</b>Передняя часть проходит по грудине и не давит на горло.</li>
+<li><b>Свободные движения</b>Лямки не должны ограничивать плечи, отводить лапы в стороны или выворачивать локти.</li>
+<li><b>Ничего не пережимает</b>Шлейка не давит на грудную клетку, живот и мягкие ткани за пределами рёбер.</li>
+<li><b>Плотно, но комфортно</b>Она не болтается, не сползает и не собирается складками на спине.</li>
+<li><b>Регулировка обязательна</b>Ремни должны подстраиваться под тело собаки. Щенку посадку нужно проверять особенно часто.</li>
+</ol>
+<h2 id="a2">Что ещё важно проверить перед прогулкой</h2>
+<p>Даже внешне удобная шлейка может натирать или смещаться, если детали расположены неправильно.</p>
+<ol class="steps">
+<li><b>Ремень на груди</b>Он должен лежать на грудине, а не на мягких тканях шеи.</li>
+<li><b>Положение крепления</b>Кольцо для поводка должно располагаться сзади, на конце стропы. Крепление посередине спины не подойдёт.</li>
+<li><b>Застёжки и швы</b>Проверьте, чтобы фурнитура не попадала в подмышки и другие чувствительные места.</li>
+<li><b>Проверьте в движении</b>Пусть собака пройдётся, повернётся и немного побегает. Посмотрите, не съезжает ли шлейка и не меняется ли походка.</li>
+</ol>
+<blockquote>Шлейка не должна натирать, сдавливать тело, ограничивать движения или заставлять собаку менять походку. Если посадка вызывает сомнения, попросите специалиста оценить её на вашей собаке.</blockquote>
+<p class="note">Главный ориентир: комфорт и естественные движения собаки. Материал носит информационный характер, учитывайте анатомию и особенности вашей собаки.</p>
+<h2 id="a3">Карточки, чтобы сохранить</h2>
+${G([['img/a/shleyka-1.webp','Как выбрать шлейку, 1/2'],['img/a/shleyka-2.webp','Что ещё важно проверить, 2/2']])}`},
+
+ {id:'pohodka-v-shleyke',sec:'amuniciya',author:'hvost',type:'Видео',img:'img/m/pohodka.webp',
+  title:'Как меняется походка собаки в разных шлейках',
+  lead:'Наглядное видео: одна и та же собака идёт свободно, в разных типах шлейки и на поводке. Посмотрите и сравните со своей шлейкой прямо сейчас.',
+  html:`<figure class="vid"><video src="video/pohodka.mp4" poster="video/pohodka.jpg" controls playsinline muted loop preload="metadata"></video><figcaption>Видео: Instagram @dutchie.daemon</figcaption></figure>
+<h2 id="v1">На что смотреть</h2>
+<p>Сначала собака идёт по дорожке свободно, без амуниции. Запомните, как она выносит передние лапы и как двигаются плечи. Дальше та же собака в разных шлейках. Подписи на видео на немецком:</p>
+<div class="arrows">
+<div>Frei<span>→</span>свободно, без амуниции</div>
+<div>Führgeschirr<span>→</span>Y-образная шлейка</div>
+<div>Norweger<span>→</span>норвежская шлейка с прямым ремнём поперёк груди</div>
+<div>mit leichtem Zug<span>→</span>с лёгким натяжением поводка</div>
+</div>
+<p>Сравните шаг в каждом варианте со свободным. Чем сильнее отличается движение лап и плеч, тем сильнее шлейка мешает собаке. Особенно заметно это при натяжении поводка.</p>
+<blockquote>Если ваша собака в своей шлейке двигается не так, как без неё, это повод присмотреться к модели и посадке. Подробнее в шпаргалке «Как выбрать шлейку».</blockquote>`},
+
+ {id:'shleyki-doggy-brain',sec:'amuniciya',author:'lychko',type:'Большой материал',img:'img/m/shleyki.webp',
+  title:'Большой материал о шлейках',
+  lead:'Статья, видео и иллюстрации Doggy Brain: как устроена собака, какой должна быть анатомическая шлейка, как снять мерки и подогнать её.',
+  html:`<h2 id="l1">Что внутри</h2>
+<ul>
+<li>Почему важно знать, как устроена собака, чтобы подобрать шлейку. Об анатомии и шлейках подробно и с картинками: вы научитесь видеть, какие модели только мешают движению собаки</li>
+<li>За счёт чего достигается идеальная посадка и что должно быть предусмотрено в конструкции шлейки</li>
+<li>Как корректно снять мерки</li>
+<li>Какие есть дополнительные опции, если шлейку можно сшить на заказ</li>
+<li>Как правильно подогнать готовую шлейку по собаке</li>
+<li>Распространённые мифы о шлейках</li>
+<li>Фотографии разных собак в шлейках</li>
+<li>Список специалистов по поведению собак, если вы ищете «своего» тренера</li>
+</ul>
+<h2 id="l2">Видео</h2>
+${LINKS([['Смотреть на YouTube','https://youtu.be/E988cN8p10Q','основное видео'],['Смотреть ВКонтакте','https://vk.com/video/@doggybrain','основное видео']])}
+<h2 id="l3">Статья</h2>
+${LINKS([['Читать в Телеграфе','https://graph.org/Kak-podobrat-anatomicheski-pravilnuyu-shlejku-dlya-progulok-dlya-svoej-sobaki-podrobnaya-instrukciya-v-kartinkah-03-13','статья целиком'],['Читать ВКонтакте','https://vk.com/@doggybrain-shleyki','статья'],['Статья и видео на Дзене','https://dzen.ru/a/Y_cVBHIFHgahcvwY',''],['Скачать иллюстрации','https://drive.google.com/drive/folders/1JYsNfzqFJtdNnGr7vRAwxeRamAZBwFAs','Google Диск']])}
+<h2 id="l4">Мини-ролики по темам</h2>
+<h4>Как связаны анатомия собаки и шлейка</h4>
+${LINKS([['Телеграм','https://t.me/doggybrain/238'],['ВКонтакте','https://vk.com/video-209549648_456239057'],['YouTube','https://youtu.be/ZHB8ygsocjY'],['Instagram','https://www.instagram.com/tv/Cd5ULi3oAD9']])}
+<h4>Как корректно снять мерки</h4>
+${LINKS([['Телеграм','https://t.me/doggybrain/262'],['ВКонтакте','https://vk.com/video-209549648_456239061'],['YouTube','https://youtu.be/rVjm_BTU6DQ'],['Instagram','https://www.instagram.com/reel/CeikwzvoNVQ/']])}
+<h4>Как правильно подогнать готовую шлейку</h4>
+${LINKS([['Телеграм','https://t.me/doggybrain/339'],['ВКонтакте','https://vk.com/video-209549648_456239100'],['Instagram','https://www.instagram.com/reel/CgTqj0voD8e']])}`},
+
+ {id:'kak-vybrat-amuniciyu',sec:'amuniciya',author:'shmakova',type:'Статья',img:'img/m/shmakova-amun.webp',
+  title:'Как правильно выбрать амуницию',
+  lead:'Ошейник, шлейка, поводок или рулетка и из чего всё это бывает. Единого ответа нет, но есть ориентиры, как подобрать амуницию именно для вашей собаки.',
+  html:`<p>Как правильно выбрать амуницию? Вопрос, который постоянно волнует владельцев. Огорчу: чёткого и единого ответа на то, что взять, не существует. Но давайте разбираться, как подобрать ту самую, идеальную амуницию именно для твоего питомца.</p>
+<h2 id="s1">Ошейник</h2>
+<p>Классика в мире амуниции! Ошейники бывают разными: на застёжке (фастексе), типа мартингейл, светящиеся (чтобы не потерять хвостика в темноте), для адресника (тот самый жетончик с номером телефона), корректирующие.</p>
+<p>Говоря о компаньонах, ошейник будет идеальным вариантом для собаки, которая не душит себя. В этом случае он не причинит вреда и не нанесёт травмы вопреки современным мифам.</p>
+<h2 id="s2">Шлейка</h2>
+<p>Самая спорная амуниция 21 века! Кто-то говорит, что они предназначены только для ездовых собак, кто-то уверен, что шлейки портят строение тела собаки и противопоказаны щенкам, а кто-то спорит с пеной у рта о том, какая она, та самая анатомическая шлейка!</p>
+<p>На сегодняшний день самым удобным и комфортным для собак [по мнению людей] является Y-образная шлея. Она не сковывает движения, не мешает анатомически верному вымаху лап, не давит на шею. Такие шлейки идеально подходят всем породам собак, в том числе и удлинённым ребятам по типу корги и такс. Спинка во многих брендах регулируется, и потому посадить модель правильно обычно не составляет труда. И да, щенкам можно! К тому же шлейка часто решает проблему погрызов поводков, так как малыш просто не дотягивается до него.</p>
+<h4>Чем же плохи другие шлейки?</h4>
+<ul>
+<li>Шлейки по типу жилетов часто состоят из синтетической ткани, которая может натирать кожу и скатывать под собой шерсть.</li>
+<li>Шлейки с ремнём спереди: тихий ужас среди амуниции. Мешают верному вымаху лап, во время ходьбы спускаются то вниз, то поднимаются вверх и давят на шею.</li>
+<li>Шлейки с ремнями под подмышками: представьте, что вам постоянно что-то натирает при ходьбе. Приятные ли это ощущения? Думаю, ответ очевиден.</li>
+</ul>
+<h2 id="s3">Поводок</h2>
+<p>Ошейник купили, шлейку заказали! А что с поводком? Берём обычный классический поводок или поводок-перестёжку от 5 м.</p>
+<p>Рулетка (если отдаёте ей предпочтение) должна быть подобрана по весу. Иначе:</p>
+<h4>Постоянное напряжение и возбуждение</h4>
+<p>Представь, что ты идёшь, постоянно преодолевая сопротивление троса. Собака на рулетке всё время борется с его натяжением, чтобы просто двигаться вперёд. Это физическое усилие держит нервную систему в хроническом тонусе, повышает общий уровень возбуждения. В таком состоянии даже нейтральный раздражитель (прохожий, другая собака) может вызвать бурную, импульсивную реакцию.</p>
+<h4>Искажённые сигналы при общении</h4>
+<p>Для собак язык тела — это целый разговор. На рулетке, из-за того же постоянного натяжения, собака часто принимает невольную «угрожающую» позу: корпус подаётся вперёд, шея вытянута. Другие собаки могут читать это как вызов или неуверенность, что провоцирует ненужные конфликты или недопонимание. Мы невольно лишаем питомца возможности общаться комфортно и понятно для сородичей.</p>
+<h4>Чувство незащищённости</h4>
+<p>С точки зрения психологии надёжная связь с хозяином — основа чувства безопасности. Рулетка же часто выскальзывает из рук, падает с грохотом и пугает собаку. Испугавшись, питомец может инстинктивно пуститься в бегство, увлекая за собой этот гремящий предмет. Ситуация становится неконтролируемой и травматичной для психики. К сожалению, такие случаи не редкость.</p>
+<h4>Иллюзия контроля</h4>
+<p>Кажется, что рулетка даёт управление на расстоянии. Но на деле контроль часто лишь кажущийся. В критический момент (испуг, погоня) тонкий трос сложно удержать, а кнопка блокировки может не сработать мгновенно. Ты физически не можешь мягко подвести собаку к себе или быстро укоротить поводок, как с обычной стропой.</p>
+<h2 id="s4">Материалы</h2>
+<p>Амуниция бывает из различных материалов. Самые стойкие и немаркие: водонепроницаемые гекса и биотан. Гекса — материал в форме сот, более дешёвый, грязь может забиваться в тиснение на стропе. Биотан гладкий, бывает нескольких видов: твёрдый для поводков, мягкий для ошейников и шлеек. Единственный минус таких материалов: на морозе они дубеют.</p>
+<p>Для поводков идеальна прорезиненная стропа.</p>
+<h2 id="s5">Бренды</h2>
+<p>Мои любимчики: staya, brrro, sobakin, procomfort, шарик.</p>
+<h2 id="s6">Карточки к посту</h2>
+${G([1,2,3,4,5].map(i=>['img/a/shmakova-amun-'+i+'.webp','']))}
+<p class="src">Источник: телеграм-канал «Пёсика: заметки зоопсихолога», <a href="https://t.me/psypesika/22" target="_blank" rel="noopener">t.me/psypesika/22</a></p>`},
+
+ {id:'chuzhaya-sobaka',sec:'sobaka-i-rebenok',author:'baranovskaya',type:'Мини-гайд',img:'img/m/chuzhaya.webp',
+  title:'Как вести себя с чужой собакой',
+  lead:'Мини-гайд для детей и родителей: простые правила, которые помогают сохранить и безопасность ребёнка, и границы собаки.',
+  pdf:'pdf/chuzhaya-sobaka-baranovskaya.pdf',
+  html:`<blockquote>Главное: чужая собака не обязана знакомиться.</blockquote>
+<h2 id="k1">Просто проходишь мимо?</h2>
+<p class="lbl" style="color:var(--caramel)">Правило №1: оставь собаке пространство</p>
+<ol class="steps">
+<li><b>Не беги к собаке</b>Даже если очень хочется познакомиться. Сначала остановись и посмотри, где её человек.</li>
+<li><b>Не кричи и не маши руками</b>Визг, резкие движения и попытки привлечь внимание могут напугать или сильно возбудить собаку.</li>
+<li><b>Самокат — медленнее</b>Сбавь скорость и объедь собаку подальше, если место позволяет. Не пролетай прямо рядом.</li>
+<li><b>Не зови и не дразни</b>Не свисти, не кидайся игрушками и не пытайся заставить чужую собаку смотреть на тебя.</li>
+</ol>
+<p>Спокойно пройти мимо — уже отличное взаимодействие.</p>
+<h2 id="k2">Хочешь познакомиться?</h2>
+<p class="lbl" style="color:var(--caramel)">Не спеши гладить</p>
+<ol class="steps">
+<li><b>Спроси</b>Сначала своего взрослого и человека, который находится с собакой.</li>
+<li><b>Подожди</b>Не тяни руки к морде. Стой спокойно и дай собаке самой решить, хочет ли она подойти.</li>
+<li><b>Прикоснись только с разрешения</b>Не нависай сверху, не обнимай и не целуй. Если собака отошла, не иди за ней.</li>
+</ol>
+<h2 id="k3">А если собака подошла сама?</h2>
+<p class="lbl" style="color:var(--caramel)">Когда страшно, не надо убегать</p>
+<div class="tree"><b>Стой как дерево</b><ul><li>Остановись.</li><li>Руки держи возле себя.</li><li>Не визжи и не убегай.</li><li>Смотри чуть в сторону, а не пристально в глаза.</li><li>Спокойно позови взрослого.</li></ul></div>
+<h2 id="k4">Взрослым на заметку</h2>
+<p>Эти правила лучше объяснить ребёнку заранее, спокойно и без запугивания. Собака не «опасная игрушка» и не «страшный зверь». Это живое существо, которому тоже нужна дистанция и право отказаться от контакта.</p>
+<blockquote>Уважение к собаке начинается с умения не лезть к ней.</blockquote>`},
+
+ {id:'cgm-u-pitomcev',sec:'diabet',author:'diabet',type:'Гайды',img:'img/m/cgm.webp',
+  title:'Сенсоры глюкозы (CGM) у собак и кошек',
+  lead:'Практическое руководство по выбору, установке и использованию сенсоров непрерывного мониторинга глюкозы. Два бесплатных гайда от проекта «Диабет Хвостики».',
+  html:`<p>Проект «Диабет Хвостики» помогает владельцам домашних питомцев с сахарным диабетом: забота и контроль без стресса. Материалы подходят и владельцам, и ветеринарным специалистам.</p>
+<h2 id="d1">Гайды по CGM</h2>
+${LINKS([['Гайд, часть 1','https://drive.google.com/file/d/1RQTLMiYmyrE4D13yEhBpR2w1I2wWEd55/view?usp=drivesdk','февраль 2025, 15 стр.'],['Гайд, часть 2','https://drive.google.com/file/d/1ZkmFuvm-UQ0VQ05-3sK3yHMJNeqyjHwd/view?usp=drivesdk','июль 2026, 51 стр.'],['Обе части одним файлом','https://drive.google.com/file/d/1LtCpch5J9ZT4R--IDbh76lvrT9o_mJr_/view?usp=drivesdk','65 стр.']])}
+<h4>Часть 1</h4>
+<ul>
+<li>Рекомендуемые CGM-сенсоры: сравнение и выбор</li>
+<li>Выбор места установки сенсора: рекомендации и возможные проблемы</li>
+<li>Аллергическая реакция: решение и способы предотвращения</li>
+<li>Удалённый просмотр показаний глюкозы: настройка и использование</li>
+<li>Ошибки приложения CGM: распространённые проблемы и способы их решения</li>
+</ul>
+<h4>Часть 2</h4>
+<ul>
+<li>Актуальность применения CGM у питомцев, мониторинг в ОРИТ, при анестезии и диагностической визуализации (рентген, КТ, МРТ)</li>
+<li>Установка сенсора и разбор частых ошибок: место установки, клеевые материалы и фиксация, защита от повреждений, безопасное снятие</li>
+<li>Интерпретация данных: тренды и вариабельность гликемии, нормы, гипо- и гипергликемия, эффект Сомоджи</li>
+<li>Сравнение показателей CGM и глюкометра</li>
+<li>Обзор ветеринарного CGM и кейсы на собаке и кошке</li>
+<li>Частота контрольных обследований собак и кошек с диабетом</li>
+<li>Долгосрочные осложнения диабета и сопутствующие заболевания</li>
+</ul>
+<h2 id="d2">Какие сенсоры используют</h2>
+<p>Ottai, Libre 1 и 2, Libre 3, а также ветеринарные сенсоры. Сравнение характеристик, рекомендованные зоны установки, клеи и видео установки и снятия есть на сайте проекта.</p>
+<blockquote>При правильной установке CGM ваш хвостик будет доволен, а датчик в безопасности 🐾</blockquote>
+<h2 id="d3">Ещё полезное</h2>
+${LINKS([['Памятка «Диабет Хвостиков»','https://drive.google.com/file/d/1gOyCv4apV4b5zjTBD6tbCUVSQWlR5R7y/view?usp=drivesdk','инъекции, шприцы, инсулины, рацион, гипогликемия'],['Сайт «Диабет Хвостики»','https://diabethvostiki.com/','гайды, видео, научные материалы о диабете'],['Телеграм «Диабет хвостики»','https://t.me/diabethvostiki',''],['«Сеньор Батон»','https://t.me/seniorbaton','группа поддержки владельцев пожилых питомцев']])}`},
+
+ {id:'inekcii-insulina',sec:'diabet',author:'diabet',type:'Памятка',img:'img/m/inekcii.webp',
+  title:'Инъекции инсулина хвостикам',
+  lead:'Как выбрать место укола, техника подкожной инъекции, что важно и чего нельзя. Плюс таблица инсулинов для собак и кошек.',
+  html:`<p>Для введения инсулина можно использовать как обычные инсулиновые шприцы, так и шприц-ручки, включая ветеринарные модели. Преимущество обычного шприца: можно визуально контролировать процесс и убедиться, что вся набранная доза введена подкожно.</p>
+<h2 id="i1">Выбор места инъекции</h2>
+<p>Используйте участки с достаточным количеством подкожной клетчатки. В зависимости от зоны инсулины могут «раскрываться» по-разному. Например, в паховой складке кожа тоньше, а кровеносных сосудов больше, поэтому всасывание быстрее и активнее, чем в холке.</p>
+<p>Периодически меняйте место инъекции (ротация), чтобы избежать уплотнений и нарушения всасывания.</p>
+<h4>Рекомендованные зоны для собак и кошек</h4>
+<ul><li>область холки</li><li>вдоль рёберной дуги</li><li>паховая складка</li></ul>
+<p class="note">В разных зонах всасываемость инсулина может отличаться. Если ваша кошка претендент на ремиссию, старайтесь колоть в одну зону, просто отступайте 1–2 см от места предыдущего укола.</p>
+<h2 id="i2">Техника подкожной инъекции</h2>
+<ol class="steps">
+<li><b>Поднимите кожную складку</b>В форме пирамидки, чтобы не ввести ошибочно в кожу или мышцу.</li>
+<li><b>Введите иглу</b>В основание складки под небольшим углом. Введите инсулин.</li>
+<li><b>Извлеките иглу</b>Убедитесь, что инсулин не вытек.</li>
+</ol>
+<h4>После инъекции</h4>
+<ul><li>Похвалите питомца, дайте небольшое угощение: это вырабатывает позитивные ассоциации с процедурой.</li><li>Запишите введённую дозу и время или отметьте в приложении CGM.</li><li>Следите за аппетитом, активностью и самочувствием питомца.</li></ul>
+<h2 id="i3">Важно</h2>
+<ul>
+<li>Опускать складку во время введения инсулина необязательно, только если вам и питомцу так удобнее.</li>
+<li>Держать шприц под кожей ещё какое-то время после нажатия на поршень нужно только со шприц-ручками. С обычными шприцами это может понадобиться кошкам в ремиссии, когда шаг дозы уже «нулевой».</li>
+<li>Не вводите инсулин внутримышечно или внутрикожно.</li>
+<li>Не используйте одноразовые иглы повторно или хотя бы минимизируйте это.</li>
+<li>Не вводите препарат в воспалённую, повреждённую или инфицированную кожу. Не смешивайте разные инсулины без назначения врача.</li>
+<li>Все виды инсулинов запрещено встряхивать! Суспензии (все НПХ-инсулины, Caninsulin/Vetsulin, Винсувет микс, ProZinc) равномерно ресуспендируют перед каждым введением. Прозрачные растворы (детемир, гларгин, деглудек) перед введением не перемешивают.</li>
+</ul>
+<blockquote>Если питомец испытывает выраженный стресс или проявляет агрессию при измерениях и инъекциях, рекомендуется консультация врача поведенческой медицины. Не применяйте насильственную фиксацию: она только усилит страх перед процедурами, которые теперь жизненно необходимы.</blockquote>
+<h2 id="i4">Шприцы</h2>
+<p>Шприц выбирают по концентрации инсулина и назначенной дозе. Обозначение U (U-40, U-100 и т. д.) показывает, сколько единиц (ЕД) в 1 мл. Шкала шприца размечена в ЕД, а шаг деления показывает, сколько единиц соответствует одному делению.</p>
+<h2 id="i5">Инсулины: ориентировочная таблица</h2>
+<p class="note">Дозировка подбирается ветеринарным врачом индивидуально: по потребности питомца, уровню и динамике глюкозы, сопутствующим болезням и терапии. Данные в таблице ориентировочные и не являются схемой дозирования.</p>
+<div class="tblw"><table>
+<thead><tr><th>Инсулин</th><th>Конц.</th><th>Хранение после вскрытия</th><th>Начальная доза</th><th>Действие</th></tr></thead>
+<tbody>
+<tr><td><b>Гларгин</b><br>Lantus (Sanofi), РинГлар</td><td>U100</td><td>28 дней до 30 °С (можно в холодильнике, но не на дверце)</td><td>Собаки: 0,25–0,5 Ед/кг каждые 12 ч<br>Кошки: 0,5–2 Ед на кошку каждые 12 ч</td><td>Собаки: 12–20 ч<br>Кошки: 12–24 ч</td></tr>
+<tr><td><b>Гларгин</b><br>Toujeo</td><td>U300</td><td>6 недель (42 дня) до 30 °С</td><td>Собаки: 0,5 Ед/кг раз в сутки<br>Кошки: 0,5 Ед/кг каждые 12/24 ч или 2 Ед на кошку каждые 24 ч</td><td>Собаки: 24–36 ч<br>Кошки: 14–17 ч</td></tr>
+<tr><td><b>Винсувет</b></td><td>U50</td><td>28 дней при 2–8 °С и при 15–25 °С</td><td>Кошки: &lt;20 ммоль/л — 0,25 Ед/кг, &gt;20 ммоль/л — 0,5 Ед/кг каждые 12 ч</td><td>Собаки: 12–20 ч<br>Кошки: 12–24 ч</td></tr>
+<tr><td><b>Детемир</b><br>Левемир</td><td>U100</td><td>6 недель до 30 °С</td><td>Собаки: 0,10 Ед/кг каждые 12 ч<br>Кошки: 0,25–0,5 Ед/кг каждые 12 ч</td><td>Собаки: 12–24 ч<br>Кошки: 12–24 ч</td></tr>
+<tr><td><b>НПХ</b><br>Новолин, Хумулин, Протафан НМ, Ринсулин НПХ</td><td>U100</td><td>28 дней, 25–28 °С</td><td>Собаки: 0,25–0,5 Ед/кг каждые 12 ч</td><td>Собаки: 4–10 ч</td></tr>
+<tr><td><b>Lente</b><br>Caninsulin (Канинсулин)</td><td>U40</td><td>42 дня до 25 °С, хранить вертикально</td><td>Собаки: 0,25–0,5 Ед/кг каждые 12 ч<br>Кошки: 0,25–0,5 Ед/кг или 1–2 Ед на кошку</td><td>Собаки: 10–24 ч<br>Кошки: 8–14 ч</td></tr>
+<tr><td><b>Двухфазный 30/70</b><br>Винсувет микс</td><td>U100</td><td>28 дней, 15–25 °С</td><td>0,1–1,5 МЕ/кг каждые 12 ч</td><td>Собаки: ≈12 ч</td></tr>
+<tr><td><b>Деглудек</b><br>Tresiba</td><td>U100</td><td>8 недель до 30 °С</td><td>Кошки: 1 Ед на кошку каждые 12 ч</td><td>Кошки: 10–13 ч</td></tr>
+<tr><td><b>PZI</b><br>ProZinc</td><td>U40</td><td>60 дней при 2–8 °С, вертикально</td><td>Кошки: 1–2 Ед на кошку каждые 12 ч</td><td>Кошки: 8–24 ч</td></tr>
+</tbody></table></div>
+<p>Подробнее в <a href="https://drive.google.com/file/d/1ugYQMdR5kGWaxcfVoChrTcntEqgbe1NJ/view?usp=drivesdk" target="_blank" rel="noopener">Памятке «Диабет Хвостиков»</a>.</p>`},
+];
+
+MATERIALS.push(...MORE);
 
 /* ---------- утилиты ---------- */
 const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
@@ -732,9 +989,9 @@ function authorCard(id,mode){
   const btns=a.links.map(([t,u,c])=>`<a class="btn sm ${c}" href="${u}" target="_blank" rel="noopener">${t}</a>`).join('');
   const quote=a.quote?`<q>${a.quote}</q><span>${a.quoteBy}</span>`:'';
   const about=a.about?`<p class="about">${a.about}</p>`:'';
-  if(mode==='byline') return `<div class="byline"><div class="lbl" style="color:var(--ink2)">Автор материала</div><div class="top"><img src="${a.ava||a.photo}" alt="${a.name}"><div><h3>${a.name}</h3><span class="role">${a.role}</span></div></div><ul>${a.facts.map(f=>`<li>${f}</li>`).join('')}</ul>${about}${quote}<div class="btns">${btns}</div></div>`;
+  if(mode==='byline') return `<div class="byline"><div class="lbl" style="color:var(--ink2)">Автор материала</div><div class="top">${a.ava||a.photo?`<img src="${a.ava||a.photo}" alt="${a.name}">`:`<div class="ph0">${a.name[0]}</div>`}<div><h3>${a.name}</h3><span class="role">${a.role}</span></div></div><ul>${a.facts.map(f=>`<li>${f}</li>`).join('')}</ul>${about}${quote}<div class="btns">${btns}</div></div>`;
   const n=MATERIALS.filter(m=>m.author===id).length;
-  return `<div class="arow rv"><img class="ph" src="${a.ava||a.photo}" alt="${a.name}"><div class="who"><h3>${a.name}</h3><span class="role">${a.role}</span></div><div class="txt">${a.facts.map(f=>`<span>${f}</span>`).join('')}${n?`<span>${plural(n,'материал','материала','материалов')} в&nbsp;базе</span>`:''}</div><div class="btns">${btns}</div></div>`;
+  return `<div class="arow rv">${a.ava||a.photo?`<img class="ph" src="${a.ava||a.photo}" alt="${a.name}">`:`<span class="ph0">${a.name[0]}</span>`}<div class="who"><h3>${a.name}</h3><span class="role">${a.role}</span></div><div class="txt">${a.facts.map(f=>`<span>${f}</span>`).join('')}${n?`<span>${plural(n,'материал','материала','материалов')} в&nbsp;базе</span>`:''}</div><div class="btns">${btns}</div></div>`;
 }
 function matRow(m){
   const a=AUTHORS[m.author];
@@ -759,7 +1016,7 @@ function footer(){
 /* ---------- страницы ---------- */
 function home(){
   const chips=['адаптация','первое время','стресс','прогулки','сон'];
-  const nA=Object.keys(AUTHORS).length, nM=MATERIALS.length;
+  const nA=AKEYS.length, nM=MATERIALS.length;
   const intro=bySec('vstuplenie'), d=AUTHORS.noskova;
   return `
   <section class="hero" id="top">
@@ -831,7 +1088,7 @@ function home(){
 
   <section class="pan blk" id="avtory">
     <div class="blk-head rv"><div><div class="lbl" style="color:var(--caramel);margin-bottom:14px">Наши авторы</div><h2 class="h2">Кто стоит<br>за&nbsp;<span class="pill">материалами</span></h2></div><p>Если вам откликнулся подход специалиста, переходите к&nbsp;нему: курсы, консультации и&nbsp;соцсети</p></div>
-    <div class="alist">${Object.keys(AUTHORS).map(id=>authorCard(id)).join('')}</div>
+    <div class="alist">${AKEYS.map(id=>authorCard(id)).join('')}</div>
   </section>
 
   <section class="pan blk" style="background:var(--blush);padding-top:clamp(22px,3vw,40px);padding-bottom:clamp(22px,3vw,40px)">
@@ -887,7 +1144,7 @@ function articlePage(id){
   const a=AUTHORS[m.author], body=articleBody(m);
   const toc=body.toc.map(t=>`<a href="#${t.id}" data-to="${t.id}" class="${t.k}l">${esc(t.t)}</a>`).join('');
   const more=MATERIALS.filter(x=>x.id!==m.id&&x.sec===m.sec);
-  const contact=a.empty?'':`<a class="btn" href="${a.links[0][1]}" target="_blank" rel="noopener">${a.links[0][0]} автора</a><a class="btn soft" href="${a.links[1][1]}" target="_blank" rel="noopener">${a.links[1][0]}</a>`;
+  const contact=a.empty||!a.links.length?'':a.links.slice(0,2).map(([t,u],i)=>`<a class="btn ${i?'soft':''}" href="${u}" target="_blank" rel="noopener">${t}${i?'':' автора'}</a>`).join('');
   return `<section class="art-top">
     <div class="pan"><div class="crumbs"><a href="#/">Хвостопедия</a><span>/</span><a href="#/r/${m.sec}">${SEC[m.sec]}</a></div>
       <h1>${m.title}</h1><p class="lead">${m.lead}</p>
@@ -898,14 +1155,14 @@ function articlePage(id){
   <section class="pan paper art-wrap ${body.toc.length<2?'notoc':''}" id="read">
     ${body.toc.length<2?'':`<aside class="toc" id="toc"><b class="lbl">Содержание</b>${toc}</aside>`}
     <article class="text">${body.html}
-      <div class="after"><h3>${a.empty?'Понравился материал?':'Хотите разобраться глубже?'}</h3><p>${a.empty?'Скачайте его целиком, чтобы вернуться в трудный момент':'Переходите к автору: консультации и полезное в соцсетях'}</p><div class="btns">${contact}${m.pdf?`<a class="btn ${a.empty?'':'soft'}" href="${m.pdf}" download>Скачать PDF</a>`:''}${more.map(x=>`<a class="btn soft" href="#/m/${x.id}">${x.title} ${ARR}</a>`).join('')}</div></div>
+      <div class="after"><h3>${a.empty||!a.links.length?'Понравился материал?':'Хотите разобраться глубже?'}</h3><p>${a.empty||!a.links.length?(m.pdf?'Скачайте его целиком, чтобы вернуться в трудный момент':'Загляните в другие материалы раздела'):'Переходите к автору: консультации и полезное в соцсетях'}</p><div class="btns">${contact}${m.pdf?`<a class="btn ${a.empty?'':'soft'}" href="${m.pdf}" download>Скачать PDF</a>`:''}${more.map(x=>`<a class="btn soft" href="#/m/${x.id}">${x.title} ${ARR}</a>`).join('')}</div></div>
     </article>
   </section>${footer()}`;
 }
 
 function authorsPage(){
   return `<section class="pan blk" style="padding-top:120px"><div class="crumbs"><a href="#/">Хвостопедия</a><span>/</span><span>Авторы</span></div><h1 class="page-title" style="margin-bottom:clamp(24px,4vh,44px)">Специалисты <span class="pill">Хвостопедии</span></h1>
-  <div class="alist">${Object.keys(AUTHORS).map(id=>authorCard(id)).join('')}</div></section>${footer()}`;
+  <div class="alist">${AKEYS.map(id=>authorCard(id)).join('')}</div></section>${footer()}`;
 }
 function notFound(){return `<section class="pan blk" style="min-height:80svh;display:flex;flex-direction:column;justify-content:center"><div class="lbl" style="color:var(--caramel)">Ой</div><h1 class="page-title">Такой страницы нет</h1><div style="margin-top:28px"><a class="btn" href="#/">На главную ${ARR}</a></div></section>`}
 
