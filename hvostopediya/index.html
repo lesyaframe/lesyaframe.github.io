@@ -224,7 +224,7 @@ header nav a.on{background:var(--milk);color:var(--ink)}
 
 /* ---------- авторы списком ---------- */
 .alist{display:flex;flex-direction:column;gap:var(--gap)}
-.arow{display:grid;grid-template-columns:72px minmax(200px,1.1fr) 1fr auto;gap:clamp(14px,2vw,28px);align-items:center;background:var(--paper);border-radius:26px;padding:14px 18px 14px 14px}
+.arow{display:grid;grid-template-columns:72px minmax(0,1.15fr) minmax(0,1fr) minmax(0,1.25fr);gap:clamp(14px,2vw,28px);align-items:center;background:var(--paper);border-radius:26px;padding:14px 18px 14px 14px}
 .arow .ph,.arow .ph0{width:72px;height:72px;border-radius:20px 20px 20px 34px;object-fit:cover}
 .arow .ph0{background:var(--sage2);display:grid;place-items:center;font:600 28px/1 var(--serif);color:var(--sage)}
 .arow h3{font:500 clamp(19px,1.6vw,23px)/1.15 var(--serif)}
@@ -711,7 +711,7 @@ const AUTHORS={
    quote:'Нам важно научиться слушать то, что пытаются сказать нам наши собаки',quoteBy:'Тюрид Ругос',
    links:[['Telegram-канал','https://t.me/withadog','car']]},
  diabet:{name:'Диабет Хвостики',short:'Диабет Хвостики',role:'Проект о диабете у собак и кошек',
-   facts:['Бесплатный благотворительный проект для владельцев питомцев с сахарным диабетом','Почти 4,5 года опыта с сенсорами глюкозы'],
+   facts:['Благотворительный проект о сахарном диабете у питомцев'],
    links:[['Сайт проекта','https://diabethvostiki.com/','car'],['Telegram','https://t.me/diabethvostiki','']]},
  pushkareva:{name:'Дарья Пушкарева',short:'Дарья Пушкарева',photo:'img/pushkareva.jpg',role:'Dog’n’Fox',
    facts:['Автор канала Dog’n’Fox'],
@@ -726,7 +726,7 @@ const AUTHORS={
    facts:['Автор гайда «Первая помощь», natali_vet'],
    links:[]},
  galimova:{name:'Галимова Альбина Амуровна',short:'Альбина Галимова',photo:'img/galimova.jpg',ava:'img/galimova-ava.jpg',role:'Кинолог, специалист по поведению собак',
-   facts:['Специализируется на проблемах в одиночестве, страхах, реактивности, агрессии и работе со щенками','Команда DOGUS TEAM по работе с тревогой в одиночестве','Лектор Canis Behaviour Conference 2025 и форума «Компаньон 2026», автор курсов платформы «Умный Друг»'],
+   facts:['Одиночество, страхи, реактивность, щенки','Команда DOGUS TEAM, лектор Canis Behaviour Conference'],
    about:'Для меня самое важное в работе — это отношения человека и собаки. И я считаю, что бережно относиться нужно к обоим. Ведь именно на владельце лежит вся ответственность, и от его сил и ресурсов зависит очень многое. Человека тоже очень-очень важно беречь 🫶🏻',
    links:[['Telegram','https://t.me/aleydog','car'],['Instagram','https://instagram.com/aleyhab',''],['Консультации','https://taplink.cc/aleyhab','soft']]},
  katerina:{name:'Катерина',short:'Катерина',role:'Специалист по поведению собак',
