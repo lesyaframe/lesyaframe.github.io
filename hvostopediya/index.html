@@ -399,6 +399,18 @@ header nav a.on{background:var(--milk);color:var(--ink)}
 .us-card h3{font:500 clamp(22px,2vw,28px)/1.1 var(--serif);margin-top:6px}
 .us-card p{color:var(--ink2);font-size:15.5px}
 .us-card .btn{align-self:flex-start;margin-top:auto}
+.fb{background:var(--dark);color:var(--paper);display:grid;grid-template-columns:1.2fr 1fr;gap:clamp(20px,4vw,60px);align-items:center;position:relative;overflow:hidden}
+.fb .h2{color:var(--paper)}
+.fb p{color:#D9CBBE;font-size:16px;max-width:460px;margin-top:16px}
+.fb-list{display:flex;flex-direction:column;gap:var(--gap);position:relative;z-index:1}
+.fb-card{display:flex;align-items:center;gap:16px;background:rgba(255,250,242,.07);border-radius:26px;padding:18px 20px;color:var(--paper);transition:background .3s,transform .3s}
+.fb-card:hover{background:var(--caramel);transform:translateY(-3px)}
+.fb-card img{width:56px;height:56px;border-radius:16px 16px 16px 28px;object-fit:cover;flex:none}
+.fb-card b{display:block;font:500 21px/1.15 var(--serif)}
+.fb-card span{font-size:14.5px;color:#D9CBBE}
+.fb-card:hover span{color:var(--paper)}
+.fb-card .round{margin-left:auto;background:var(--paper);color:var(--ink)}
+@media (max-width:980px){.fb{grid-template-columns:1fr}}
 @media (max-width:980px){.us{grid-template-columns:1fr}.us-h{max-width:none;padding:8px 4px 4px}}
 
 /* ---------- подвал ---------- */
@@ -658,7 +670,6 @@ const SECTIONS=[
  ['sobaka-i-rebenok','Собака и ребёнок','baby','photo'],
  ['obrabotki','Обработки','bug','photo'],
  ['uhod','Уход за шерстью','scissors','text','var(--sage2)'],
- ['privivki','Календарь прививок','syringe','text','var(--sage)'],
  ['diabet','Диабет у собак','drop','photo'],
 ];
 const GRID=SECTIONS.filter(s=>s[0]!=='vstuplenie');
@@ -1889,7 +1900,8 @@ function footer(){
     <div class="f-contacts"><div class="lbl">Связаться с&nbsp;нами</div>
       <a href="https://instagram.com/mom_chiwawa" target="_blank" rel="noopener"><i class="ph-duotone ph-instagram-logo"></i>@mom_chiwawa</a>
       <a href="https://instagram.com/lesya.frame" target="_blank" rel="noopener"><i class="ph-duotone ph-instagram-logo"></i>@lesya.frame</a>
-      <!--TG-->
+      <a href="https://t.me/miroslavakamenskaya" target="_blank" rel="noopener"><i class="ph-duotone ph-telegram-logo"></i>@miroslavakamenskaya</a>
+      <a href="https://t.me/LesyaLesya8" target="_blank" rel="noopener"><i class="ph-duotone ph-telegram-logo"></i>@LesyaLesya8</a>
     </div></div><div class="f-cols">${cols.map(c=>`<div>${c.map(([id,t])=>`<a href="#/r/${id}">${t}</a>`).join('')}</div>`).join('')}</div></div><div class="f-low">Материалы публикуются с разрешения авторов</div></footer>`;
 }
 
@@ -1975,6 +1987,14 @@ function home(){
       <div class="us-h rv"><div class="lbl" style="color:var(--caramel)">О&nbsp;нас</div><h2 class="h2" style="font-size:clamp(30px,3.4vw,48px)">Хвостопедию придумали и&nbsp;собрали</h2></div>
       <div class="us-card rv"><img class="usph" src="img/mira.jpg" alt="Мира"><h3>Мира</h3><p>Мама двух чихуахуа, Чарли и&nbsp;Ричи. Создала сообщество «ЧИХУАХУА РФ»</p><a class="btn sm" href="https://instagram.com/mom_chiwawa" target="_blank" rel="noopener">@mom_chiwawa <span class="ar">${ARR}</span></a></div>
       <div class="us-card rv"><img class="usph" src="img/lesya.jpg" alt="Леся"><h3>Леся</h3><p>Дизайнер-разработчик, сделала этот сайт. Хозяйка Рэма, учится на&nbsp;зоопсихолога</p><a class="btn sm soft" href="https://instagram.com/lesya.frame" target="_blank" rel="noopener">@lesya.frame <span class="ar">${ARR}</span></a></div>
+    </div>
+  </section>
+  <section class="pan blk fb" id="svyaz">
+    <div class="rv"><div class="lbl" style="color:var(--caramel2);margin-bottom:14px">Обратная связь</div><h2 class="h2">Напишите <span class="pill" style="background:var(--caramel);color:var(--paper)">нам</span></h2>
+      <p>Есть вопрос или идея, хотите стать автором или нашли ошибку? Пишите в&nbsp;Telegram, мы на&nbsp;связи.</p></div>
+    <div class="fb-list">
+      <a class="fb-card rv" href="https://t.me/miroslavakamenskaya" target="_blank" rel="noopener"><img src="img/mira.jpg" alt=""><span><b>Мира</b><span>@miroslavakamenskaya</span></span><span class="round">${ARR2}</span></a>
+      <a class="fb-card rv" href="https://t.me/LesyaLesya8" target="_blank" rel="noopener"><img src="img/lesya.jpg" alt=""><span><b>Леся</b><span>@LesyaLesya8</span></span><span class="round">${ARR2}</span></a>
     </div>
   </section>
   ${footer()}`;
